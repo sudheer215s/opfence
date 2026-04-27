@@ -1,0 +1,13 @@
+/opfence
+/dist/
+/bin/
+/_site/
+*.test
+*.out
+coverage.*
+.DS_Store
+.claude/settings.local.json
+testdata/fuzz/**/corpus-local/
+
+.git-organise/
+.claude/
