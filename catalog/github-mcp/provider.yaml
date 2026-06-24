@@ -1,0 +1,30 @@
+provider: github-mcp
+title: GitHub MCP
+docs: https://github.com/github/github-mcp-server
+# GitHub's official MCP server, github/github-mcp-server v2.0.2 (Go module
+# github.com/github/github-mcp-server/v2, tag v2.0.2, same tool list as main
+# on 2026-10-19). It runs locally over stdio (Docker image
+# ghcr.io/github/github-mcp-server, or the binary), and GitHub hosts it at
+# https://api.githubcopilot.com/mcp/ (also /mcp/readonly, /mcp/insiders and
+# /mcp/x/<toolset>[/readonly]). The remote server adds four tools that are
+# documented in the README but not in the published source.
+# The local server's own API calls go to api.github.com through the proxy and
+# meet catalog/github's REST and GraphQL rules; these rules classify the tool
+# calls themselves, which the agent hook sees for both deployments.
+# The host also serves the Copilot API, as clients built on
+# @vscode/copilot-api reach it when their Copilot token names no other API
+# host (copilot-api.yaml): mcp.paths keeps MCP decoding to /mcp and what is
+# under it, and every other path is read as REST.
+hosts: [api.githubcopilot.com]
+auth:
+  - header: Authorization          # a GitHub PAT or OAuth token, "Bearer <token>"
+    scheme: Bearer
+secrets_from: [github]               # a GitHub PAT or OAuth token, whichever provider found it
+# GITHUB_PERSONAL_ACCESS_TOKEN is the local server's variable. GITHUB_TOKEN,
+# GH_TOKEN and the ghp_/github_pat_ prefixes belong to catalog/github.
+detect:
+  env: [GITHUB_PERSONAL_ACCESS_TOKEN]
+mcp:
+  names: [github, GitHub, github-mcp-server, github-mcp]
+  package: "ghcr.io/github/github-mcp-server"   # Docker image; Go module github.com/github/github-mcp-server/v2; no npm package
+  paths: [/mcp]
