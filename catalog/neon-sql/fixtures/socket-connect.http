@@ -1,0 +1,8 @@
+# description: Pool opens a socket to its endpoint
+GET /v2 HTTP/1.1
+Host: ep-cool-darkness-123456.us-east-2.aws.neon.tech
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Version: 13
+Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==
+

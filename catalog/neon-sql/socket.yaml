@@ -1,0 +1,79 @@
+# Neon serverless driver: Postgres over WebSocket (Pool, Client) on the
+# endpoint hosts, wss://<endpoint>/v2.
+operations:
+  - id: neon-sql.socket.connect
+    match: { websocket: { path: /v2, message: connect } }
+    class: read
+    resource: { arg: connection.host, kind: endpoint }
+    card: "Open a Postgres connection to Neon endpoint {connection.host} over WebSocket"
+    status: verified
+    verified: 2026-10-25
+    sources:
+      - https://github.com/neondatabase/serverless/blob/main/src/shims/net/index.ts
+      - https://github.com/neondatabase/serverless/blob/main/CONFIG.md
+    notes: >-
+      The driver's default wsProxy is host => host + '/v2', so the socket goes to the endpoint
+      host itself, which Neon routes by. Opening it runs nothing; each statement sent on it is
+      decided by neon-sql.socket.query.
+    tests:
+      - fixture: fixtures/socket-connect.http
+        expect: read
+        resource: "ep-cool-darkness-123456.us-east-2.aws.neon.tech"
+
+  - id: neon-sql.socket.query
+    match: { websocket: { path: /v2, message: query } }
+    class: unknown
+    classify: { sql: sql }
+    resource: { arg: connection.host, kind: endpoint }
+    card: "Run SQL on database {connection.database} at Neon endpoint {connection.host}"
+    status: verified
+    verified: 2026-10-25
+    sources:
+      - https://github.com/neondatabase/serverless/blob/main/src/shims/net/index.ts
+      - https://www.postgresql.org/docs/current/protocol-message-formats.html
+    notes: >-
+      Every Query (the simple protocol, which may hold several statements) and every Parse (the
+      extended protocol node-postgres uses for parameterised queries) is classified as Postgres;
+      Bind and Execute run only what a Parse brought, and parameters are values, never SQL. A
+      transaction's statements arrive one by one, each decided on its own; a blocked one gets an
+      ErrorResponse and the socket closes, which rolls the transaction back. The startup
+      message's user and database, with the endpoint host, are the connection argument, as for
+      the HTTP driver's Neon-Connection-String, so one environment mapping covers both. The
+      password, sent in the clear inside the socket, is never read. A FunctionCall message, TLS
+      inside the socket and anything else Opfence cannot read are unknown.
+    tests:
+      - fixture: fixtures/socket-query-read.ws
+        expect: read
+        resource: "ep-cool-darkness-123456.us-east-2.aws.neon.tech"
+      - fixture: fixtures/socket-query-drop.ws
+        expect: irreversible
+        resource: "ep-cool-darkness-123456.us-east-2.aws.neon.tech"
+      - fixture: fixtures/socket-query-delete.ws
+        expect: delete
+        resource: "ep-cool-darkness-123456.us-east-2.aws.neon.tech"
+      - fixture: fixtures/socket-query-every-row.ws
+        expect: irreversible
+        resource: "ep-cool-darkness-123456.us-east-2.aws.neon.tech"
+      - fixture: fixtures/socket-transaction.ws
+        expect: irreversible
+        resource: "ep-cool-darkness-123456.us-east-2.aws.neon.tech"
+      - fixture: fixtures/socket-query-split.ws
+        expect: irreversible
+        resource: "ep-cool-darkness-123456.us-east-2.aws.neon.tech"
+
+  - id: neon-sql.socket.cancel
+    match: { websocket: { path: /v2, message: cancel } }
+    class: read
+    resource: { arg: connection.host, kind: endpoint }
+    card: "Cancel a running query on Neon endpoint {connection.host}"
+    status: verified
+    verified: 2026-10-25
+    sources:
+      - https://www.postgresql.org/docs/current/protocol-flow.html#PROTOCOL-FLOW-CANCELING-REQUESTS
+    notes: >-
+      A CancelRequest opens a connection of its own and asks the server to stop a query, named
+      by the key the server gave its connection; nothing else runs on it.
+    tests:
+      - fixture: fixtures/socket-cancel.ws
+        expect: read
+        resource: "ep-cool-darkness-123456.us-east-2.aws.neon.tech"

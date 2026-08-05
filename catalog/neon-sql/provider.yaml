@@ -1,0 +1,33 @@
+provider: neon-sql
+title: Neon serverless driver
+docs: https://neon.com/docs/serverless/serverless-driver
+# @neondatabase/serverless sends neon() queries to https://api.<host>/sql, where
+# <host> is the connection string's host without its first label (the endpoint
+# id): ep-cool-darkness-123456.us-east-2.aws.neon.tech queries
+# api.us-east-2.aws.neon.tech, and a cell host (ep-....c-2.us-east-2...) its own
+# api. host. With a JWT (authToken) the driver uses apiauth. instead.
+#
+# Its Pool and Client open wss://<endpoint host>/v2 and speak the Postgres
+# protocol inside (stage 28b): the socket is the TLS, so the protocol is plain,
+# and every Query and Parse is read. The endpoint hosts serve Postgres itself on
+# 5432, which Opfence cannot read (database_ports), so direct connections keep
+# the strict or open mode handling they had. Other requests to endpoint hosts
+# (Neon's Data API on ep-….apirest.…, Neon Auth on ep-….neonauth.…) have no
+# rules yet and are unknown.
+#
+# The database password travels in the Neon-Connection-String header, and in
+# the clear inside the socket. The same password serves Postgres connections
+# that do not pass through Opfence, so it is not turned into a placeholder:
+# there is no auth or detect section.
+hosts: ["api.*.neon.tech", "apiauth.*.neon.tech", "ep-*.*.neon.tech"]
+database_ports: [5432]
+websocket:
+  - path: /v2
+    protocol: postgres
+# The connection string's host names the endpoint the query runs on (Neon
+# routes by it), so rules can name it and opfence.yaml can map it to an
+# environment: connection.host, .user, .database and .port. Never the password.
+header_args:
+  - header: Neon-Connection-String
+    arg: connection
+    parse: url
