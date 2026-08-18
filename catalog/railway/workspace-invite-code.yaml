@@ -1,0 +1,31 @@
+# Railway GraphQL API: workspace-invite-code
+operations:
+  - id: railway.workspace-invite-code.create
+    match: { graphql: { type: mutation, field: workspaceInviteCodeCreate } }
+    class: access
+    resource: { arg: workspaceId, kind: workspace }
+    card: "Create an invite code for workspace {workspaceId} with role {input.role}"
+    status: verified
+    verified: 2026-10-16
+    sources:
+      - https://github.com/railwayapp/cli/blob/master/src/gql/schema.json
+      - https://docs.railway.com/integrations/api
+    tests:
+      - fixture: fixtures/workspace-invite-code-create.http
+        expect: access
+        resource: ws-acme
+
+  - id: railway.workspace-invite-code.use
+    match: { graphql: { type: mutation, field: workspaceInviteCodeUse } }
+    class: access
+    resource: { arg: code, kind: invite-code }
+    card: "Join a workspace with invite code {code}"
+    status: verified
+    verified: 2026-10-19
+    sources:
+      - https://github.com/railwayapp/cli/blob/master/src/gql/schema.json
+      - https://docs.railway.com/integrations/api
+    tests:
+      - fixture: fixtures/workspace-invite-code-use.http
+        expect: access
+        resource: winv-1

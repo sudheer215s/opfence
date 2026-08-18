@@ -1,0 +1,35 @@
+provider: railway
+title: Railway
+docs: https://docs.railway.com/integrations/api
+hosts: [backboard.railway.com, backboard.railway.app]
+graphql: [/graphql/v2]
+# The CLI follows logs and deployments (railway logs, up, restart) over a
+# GraphQL subscription on the same path (graphql-transport-ws). Operations
+# sent over the socket are decided by the GraphQL rules, as if posted.
+websocket:
+  - path: /graphql/v2
+    protocol: graphql-ws
+auth:
+  - header: Authorization          # account and workspace tokens (RAILWAY_API_TOKEN)
+    scheme: Bearer
+  - header: Project-Access-Token   # project tokens (RAILWAY_TOKEN)
+  - header: Team-Access-Token
+detect:
+  env: [RAILWAY_API_TOKEN, RAILWAY_TOKEN]
+defaults:
+  graphql_query: read              # queries only read, except the ones listed as credential
+  graphql_subscription: read       # logs and status (13 in schema.json); secret fields still count
+  # Fields that hold secret values in Railway's schema.json. A query that
+  # selects one at any depth is also credential, whatever its root field.
+  # Opfence does not see nested arguments, so config and patch count even
+  # without decryptVariables: true (which is what makes them return values).
+  # config also names Template, Integration and notification channel config.
+  graphql_secret_fields:
+    - config                       # Environment.config(decryptVariables), Integration.config
+    - patch                        # EnvironmentPatch.patch(decryptVariables)
+    - secretAccessKey              # BucketS3CompatibleCredentials
+# Published schemas the rules were built from; `opfence catalog check-sources`
+# compares them nightly.
+schemas:
+  - kind: graphql
+    url: https://raw.githubusercontent.com/railwayapp/cli/master/src/gql/schema.json
