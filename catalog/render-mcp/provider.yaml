@@ -1,0 +1,11 @@
+provider: render-mcp
+title: Render MCP
+docs: https://render.com/docs/mcp-server
+hosts: [mcp.render.com]
+auth:
+  - header: Authorization
+    scheme: Bearer
+secrets_from: [render]               # RENDER_API_KEY, detected by catalog/render
+mcp:
+  names: [render]
+  package: "github.com/render-oss/render-mcp-server"   # Go module; Render ships no npm or PyPI package
