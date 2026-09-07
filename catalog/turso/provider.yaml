@@ -1,0 +1,26 @@
+provider: turso
+title: Turso
+docs: https://docs.turso.tech/api-reference/introduction
+# api.turso.tech is the Platform API. Every database also has its own host,
+# [database]-[organization].turso.io (some regions add a region label), which
+# serves SQL over HTTP (Hrana) and file uploads with a database token.
+hosts: [api.turso.tech, "*.turso.io"]
+# libSQL clients given a wss:// URL speak Hrana over WebSocket to the database
+# host's root (stage 28c), with the database token in the hello message.
+websocket:
+  - path: /
+    protocol: hrana
+auth:
+  - header: Authorization
+    scheme: Bearer
+detect:
+  env: [TURSO_API_TOKEN, TURSO_AUTH_TOKEN]   # Platform API token (turso CLI), database token (SDK docs)
+defaults:
+  rest_safe_methods: read          # no GET returns a token or other secret
+# Platform rules match any version prefix (/{version}/organizations/...): the
+# CLI mixes /v1, /v2 and /v3 routes, and /v3 takes UUIDs where /v1 takes names.
+# Published schemas the rules were built from; `opfence catalog check-sources`
+# compares them nightly.
+schemas:
+  - kind: openapi
+    url: https://raw.githubusercontent.com/tursodatabase/turso-docs/main/api-reference/openapi.json
