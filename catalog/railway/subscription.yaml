@@ -1,0 +1,198 @@
+# Railway GraphQL API: subscriptions, which the CLI follows over a WebSocket
+# (railway logs, up, restart). All stream logs or status. A subscription
+# that selects a secret field (an environment patch's patch) is also
+# credential, by defaults.graphql_secret_fields.
+operations:
+
+  - id: railway.subscription.build-logs
+    match: { graphql: { type: subscription, field: buildLogs } }
+    class: read
+    resource: { arg: deploymentId, kind: deployment }
+    card: "Follow build logs of Railway deployment {deploymentId}"
+    status: verified
+    verified: 2026-10-24
+    sources:
+      - https://github.com/railwayapp/cli/blob/master/src/gql/schema.json
+      - https://github.com/railwayapp/cli/blob/master/src/subscription.rs
+    tests:
+      - fixture: fixtures/subscription-build-logs.ws
+        expect: read
+        resource: "d0f5c6e2-1b7a-4c1e-9a3e-5f2b8c7d6e41"
+
+  - id: railway.subscription.deployment
+    match: { graphql: { type: subscription, field: deployment } }
+    class: read
+    resource: { arg: id, kind: deployment }
+    card: "Follow the status of Railway deployment {id}"
+    status: verified
+    verified: 2026-10-24
+    sources:
+      - https://github.com/railwayapp/cli/blob/master/src/gql/schema.json
+      - https://github.com/railwayapp/cli/blob/master/src/subscription.rs
+    tests:
+      - fixture: fixtures/subscription-deployment.ws
+        expect: read
+        resource: "d0f5c6e2-1b7a-4c1e-9a3e-5f2b8c7d6e41"
+
+  - id: railway.subscription.deployment-events
+    match: { graphql: { type: subscription, field: deploymentEvents } }
+    class: read
+    resource: { arg: id, kind: deployment }
+    card: "Follow events of Railway deployment {id}"
+    status: verified
+    verified: 2026-10-24
+    sources:
+      - https://github.com/railwayapp/cli/blob/master/src/gql/schema.json
+      - https://github.com/railwayapp/cli/blob/master/src/subscription.rs
+    tests:
+      - fixture: fixtures/subscription-deployment-events.ws
+        expect: read
+        resource: "d0f5c6e2-1b7a-4c1e-9a3e-5f2b8c7d6e41"
+
+  - id: railway.subscription.deployment-instance-executions
+    match: { graphql: { type: subscription, field: deploymentInstanceExecutions } }
+    class: read
+    resource: { arg: input.deploymentId, kind: deployment }
+    card: "Follow instance executions of Railway deployment {input.deploymentId}"
+    status: verified
+    verified: 2026-10-24
+    sources:
+      - https://github.com/railwayapp/cli/blob/master/src/gql/schema.json
+      - https://github.com/railwayapp/cli/blob/master/src/subscription.rs
+    tests:
+      - fixture: fixtures/subscription-deployment-instance-executions.ws
+        expect: read
+        resource: "d0f5c6e2-1b7a-4c1e-9a3e-5f2b8c7d6e41"
+
+  - id: railway.subscription.deployment-logs
+    match: { graphql: { type: subscription, field: deploymentLogs } }
+    class: read
+    resource: { arg: deploymentId, kind: deployment }
+    card: "Follow logs of Railway deployment {deploymentId}"
+    status: verified
+    verified: 2026-10-24
+    sources:
+      - https://github.com/railwayapp/cli/blob/master/src/gql/schema.json
+      - https://github.com/railwayapp/cli/blob/master/src/subscription.rs
+    tests:
+      - fixture: fixtures/subscription-deployment-logs.ws
+        expect: read
+        resource: "d0f5c6e2-1b7a-4c1e-9a3e-5f2b8c7d6e41"
+
+  - id: railway.subscription.dns-query-logs
+    match: { graphql: { type: subscription, field: dnsQueryLogs } }
+    class: read
+    resource: { arg: environmentId, kind: environment }
+    card: "Follow DNS query logs of Railway environment {environmentId}"
+    status: verified
+    verified: 2026-10-24
+    sources:
+      - https://github.com/railwayapp/cli/blob/master/src/gql/schema.json
+      - https://github.com/railwayapp/cli/blob/master/src/subscription.rs
+    tests:
+      - fixture: fixtures/subscription-dns-query-logs.ws
+        expect: read
+        resource: "6c2b1f0e-8d4a-4e3b-9f1c-2a7d5e8b0c34"
+
+  - id: railway.subscription.environment-logs
+    match: { graphql: { type: subscription, field: environmentLogs } }
+    class: read
+    resource: { arg: environmentId, kind: environment }
+    card: "Follow logs of Railway environment {environmentId}"
+    status: verified
+    verified: 2026-10-24
+    sources:
+      - https://github.com/railwayapp/cli/blob/master/src/gql/schema.json
+      - https://github.com/railwayapp/cli/blob/master/src/subscription.rs
+    tests:
+      - fixture: fixtures/subscription-environment-logs.ws
+        expect: read
+        resource: "6c2b1f0e-8d4a-4e3b-9f1c-2a7d5e8b0c34"
+
+  - id: railway.subscription.environment-staged-patch
+    match: { graphql: { type: subscription, field: environmentStagedPatch } }
+    class: read
+    resource: { arg: environmentId, kind: environment }
+    card: "Follow the staged changes of Railway environment {environmentId}"
+    status: verified
+    verified: 2026-10-24
+    sources:
+      - https://github.com/railwayapp/cli/blob/master/src/gql/schema.json
+      - https://github.com/railwayapp/cli/blob/master/src/subscription.rs
+    tests:
+      - fixture: fixtures/subscription-environment-staged-patch.ws
+        expect: read
+        resource: "6c2b1f0e-8d4a-4e3b-9f1c-2a7d5e8b0c34"
+
+  - id: railway.subscription.http-logs
+    match: { graphql: { type: subscription, field: httpLogs } }
+    class: read
+    resource: { arg: deploymentId, kind: deployment }
+    card: "Follow HTTP logs of Railway deployment {deploymentId}"
+    status: verified
+    verified: 2026-10-24
+    sources:
+      - https://github.com/railwayapp/cli/blob/master/src/gql/schema.json
+      - https://github.com/railwayapp/cli/blob/master/src/subscription.rs
+    tests:
+      - fixture: fixtures/subscription-http-logs.ws
+        expect: read
+        resource: "d0f5c6e2-1b7a-4c1e-9a3e-5f2b8c7d6e41"
+
+  - id: railway.subscription.network-flow-logs
+    match: { graphql: { type: subscription, field: networkFlowLogs } }
+    class: read
+    resource: { arg: environmentId, kind: environment }
+    card: "Follow network flow logs of Railway environment {environmentId}"
+    status: verified
+    verified: 2026-10-24
+    sources:
+      - https://github.com/railwayapp/cli/blob/master/src/gql/schema.json
+      - https://github.com/railwayapp/cli/blob/master/src/subscription.rs
+    tests:
+      - fixture: fixtures/subscription-network-flow-logs.ws
+        expect: read
+        resource: "6c2b1f0e-8d4a-4e3b-9f1c-2a7d5e8b0c34"
+
+  - id: railway.subscription.notification-delivery-updated
+    match: { graphql: { type: subscription, field: notificationDeliveryUpdated } }
+    class: read
+    card: "Follow your Railway notification deliveries"
+    status: verified
+    verified: 2026-10-24
+    sources:
+      - https://github.com/railwayapp/cli/blob/master/src/gql/schema.json
+      - https://github.com/railwayapp/cli/blob/master/src/subscription.rs
+    tests:
+      - fixture: fixtures/subscription-notification-delivery-updated.ws
+        expect: read
+
+  - id: railway.subscription.plugin-logs
+    match: { graphql: { type: subscription, field: pluginLogs } }
+    class: read
+    resource: { arg: pluginId, kind: plugin }
+    card: "Follow logs of Railway plugin {pluginId}"
+    status: verified
+    verified: 2026-10-24
+    sources:
+      - https://github.com/railwayapp/cli/blob/master/src/gql/schema.json
+      - https://github.com/railwayapp/cli/blob/master/src/subscription.rs
+    tests:
+      - fixture: fixtures/subscription-plugin-logs.ws
+        expect: read
+        resource: "a1b2c3d4-0000-4000-8000-000000000001"
+
+  - id: railway.subscription.replication-progress
+    match: { graphql: { type: subscription, field: replicationProgress } }
+    class: read
+    resource: { arg: volumeInstanceId, kind: volume-instance }
+    card: "Follow replication of Railway volume instance {volumeInstanceId}"
+    status: verified
+    verified: 2026-10-24
+    sources:
+      - https://github.com/railwayapp/cli/blob/master/src/gql/schema.json
+      - https://github.com/railwayapp/cli/blob/master/src/subscription.rs
+    tests:
+      - fixture: fixtures/subscription-replication-progress.ws
+        expect: read
+        resource: "5e4d3c2b-1a09-4f8e-8d7c-6b5a49382716"

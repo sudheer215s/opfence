@@ -1,0 +1,22 @@
+# Railway GraphQL API over WebSocket: the socket itself. What travels on it
+# is decided by the GraphQL rules, a subscription by defaults.graphql_subscription.
+operations:
+  - id: railway.websocket.connect
+    match: { websocket: { path: /graphql/v2, message: connect } }
+    class: read
+    card: "Open a GraphQL socket to Railway for subscriptions"
+    status: verified
+    verified: 2026-10-24
+    sources:
+      - https://github.com/railwayapp/cli/blob/master/src/subscription.rs
+      - https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md
+    notes: >-
+      The CLI opens wss://backboard.railway.com/graphql/v2 with the graphql-transport-ws
+      subprotocol and its token in the upgrade's headers (project-access-token or
+      Authorization), then subscribes to deployment logs, build logs, HTTP logs and deployment
+      status. Opening the socket does nothing by itself; each operation sent on it is decided
+      like the same operation posted over HTTP, so a mutation sent over the socket gets the
+      mutation's decision.
+    tests:
+      - fixture: fixtures/websocket-connect.http
+        expect: read

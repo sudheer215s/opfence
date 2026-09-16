@@ -1,0 +1,28 @@
+# Vercel REST API: webhook
+operations:
+  - id: vercel.webhook.delete
+    match: { rest: { method: DELETE, path: "/{version}/webhooks/{id}" } }
+    class: delete
+    card: "Delete webhook {id}"
+    status: verified
+    verified: 2026-10-16
+    sources:
+      - https://github.com/vercel/sdk/blob/main/vercel-spec.json
+    tests:
+      - fixture: fixtures/webhook-delete.http
+        expect: delete
+
+  - id: vercel.webhook.create
+    match: { rest: { method: POST, path: "/{version}/webhooks" } }
+    class: credential
+    card: "Create a webhook to {body.url}"
+    status: verified
+    verified: 2026-10-19
+    sources:
+      - https://github.com/vercel/sdk/blob/main/vercel-spec.json
+    notes: >-
+      Sends events to an outside URL; the response carries the webhook's signing
+      secret, shown once.
+    tests:
+      - fixture: fixtures/webhook-create.http
+        expect: credential

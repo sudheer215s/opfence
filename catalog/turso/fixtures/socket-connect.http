@@ -1,0 +1,9 @@
+# description: A libSQL client opens its socket
+GET / HTTP/1.1
+Host: app-db-acme.aws-us-east-1.turso.io
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Version: 13
+Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==
+Sec-WebSocket-Protocol: hrana2, hrana1
+

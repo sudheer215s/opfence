@@ -1,0 +1,54 @@
+# Turso database hosts: Hrana over WebSocket, as libSQL clients speak it on
+# wss:// URLs.
+operations:
+  - id: turso.socket.connect
+    match: { websocket: { path: /, message: connect } }
+    class: read
+    card: "Open a Hrana socket to a Turso database"
+    status: verified
+    verified: 2026-10-25
+    sources:
+      - https://github.com/tursodatabase/libsql/blob/main/docs/HRANA_3_SPEC.md
+      - https://github.com/tursodatabase/libsql-client-ts/blob/main/packages/libsql-client/src/ws.ts
+    notes: >-
+      The client opens the database host's root with the hrana3, hrana2 or hrana1 subprotocol and
+      sends its database token in a hello message, which Opfence swaps like the Authorization
+      header of the HTTP protocol. Opening the socket runs nothing; each request on it is decided
+      by turso.sql.socket.
+    tests:
+      - fixture: fixtures/socket-connect.http
+        expect: read
+
+  - id: turso.sql.socket
+    match: { websocket: { path: /, message: request } }
+    class: unknown
+    classify: { sql: request, format: libsql }
+    card: "Run SQL on a Turso database over WebSocket"
+    status: verified
+    verified: 2026-10-25
+    sources:
+      - https://github.com/tursodatabase/libsql/blob/main/docs/HRANA_3_SPEC.md
+      - https://github.com/tursodatabase/libsql/blob/main/docs/HRANA_2_SPEC.md
+    notes: >-
+      Every execute, batch, sequence and open_cursor request is classified as SQLite, as its HTTP
+      form is. SQL stored on the connection with store_sql runs nothing until a later request
+      names its sql_id, so the store itself passes, and the request that runs it is decided by the
+      stored text; an id the connection did not store, a statement with both sql and sql_id, the
+      protobuf form (hrana3-protobuf) and unknown requests are unknown. Opening and closing
+      streams and cursors, describe and get_autocommit pass. A blocked request gets
+      response_error and the stream carries on.
+    tests:
+      - fixture: fixtures/socket-execute-drop.ws
+        expect: irreversible
+      - fixture: fixtures/socket-execute-read.ws
+        expect: read
+      - fixture: fixtures/socket-batch.ws
+        expect: delete
+      - fixture: fixtures/socket-stored-sql.ws
+        expect: irreversible
+      - fixture: fixtures/socket-sql-id-unknown.ws
+        expect: unknown
+      - fixture: fixtures/socket-sequence.ws
+        expect: irreversible
+      - fixture: fixtures/socket-cursor.ws
+        expect: write
