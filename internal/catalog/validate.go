@@ -1,0 +1,885 @@
+package catalog
+
+import (
+	"io/fs"
+	"maps"
+	"net/url"
+	"path"
+	"regexp"
+	"slices"
+	"strings"
+	"time"
+
+	"github.com/rakeshnitb23/opfence/internal/classes"
+	"github.com/rakeshnitb23/opfence/internal/decode"
+	"github.com/rakeshnitb23/opfence/internal/request"
+)
+
+var (
+	providerIDRe    = regexp.MustCompile(`^[a-z0-9][a-z0-9-]*$`)
+	ruleIDRe        = regexp.MustCompile(`^[a-z0-9][a-z0-9-]*(\.[a-z0-9][a-z0-9-]*)+$`)
+	hostRe          = regexp.MustCompile(`^(\*\.|[a-z0-9]([a-z0-9-]*[a-z0-9])?\.\*\.|[a-z0-9][a-z0-9-]*\*\.\*\.)?([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}$`)
+	graphqlName     = regexp.MustCompile(`^[_A-Za-z][_0-9A-Za-z]*$`)
+	headerNameRe    = regexp.MustCompile("^[!#$%&'*+.^_`|~0-9A-Za-z-]+$")
+	envNameRe       = regexp.MustCompile(`^[A-Z_][A-Z0-9_]*$`)
+	mcpNameRe       = regexp.MustCompile(`^[A-Za-z0-9_-]+$`)
+	awsServiceRe    = regexp.MustCompile(`^[a-z0-9-]+$`)
+	awsActionRe     = regexp.MustCompile(`^[A-Z][A-Za-z0-9]*$`)
+	cardParamRe     = regexp.MustCompile(`\{([^{}]*)\}`)
+	gitRefRe        = regexp.MustCompile(`^refs/[A-Za-z0-9._/-]*\*?$`)
+	headerArgNameRe = regexp.MustCompile(`^[A-Za-z_][A-Za-z0-9_]*$`)
+	// responsePathRe is argPathRe with "**" steps (any number of keys)
+	// anywhere but last, for response transforms and restore paths.
+	responsePathRe = regexp.MustCompile(`^(\*\*\.)*[A-Za-z_$][A-Za-z0-9_$-]*(\.(\*\*\.)*[A-Za-z_$][A-Za-z0-9_$-]*)*$`)
+	argPathRe      = regexp.MustCompile(`^[A-Za-z_$][A-Za-z0-9_$-]*(\.[A-Za-z_$][A-Za-z0-9_$-]*)*$`)
+)
+
+var restMethods = map[string]bool{
+	"GET": true, "HEAD": true, "POST": true, "PUT": true, "PATCH": true, "DELETE": true, "OPTIONS": true,
+}
+
+var graphQLNameRe = regexp.MustCompile(`^[_A-Za-z][_0-9A-Za-z]*$`)
+
+func (l *loader) validate(c *Catalog) {
+	l.validateProviders(c)
+	referenced := map[string]bool{}
+	for _, p := range c.Providers {
+		l.validateRules(c, p, referenced)
+	}
+	for f := range l.fixtures {
+		if !referenced[f] {
+			l.addf(f, 0, "fixture is not referenced by any rule test")
+		}
+	}
+	for _, p := range c.Providers {
+		for _, r := range p.Rules {
+			if r.Classify == nil || r.Classify.AWSCLI == "" || r.Classify.Provider == "" {
+				continue
+			}
+			if t := c.Provider(r.Classify.Provider); t == nil || !t.SigV4 {
+				l.addf(r.File, r.Line, "%s: classify.provider %q is not a sigv4 provider in the catalog", r.ID, r.Classify.Provider)
+			}
+		}
+	}
+}
+
+// validateProviders checks every provider's own file, and the hosts and MCP
+// names they claim against each other.
+func (l *loader) validateProviders(c *Catalog) {
+	hostOwner := map[string]string{}
+	mcpNameOwner := map[string]string{}
+	for _, p := range c.Providers {
+		l.validateProvider(p, hostOwner, mcpNameOwner)
+	}
+	// A credential found by its variable or prefix goes to one provider;
+	// another that takes it says so with secrets_from.
+	envOwner, prefixOwner := map[string]string{}, map[string]string{}
+	for _, p := range c.Providers {
+		file := path.Join(p.Dir, ProviderFile)
+		for _, e := range p.Detect.Env {
+			if prev, ok := envOwner[e]; ok {
+				l.addf(file, 0, "detect.env %s is already detected by provider %s; list it in secrets_from instead", e, prev)
+			} else {
+				envOwner[e] = p.ID
+			}
+		}
+		for _, pre := range p.Detect.Prefixes {
+			for other, owner := range prefixOwner {
+				if owner != p.ID && (strings.HasPrefix(pre, other) || strings.HasPrefix(other, pre)) {
+					l.addf(file, 0, "detect.prefixes %s overlaps %s detected by provider %s; list it in secrets_from instead", pre, other, owner)
+				}
+			}
+			prefixOwner[pre] = p.ID
+		}
+		for _, from := range p.SecretsFrom {
+			switch {
+			case from == p.ID:
+				l.addf(file, 0, "secrets_from names the provider itself")
+			case c.Provider(from) == nil:
+				l.addf(file, 0, "secrets_from: no provider %s", from)
+			case len(p.Auth) == 0:
+				l.addf(file, 0, "secrets_from needs auth locations to put the secrets in")
+			}
+		}
+	}
+	fallback := map[string]bool{}
+	for _, p := range c.Providers {
+		fallback[p.ID] = p.Fallback
+	}
+	for h, owner := range hostOwner {
+		if !strings.Contains(h, "*") {
+			continue
+		}
+		for other, otherOwner := range hostOwner {
+			// A fallback provider's hosts may cover others': it applies
+			// only where no other provider does. Two fallbacks may not
+			// overlap.
+			if fallback[owner] != fallback[otherOwner] {
+				continue
+			}
+			if otherOwner != owner && (HostMatches(h, hostSample(other)) || HostMatches(other, hostSample(h))) {
+				l.addf(path.Join(owner, ProviderFile), 0, "host %q overlaps %q claimed by provider %s", h, other, otherOwner)
+			}
+		}
+	}
+}
+
+// validateRules checks p's rules, compiling their templates and conditions,
+// and indexes them in c by id and alias. It records the fixtures their tests
+// use in referenced, when it is not nil.
+func (l *loader) validateRules(c *Catalog, p *Provider, referenced map[string]bool) {
+	keys := map[string]*Rule{}
+	var gitRules []*Rule
+	for _, r := range p.Rules {
+		l.validateRule(r)
+		if g := r.Match.Git; g != nil && len(g.Refs) > 0 {
+			for _, prev := range gitRules {
+				if ref, ok := gitRefsOverlap(prev.Match.Git, g); ok {
+					l.addf(r.File, r.Line, "rule %s and %s (%s:%d) can both match %s; ref patterns of one command must not overlap", r.ID, prev.ID, prev.File, prev.Line, ref)
+				}
+			}
+			gitRules = append(gitRules, r)
+		}
+		for _, id := range append([]string{r.ID}, r.Aliases...) {
+			if id == "" {
+				continue
+			}
+			if prev, ok := c.rules[id]; ok {
+				l.addf(r.File, r.Line, "rule id %q already used by %s:%d", id, prev.File, prev.Line)
+				continue
+			}
+			c.rules[id] = r
+		}
+		if k := matchKey(r); k != "" {
+			if prev, ok := keys[k]; ok {
+				l.addf(r.File, r.Line, "rule %s matches the same operations as %s (%s:%d); merge them or use `when`", r.ID, prev.ID, prev.File, prev.Line)
+			} else {
+				keys[k] = r
+			}
+		}
+		if referenced == nil {
+			continue
+		}
+		for _, t := range r.Tests {
+			if t.Fixture != "" {
+				referenced[path.Join(p.Dir, t.Fixture)] = true
+			}
+			if t.Response != "" {
+				referenced[path.Join(p.Dir, t.Response)] = true
+			}
+		}
+	}
+}
+
+func (l *loader) validateProvider(p *Provider, hostOwner, mcpNameOwner map[string]string) {
+	file := path.Join(p.Dir, ProviderFile)
+	if p.ID != p.Dir {
+		l.addf(file, 0, "provider %q must match its folder name %q", p.ID, p.Dir)
+	}
+	if !providerIDRe.MatchString(p.ID) {
+		l.addf(file, 0, "provider id %q must be lower-case letters, digits and dashes", p.ID)
+	}
+	if strings.TrimSpace(p.Title) == "" {
+		l.addf(file, 0, "title is required")
+	}
+	if p.Docs != "" && !validHTTPSURL(p.Docs) {
+		l.addf(file, 0, "docs must be an https URL")
+	}
+	if len(p.Hosts) == 0 && p.MCP == nil {
+		l.addf(file, 0, "hosts is required (only local MCP servers may omit it)")
+	}
+	for i, sc := range p.Schemas {
+		switch {
+		case !slices.Contains(SchemaKinds, sc.Kind):
+			l.addf(file, 0, "schemas[%d]: kind %q must be one of %s", i, sc.Kind, strings.Join(SchemaKinds, ", "))
+		case !validHTTPSURL(sc.URL):
+			l.addf(file, 0, "schemas[%d]: url must be an https URL", i)
+		case sc.Prefix != "" && (!strings.HasPrefix(sc.Prefix, "/") || strings.HasSuffix(sc.Prefix, "/")):
+			l.addf(file, 0, "schemas[%d]: prefix %q must start with / and not end with one", i, sc.Prefix)
+		case sc.Coverage != "" && sc.Coverage != "full" && sc.Coverage != "partial":
+			l.addf(file, 0, "schemas[%d]: coverage must be full or partial", i)
+		case (sc.Kind == "botocore") != (sc.Service != ""):
+			l.addf(file, 0, "schemas[%d]: service is required for botocore schemas and only for them", i)
+		}
+	}
+	for _, h := range p.Hosts {
+		if !hostRe.MatchString(h) {
+			l.addf(file, 0, "host %q must be a lower-case DNS name, optionally starting with *. or with one label (or a label prefix ending in *) and .*.", h)
+			continue
+		}
+		if prev, ok := hostOwner[h]; ok {
+			l.addf(file, 0, "host %q is already claimed by provider %s", h, prev)
+		} else {
+			hostOwner[h] = p.ID
+		}
+	}
+	for _, h := range p.Git {
+		if !slices.Contains(p.Hosts, h) || strings.Contains(h, "*") {
+			l.addf(file, 0, "git host %q must be one of the provider's hosts, without a wildcard", h)
+		}
+	}
+	for i, a := range p.HeaderArgs {
+		switch {
+		case !headerNameRe.MatchString(a.Header):
+			l.addf(file, 0, "header_args[%d]: bad header name %q", i, a.Header)
+		case !headerArgNameRe.MatchString(a.Arg) || a.Arg == "query" || a.Arg == "body":
+			l.addf(file, 0, "header_args[%d]: arg %q must be a plain name other than query and body", i, a.Arg)
+		case a.Parse != "url" && a.Parse != "basic":
+			l.addf(file, 0, "header_args[%d]: parse %q must be url or basic", i, a.Parse)
+		}
+		for _, b := range p.HeaderArgs[:i] {
+			if b.Arg == a.Arg {
+				l.addf(file, 0, "header_args[%d]: arg %q is used twice", i, a.Arg)
+			}
+		}
+	}
+	if p.HostArg != "" {
+		wild := slices.ContainsFunc(p.Hosts, func(h string) bool { return strings.HasPrefix(h, "*.") })
+		switch {
+		case !headerArgNameRe.MatchString(p.HostArg) || p.HostArg == "query" || p.HostArg == "body":
+			l.addf(file, 0, "host_arg %q must be a plain name other than query and body", p.HostArg)
+		case !wild:
+			l.addf(file, 0, "host_arg needs a host pattern that starts with *.")
+		}
+		for _, a := range p.HeaderArgs {
+			if a.Arg == p.HostArg {
+				l.addf(file, 0, "host_arg %q is also a header_args arg", p.HostArg)
+			}
+		}
+	}
+	seenPorts := map[int]bool{}
+	for _, port := range p.DatabasePorts {
+		switch {
+		case port < 1 || port > 65535 || port == 443:
+			l.addf(file, 0, "database_ports: %d must be a port from 1 to 65535 other than 443, which Opfence inspects", port)
+		case seenPorts[port]:
+			l.addf(file, 0, "database_ports lists %d twice", port)
+		}
+		seenPorts[port] = true
+	}
+	if len(p.DatabasePorts) > 0 && len(p.Hosts) == 0 {
+		l.addf(file, 0, "database_ports needs hosts")
+	}
+	if p.Fallback {
+		switch {
+		case len(p.Hosts) == 0 || slices.ContainsFunc(p.Hosts, func(h string) bool { return !strings.HasPrefix(h, "*.") }):
+			l.addf(file, 0, "a fallback provider's hosts must all be *. patterns")
+		case p.MCP != nil || p.SigV4 || len(p.Git) > 0 || len(p.GraphQL) > 0 || len(p.Batch) > 0 || p.HostArg != "" || len(p.WebSocket) > 0:
+			l.addf(file, 0, "a fallback provider takes REST defaults and auth only")
+		}
+	}
+	for _, g := range p.GraphQL {
+		if !strings.HasPrefix(g, "/") {
+			l.addf(file, 0, "graphql path %q must start with /", g)
+		}
+	}
+	for _, b := range p.Batch {
+		switch {
+		case !strings.HasPrefix(b, "/"):
+			l.addf(file, 0, "batch path %q must start with /", b)
+		case slices.Contains(p.GraphQL, b):
+			l.addf(file, 0, "batch path %q is also a graphql path", b)
+		}
+	}
+	if len(p.Batch) > 0 && (p.SigV4 || p.MCP != nil) {
+		l.addf(file, 0, "batch paths need a REST provider")
+	}
+	seenWS := map[string]bool{}
+	for _, w := range p.WebSocket {
+		_, known := decode.WebSocketMessages[w.Protocol]
+		switch {
+		case !strings.HasPrefix(w.Path, "/") || strings.ContainsAny(w.Path, "?#{}*"):
+			l.addf(file, 0, "websocket path %q must be a plain path starting with /", w.Path)
+		case seenWS[w.Path]:
+			l.addf(file, 0, "websocket path %q is listed twice", w.Path)
+		case !known:
+			l.addf(file, 0, "websocket path %s: protocol %q must be one of %s", w.Path, w.Protocol, strings.Join(slices.Sorted(maps.Keys(decode.WebSocketMessages)), ", "))
+		case w.Protocol == decode.WSGraphQL && !slices.Contains(p.GraphQL, w.Path):
+			// Its operations are decided by the GraphQL rules, as if posted
+			// to the same path.
+			l.addf(file, 0, "websocket path %s speaks graphql-ws, so it must also be a graphql path", w.Path)
+		}
+		seenWS[w.Path] = true
+	}
+	if len(p.WebSocket) > 0 && (p.SigV4 || p.MCP != nil || len(p.Hosts) == 0) {
+		l.addf(file, 0, "websocket paths need hosts and a provider that is not SigV4 or MCP")
+	}
+	for i, a := range p.Auth {
+		set := 0
+		if a.Header != "" {
+			set++
+			if !headerNameRe.MatchString(a.Header) {
+				l.addf(file, 0, "auth[%d]: bad header name %q", i, a.Header)
+			}
+		}
+		if a.Query != "" {
+			set++
+		}
+		if a.Basic != "" {
+			set++
+			if a.Basic != "username" && a.Basic != "password" {
+				l.addf(file, 0, "auth[%d]: basic must be username or password", i)
+			}
+		}
+		if a.Form != "" {
+			set++
+			if !headerArgNameRe.MatchString(a.Form) {
+				l.addf(file, 0, "auth[%d]: form %q must be a plain field name", i, a.Form)
+			}
+		}
+		if set != 1 {
+			l.addf(file, 0, "auth[%d]: set exactly one of header, query, basic or form", i)
+		}
+		if a.Scheme != "" && a.Header == "" {
+			l.addf(file, 0, "auth[%d]: scheme is only valid with header", i)
+		}
+	}
+	for _, e := range p.Detect.Env {
+		if !envNameRe.MatchString(e) {
+			l.addf(file, 0, "detect.env %q is not an environment variable name", e)
+		}
+	}
+	for _, pre := range p.Detect.Prefixes {
+		if len(pre) < 3 {
+			l.addf(file, 0, "detect.prefixes %q is too short to identify a token", pre)
+		}
+	}
+	for name, c := range map[string]classes.Class{"graphql_query": p.Defaults.GraphQLQuery, "graphql_subscription": p.Defaults.GraphQLSubscription, "rest_safe_methods": p.Defaults.RESTSafeMethods,
+		"aws_read_actions": p.Defaults.AWSReadActions, "mcp_tools": p.Defaults.MCPTools} {
+		if c != "" && !c.Valid() {
+			l.addf(file, 0, "defaults.%s: unknown class %q", name, c)
+		}
+	}
+	// A tool no rule names is one nobody has read, so its default may not
+	// let it through as a read.
+	if p.Defaults.MCPTools == classes.Read {
+		l.addf(file, 0, "defaults.mcp_tools may not be read")
+	}
+	if p.Defaults.MCPTools != "" && p.MCP == nil {
+		l.addf(file, 0, "defaults.mcp_tools needs an mcp block")
+	}
+	if p.Defaults.GraphQLQuery != "" && len(p.GraphQL) == 0 {
+		l.addf(file, 0, "defaults.graphql_query needs graphql paths")
+	}
+	if p.Defaults.GraphQLSubscription != "" && len(p.GraphQL) == 0 {
+		l.addf(file, 0, "defaults.graphql_subscription needs graphql paths")
+	}
+	if len(p.Defaults.GraphQLSecretFields) > 0 && len(p.GraphQL) == 0 {
+		l.addf(file, 0, "defaults.graphql_secret_fields needs graphql paths")
+	}
+	for _, f := range p.Defaults.GraphQLSecretFields {
+		if !graphQLNameRe.MatchString(f) {
+			l.addf(file, 0, "defaults.graphql_secret_fields: %q is not a GraphQL field name", f)
+		}
+	}
+	if p.Defaults.AWSReadActions != "" && !p.SigV4 {
+		l.addf(file, 0, "defaults.aws_read_actions needs sigv4: true")
+	}
+	if p.MCP != nil {
+		if len(p.MCP.Names) == 0 {
+			l.addf(file, 0, "mcp.names is required")
+		}
+		for _, n := range p.MCP.Names {
+			if !mcpNameRe.MatchString(n) {
+				l.addf(file, 0, "mcp name %q may only contain letters, digits, _ and -", n)
+				continue
+			}
+			if prev, ok := mcpNameOwner[n]; ok {
+				l.addf(file, 0, "mcp name %q is already claimed by provider %s", n, prev)
+			} else {
+				mcpNameOwner[n] = p.ID
+			}
+		}
+		if len(p.MCP.Paths) > 0 && len(p.Hosts) == 0 {
+			l.addf(file, 0, "mcp.paths needs provider hosts")
+		}
+		seen := map[string]bool{}
+		for _, mp := range p.MCP.Paths {
+			segs, ok := request.NormalizePath(mp)
+			if !ok || len(segs) == 0 || mp != "/"+strings.Join(segs, "/") {
+				l.addf(file, 0, "mcp path %q must be an absolute path without empty or dot segments or a trailing /", mp)
+			}
+			if seen[mp] {
+				l.addf(file, 0, "mcp path %q is listed twice", mp)
+			}
+			seen[mp] = true
+		}
+	}
+}
+
+// underMCPPath returns the MCP path a REST template can only match requests
+// under, which the decoder reads as MCP, or "" when it can match others.
+func underMCPPath(t *Template, paths []string) string {
+	for _, mp := range paths {
+		ps, ok := request.NormalizePath(mp)
+		if !ok || len(ps) > len(t.Segments) {
+			continue
+		}
+		under := true
+		for i, s := range ps {
+			ts := t.Segments[i]
+			if ts.Rest || ts.Param != "" || ts.Literal != s {
+				under = false
+				break
+			}
+		}
+		if under {
+			return mp
+		}
+	}
+	return ""
+}
+
+func (l *loader) validateRule(r *Rule) {
+	p := r.Provider
+	f, ln := r.File, r.Line
+	if !ruleIDRe.MatchString(r.ID) {
+		l.addf(f, ln, "rule id %q must look like provider.resource.verb (lower-case, dots between parts)", r.ID)
+	} else if !strings.HasPrefix(r.ID, p.ID+".") {
+		l.addf(f, ln, "rule id %q must start with its provider %q", r.ID, p.ID+".")
+	}
+	for _, a := range r.Aliases {
+		if !ruleIDRe.MatchString(a) {
+			l.addf(f, ln, "alias %q is not a valid rule id", a)
+		}
+	}
+
+	l.validateMatch(r)
+	if m := r.Match.REST; m != nil && m.Template != nil {
+		for _, seg := range m.Template.Segments {
+			for _, a := range p.HeaderArgs {
+				if seg.Param != "" && seg.Param == a.Arg {
+					l.addf(f, ln, "%s: path parameter {%s} has the name of a header_args arg", r.ID, seg.Param)
+				}
+			}
+			if seg.Param != "" && seg.Param == p.HostArg {
+				l.addf(f, ln, "%s: path parameter {%s} has the name of the host_arg", r.ID, seg.Param)
+			}
+		}
+	}
+
+	if !r.Class.Valid() {
+		l.addf(f, ln, "%s: unknown class %q", r.ID, r.Class)
+	}
+	for i := range r.When {
+		w := &r.When[i]
+		if !w.Class.Valid() {
+			l.addf(f, ln, "%s: when[%d]: unknown class %q", r.ID, i, w.Class)
+		}
+		l.validateCondition(r, i, &w.If)
+	}
+	if x := r.Response; x != nil {
+		if r.Match.REST == nil && r.Match.GraphQL == nil {
+			l.addf(f, ln, "%s: response transforms are for rest and graphql rules", r.ID)
+		}
+		if len(x.Paths()) == 0 {
+			l.addf(f, ln, "%s: response needs redact, clear, mint or hold paths", r.ID)
+		}
+		for _, p := range x.Hold {
+			if slices.Contains(x.Redact, p) || slices.Contains(x.Clear, p) || slices.Contains(x.Mint, p) {
+				l.addf(f, ln, "%s: response path %q is held and also redacted, cleared or minted", r.ID, p)
+			}
+		}
+		if len(x.Hold) > 0 && r.Match.REST == nil {
+			l.addf(f, ln, "%s: response.hold is for rest rules", r.ID)
+		}
+		for _, p := range x.Paths() {
+			if !responsePathRe.MatchString(p) {
+				l.addf(f, ln, "%s: response path %q is not a dotted path (a ** step may stand for any keys, but not last)", r.ID, p)
+			}
+		}
+		if !x.Class.Valid() {
+			l.addf(f, ln, "%s: response.class %q is not a class", r.ID, x.Class)
+		}
+		hasResponseTest := false
+		for _, t := range r.Tests {
+			hasResponseTest = hasResponseTest || t.Response != ""
+		}
+		if !hasResponseTest && r.Status == Verified {
+			l.addf(f, ln, "%s: a verified rule with a response transform needs a test with a recorded response", r.ID)
+		}
+	}
+	if len(r.Restore) > 0 {
+		switch {
+		case r.Match.REST == nil || (r.Match.REST.Method != "PUT" && r.Match.REST.Method != "PATCH" && r.Match.REST.Method != "POST"):
+			l.addf(f, ln, "%s: restore is for rest rules that match PUT, PATCH or POST", r.ID)
+		case r.Response == nil || len(r.Response.Hold) == 0:
+			// The API echoes what was written; without a hold the values
+			// would reach the agent in the response.
+			l.addf(f, ln, "%s: a rule with restore needs response.hold for what the API sends back", r.ID)
+		}
+		for _, p := range r.Restore {
+			if !responsePathRe.MatchString(p) {
+				l.addf(f, ln, "%s: restore path %q is not a dotted path (a ** step may stand for any keys, but not last)", r.ID, p)
+			}
+		}
+	}
+	if c := r.Classify; c != nil {
+		kinds := 0
+		for _, set := range []bool{len(c.SQL) > 0, len(c.Redis) > 0, c.AWSCLI != "", c.PostgREST != ""} {
+			if set {
+				kinds++
+			}
+		}
+		switch {
+		case kinds == 0:
+			l.addf(f, ln, "%s: classify needs sql: <argument>, redis: <argument>, aws_cli: <argument> or postgrest: <argument>", r.ID)
+		case kinds > 1:
+			l.addf(f, ln, "%s: classify takes one of sql, redis, aws_cli and postgrest", r.ID)
+		case c.PostgREST != "" && !argPathRe.MatchString(c.PostgREST):
+			l.addf(f, ln, "%s: classify.postgrest %q is not an argument path", r.ID, c.PostgREST)
+		case c.PostgREST != "" && (len(c.Dialect) > 0 || c.Format != "" || c.Provider != ""):
+			l.addf(f, ln, "%s: classify.postgrest takes no dialect, format or provider", r.ID)
+		case c.PostgREST != "" && (r.Match.REST == nil || (r.Match.REST.Method != "PATCH" && r.Match.REST.Method != "DELETE")):
+			l.addf(f, ln, "%s: classify.postgrest is for PATCH and DELETE rules, whose filters choose the rows they change", r.ID)
+		case c.AWSCLI != "" && !argPathRe.MatchString(c.AWSCLI):
+			l.addf(f, ln, "%s: classify.aws_cli %q is not an argument path", r.ID, c.AWSCLI)
+		case c.AWSCLI != "" && c.Provider == "":
+			l.addf(f, ln, "%s: classify.aws_cli needs provider: the SigV4 provider whose rules decide", r.ID)
+		case c.AWSCLI == "" && c.Provider != "":
+			l.addf(f, ln, "%s: classify.provider is for aws_cli", r.ID)
+		case c.AWSCLI != "" && (len(c.Dialect) > 0 || c.Format != ""):
+			l.addf(f, ln, "%s: classify.dialect and classify.format are for sql", r.ID)
+		case len(c.Redis) > 0 && (len(c.Dialect) > 0 || c.Format != ""):
+			l.addf(f, ln, "%s: classify.dialect and classify.format are for sql", r.ID)
+		}
+		for i, p := range c.Redis {
+			if !argPathRe.MatchString(p) {
+				l.addf(f, ln, "%s: classify.redis %q is not an argument path", r.ID, p)
+			} else if slices.Contains(c.Redis[:i], p) {
+				l.addf(f, ln, "%s: classify.redis lists %q twice", r.ID, p)
+			}
+		}
+		for i, p := range c.SQL {
+			if !argPathRe.MatchString(p) {
+				l.addf(f, ln, "%s: classify.sql %q is not an argument path", r.ID, p)
+			} else if slices.Contains(c.SQL[:i], p) {
+				l.addf(f, ln, "%s: classify.sql lists %q twice", r.ID, p)
+			}
+		}
+		for i, d := range c.Dialect {
+			switch {
+			case d != DialectPostgres && d != DialectMySQL && d != DialectSQLite && d != DialectGoogle:
+				l.addf(f, ln, "%s: classify.dialect %q is not postgres, mysql, sqlite or googlesql", r.ID, d)
+			case slices.Contains(c.Dialect[:i], d):
+				l.addf(f, ln, "%s: classify.dialect lists %q twice", r.ID, d)
+			}
+		}
+		switch c.Format {
+		case "":
+		case FormatLibSQL:
+			if len(c.SQL) > 1 {
+				l.addf(f, ln, "%s: classify.format libsql reads one argument, the request body", r.ID)
+			}
+			if len(c.Dialect) > 0 {
+				l.addf(f, ln, "%s: classify.format libsql is always sqlite; leave dialect out", r.ID)
+			}
+		default:
+			l.addf(f, ln, "%s: classify.format %q is not libsql", r.ID, c.Format)
+		}
+	}
+	if r.Resource != nil {
+		if !argPathRe.MatchString(r.Resource.Arg) {
+			l.addf(f, ln, "%s: resource.arg %q is not an argument path", r.ID, r.Resource.Arg)
+		}
+		if r.Resource.Kind == "" {
+			l.addf(f, ln, "%s: resource.kind is required", r.ID)
+		}
+	}
+
+	if r.Card == "" && r.Class != classes.Read {
+		l.addf(f, ln, "%s: card is required for operations that are not reads", r.ID)
+	}
+	if strings.Count(r.Card, "{") != strings.Count(r.Card, "}") {
+		l.addf(f, ln, "%s: card has unbalanced braces", r.ID)
+	}
+	for _, m := range cardParamRe.FindAllStringSubmatch(r.Card, -1) {
+		if !argPathRe.MatchString(m[1]) {
+			l.addf(f, ln, "%s: card placeholder {%s} is not an argument path", r.ID, m[1])
+		}
+	}
+
+	switch r.Status {
+	case Verified, Community, Draft:
+	case "":
+		l.addf(f, ln, "%s: status is required (verified, community or draft)", r.ID)
+	default:
+		l.addf(f, ln, "%s: unknown status %q", r.ID, r.Status)
+	}
+	if r.Verified != "" {
+		if _, err := time.Parse("2006-01-02", r.Verified); err != nil {
+			l.addf(f, ln, "%s: verified must be a date like 2026-10-16", r.ID)
+		}
+	}
+	for _, s := range r.Sources {
+		if !validHTTPSURL(s) {
+			l.addf(f, ln, "%s: source %q must be an https URL", r.ID, s)
+		}
+	}
+	if r.Status == Verified {
+		if len(r.Tests) == 0 {
+			l.addf(f, ln, "%s: verified rules need at least one test", r.ID)
+		}
+		if len(r.Sources) == 0 {
+			l.addf(f, ln, "%s: verified rules need at least one source", r.ID)
+		}
+		if r.Verified == "" {
+			l.addf(f, ln, "%s: verified rules need a verified date", r.ID)
+		}
+	}
+	if r.Match.CLI != nil && len(r.Tests) > 0 {
+		l.addf(f, ln, "%s: cli rules cannot have request fixtures", r.ID)
+	}
+	if l.lazy {
+		return // tests and their fixtures are checked when the catalog is loaded whole
+	}
+	for i, t := range r.Tests {
+		l.validateTest(r, i, t)
+	}
+}
+
+func (l *loader) validateMatch(r *Rule) {
+	p, f, ln := r.Provider, r.File, r.Line
+	m := &r.Match
+	n := 0
+	for _, set := range []bool{m.REST != nil, m.GraphQL != nil, m.MCP != nil, m.AWS != nil, m.Git != nil, m.CLI != nil, m.WebSocket != nil} {
+		if set {
+			n++
+		}
+	}
+	if n != 1 {
+		l.addf(f, ln, "%s: match needs exactly one of rest, graphql, mcp, aws, git, cli or websocket", r.ID)
+		return
+	}
+	switch {
+	case m.REST != nil:
+		if !restMethods[m.REST.Method] {
+			l.addf(f, ln, "%s: rest.method %q must be an upper-case HTTP method", r.ID, m.REST.Method)
+		}
+		t, err := ParseTemplate(m.REST.Path)
+		if err != nil {
+			l.addf(f, ln, "%s: %v", r.ID, err)
+		} else {
+			m.REST.Template = t
+		}
+		if len(p.Hosts) == 0 {
+			l.addf(f, ln, "%s: rest rules need provider hosts", r.ID)
+		}
+		if p.MCP != nil {
+			// Without mcp.paths every request to the hosts is read as MCP.
+			if len(p.MCP.Paths) == 0 {
+				l.addf(f, ln, "%s: rest rules on an MCP server's hosts need mcp.paths", r.ID)
+			} else if t != nil {
+				if mp := underMCPPath(t, p.MCP.Paths); mp != "" {
+					l.addf(f, ln, "%s: rest path %s is under mcp path %s, which is read as MCP", r.ID, m.REST.Path, mp)
+				}
+			}
+		}
+	case m.GraphQL != nil:
+		switch m.GraphQL.Type {
+		case "query", "mutation", "subscription":
+		default:
+			l.addf(f, ln, "%s: graphql.type must be query, mutation or subscription", r.ID)
+		}
+		if !graphqlName.MatchString(m.GraphQL.Field) {
+			l.addf(f, ln, "%s: graphql.field %q is not a GraphQL name", r.ID, m.GraphQL.Field)
+		}
+		if len(p.GraphQL) == 0 {
+			l.addf(f, ln, "%s: graphql rules need graphql paths in %s", r.ID, ProviderFile)
+		}
+	case m.MCP != nil:
+		if !mcpNameRe.MatchString(m.MCP.Tool) {
+			l.addf(f, ln, "%s: mcp.tool %q may only contain letters, digits, _ and -", r.ID, m.MCP.Tool)
+		}
+		if p.MCP == nil {
+			l.addf(f, ln, "%s: mcp rules need an mcp block in %s", r.ID, ProviderFile)
+		}
+	case m.AWS != nil:
+		if !awsServiceRe.MatchString(m.AWS.Service) {
+			l.addf(f, ln, "%s: aws.service %q must be a lower-case signing name", r.ID, m.AWS.Service)
+		}
+		switch {
+		case m.AWS.Action != "" && m.AWS.Method == "" && m.AWS.Path == "":
+			if !awsActionRe.MatchString(m.AWS.Action) {
+				l.addf(f, ln, "%s: aws.action %q must be an action name like DeleteBucket", r.ID, m.AWS.Action)
+			}
+		case m.AWS.Action == "" && m.AWS.Method != "" && m.AWS.Path != "":
+			if !restMethods[m.AWS.Method] {
+				l.addf(f, ln, "%s: aws.method %q must be an upper-case HTTP method", r.ID, m.AWS.Method)
+			}
+			t, err := ParseTemplate(m.AWS.Path)
+			if err != nil {
+				l.addf(f, ln, "%s: %v", r.ID, err)
+			} else {
+				m.AWS.Template = t
+			}
+		default:
+			l.addf(f, ln, "%s: aws needs either action, or method and path", r.ID)
+		}
+		if !p.SigV4 {
+			l.addf(f, ln, "%s: aws rules need sigv4: true in %s", r.ID, ProviderFile)
+		}
+	case m.Git != nil:
+		cmds, ok := gitCommands[m.Git.Service]
+		if !ok {
+			l.addf(f, ln, "%s: git.service must be upload-pack, receive-pack or lfs", r.ID)
+		} else if !slices.Contains(cmds, m.Git.Command) {
+			l.addf(f, ln, "%s: git.command for %s must be one of %s", r.ID, m.Git.Service, strings.Join(cmds, ", "))
+		}
+		if len(m.Git.Refs) > 0 && !(m.Git.Service == decode.GitReceivePack && m.Git.Command != decode.GitListRefs) {
+			l.addf(f, ln, "%s: git.refs only applies to receive-pack create, update and delete", r.ID)
+		}
+		for _, ref := range m.Git.Refs {
+			if !gitRefRe.MatchString(ref) {
+				l.addf(f, ln, "%s: git.refs %q must be a full ref name like refs/heads/main, with * only at the end", r.ID, ref)
+			}
+		}
+		if len(p.Git) == 0 {
+			l.addf(f, ln, "%s: git rules need git hosts in %s", r.ID, ProviderFile)
+		}
+	case m.CLI != nil:
+		if strings.TrimSpace(m.CLI.Command) == "" || m.CLI.Command != strings.TrimSpace(m.CLI.Command) {
+			l.addf(f, ln, "%s: cli.command must be a command without surrounding spaces", r.ID)
+		}
+	case m.WebSocket != nil:
+		i := slices.IndexFunc(p.WebSocket, func(w WebSocketPath) bool { return w.Path == m.WebSocket.Path })
+		if i < 0 {
+			l.addf(f, ln, "%s: websocket.path %q is not one of the websocket paths in %s", r.ID, m.WebSocket.Path, ProviderFile)
+			break
+		}
+		if msgs := decode.WebSocketMessages[p.WebSocket[i].Protocol]; !slices.Contains(msgs, m.WebSocket.Message) {
+			l.addf(f, ln, "%s: websocket.message for %s must be one of %s", r.ID, p.WebSocket[i].Protocol, strings.Join(msgs, ", "))
+		}
+	}
+}
+
+func (l *loader) validateCondition(r *Rule, i int, c *Condition) {
+	f, ln := r.File, r.Line
+	if !argPathRe.MatchString(c.Arg) {
+		l.addf(f, ln, "%s: when[%d]: arg %q is not an argument path", r.ID, i, c.Arg)
+	}
+	n := 0
+	if c.Equals != nil {
+		n++
+	}
+	if c.In != nil {
+		n++
+		if len(c.In) == 0 {
+			l.addf(f, ln, "%s: when[%d]: in must list at least one value", r.ID, i)
+		}
+	}
+	if c.Present {
+		n++
+	}
+	if c.Absent {
+		n++
+	}
+	if c.Empty {
+		n++
+	}
+	if c.Matches != "" {
+		n++
+		re, err := regexp.Compile(c.Matches)
+		if err != nil {
+			l.addf(f, ln, "%s: when[%d]: matches: %v", r.ID, i, err)
+		}
+		c.re = re
+	}
+	if n != 1 {
+		l.addf(f, ln, "%s: when[%d]: set exactly one of equals, in, present, absent, empty or matches", r.ID, i)
+	}
+}
+
+func (l *loader) validateTest(r *Rule, i int, t Test) {
+	f, ln := r.File, r.Line
+	if t.Fixture == "" {
+		l.addf(f, ln, "%s: tests[%d]: fixture is required", r.ID, i)
+	} else {
+		clean := path.Clean(t.Fixture)
+		if clean != t.Fixture || strings.HasPrefix(clean, "../") || clean == ".." || path.IsAbs(clean) || !strings.HasPrefix(clean, FixturesDir+"/") {
+			l.addf(f, ln, "%s: tests[%d]: fixture %q must be a clean path under %s/", r.ID, i, t.Fixture, FixturesDir)
+		} else if _, err := fs.Stat(l.fsys, path.Join(r.Provider.Dir, clean)); err != nil {
+			l.addf(f, ln, "%s: tests[%d]: fixture %s not found", r.ID, i, t.Fixture)
+		} else if strings.HasSuffix(clean, ".json") && r.Match.MCP == nil {
+			l.addf(f, ln, "%s: tests[%d]: .json tool-call fixtures are for mcp rules", r.ID, i)
+		} else if strings.HasSuffix(clean, ".ws") && len(r.Provider.WebSocket) == 0 {
+			l.addf(f, ln, "%s: tests[%d]: .ws fixtures are for providers with websocket paths", r.ID, i)
+		} else if !strings.HasSuffix(clean, ".http") && !strings.HasSuffix(clean, ".json") && !strings.HasSuffix(clean, ".ws") {
+			l.addf(f, ln, "%s: tests[%d]: fixture %s must be a .http request, a .ws socket or a .json tool call", r.ID, i, t.Fixture)
+		}
+	}
+	if !t.Expect.Valid() {
+		l.addf(f, ln, "%s: tests[%d]: unknown expected class %q", r.ID, i, t.Expect)
+	}
+	if t.Response != "" {
+		clean := path.Clean(t.Response)
+		switch {
+		case r.Response == nil:
+			l.addf(f, ln, "%s: tests[%d]: response is for rules with a response transform", r.ID, i)
+		case clean != t.Response || !strings.HasPrefix(clean, FixturesDir+"/") || !strings.HasSuffix(clean, ".json"):
+			l.addf(f, ln, "%s: tests[%d]: response %q must be a clean .json path under %s/", r.ID, i, t.Response, FixturesDir)
+		default:
+			if _, err := fs.Stat(l.fsys, path.Join(r.Provider.Dir, clean)); err != nil {
+				l.addf(f, ln, "%s: tests[%d]: response %s not found", r.ID, i, t.Response)
+			}
+		}
+	}
+}
+
+// matchKey identifies the set of operations a rule matches, for ambiguity
+// checks within a provider. Rules with conditions still collide: conditions
+// belong in one rule's `when` list.
+func matchKey(r *Rule) string {
+	m := r.Match
+	switch {
+	case m.REST != nil && m.REST.Template != nil:
+		return "rest " + m.REST.Method + " " + m.REST.Template.Shape()
+	case m.GraphQL != nil:
+		return "graphql " + m.GraphQL.Type + " " + m.GraphQL.Field
+	case m.MCP != nil:
+		return "mcp " + m.MCP.Tool
+	case m.AWS != nil && m.AWS.Template != nil:
+		return "aws " + m.AWS.Service + " " + m.AWS.Method + " " + m.AWS.Template.Shape()
+	case m.AWS != nil:
+		return "aws " + m.AWS.Service + " " + m.AWS.Action
+	case m.Git != nil && len(m.Git.Refs) == 0:
+		return "git " + m.Git.Service + " " + m.Git.Command
+	case m.CLI != nil:
+		return "cli " + m.CLI.Command
+	case m.WebSocket != nil:
+		return "websocket " + m.WebSocket.Path + " " + m.WebSocket.Message
+	}
+	return ""
+}
+
+// gitRefsOverlap reports a ref that two git rules for the same command
+// could both match.
+func gitRefsOverlap(a, b *GitMatch) (string, bool) {
+	if a.Service != b.Service || a.Command != b.Command {
+		return "", false
+	}
+	for _, x := range a.Refs {
+		for _, y := range b.Refs {
+			px, py := strings.TrimSuffix(x, "*"), strings.TrimSuffix(y, "*")
+			switch {
+			case x == y,
+				strings.HasSuffix(x, "*") && strings.HasPrefix(py, px),
+				strings.HasSuffix(y, "*") && strings.HasPrefix(px, py):
+				return y, true
+			}
+		}
+	}
+	return "", false
+}
+
+// gitCommands lists each git service's commands.
+var gitCommands = map[string][]string{
+	decode.GitUploadPack:  {decode.GitFetch},
+	decode.GitReceivePack: {decode.GitListRefs, decode.GitCreate, decode.GitUpdate, decode.GitDelete},
+	decode.GitLFS:         {decode.LFSDownload, decode.LFSUpload, decode.LFSListLocks, decode.LFSLock, decode.LFSUnlock},
+}
+
+func validHTTPSURL(s string) bool {
+	u, err := url.Parse(s)
+	return err == nil && u.Scheme == "https" && u.Host != ""
+}
