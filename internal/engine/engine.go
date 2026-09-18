@@ -1,0 +1,504 @@
+// Package engine ties the core together: it decodes a request into
+// operations, matches each against the catalog, resolves its environment
+// and decides what to do. It does no I/O.
+package engine
+
+import (
+	"crypto/sha256"
+	"encoding/json"
+	"fmt"
+	"regexp"
+	"slices"
+	"strings"
+	"unicode"
+
+	"github.com/rakeshnitb23/opfence/internal/catalog"
+	"github.com/rakeshnitb23/opfence/internal/classes"
+	"github.com/rakeshnitb23/opfence/internal/decode"
+	"github.com/rakeshnitb23/opfence/internal/policy"
+	"github.com/rakeshnitb23/opfence/internal/request"
+)
+
+// Engine evaluates requests against a catalog and a policy.
+type Engine struct {
+	Catalog *catalog.Catalog
+	Policy  *policy.Effective
+	// IncludeDraft also applies draft rules (the fixture runner sets it;
+	// otherwise the policy decides).
+	IncludeDraft bool
+	// TransformsResponses says the caller applies rules' response
+	// transforms (only the proxy can), so their response.class counts.
+	TransformsResponses bool
+}
+
+// New returns an engine. A nil policy means defaults only.
+func New(c *catalog.Catalog, p *policy.Effective) *Engine {
+	if p == nil {
+		p = policy.Resolve(nil, nil)
+	}
+	return &Engine{Catalog: c, Policy: p, IncludeDraft: p.IncludeDraft}
+}
+
+// Evaluation is the verdict on one operation.
+type Evaluation struct {
+	Op       decode.Operation
+	Provider *catalog.Provider // nil for hosts not in the catalog
+	Rule     *catalog.Rule     // nil when no rule matched
+	Args     map[string]any    // operation args plus path parameters
+
+	Class       classes.Class   // the class that produced Decision
+	Classes     []classes.Class // every class the operation has (SQL can have several)
+	ClassSource string
+
+	Environment string
+	EnvSource   string
+
+	Decision       classes.Decision
+	DecisionSource string
+
+	Resource string // value of the rule's resource argument, if any
+	Card     string // human description, from decoded arguments only
+
+	// Transform is the response transform the caller must apply before the
+	// response reaches the agent; set only when the engine was told it
+	// transforms responses.
+	Transform *catalog.Response
+}
+
+// Result is the verdict on a whole request.
+type Result struct {
+	Host        string
+	Provider    *catalog.Provider // nil when the host is not in the catalog
+	Evaluations []Evaluation
+	Decision    classes.Decision // strictest over Evaluations
+	// Hash identifies exactly what would run: provider, rules and
+	// arguments of every operation. Approvals bind to it.
+	Hash [32]byte
+}
+
+// UnknownHost reports whether the request's host is not in the catalog.
+func (r Result) UnknownHost() bool { return r.Provider == nil }
+
+// Evaluate decides a request.
+func (e *Engine) Evaluate(r *request.Request) Result {
+	p := e.Catalog.ProviderForHost(r.Host)
+	res := Result{Host: r.Host, Provider: p}
+	var ops []decode.Operation
+	if p == nil {
+		ops = decode.Decode(r, decode.Hints{})
+	} else {
+		ops = decode.Decode(r, p.Hints(r.Host))
+	}
+	for _, op := range ops {
+		res.Evaluations = append(res.Evaluations, e.evaluate(p, r.Host, op))
+	}
+	res.finish()
+	// Bind the hash to the exact body too, so a grant for one body can never
+	// cover another sent to the same operation.
+	bodyErr := ""
+	if r.BodyErr != nil {
+		bodyErr = r.BodyErr.Error()
+	}
+	res.Hash = sha256.Sum256(append(append(res.Hash[:], r.Body...), bodyErr...))
+	return res
+}
+
+// EvaluateMessage decides the operations of one message on an open
+// WebSocket, whose upgrade was handshake: the operations get the arguments
+// the provider takes from the upgrade (its host and header arguments), and
+// the hash binds to body, the message as sent.
+func (e *Engine) EvaluateMessage(handshake *request.Request, ops []decode.Operation, body []byte) Result {
+	p := e.Catalog.ProviderForHost(handshake.Host)
+	res := Result{Host: handshake.Host, Provider: p}
+	if p != nil {
+		ops = decode.ApplyHints(ops, handshake, p.Hints(handshake.Host))
+	}
+	for _, op := range ops {
+		res.Evaluations = append(res.Evaluations, e.evaluate(p, handshake.Host, op))
+	}
+	res.finish()
+	res.Hash = sha256.Sum256(append(append(res.Hash[:], "message\x00"...), body...))
+	return res
+}
+
+// EvaluateStep decides what one message on a WebSocket asks for: a request
+// it carries, decided as if sent on its own, or its operations.
+func (e *Engine) EvaluateStep(handshake *request.Request, step decode.WSStep) Result {
+	if step.Request != nil {
+		return e.Evaluate(step.Request)
+	}
+	return e.EvaluateMessage(handshake, step.Ops, step.Body)
+}
+
+// EvaluateTool decides one MCP tool call made outside the proxy, such as a
+// Claude Code tool call seen by the PreToolUse hook.
+func (e *Engine) EvaluateTool(p *catalog.Provider, tool string, args map[string]any) Result {
+	if args == nil {
+		args = map[string]any{}
+	}
+	op := decode.Operation{Protocol: decode.MCP, MCPMethod: "tools/call", Tool: tool, Args: args}
+	res := Result{Provider: p}
+	res.Evaluations = []Evaluation{e.evaluate(p, "", op)}
+	res.finish()
+	return res
+}
+
+func (res *Result) finish() {
+	ds := make([]classes.Decision, len(res.Evaluations))
+	for i, ev := range res.Evaluations {
+		ds[i] = ev.Decision
+	}
+	res.Decision = classes.Strictest(ds...)
+	res.Hash = hashEvaluations(res.Host, res.Evaluations)
+}
+
+func (e *Engine) evaluate(p *catalog.Provider, host string, op decode.Operation) Evaluation {
+	ev := Evaluation{Op: op, Provider: p, Args: map[string]any{}}
+	for k, v := range op.Args {
+		ev.Args[k] = v
+	}
+
+	loadErr := e.Catalog.LoadRules(p) // a no-op unless the catalog is lazy
+	switch {
+	case p == nil:
+		ev.Classes, ev.ClassSource = []classes.Class{classes.Unknown}, "host is not in the catalog"
+	case loadErr != nil:
+		ev.Classes, ev.ClassSource = []classes.Class{classes.Unknown}, "the catalog's rules for "+p.ID+" could not be loaded"
+	default:
+		rule, params := p.Match(op, e.IncludeDraft)
+		for k, v := range params {
+			ev.Args[k] = v
+		}
+		if rule != nil {
+			ev.Rule = rule
+			ev.Classes, ev.ClassSource = rule.ClassesFor(op, ev.Args)
+			if e.TransformsResponses && rule.Response != nil {
+				ev.Transform = rule.Response
+				// The transform removes what made the rule's own class
+				// stricter; a condition or SQL that holds still counts.
+				if ev.ClassSource == "rule class" {
+					ev.Classes = []classes.Class{rule.Response.Class}
+					ev.ClassSource = "rule class with the response transformed"
+				}
+			}
+		} else if dr := p.ToolDefault(op); dr != nil {
+			ev.Rule = dr
+			ev.Classes, ev.ClassSource = []classes.Class{dr.Class}, "provider default for tools no rule names"
+		} else {
+			c, src := p.DefaultClass(op)
+			ev.Classes, ev.ClassSource = []classes.Class{c}, src
+		}
+		if f := secretField(p, op); f != "" && !slices.Contains(ev.Classes, classes.Credential) {
+			ev.Classes = append(ev.Classes, classes.Credential)
+			ev.ClassSource += "; selects secret field " + f
+		}
+	}
+
+	provID := ""
+	if p != nil {
+		provID = p.ID
+	}
+	// lookup reads an argument for environment mapping and the resource. A
+	// rule made from defaults.mcp_tools names its tool with ToolArg, which
+	// comes from the tool name, never from an argument of that name.
+	lookup := func(arg string) (string, bool) {
+		if ev.Rule != nil && ev.Rule.Status == catalog.ToolDefault && arg == catalog.ToolArg {
+			return op.Tool, true
+		}
+		v, ok := catalog.Lookup(ev.Args, arg)
+		if !ok {
+			return "", false
+		}
+		return catalog.Scalar(v)
+	}
+	ev.Environment, ev.EnvSource = e.Policy.Environment(provID, lookup)
+
+	ruleID := ""
+	if ev.Rule != nil {
+		ruleID = ev.Rule.ID
+	}
+	if len(ev.Classes) == 0 {
+		ev.Classes = []classes.Class{classes.Unknown}
+	}
+	ev.Decision = -1
+	for _, c := range ev.Classes {
+		d, src := e.Policy.Decide(ruleID, c, ev.Environment)
+		if d > ev.Decision {
+			ev.Decision, ev.DecisionSource, ev.Class = d, src, c
+		}
+	}
+
+	if ev.Rule != nil && ev.Rule.Classify != nil && ev.Rule.Classify.AWSCLI != "" && op.Protocol != decode.AWS {
+		e.awsCLI(&ev)
+	}
+
+	if ev.Rule != nil && ev.Rule.Resource != nil {
+		if s, ok := lookup(ev.Rule.Resource.Arg); ok {
+			// The resource is shown in approval prompts and the hook's
+			// reason, and comes from the request.
+			ev.Resource = Sanitize(s, 200)
+		}
+	}
+	ev.Card = card(ev, host)
+	if ev.Rule != nil && strings.HasPrefix(ev.ClassSource, catalog.SQLClassSource) {
+		// What the SQL does, from its parse: the card alone says "Run SQL
+		// on project …" whether the SQL reads or drops a table. Only when
+		// the class came from that parse: a when condition that decides
+		// instead (DynamoDB's PartiQL with a block comment, which Postgres
+		// reads differently) means the parse may not be what runs.
+		if sum := ev.Rule.Classify.Summary(ev.Args); len(sum) > 0 {
+			ev.Card += ": " + sqlSummaryText(sum)
+		}
+	}
+	if ev.Rule != nil && ev.Rule.Classify != nil && ev.Rule.Classify.PostgREST != "" {
+		// Which rows a PostgREST PATCH or DELETE changes: its filters, or
+		// every row when none limits them.
+		if strings.HasPrefix(ev.ClassSource, catalog.PostgRESTEveryRow) {
+			ev.Card += " (every row)"
+		} else if v, ok := catalog.Lookup(ev.Args, ev.Rule.Classify.PostgREST); ok {
+			if q, ok := v.(map[string]any); ok {
+				if f := decode.PostgRESTFilters(q); len(f) > 0 {
+					text := strings.Join(f, ", ")
+					if len(f) > 3 {
+						text = fmt.Sprintf("%s and %d more", strings.Join(f[:3], ", "), len(f)-3)
+					}
+					ev.Card += " where " + Sanitize(text, 160)
+				}
+			}
+		}
+	}
+	return ev
+}
+
+// maxSummaryStatements bounds the statements a card describes.
+const maxSummaryStatements = 3
+
+// sqlSummaryText joins statement summaries for a card, at most
+// maxSummaryStatements of them, cut at 300 characters.
+func sqlSummaryText(sum []string) string {
+	text := strings.Join(sum, "; ")
+	if len(sum) > maxSummaryStatements {
+		text = fmt.Sprintf("%s; and %d more statements", strings.Join(sum[:maxSummaryStatements], "; "), len(sum)-maxSummaryStatements)
+	}
+	return Sanitize(text, 300)
+}
+
+// secretField returns the first field op selects that p lists as secret.
+func secretField(p *catalog.Provider, op decode.Operation) string {
+	if op.Protocol != decode.GraphQL {
+		return ""
+	}
+	for _, f := range op.Selected {
+		if slices.Contains(p.Defaults.GraphQLSecretFields, f) {
+			return f
+		}
+	}
+	return ""
+}
+
+var placeholderRe = regexp.MustCompile(`\{([^{}]*)\}`)
+
+// card renders the approval text from the rule's template and the decoded
+// arguments, never from anything the agent wrote about the request.
+func card(ev Evaluation, host string) string {
+	if ev.Rule != nil && ev.Rule.Card != "" {
+		return placeholderRe.ReplaceAllStringFunc(ev.Rule.Card, func(m string) string {
+			v, ok := catalog.Lookup(ev.Args, m[1:len(m)-1])
+			if !ok {
+				return "(none)"
+			}
+			s, ok := catalog.Scalar(v)
+			if !ok {
+				b, _ := json.Marshal(v)
+				s = string(b)
+			}
+			return Sanitize(s, 80)
+		})
+	}
+	op := ev.Op
+	name := host
+	if ev.Provider != nil {
+		name = ev.Provider.Title
+	}
+	switch op.Protocol {
+	case decode.GraphQL:
+		return fmt.Sprintf("%s GraphQL %s %s", name, op.GraphQLType, Sanitize(op.Field, 80))
+	case decode.MCP:
+		if op.Tool != "" {
+			if strings.HasSuffix(name, " MCP") {
+				return fmt.Sprintf("%s tool %s", name, Sanitize(op.Tool, 80))
+			}
+			return fmt.Sprintf("%s MCP tool %s", name, Sanitize(op.Tool, 80))
+		}
+		return fmt.Sprintf("%s MCP %s", name, Sanitize(op.MCPMethod, 80))
+	case decode.AWS:
+		if op.Action != "" {
+			return fmt.Sprintf("AWS %s %s", op.Service, Sanitize(op.Action, 80))
+		}
+		return fmt.Sprintf("AWS %s %s %s", op.Service, op.Method, Sanitize(op.Path, 120))
+	case decode.WebSocket:
+		if op.Method == decode.WSConnect {
+			return fmt.Sprintf("Open a WebSocket to %s%s", Sanitize(host, 80), Sanitize(op.Path, 120))
+		}
+		return fmt.Sprintf("WebSocket %s message on %s%s", Sanitize(op.Method, 32), Sanitize(host, 80), Sanitize(op.Path, 120))
+	}
+	return fmt.Sprintf("%s %s %s", Sanitize(op.Method, 16), Sanitize(host, 80), Sanitize(op.Path, 120))
+}
+
+// Sanitize makes untrusted text safe to show on a card: control characters,
+// bidirectional overrides and zero-width characters are replaced, and the
+// text is cut to max runes.
+func Sanitize(s string, max int) string {
+	var b strings.Builder
+	n := 0
+	for _, r := range s {
+		if n == max {
+			b.WriteString("…")
+			break
+		}
+		switch {
+		case r == '\n' || r == '\r' || r == '\t':
+			r = ' '
+		case unicode.IsControl(r),
+			r >= 0x202A && r <= 0x202E, r >= 0x2066 && r <= 0x2069,
+			r >= 0x200B && r <= 0x200F, r == 0xFEFF, r == 0x2028, r == 0x2029:
+			r = '�'
+		}
+		b.WriteRune(r)
+		n++
+	}
+	return b.String()
+}
+
+// hashEvaluations hashes a canonical form of what the request would do.
+// encoding/json sorts map keys, so equal requests hash equally.
+func hashEvaluations(host string, evs []Evaluation) [32]byte {
+	type canon struct {
+		Provider, Rule, Protocol, Method, Path, Type, Field, Tool, MCPMethod, Service, Action string
+		Args                                                                                  map[string]any
+	}
+	cs := make([]canon, len(evs))
+	for i, ev := range evs {
+		c := canon{Protocol: ev.Op.Protocol, Method: ev.Op.Method, Path: ev.Op.Path, Type: ev.Op.GraphQLType,
+			Field: ev.Op.Field, Tool: ev.Op.Tool, MCPMethod: ev.Op.MCPMethod, Service: ev.Op.Service, Action: ev.Op.Action, Args: ev.Args}
+		if ev.Provider != nil {
+			c.Provider = ev.Provider.ID
+		}
+		if ev.Rule != nil {
+			c.Rule = ev.Rule.ID
+		}
+		cs[i] = c
+	}
+	b, err := json.Marshal(struct {
+		Host string
+		Ops  []canon
+	}{host, cs})
+	if err != nil {
+		// Args come from decoders and only hold JSON-compatible values;
+		// should that ever fail, make the hash unique so no grant matches.
+		b = []byte(fmt.Sprintf("unhashable %p", &evs))
+	}
+	return sha256.Sum256(b)
+}
+
+// awsCLI decides a tool call that runs AWS CLI commands (classify.aws_cli):
+// each command's API operations are evaluated against the named SigV4
+// provider's rules exactly as the proxy would evaluate their requests, with
+// that provider's environments and rule overrides, and the call gets the
+// strictest result. What cannot be read (an unparsable command, an
+// argument from a file, an awscli customization Opfence does not know) is
+// unknown, and the rule's own class counts too, so the call is never
+// decided more loosely than the rule's fixed class.
+func (e *Engine) awsCLI(ev *Evaluation) {
+	r := ev.Rule
+	v, ok := catalog.Lookup(ev.Args, r.Classify.AWSCLI)
+	if !ok {
+		return // the rule's own class, already decided
+	}
+	var cmds []string
+	switch x := v.(type) {
+	case string:
+		cmds = []string{x}
+	case []any:
+		for _, el := range x {
+			s, ok := el.(string)
+			if !ok {
+				return
+			}
+			cmds = append(cmds, s)
+		}
+	default:
+		return
+	}
+	if len(cmds) == 0 {
+		return
+	}
+	prov := e.Catalog.Provider(r.Classify.Provider)
+	type part struct {
+		class                    classes.Class
+		decision                 classes.Decision
+		decisionSrc, env, envSrc string
+		resource, label          string
+	}
+	var parts []part
+	direct := func(c classes.Class, label string) {
+		d, src := e.Policy.Decide(r.ID, c, ev.Environment)
+		parts = append(parts, part{class: c, decision: d, decisionSrc: src, env: ev.Environment, envSrc: ev.EnvSource, label: label})
+	}
+	unknown := false
+	all := map[classes.Class]bool{}
+	for _, cmd := range cmds {
+		steps, err := decode.AWSCLI(cmd)
+		if err != nil {
+			direct(classes.Unknown, "unreadable command ("+Sanitize(err.Error(), 80)+")")
+			unknown = true
+			continue
+		}
+		for _, st := range steps {
+			if st.Op == nil || prov == nil {
+				c := st.Class
+				if c == "" {
+					c = classes.Unknown
+				}
+				direct(c, Sanitize(st.Reason, 120))
+				unknown = unknown || c == classes.Unknown
+				continue
+			}
+			sub := e.evaluate(prov, "", *st.Op)
+			label := "AWS " + st.Op.Service + " " + st.Op.Action + " (" + sub.ClassSource + ")"
+			if sub.Rule != nil {
+				label = sub.Rule.ID
+			}
+			for _, c := range sub.Classes {
+				all[c] = true
+				unknown = unknown || c == classes.Unknown
+			}
+			parts = append(parts, part{class: sub.Class, decision: sub.Decision, decisionSrc: sub.DecisionSource,
+				env: sub.Environment, envSrc: sub.EnvSource, resource: sub.Resource, label: label + " " + string(sub.Class)})
+		}
+	}
+	if unknown && !slices.ContainsFunc(parts, func(p part) bool { return p.class == r.Class }) {
+		direct(r.Class, "rule class, for what Opfence cannot read")
+	}
+	best := parts[0]
+	var labels []string
+	for _, p := range parts {
+		all[p.class] = true
+		labels = append(labels, p.label)
+		if p.decision > best.decision {
+			best = p
+		}
+	}
+	ev.Classes = ev.Classes[:0]
+	for _, c := range classes.All {
+		if all[c] {
+			ev.Classes = append(ev.Classes, c)
+		}
+	}
+	ev.ClassSource = "AWS CLI: " + strings.Join(labels, "; ")
+	ev.Class, ev.Decision, ev.DecisionSource = best.class, best.decision, best.decisionSrc
+	ev.Environment, ev.EnvSource = best.env, best.envSrc
+	if best.resource != "" {
+		ev.Resource = best.resource
+	}
+}
