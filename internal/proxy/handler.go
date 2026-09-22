@@ -1,0 +1,575 @@
+package proxy
+
+import (
+	"bytes"
+	"context"
+	"encoding/hex"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"net/http"
+	"net/http/httputil"
+	"net/url"
+	"slices"
+	"strconv"
+	"strings"
+	"time"
+
+	"github.com/rakeshnitb23/opfence/internal/audit"
+	"github.com/rakeshnitb23/opfence/internal/catalog"
+	"github.com/rakeshnitb23/opfence/internal/classes"
+	"github.com/rakeshnitb23/opfence/internal/decode"
+	"github.com/rakeshnitb23/opfence/internal/engine"
+	"github.com/rakeshnitb23/opfence/internal/inject"
+	"github.com/rakeshnitb23/opfence/internal/request"
+	"github.com/rakeshnitb23/opfence/internal/secrets"
+)
+
+// maxAuditPath bounds the path written to the audit log.
+const maxAuditPath = 512
+
+type fwdKey struct{}
+
+// fwd carries a forwarded request's evaluated target and its audit entry
+// from the handler to the reverse proxy's callbacks.
+type fwd struct {
+	host, path, rawPath, rawQuery string
+	entry                         audit.Entry
+	// transforms are the response transforms of the request's rules, which
+	// must be applied before the response reaches the agent.
+	transforms []transform
+}
+
+type transform struct {
+	prov   *catalog.Provider
+	rule   string
+	x      *catalog.Response
+	object string // the request path held values are bound to
+}
+
+// serveIntercepted evaluates one request on an intercepted connection and
+// forwards, holds for approval, or blocks it.
+func (s *Server) serveIntercepted(w http.ResponseWriter, r *http.Request) {
+	host := strings.TrimSuffix(strings.ToLower(r.TLS.ServerName), ".")
+	entry := audit.Entry{Event: "request", Host: host, Method: r.Method}
+	req, raw, err := request.FromHTTP(r)
+	if err != nil {
+		entry.Path = auditPath(r.URL.EscapedPath())
+		s.block(w, nil, nil, entry, http.StatusBadRequest, "Opfence could not read this request: "+err.Error())
+		return
+	}
+	entry.Path = auditPath(req.Path)
+	if req.Host != host || req.Port != "" {
+		// HTTP/2 clients may reuse a connection for another host; 421 makes
+		// them open a new one, which gets its own decision.
+		entry.Outcome, entry.Status, entry.Reason = "refused", http.StatusMisdirectedRequest, "Host "+r.Host+" does not match the TLS server name"
+		s.record(entry)
+		http.Error(w, "Opfence: this connection is for "+host, http.StatusMisdirectedRequest)
+		return
+	}
+	if r.Method == http.MethodConnect {
+		// A tunnel inside an intercepted connection (or HTTP/2's extended
+		// CONNECT, which Go's server refuses unless GODEBUG turns it on)
+		// would carry what Opfence cannot read.
+		s.block(w, req, nil, entry, http.StatusForbidden, "Opfence does not open tunnels inside an API connection.")
+		return
+	}
+	if r.Header.Get("Upgrade") != "" {
+		if why := s.upgradeRefused(r, req); why != "" {
+			s.block(w, req, nil, entry, http.StatusForbidden, why)
+			return
+		}
+	}
+
+	if h := endToEndConnectionHeader(r.Header); h != "" {
+		// The reverse proxy drops headers named in Connection, so the API
+		// would see a different request from the one decided.
+		s.block(w, req, nil, entry, http.StatusBadRequest, "Opfence blocks requests whose Connection header names "+strconv.Quote(h)+", because it would remove that header before forwarding.")
+		return
+	}
+
+	res := s.cfg.Engine.Evaluate(req)
+	if ok, why := s.decide(r.Context(), &res, Pending{Method: req.Method, Host: host, Path: req.Path}, &entry); !ok {
+		s.block(w, req, &res, entry, http.StatusForbidden, why)
+		return
+	}
+	if ws, ok := s.webSocketPath(res.Provider, r, req); ok {
+		s.serveWebSocket(w, r, req, &res, entry, ws)
+		return
+	}
+
+	// Forward exactly the path that was evaluated.
+	path, err := url.PathUnescape(req.Path)
+	if u := (url.URL{Path: path, RawPath: req.Path}); err != nil || u.EscapedPath() != req.Path {
+		s.block(w, req, &res, entry, http.StatusBadRequest, "Opfence could not forward this path unchanged, so it blocks it.")
+		return
+	}
+	restored, n, why := s.restoreHeld(req, &res)
+	if why != "" {
+		s.block(w, req, &res, entry, http.StatusForbidden, why)
+		return
+	}
+	if restored != nil {
+		// The body goes out decoded, with the held values swapped back in.
+		raw = restored
+		r.Body = io.NopCloser(bytes.NewReader(nil))
+		r.ContentLength = int64(len(restored))
+		r.Header.Set("Content-Length", strconv.Itoa(len(restored)))
+		r.Header.Del("Content-Encoding")
+		r.TransferEncoding = nil
+		entry.Restored = n
+	}
+	rawQuery, inj := inject.Request(res.Provider, r.Header, r.URL.RawQuery, s.cfg.Secrets)
+	entry.Credentials = inj.Injected
+	if req.BodyErr == nil && len(raw) <= request.MaxBody {
+		// Form fields that carry secrets (an OAuth refresh token).
+		if body, fr := inject.Form(res.Provider, r.Header.Get("Content-Type"), r.Header.Get("Content-Encoding"), raw, s.cfg.Secrets); body != nil {
+			raw = body
+			r.Body = io.NopCloser(bytes.NewReader(nil))
+			r.ContentLength = int64(len(body))
+			r.Header.Set("Content-Length", strconv.Itoa(len(body)))
+			r.TransferEncoding = nil
+			entry.Credentials = append(entry.Credentials, fr.Injected...)
+			inj.Foreign = append(inj.Foreign, fr.Foreign...)
+		}
+	}
+	if len(inj.Foreign) > 0 {
+		entry.Reason = fmt.Sprintf("placeholder for %s sent to %s; not swapped in", strings.Join(inj.Foreign, ", "), host)
+	}
+	sigV4 := res.Provider != nil && res.Provider.SigV4
+	var transforms []transform
+	for _, ev := range res.Evaluations {
+		if ev.Transform != nil {
+			transforms = append(transforms, transform{res.Provider, ev.Rule.ID, ev.Transform, objectPath(req.Path)})
+		}
+	}
+	if s.scrubber.Active() || len(transforms) > 0 {
+		// Let the transport ask for gzip and decode it, so responses can be
+		// scrubbed and transformed.
+		r.Header.Del("Accept-Encoding")
+		if !sigV4 {
+			// A key split across two ranged reads would not be scrubbed in
+			// either. AWS keeps Range: S3 downloads in parts depend on it.
+			r.Header.Del("Range")
+			r.Header.Del("If-Range")
+		}
+	}
+	var whole []byte
+	if sigV4 {
+		if len(raw) > request.MaxBody && r.Header.Get("X-Amz-Content-Sha256") == "" {
+			// Re-signing may read up to MaxSignedBody into memory; a few at a
+			// time.
+			select {
+			case s.resign <- struct{}{}:
+				defer func() { <-s.resign }()
+			case <-r.Context().Done():
+				s.block(w, req, &res, entry, http.StatusServiceUnavailable, "the request was cancelled while waiting for other large AWS uploads")
+				return
+			}
+		}
+		// After every header change, so the new signature covers what is
+		// sent.
+		signed, body, err := inject.SigV4(res.Provider, inject.AWSRequest{
+			Method: req.Method, Host: host, Path: path, RawPath: req.Path, RawQuery: rawQuery,
+			Header: r.Header, ContentLength: r.ContentLength,
+			Body: raw, BodyComplete: len(raw) <= request.MaxBody, Rest: r.Body,
+		}, s.cfg.Secrets)
+		if err != nil {
+			s.block(w, req, &res, entry, http.StatusForbidden, err.Error())
+			return
+		}
+		entry.Credentials = append(entry.Credentials, signed.Injected...)
+		if len(signed.Foreign) > 0 {
+			entry.Reason = fmt.Sprintf("placeholder for %s sent to %s; not swapped in", strings.Join(signed.Foreign, ", "), host)
+		}
+		whole = body
+	}
+	f := &fwd{host: host, path: path, rawPath: req.Path, rawQuery: rawQuery, entry: entry, transforms: transforms}
+	if r.Body != nil && r.Body != http.NoBody {
+		var rd io.Reader = io.MultiReader(bytes.NewReader(raw), r.Body)
+		if whole != nil {
+			rd = bytes.NewReader(whole)
+		}
+		r.Body = struct {
+			io.Reader
+			io.Closer
+		}{rd, r.Body}
+	}
+	s.rp.ServeHTTP(scrubWriter{w, s}, r.WithContext(contextWith(r, f)))
+}
+
+// decide applies the decision on res: allowed, held for approval, or
+// denied. It fills the entry's decision, operations and outcome, and
+// returns whether the request or message may go on, and if not, why. p
+// describes what waits, for the approval card.
+func (s *Server) decide(ctx context.Context, res *engine.Result, p Pending, entry *audit.Entry) (bool, string) {
+	entry.Decision = res.Decision.String()
+	for _, ev := range res.Evaluations {
+		op := audit.Operation{Class: string(ev.Class), Environment: ev.Environment, Decision: ev.Decision.String(), Card: ev.Card}
+		if ev.Rule != nil {
+			op.Rule = ev.Rule.ID
+		}
+		entry.Operations = append(entry.Operations, op)
+	}
+	switch res.Decision {
+	case classes.Allow:
+		entry.Outcome = "forwarded"
+		return true, ""
+	case classes.Ask, classes.Confirm:
+		entry.Hash = hex.EncodeToString(res.Hash[:])
+		p.Result, p.Via = res, s.cfg.Via
+		a := s.cfg.Approver.Approve(ctx, p)
+		entry.Approver = a.Channel
+		if !a.Approved {
+			return false, a.Reason
+		}
+		entry.Outcome = "approved"
+		return true, ""
+	}
+	return false, "Your Opfence policy denies this. Change the policy if it should be allowed."
+}
+
+// scrubWriter scrubs the headers of informational (1xx) responses, which the
+// reverse proxy forwards as they arrive, before modifyResponse runs.
+type scrubWriter struct {
+	http.ResponseWriter
+	s *Server
+}
+
+func (w scrubWriter) WriteHeader(code int) {
+	if code < 200 {
+		w.s.scrubber.Header(w.Header())
+	}
+	w.ResponseWriter.WriteHeader(code)
+}
+
+// Unwrap lets http.ResponseController flush streamed responses.
+func (w scrubWriter) Unwrap() http.ResponseWriter { return w.ResponseWriter }
+
+func rewriteIntercepted(pr *httputil.ProxyRequest) {
+	f := pr.In.Context().Value(fwdKey{}).(*fwd)
+	pr.Out.URL.Scheme = "https"
+	pr.Out.URL.Host = f.host
+	pr.Out.URL.Path = f.path
+	pr.Out.URL.RawPath = f.rawPath
+	pr.Out.URL.RawQuery = f.rawQuery
+	pr.Out.Host = f.host
+}
+
+// modifyResponse applies the rules' response transforms, scrubs secrets
+// from the response and writes the audit entry once the upstream's response
+// headers arrive, before any body streams, so a long stream is logged
+// immediately. A response in an encoding Opfence cannot read is refused
+// when there are secrets to scrub or a transform to apply.
+func (s *Server) modifyResponse(resp *http.Response) error {
+	f, _ := resp.Request.Context().Value(fwdKey{}).(*fwd)
+	var transforms []transform
+	if f != nil {
+		transforms = f.transforms
+	}
+	if s.scrubber.Active() || len(transforms) > 0 {
+		if ce := strings.TrimSpace(resp.Header.Get("Content-Encoding")); ce != "" && !strings.EqualFold(ce, "identity") {
+			return withheldError(fmt.Sprintf("the response is encoded with %s, which Opfence cannot scrub for credentials", ce))
+		}
+	}
+	if len(transforms) > 0 {
+		minted, held, err := s.transformResponse(resp, transforms)
+		f.entry.Minted, f.entry.Held = minted, held
+		if err != nil {
+			return err
+		}
+	}
+	if s.scrubber.Active() {
+		s.scrubber.Header(resp.Header)
+		resp.Body = s.scrubber.Reader(resp.Body, func() { s.scrubber.Header(resp.Trailer) })
+	}
+	if f != nil {
+		f.entry.Status = resp.StatusCode
+		s.record(f.entry)
+	}
+	return nil
+}
+
+// transformResponse buffers the body and applies every transform to it,
+// returning the credentials it minted and how many values it held. It
+// fails closed: a successful response it cannot transform is withheld. An
+// unsuccessful response that is not JSON carries none of the data the rule
+// describes and passes on.
+func (s *Server) transformResponse(resp *http.Response, transforms []transform) ([]string, int, error) {
+	body, err := io.ReadAll(io.LimitReader(resp.Body, inject.MaxTransformBody+1))
+	_ = resp.Body.Close()
+	if err != nil {
+		return nil, 0, fmt.Errorf("reading the response: %w", err)
+	}
+	if len(body) > inject.MaxTransformBody {
+		return nil, 0, withheldError(fmt.Sprintf("the response is larger than %d MiB, so Opfence cannot remove the credentials in it", inject.MaxTransformBody>>20))
+	}
+	resp.Body = io.NopCloser(bytes.NewReader(body))
+	if len(bytes.TrimSpace(body)) == 0 {
+		return nil, 0, nil // HEAD, 204, 304: headers only, kept as they are
+	}
+	var minted []string
+	held := 0
+	for _, t := range transforms {
+		out, _, err := inject.Transform(body, t.x, inject.Funcs{
+			Mint: func(value string) (string, error) {
+				sec, err := s.mint(t, value)
+				if err != nil {
+					return "", err
+				}
+				minted = append(minted, sec.Provider+"/"+sec.Name)
+				return sec.Placeholder, nil
+			},
+			Hold: func(path, value string) (string, error) {
+				held++
+				return s.held.Hold(t.prov.ID, t.object, path, value)
+			},
+		})
+		if err != nil {
+			if resp.StatusCode/100 != 2 && len(minted) == 0 {
+				return nil, 0, nil // an error page, not the data the rule describes
+			}
+			return minted, held, withheldError(fmt.Sprintf("Opfence could not remove the credentials from this response (%s): %v", t.rule, err))
+		}
+		body = out
+	}
+	resp.Body = io.NopCloser(bytes.NewReader(body))
+	resp.ContentLength = int64(len(body))
+	resp.Header.Set("Content-Length", strconv.Itoa(len(body)))
+	for _, h := range []string{"Content-Md5", "Digest", "Repr-Digest", "Content-Digest"} {
+		resp.Header.Del(h)
+	}
+	return minted, held, nil
+}
+
+// objectPath is the object a request acts on, for binding held values: its
+// path with dot segments resolved and empty ones dropped.
+func objectPath(rawPath string) string {
+	segs, ok := request.NormalizePath(rawPath)
+	if !ok {
+		return rawPath
+	}
+	return "/" + strings.Join(segs, "/")
+}
+
+// restoreHeld swaps values a hold transform replaced with tokens back into
+// a request's body (docs/ARCHITECTURE.md §8.4). It returns the new body, or
+// nil when there is nothing to swap, and why when the request must be
+// blocked: it carries a token that may not go where it is, or its provider
+// holds values and its body cannot be checked. Only providers with hold
+// rules are checked; a token sent elsewhere is just text.
+func (s *Server) restoreHeld(req *request.Request, res *engine.Result) ([]byte, int, string) {
+	if res.Provider == nil || !res.Provider.HoldsValues() || res.Provider.SigV4 {
+		return nil, 0, ""
+	}
+	object := objectPath(req.Path)
+	var paths []string
+	for _, ev := range res.Evaluations {
+		// Only the request's own operations: not the parts of a batch.
+		if ev.Rule != nil && ev.Op.Protocol == decode.REST && objectPath(ev.Op.Path) == object {
+			for _, p := range ev.Rule.Restore {
+				if !slices.Contains(paths, p) {
+					paths = append(paths, p)
+				}
+			}
+		}
+	}
+	marker := []byte(inject.HeldPrefix)
+	if req.BodyErr != nil {
+		if bytes.Contains(req.Prefix, marker) || (len(paths) > 0 && s.held.Len() > 0) {
+			return nil, 0, fmt.Sprintf("Opfence cannot read this request's body (%v), so it cannot swap back the values it held from %s; it blocks the request rather than send their tokens.", req.BodyErr, res.Provider.ID)
+		}
+		return nil, 0, ""
+	}
+	if !bytes.Contains(req.Body, marker) {
+		return nil, 0, ""
+	}
+	if len(paths) == 0 {
+		return nil, 0, fmt.Sprintf("This request carries a value Opfence held back from an earlier response (%s…), and only a write to the object it was read from can carry it back; sending the token would store it in place of the value.", inject.HeldPrefix)
+	}
+	body, n, err := s.held.Restore(res.Provider.ID, object, paths, req.Body)
+	if err != nil {
+		return nil, 0, fmt.Sprintf("Opfence blocks this request: %v.", err)
+	}
+	return body, n, ""
+}
+
+// mint holds a credential a response created, like a stored secret of the
+// rule's provider, and returns it with the placeholder the agent gets.
+func (s *Server) mint(t transform, value string) (*secrets.Secret, error) {
+	ph, err := secrets.NewPlaceholder(value, t.prov.Detect.Prefixes)
+	if err != nil {
+		return nil, err
+	}
+	sec := &secrets.Secret{Provider: t.prov.ID, Name: fmt.Sprintf("minted/%s/%d", t.rule, s.minted.Add(1)), Value: value, Placeholder: ph, Created: time.Now().UTC()}
+	if err := s.cfg.Secrets.Add(sec); err != nil {
+		return nil, err
+	}
+	s.scrubber.AddSecret(sec)
+	return sec, nil
+}
+
+// withheldError is a response Opfence received but will not pass on.
+type withheldError string
+
+func (e withheldError) Error() string { return string(e) }
+
+func (s *Server) upstreamError(w http.ResponseWriter, r *http.Request, err error) {
+	if f, ok := r.Context().Value(fwdKey{}).(*fwd); ok {
+		f.entry.Outcome, f.entry.Status, f.entry.Reason = "error", http.StatusBadGateway, err.Error()
+		s.record(f.entry)
+	}
+	msg := "Opfence could not reach the API: " + err.Error()
+	var we withheldError
+	if errors.As(err, &we) {
+		msg = "Opfence withheld the API's response: " + err.Error()
+	}
+	http.Error(w, msg, http.StatusBadGateway)
+}
+
+// block answers a request that will not be forwarded. MCP clients get a
+// JSON-RPC error, which agents show to the model as the tool's result;
+// everything else gets a 403 with a JSON body. Either way the message says
+// what was blocked and why, from the decoded request only.
+func (s *Server) block(w http.ResponseWriter, req *request.Request, res *engine.Result, entry audit.Entry, status int, reason string) {
+	entry.Outcome, entry.Status, entry.Reason = "blocked", status, reason
+	msg := blockText(res, reason)
+	detail := map[string]any{}
+	if res != nil && len(res.Evaluations) > 0 {
+		ev := strictest(res)
+		detail = map[string]any{"decision": res.Decision.String(), "class": ev.Class, "environment": ev.Environment, "card": ev.Card}
+		if ev.Rule != nil {
+			detail["rule"] = ev.Rule.ID
+		}
+	}
+	w.Header().Set("X-Opfence-Decision", "blocked")
+	if report, ok := gitPushReport(req, res, msg); ok {
+		// git shows a rejected ref with its reason, which a 403 would hide
+		// behind "RPC failed".
+		entry.Status = http.StatusOK
+		s.record(entry)
+		w.Header().Set("Content-Type", "application/x-git-receive-pack-result")
+		_, _ = w.Write(report)
+		return
+	}
+	if id, ok := jsonRPCID(req, res); ok {
+		entry.Status = http.StatusOK
+		s.record(entry)
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(map[string]any{
+			"jsonrpc": "2.0",
+			"id":      id,
+			"error":   map[string]any{"code": -32001, "message": msg, "data": detail},
+		})
+		return
+	}
+	s.record(entry)
+	detail["message"] = msg
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	_ = json.NewEncoder(w).Encode(map[string]any{"error": detail})
+}
+
+// blockText says what was blocked and why, from the decoded request only.
+func blockText(res *engine.Result, reason string) string {
+	if res == nil || len(res.Evaluations) == 0 {
+		return "Blocked by Opfence. " + reason
+	}
+	ev := strictest(res)
+	return fmt.Sprintf("Blocked by Opfence: %s (%s, %s). %s", ev.Card, ev.Class, ev.Environment, reason)
+}
+
+// strictest returns the evaluation that produced the request's decision.
+func strictest(res *engine.Result) engine.Evaluation {
+	for _, ev := range res.Evaluations {
+		if ev.Decision == res.Decision {
+			return ev
+		}
+	}
+	return res.Evaluations[0]
+}
+
+// gitPushReport answers a blocked git push with git's own report-status,
+// rejecting every ref with msg, so git prints "[remote rejected] (msg)".
+func gitPushReport(req *request.Request, res *engine.Result, msg string) ([]byte, bool) {
+	if req == nil || res == nil || len(res.Evaluations) == 0 {
+		return nil, false
+	}
+	var refs []string
+	for _, ev := range res.Evaluations {
+		ref, _ := ev.Op.Args["ref"].(string)
+		if ev.Op.Protocol != decode.Git || ev.Op.Service != decode.GitReceivePack || ev.Op.Error != "" || ref == "" {
+			return nil, false
+		}
+		refs = append(refs, ref)
+	}
+	msg = strings.Join(strings.Fields(msg), " ")
+	var report bytes.Buffer
+	pktLine(&report, "unpack ok\n")
+	for _, ref := range refs {
+		pktLine(&report, "ng "+ref+" "+msg+"\n")
+	}
+	report.WriteString("0000")
+	caps := decode.GitPushCapabilities(req)
+	if !slices.Contains(caps, "side-band-64k") && !slices.Contains(caps, "side-band") {
+		return report.Bytes(), true
+	}
+	// With side-band the report travels in band 1, in packets small enough
+	// for plain side-band (1000 bytes).
+	var out bytes.Buffer
+	data := report.Bytes()
+	for len(data) > 0 {
+		n := min(len(data), 995)
+		pktLine(&out, "\x01"+string(data[:n]))
+		data = data[n:]
+	}
+	out.WriteString("0000")
+	return out.Bytes(), true
+}
+
+func pktLine(b *bytes.Buffer, s string) {
+	fmt.Fprintf(b, "%04x%s", len(s)+4, s)
+}
+
+// jsonRPCID returns the id of a single MCP JSON-RPC request.
+func jsonRPCID(req *request.Request, res *engine.Result) (json.RawMessage, bool) {
+	if req == nil || res == nil || len(res.Evaluations) == 0 || res.Evaluations[0].Op.Protocol != decode.MCP {
+		return nil, false
+	}
+	var msg struct {
+		ID     json.RawMessage `json:"id"`
+		Method string          `json:"method"`
+	}
+	if json.Unmarshal(req.Body, &msg) != nil || msg.Method == "" || len(msg.ID) == 0 || string(msg.ID) == "null" {
+		return nil, false
+	}
+	return msg.ID, true
+}
+
+// connectionTokens are the Connection header values clients normally send.
+var connectionTokens = map[string]bool{"close": true, "keep-alive": true, "te": true, "upgrade": true}
+
+// endToEndConnectionHeader returns the first header the Connection header
+// names other than the usual hop-by-hop tokens.
+func endToEndConnectionHeader(h http.Header) string {
+	for _, v := range h.Values("Connection") {
+		for _, tok := range strings.Split(v, ",") {
+			if tok = strings.ToLower(strings.TrimSpace(tok)); tok != "" && !connectionTokens[tok] {
+				return tok
+			}
+		}
+	}
+	return ""
+}
+
+func auditPath(p string) string {
+	if len(p) > maxAuditPath {
+		return p[:maxAuditPath] + "…"
+	}
+	return p
+}
+
+func contextWith(r *http.Request, f *fwd) context.Context {
+	return context.WithValue(r.Context(), fwdKey{}, f)
+}
