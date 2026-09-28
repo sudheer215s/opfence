@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rakeshnitb23/opfence/schema/provider.schema.json",
+  "title": "Opfence catalog provider file (catalog/<provider>/provider.yaml)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["provider", "title"],
+  "properties": {
+    "provider": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$", "description": "Provider id; must equal the folder name" },
+    "title": { "type": "string", "minLength": 1 },
+    "docs": { "type": "string", "pattern": "^https://" },
+    "hosts": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^(\\*\\.|[a-z0-9]([a-z0-9-]*[a-z0-9])?\\.\\*\\.|[a-z0-9][a-z0-9-]*\\*\\.\\*\\.)?([a-z0-9]([a-z0-9-]*[a-z0-9])?\\.)+[a-z]{2,}$" },
+      "uniqueItems": true,
+      "description": "Exact names, *.suffix (any name under suffix) or label.*.suffix (a name that starts with label and ends under suffix)"
+    },
+    "graphql": { "type": "array", "items": { "type": "string", "pattern": "^/" }, "description": "Request paths that carry GraphQL" },
+    "batch": { "type": "array", "items": { "type": "string", "pattern": "^/" }, "description": "Request paths that take a Google API batch: a POST whose multipart/mixed body carries HTTP requests, each decided as if sent on its own" },
+    "websocket": {
+      "type": "array",
+      "description": "Paths that take WebSocket upgrades and the protocol their messages speak; upgrades anywhere else are blocked",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "protocol"],
+        "properties": {
+          "path": { "type": "string", "pattern": "^/[^?#{}*]*$" },
+          "protocol": { "enum": ["graphql-ws", "postgres", "phoenix", "hrana"] }
+        }
+      }
+    },
+    "sigv4": { "type": "boolean", "description": "Requests are AWS SigV4-signed" },
+    "header_args": {
+      "type": "array",
+      "description": "Headers whose non-secret parts become arguments: url gives host, port, user and database; basic gives the Basic-auth username. Passwords are never read",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["header", "arg", "parse"],
+        "properties": {
+          "header": { "type": "string", "pattern": "^[!#$%&'*+.^_`|~0-9A-Za-z-]+$" },
+          "arg": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$", "not": { "enum": ["query", "body"] } },
+          "parse": { "enum": ["url", "basic"] }
+        }
+      }
+    },
+    "host_arg": {
+      "type": "string",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+      "not": { "enum": ["query", "body"] },
+      "description": "An argument holding the part of the request's host that a *. host pattern stands for (a project's ref in abcd.supabase.co), for resources and environments"
+    },
+    "database_ports": {
+      "type": "array",
+      "items": { "type": "integer", "minimum": 1, "maximum": 65535, "not": { "const": 443 } },
+      "uniqueItems": true,
+      "description": "Ports where the hosts speak a database's own protocol, which Opfence cannot read; the proxy handles them like hosts outside the catalog"
+    },
+    "git": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^([a-z0-9]([a-z0-9-]*[a-z0-9])?\\.)+[a-z]{2,}$" },
+      "uniqueItems": true,
+      "description": "Hosts (from hosts) that serve git's smart HTTP protocol and Git LFS"
+    },
+    "auth": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "header": { "type": "string" },
+          "scheme": { "type": "string" },
+          "query": { "type": "string" },
+          "basic": { "enum": ["username", "password"] },
+          "form": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$", "description": "A field of a form-encoded body that carries a secret, such as an OAuth token request's refresh_token" }
+        },
+        "oneOf": [
+          { "required": ["header"], "not": { "anyOf": [{ "required": ["query"] }, { "required": ["basic"] }, { "required": ["form"] }] } },
+          { "required": ["query"], "not": { "anyOf": [{ "required": ["header"] }, { "required": ["basic"] }, { "required": ["scheme"] }, { "required": ["form"] }] } },
+          { "required": ["basic"], "not": { "anyOf": [{ "required": ["header"] }, { "required": ["query"] }, { "required": ["scheme"] }, { "required": ["form"] }] } },
+          { "required": ["form"], "not": { "anyOf": [{ "required": ["header"] }, { "required": ["query"] }, { "required": ["scheme"] }, { "required": ["basic"] }] } }
+        ]
+      }
+    },
+    "detect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "env": { "type": "array", "items": { "type": "string", "pattern": "^[A-Z_][A-Z0-9_]*$" } },
+        "prefixes": { "type": "array", "items": { "type": "string", "minLength": 3 } }
+      }
+    },
+    "fallback": { "type": "boolean", "description": "A provider for every API on a domain that no other provider claims: its *. hosts may cover other providers' hosts, and it applies only where none of them do" },
+    "secrets_from": {
+      "type": "array",
+      "description": "Providers whose secrets this provider's auth locations also take (a hosted MCP server that accepts its vendor's API token)",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" }
+    },
+    "defaults": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "graphql_query": { "$ref": "rules.schema.json#/$defs/class" },
+        "graphql_subscription": { "$ref": "rules.schema.json#/$defs/class" },
+        "rest_safe_methods": { "$ref": "rules.schema.json#/$defs/class" },
+        "aws_read_actions": { "$ref": "rules.schema.json#/$defs/class" },
+        "mcp_tools": {
+          "description": "Class of an MCP tool call no rule names, for servers whose tools the user names; never read",
+          "allOf": [{ "$ref": "rules.schema.json#/$defs/class" }, { "not": { "const": "read" } }]
+        },
+        "graphql_secret_fields": { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "^[_A-Za-z][_0-9A-Za-z]*$" } }
+      }
+    },
+    "mcp": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["names"],
+      "properties": {
+        "names": { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "^[A-Za-z0-9_-]+$" } },
+        "package": { "type": "string" },
+        "paths": {
+          "type": "array",
+          "description": "Where a hosted server speaks MCP on the provider's hosts, each with every path under it; other paths are read as REST",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^(/[^/]+)+$" }
+        }
+      }
+    },
+    "schemas": {
+      "type": "array",
+      "description": "Published schemas the rules were built from, for opfence catalog check-sources",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "url"],
+        "properties": {
+          "kind": { "enum": ["openapi", "graphql", "heroku", "botocore", "discovery"] },
+          "url": { "type": "string", "pattern": "^https://" },
+          "prefix": { "type": "string", "pattern": "^/.*[^/]$" },
+          "service": { "type": "string" },
+          "coverage": { "enum": ["full", "partial"] }
+        }
+      }
+    }
+  }
+}
