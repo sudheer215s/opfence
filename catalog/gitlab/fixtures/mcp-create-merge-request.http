@@ -1,0 +1,8 @@
+# description: Create or update a merge request in project acme/shop
+POST /api/v4/mcp HTTP/1.1
+Host: gitlab.com
+Authorization: Bearer opf_gitlab_EXAMPLE
+Content-Type: application/json
+Accept: application/json, text/event-stream
+
+{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "create_merge_request", "arguments": {"project_id": "acme/shop", "title": "Add login", "source_branch": "feature/login", "target_branch": "main"}}}

@@ -1,7 +1,0 @@
-# description: Create MCP request handler
-POST /api/v4/mcp HTTP/1.1
-Host: gitlab.com
-PRIVATE-TOKEN: opf_gitlab_EXAMPLE
-Content-Type: application/json
-
-{}

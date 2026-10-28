@@ -1,0 +1,8 @@
+# description: List the work items of saved view gid://gitlab/WorkItems::SavedViews::SavedView/3
+POST /api/v4/mcp HTTP/1.1
+Host: gitlab.com
+Authorization: Bearer opf_gitlab_EXAMPLE
+Content-Type: application/json
+Accept: application/json, text/event-stream
+
+{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "get_saved_view_work_items", "arguments": {"project_id": "acme/shop", "saved_view_id": "gid://gitlab/WorkItems::SavedViews::SavedView/3"}}}

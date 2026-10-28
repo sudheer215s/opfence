@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/fs"
 	"path"
+	"regexp"
 	"sort"
 	"strings"
 
@@ -56,9 +57,11 @@ func (e *ValidationError) Error() string {
 }
 
 type loader struct {
-	fsys     fs.FS
-	problems []Problem
-	fixtures map[string]bool // every file under */fixtures, by FS path
+	// toolsOnly skips rule files without an MCP matcher (Catalog.ToolRulesOnly).
+	toolsOnly bool
+	fsys      fs.FS
+	problems  []Problem
+	fixtures  map[string]bool // every file under */fixtures, by FS path
 	// lazy skips what only authors need: fixtures and their tests, and
 	// rule line numbers (docs/ARCHITECTURE.md §4.6).
 	lazy bool
@@ -137,7 +140,7 @@ func (c *Catalog) LoadRules(p *Provider) error {
 		return nil
 	}
 	p.lazy.once.Do(func() {
-		l := &loader{fsys: c.FS, lazy: true}
+		l := &loader{fsys: c.FS, lazy: true, toolsOnly: p.lazy.toolsOnly}
 		l.loadProviderFiles(p)
 		c.mu.Lock()
 		defer c.mu.Unlock()
@@ -155,6 +158,25 @@ func (c *Catalog) LoadRules(p *Provider) error {
 	})
 	return p.lazy.err
 }
+
+// ToolRulesOnly makes a lazily loaded catalog load only those rule files of p
+// that can hold MCP rules: a file without an "mcp:" key holds none. A hook
+// decides one tool call per process, and GitLab's provider keeps its MCP
+// server's 80 rules beside 1,100 REST rules on the same host, which a hook
+// would otherwise parse on every call. Call it before p's rules are first
+// loaded; afterwards, and on a catalog loaded whole, it does nothing. Other
+// providers a rule reaches (catalog/aws, through call_aws) still load whole.
+func (c *Catalog) ToolRulesOnly(p *Provider) {
+	if c.lazy && p != nil && p.lazy != nil {
+		c.mu.Lock()
+		p.lazy.toolsOnly = true
+		c.mu.Unlock()
+	}
+}
+
+// mcpMatcherRe finds an "mcp:" key in a rule file, in flow or block style,
+// quoted or not. A file it does not match cannot hold an MCP matcher.
+var mcpMatcherRe = regexp.MustCompile(`(^|[\s{,])["']?mcp["']?\s*:`)
 
 // err returns the problems found as a *ValidationError, sorted, or nil.
 func (l *loader) err() error {
@@ -256,6 +278,9 @@ func (l *loader) loadRuleFile(p *Provider, file string) {
 	if err != nil {
 		l.addf(file, 0, "%v", err)
 		return
+	}
+	if l.toolsOnly && (!bytes.Contains(data, []byte("mcp")) || !mcpMatcherRe.Match(data)) {
+		return // no MCP rule can be in it (ToolRulesOnly)
 	}
 	var rf ruleFile
 	if !l.decodeStrict(file, data, &rf) {

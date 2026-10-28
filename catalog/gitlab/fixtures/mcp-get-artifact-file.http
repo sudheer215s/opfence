@@ -1,0 +1,8 @@
+# description: Read coverage/report.txt from job 2002's artifacts in project acme/shop
+POST /api/v4/mcp HTTP/1.1
+Host: gitlab.com
+Authorization: Bearer opf_gitlab_EXAMPLE
+Content-Type: application/json
+Accept: application/json, text/event-stream
+
+{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "get_artifact_file", "arguments": {"project_id": "acme/shop", "job_id": 2002, "artifact_path": "coverage/report.txt"}}}

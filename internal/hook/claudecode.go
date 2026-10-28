@@ -76,6 +76,7 @@ func ClaudeCode(in io.Reader, out io.Writer, engineFor EngineFor) error {
 	if prov == nil {
 		return nil
 	}
+	eng.Catalog.ToolRulesOnly(prov) // a tool call needs only the provider's MCP rules
 	if err := eng.Catalog.LoadRules(prov); err != nil {
 		return err
 	}

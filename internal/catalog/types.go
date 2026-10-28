@@ -110,6 +110,9 @@ type HeaderArg struct {
 type lazyRules struct {
 	once sync.Once
 	err  error
+	// toolsOnly loads only the rule files that can hold MCP rules
+	// (Catalog.ToolRulesOnly).
+	toolsOnly bool
 }
 
 // Auth says where a provider's credential travels in a request. Exactly one

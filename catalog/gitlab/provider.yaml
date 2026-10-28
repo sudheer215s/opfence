@@ -25,6 +25,12 @@ auth:
   - query: job_token
   - basic: password                # git over HTTPS: any user name (oauth2, gitlab-ci-token), the token as password
   - form: refresh_token            # glab's OAuth refresh at /oauth/token, with a refresh token minted there
+# GitLab's MCP server is part of GitLab: POST /api/v4/mcp (streamable HTTP,
+# with an OAuth token or an access token). Its tool rules are in mcp.yaml;
+# every other path is read as REST.
+mcp:
+  names: [gitlab, GitLab, gitlab-mcp]
+  paths: [/api/v4/mcp]
 detect:
   env: [GITLAB_TOKEN, GITLAB_ACCESS_TOKEN, GITLAB_PRIVATE_TOKEN]
   prefixes: [glpat-, gldt-]        # access tokens; deploy tokens (git and the registry, by Basic auth)
