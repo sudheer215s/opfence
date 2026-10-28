@@ -1,0 +1,28 @@
+# GitLab REST API (gitlab.com/api/v4): Jira forge subscriptions.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.jira-forge-subscriptions.create-gitlab-for-jira-namespace-subscription
+    match: { rest: { method: POST, path: "/api/v4/integrations/jira_forge/subscriptions" } }
+    class: access
+    card: "Create a GitLab for Jira (Forge) namespace subscription"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Shares the namespace's development information with the Jira site.
+    tests:
+      - fixture: fixtures/jira-forge-subscriptions-create-gitlab-for-jira-namespace-subscription.http
+        expect: access
+
+  - id: gitlab.jira-forge-subscriptions.delete-gitlab-for-jira-namespace-subscription
+    match: { rest: { method: DELETE, path: "/api/v4/integrations/jira_forge/subscriptions/{id}" } }
+    class: delete
+    card: "Delete a GitLab for Jira (Forge) namespace subscription {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/jira-forge-subscriptions-delete-gitlab-for-jira-namespace-subscription.http
+        expect: delete

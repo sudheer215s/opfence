@@ -1,0 +1,7 @@
+# description: Add a group to a CI/CD job token allowlist in project acme/shop
+POST /api/v4/projects/acme%2Fshop/job_token_scope/groups_allowlist HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

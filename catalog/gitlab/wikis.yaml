@@ -1,0 +1,118 @@
+# GitLab REST API (gitlab.com/api/v4): Wikis.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.wikis.create-wiki-page-for-group
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/wikis" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Create a wiki page for group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/wikis-create-wiki-page-for-group.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.wikis.update-wiki-page-for-group
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/wikis/{slug}" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Update wiki page {slug} for group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/wikis-update-wiki-page-for-group.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.wikis.delete-wiki-page-for-group
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/wikis/{slug}" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Delete wiki page {slug} for group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Wiki pages are kept in the wiki's git history.
+    tests:
+      - fixture: fixtures/wikis-delete-wiki-page-for-group.http
+        expect: delete
+        resource: "acme"
+
+  - id: gitlab.wikis.upload-attachment-to-group-wiki
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/wikis/attachments" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Upload an attachment to a group wiki in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/wikis-upload-attachment-to-group-wiki.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.wikis.create-wiki-page-for-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/wikis" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create a wiki page for project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/wikis-create-wiki-page-for-project.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.wikis.update-wiki-page-for-project
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/wikis/{slug}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update wiki page {slug} for project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/wikis-update-wiki-page-for-project.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.wikis.delete-wiki-page-for-project
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/wikis/{slug}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete wiki page {slug} for project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Wiki pages are kept in the wiki's git history.
+    tests:
+      - fixture: fixtures/wikis-delete-wiki-page-for-project.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.wikis.upload-attachment-to-project-wiki
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/wikis/attachments" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Upload an attachment to a project wiki in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/wikis-upload-attachment-to-project-wiki.http
+        expect: write
+        resource: "acme/shop"

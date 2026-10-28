@@ -1,0 +1,117 @@
+# GitLab REST API (gitlab.com/api/v4): Instance.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.instance.retrieve-application-settings
+    match: { rest: { method: GET, path: "/api/v4/application/settings" } }
+    class: credential
+    card: "Read the instance's settings with their secrets"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the instance's settings, among them the Elasticsearch password and AWS secret key, the
+      secret detection service's tokens and the Cube API key.
+    tests:
+      - fixture: fixtures/instance-retrieve-application-settings.http
+        expect: credential
+
+  - id: gitlab.instance.update-application-settings
+    match: { rest: { method: PUT, path: "/api/v4/application/settings" } }
+    class: access
+    when:
+      - if: { arg: body.akismet_api_key, present: true }
+        class: credential
+      - if: { arg: query.akismet_api_key, present: true }
+        class: credential
+      - if: { arg: body.allow_runner_registration_token, present: true }
+        class: credential
+      - if: { arg: query.allow_runner_registration_token, present: true }
+        class: credential
+      - if: { arg: body.asset_proxy_secret_key, present: true }
+        class: credential
+      - if: { arg: query.asset_proxy_secret_key, present: true }
+        class: credential
+      - if: { arg: body.cube_api_key, present: true }
+        class: credential
+      - if: { arg: query.cube_api_key, present: true }
+        class: credential
+      - if: { arg: body.disable_feed_token, present: true }
+        class: credential
+      - if: { arg: query.disable_feed_token, present: true }
+        class: credential
+      - if: { arg: body.eks_secret_access_key, present: true }
+        class: credential
+      - if: { arg: query.eks_secret_access_key, present: true }
+        class: credential
+      - if: { arg: body.elasticsearch_aws_access_key, present: true }
+        class: credential
+      - if: { arg: query.elasticsearch_aws_access_key, present: true }
+        class: credential
+      - if: { arg: body.elasticsearch_aws_secret_access_key, present: true }
+        class: credential
+      - if: { arg: query.elasticsearch_aws_secret_access_key, present: true }
+        class: credential
+      - if: { arg: body.elasticsearch_password, present: true }
+        class: credential
+      - if: { arg: query.elasticsearch_password, present: true }
+        class: credential
+      - if: { arg: body.external_pipeline_validation_service_token, present: true }
+        class: credential
+      - if: { arg: query.external_pipeline_validation_service_token, present: true }
+        class: credential
+      - if: { arg: body.recaptcha_private_key, present: true }
+        class: credential
+      - if: { arg: query.recaptcha_private_key, present: true }
+        class: credential
+      - if: { arg: body.secret_detection_service_auth_token, present: true }
+        class: credential
+      - if: { arg: query.secret_detection_service_auth_token, present: true }
+        class: credential
+      - if: { arg: body.secret_detection_token_revocation_token, present: true }
+        class: credential
+      - if: { arg: query.secret_detection_token_revocation_token, present: true }
+        class: credential
+      - if: { arg: body.slack_app_secret, present: true }
+        class: credential
+      - if: { arg: query.slack_app_secret, present: true }
+        class: credential
+      - if: { arg: body.slack_app_signing_secret, present: true }
+        class: credential
+      - if: { arg: query.slack_app_signing_secret, present: true }
+        class: credential
+      - if: { arg: body.slack_app_verification_token, present: true }
+        class: credential
+      - if: { arg: query.slack_app_verification_token, present: true }
+        class: credential
+      - if: { arg: body.spam_check_api_key, present: true }
+        class: credential
+      - if: { arg: query.spam_check_api_key, present: true }
+        class: credential
+      - if: { arg: body.static_objects_external_storage_auth_token, present: true }
+        class: credential
+      - if: { arg: query.static_objects_external_storage_auth_token, present: true }
+        class: credential
+    card: "Update application settings"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance-wide settings: sign-up, authentication, visibility and limits. Setting one of its
+      secrets is credential.
+    tests:
+      - fixture: fixtures/instance-update-application-settings.http
+        expect: access
+
+  - id: gitlab.instance.modify-appearance
+    match: { rest: { method: PUT, path: "/api/v4/application/appearance" } }
+    class: write
+    card: "Modify appearance"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/instance-modify-appearance.http
+        expect: write

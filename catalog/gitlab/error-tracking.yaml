@@ -1,0 +1,58 @@
+# GitLab REST API (gitlab.com/api/v4): Error tracking.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.error-tracking.update-error-tracking-settings-for-project
+    match: { rest: { method: PATCH, path: "/api/v4/projects/{id}/error_tracking/settings" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update Error Tracking settings for project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/error-tracking-update-error-tracking-settings-for-project.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.error-tracking.create-error-tracking-settings-for-project
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/error_tracking/settings" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create Error Tracking settings for project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/error-tracking-create-error-tracking-settings-for-project.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.error-tracking.create-client-key
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/error_tracking/client_keys" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create a client key in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/error-tracking-create-client-key.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.error-tracking.delete-client-key
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/error_tracking/client_keys/{key_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete a client key {key_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/error-tracking-delete-client-key.http
+        expect: delete
+        resource: "acme/shop"

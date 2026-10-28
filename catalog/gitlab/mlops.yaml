@@ -1,0 +1,266 @@
+# GitLab REST API (gitlab.com/api/v4): MLOps.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.mlops.creates-registered-model
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/ml/mlflow/api/2.0/mlflow/registered-models/create" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create a Registered Model in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/mlops-creates-registered-model.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mlops.update-registered-model-by-name
+    match: { rest: { method: PATCH, path: "/api/v4/projects/{id}/ml/mlflow/api/2.0/mlflow/registered-models/update" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update a Registered Model by Name in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/mlops-update-registered-model-by-name.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mlops.fetch-latest-model-version-for-registered-model-name
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/ml/mlflow/api/2.0/mlflow/registered-models/get-latest-versions" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Fetch the latest Model Version for the given Registered Model Name in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Searches; nothing is changed.
+    tests:
+      - fixture: fixtures/mlops-fetch-latest-model-version-for-registered-model-name.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mlops.delete-registered-model-by-name
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/ml/mlflow/api/2.0/mlflow/registered-models/delete" } }
+    class: irreversible
+    resource: { arg: id, kind: project }
+    card: "Delete a Registered Model by Name in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      GitLab's MLflow API has no restore.
+    tests:
+      - fixture: fixtures/mlops-delete-registered-model-by-name.http
+        expect: irreversible
+        resource: "acme/shop"
+
+  - id: gitlab.mlops.creates-run
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/ml/mlflow/api/2.0/mlflow/runs/create" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create a Run in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/mlops-creates-run.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mlops.searches-runs-candidates-within-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/ml/mlflow/api/2.0/mlflow/runs/search" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Search runs/candidates within project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Searches; nothing is changed.
+    tests:
+      - fixture: fixtures/mlops-searches-runs-candidates-within-project.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mlops.updates-run
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/ml/mlflow/api/2.0/mlflow/runs/update" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update a Run in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/mlops-updates-run.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mlops.logs-metric-to-run
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/ml/mlflow/api/2.0/mlflow/runs/log-metric" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Log a metric to a run in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/mlops-logs-metric-to-run.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mlops.logs-parameter-to-run
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/ml/mlflow/api/2.0/mlflow/runs/log-parameter" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Log a parameter to a run in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/mlops-logs-parameter-to-run.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mlops.sets-tag-for-run
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/ml/mlflow/api/2.0/mlflow/runs/set-tag" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Set a tag for a run in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/mlops-sets-tag-for-run.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mlops.logs-multiple-parameters-and-metrics
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/ml/mlflow/api/2.0/mlflow/runs/log-batch" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Log multiple parameters and metrics in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/mlops-logs-multiple-parameters-and-metrics.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mlops.delete-run
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/ml/mlflow/api/2.0/mlflow/runs/delete" } }
+    class: irreversible
+    resource: { arg: id, kind: project }
+    card: "Delete a run in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      GitLab's MLflow API has no restore.
+    tests:
+      - fixture: fixtures/mlops-delete-run.http
+        expect: irreversible
+        resource: "acme/shop"
+
+  - id: gitlab.mlops.creates-model-version
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/ml/mlflow/api/2.0/mlflow/model-versions/create" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create a Model Version in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/mlops-creates-model-version.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mlops.updates-model-version
+    match: { rest: { method: PATCH, path: "/api/v4/projects/{id}/ml/mlflow/api/2.0/mlflow/model-versions/update" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update a Model Version in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/mlops-updates-model-version.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mlops.search-experiments
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/ml/mlflow/api/2.0/mlflow/experiments/search" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Search experiments in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Searches; nothing is changed.
+    tests:
+      - fixture: fixtures/mlops-search-experiments.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mlops.create-experiment
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/ml/mlflow/api/2.0/mlflow/experiments/create" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create experiment in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/mlops-create-experiment.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mlops.sets-tag-for-experiment
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/ml/mlflow/api/2.0/mlflow/experiments/set-experiment-tag" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Set a tag for an experiment in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/mlops-sets-tag-for-experiment.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mlops.delete-experiment
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/ml/mlflow/api/2.0/mlflow/experiments/delete" } }
+    class: irreversible
+    resource: { arg: id, kind: project }
+    card: "Delete an experiment in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      GitLab's MLflow API has no restore.
+    tests:
+      - fixture: fixtures/mlops-delete-experiment.http
+        expect: irreversible
+        resource: "acme/shop"

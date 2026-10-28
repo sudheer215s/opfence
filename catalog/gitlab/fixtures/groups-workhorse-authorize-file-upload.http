@@ -1,0 +1,7 @@
+# description: Workhorse authorize the file upload in group acme
+POST /api/v4/groups/acme/uploads/authorize HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

@@ -1,0 +1,32 @@
+# GitLab REST API (gitlab.com/api/v4): Unleash.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.unleash.register-unleash-client
+    match: { rest: { method: POST, path: "/api/v4/feature_flags/unleash/{project_id}/client/register" } }
+    class: read
+    card: "Register Unleash client {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A feature flag client registering itself or reporting which flags it evaluated; no flag
+      changes.
+    tests:
+      - fixture: fixtures/unleash-register-unleash-client.http
+        expect: read
+
+  - id: gitlab.unleash.report-unleash-client-metrics
+    match: { rest: { method: POST, path: "/api/v4/feature_flags/unleash/{project_id}/client/metrics" } }
+    class: read
+    card: "Report Unleash client metrics {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A feature flag client registering itself or reporting which flags it evaluated; no flag
+      changes.
+    tests:
+      - fixture: fixtures/unleash-report-unleash-client-metrics.http
+        expect: read

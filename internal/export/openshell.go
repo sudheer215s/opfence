@@ -108,34 +108,52 @@ func OpenShell(c *catalog.Catalog, p *policy.Effective, env string) ([]byte, err
 func openShellEndpoints(p *policy.Effective, prov *catalog.Provider, host, env string) []*yaml.Node {
 	rules := sortedRules(p, prov)
 	var out []*yaml.Node
-	switch {
-	case prov.MCP != nil:
+	restRules := rules
+	if prov.MCP != nil {
 		for _, path := range mcpPaths(prov) {
 			out = append(out, mcpEndpoint(p, rules, host, path, env))
 		}
+		if len(prov.MCP.Paths) == 0 {
+			return out // every path is MCP
+		}
 		// An API sharing the host (mcp.paths names where MCP is) gets its
 		// REST rules; the catalog checks none of them is under an MCP path.
-		if len(prov.MCP.Paths) > 0 {
-			if shared := sharedHostRules(rules); hasREST(prov, shared) {
-				out = append(out, restEndpoint(p, prov, shared, host, env, nil))
-			}
-		}
-	case slices.Contains(prov.Git, host):
-		out = append(out, gitEndpoint(p, prov, rules, host, env))
-	default:
-		var closed []string // GraphQL paths with nothing to allow
-		for _, path := range prov.GraphQL {
-			if ep := graphQLEndpoint(p, prov, rules, host, path, env); ep != nil {
-				out = append(out, ep)
-			} else {
-				closed = append(closed, path)
-			}
-		}
-		if hasREST(prov, rules) {
-			out = append(out, restEndpoint(p, prov, rules, host, env, closed))
+		restRules = sharedHostRules(rules)
+	}
+	git := slices.Contains(prov.Git, host)
+	if git && !gitSharesAPIHost(prov) {
+		// github.com serves git; GitHub's API is on api.github.com.
+		return append(out, gitEndpoint(p, prov, rules, host, env))
+	}
+	var closed []string // GraphQL paths with nothing to allow
+	for _, path := range prov.GraphQL {
+		if ep := graphQLEndpoint(p, prov, rules, host, path, env); ep != nil {
+			out = append(out, ep)
+		} else {
+			closed = append(closed, path)
 		}
 	}
+	if git || hasREST(prov, restRules) {
+		// gitlab.com serves the API and git on one host: one REST
+		// endpoint carries both, git's routes beside the API's paths.
+		out = append(out, restEndpoint(p, prov, restRules, host, env, closed, git))
+	}
 	return out
+}
+
+// gitSharesAPIHost reports whether every host of the provider serves git, so
+// its API is on a git host too (gitlab.com) rather than on a host of its own
+// (api.github.com beside github.com).
+func gitSharesAPIHost(prov *catalog.Provider) bool {
+	if len(prov.Git) == 0 {
+		return false
+	}
+	for _, h := range prov.Hosts {
+		if !slices.Contains(prov.Git, h) {
+			return false
+		}
+	}
+	return true
 }
 
 // mcpPaths is where an MCP provider's streamable HTTP endpoint lives:
@@ -261,7 +279,7 @@ func graphQLEndpoint(p *policy.Effective, prov *catalog.Provider, rules []*catal
 	return ep
 }
 
-func restEndpoint(p *policy.Effective, prov *catalog.Provider, rules []*catalog.Rule, host, env string, closedGraphQL []string) *yaml.Node {
+func restEndpoint(p *policy.Effective, prov *catalog.Provider, rules []*catalog.Rule, host, env string, closedGraphQL []string, git bool) *yaml.Node {
 	ep := endpointHead(host, "", "rest")
 	allow, deny := seq(), seq()
 	safeDefault := prov.Defaults.RESTSafeMethods != "" && DefaultDecision(p, prov.Defaults.RESTSafeMethods, env) == classes.Allow
@@ -319,9 +337,20 @@ func restEndpoint(p *policy.Effective, prov *catalog.Provider, rules []*catalog.
 			}
 		}
 	}
+	if git {
+		a, d := gitRules(p, rules, env, safeDefault)
+		allow.Content = append(allow.Content, a...)
+		deny.Content = append(deny.Content, d...)
+	}
 	addRules(ep, allow, deny)
 	return ep
 }
+
+// maxGitDepth is the deepest repository path the git routes are written for:
+// GitLab nests projects in subgroups (/group/sub/project.git). OpenShell
+// denies requests no allow rule matches, so deeper repositories are blocked
+// there, which is stricter than Opfence.
+const maxGitDepth = 8
 
 // gitRoute is a method and path glob that git smart HTTP or Git LFS uses.
 type gitRoute struct{ method, glob string }
@@ -330,7 +359,18 @@ type gitRoute struct{ method, glob string }
 // OpenShell cannot read the ref updates inside a push, so every push
 // command shares one route.
 func gitRoutes(m *catalog.GitMatch) []gitRoute {
-	const repo = "/*/*/"
+	out := gitRoutesAt(m, "/*/*/")
+	// Deeper repositories end in .git, as the decoder requires (a path
+	// without it is a REST call on a host that also serves an API).
+	for depth := 3; depth <= maxGitDepth; depth++ {
+		out = append(out, gitRoutesAt(m, "/"+strings.Repeat("*/", depth-1)+"*.git/")...)
+	}
+	return out
+}
+
+// gitRoutesAt lists the routes for repositories at one depth: repo is the
+// glob of the repository's path, ending in a slash.
+func gitRoutesAt(m *catalog.GitMatch, repo string) []gitRoute {
 	switch m.Service + " " + m.Command {
 	case decode.GitUploadPack + " " + decode.GitFetch:
 		return []gitRoute{{"GET", repo + "info/refs"}, {"POST", repo + "git-upload-pack"}}
@@ -350,9 +390,7 @@ func gitRoutes(m *catalog.GitMatch) []gitRoute {
 	return nil
 }
 
-// gitEndpoint writes path rules for a git host. Each route gets the strictest
-// decision of the rules that share it: a push route is allowed only when
-// every kind of ref update would be.
+// gitEndpoint writes path rules for a git host.
 func gitEndpoint(p *policy.Effective, prov *catalog.Provider, rules []*catalog.Rule, host, env string) *yaml.Node {
 	ep := endpointHead(host, "", "rest")
 	allow, deny := seq(), seq()
@@ -362,6 +400,18 @@ func gitEndpoint(p *policy.Effective, prov *catalog.Provider, rules []*catalog.R
 			allow.Content = append(allow.Content, allowRule(pairs("method", scalar(m), "path", scalar("/**"))))
 		}
 	}
+	a, d := gitRules(p, rules, env, safeDefault)
+	allow.Content = append(allow.Content, a...)
+	deny.Content = append(deny.Content, d...)
+	addRules(ep, allow, deny)
+	return ep
+}
+
+// gitRules writes the git rules' routes. Each route gets the strictest
+// decision of the rules that share it: a push route is allowed only when
+// every kind of ref update would be. safeDefault says GETs are already
+// allowed by a GET /** rule.
+func gitRules(p *policy.Effective, rules []*catalog.Rule, env string, safeDefault bool) (allow, deny []*yaml.Node) {
 	var order []gitRoute
 	decisions := map[gitRoute][]classes.Decision{}
 	ids := map[gitRoute][]string{}
@@ -380,21 +430,24 @@ func gitEndpoint(p *policy.Effective, prov *catalog.Provider, rules []*catalog.R
 	for _, rt := range order {
 		rule := pairs("method", scalar(rt.method), "path", scalar(rt.glob))
 		safe := safeDefault && rt.method == "GET"
-		switch d := classes.Strictest(decisions[rt]...); {
+		d := classes.Strictest(decisions[rt]...)
+		if d != classes.Allow {
+			rule = pairs("method", scalar(rt.method), "path", scalar(denyGlob(rt.glob)))
+		}
+		switch {
 		case d == classes.Allow:
 			if !safe {
-				allow.Content = append(allow.Content, allowRule(rule))
+				allow = append(allow, allowRule(rule))
 			}
 		case d == classes.Deny:
 			rule.HeadComment = "Opfence denies one of " + strings.Join(ids[rt], ", ") + ", which OpenShell cannot tell apart on this path."
-			deny.Content = append(deny.Content, rule)
+			deny = append(deny, rule)
 		case safe:
 			rule.HeadComment = "Opfence would ask about one of " + strings.Join(ids[rt], ", ") + ", but the GET allow rule above would let it through, so it is denied."
-			deny.Content = append(deny.Content, rule)
+			deny = append(deny, rule)
 		}
 	}
-	addRules(ep, allow, deny)
-	return ep
+	return allow, deny
 }
 
 func mcpEndpoint(p *policy.Effective, rules []*catalog.Rule, host, path, env string) *yaml.Node {
@@ -476,14 +529,14 @@ func templateGlob(t string) string {
 	return strings.Join(segs, "/")
 }
 
-// denyGlob widens custom-method segments (*:verb) to * for deny rules. An
-// allow glob that a gateway reads more narrowly than meant only blocks more;
-// a deny glob must never be read more narrowly, so it does not rely on
-// wildcards inside a segment.
+// denyGlob widens segments with a wildcard and a suffix (*:verb, *.git) to *
+// for deny rules. An allow glob that a gateway reads more narrowly than
+// meant only blocks more; a deny glob must never be read more narrowly, so
+// it does not rely on wildcards inside a segment.
 func denyGlob(g string) string {
 	segs := strings.Split(g, "/")
 	for i, s := range segs {
-		if strings.HasPrefix(s, "*:") {
+		if strings.HasPrefix(s, "*") && s != "*" && s != "**" {
 			segs[i] = "*"
 		}
 	}

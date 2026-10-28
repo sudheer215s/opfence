@@ -1,0 +1,7 @@
+# description: Create or update the Jira Cloud App integration in group acme
+PUT /api/v4/groups/acme/integrations/jira-cloud-app HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

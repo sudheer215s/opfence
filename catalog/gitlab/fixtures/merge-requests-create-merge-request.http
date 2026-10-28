@@ -1,0 +1,7 @@
+# description: Open a merge request from … to … in project acme/shop
+POST /api/v4/projects/acme%2Fshop/merge_requests HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{"source_branch": "feature/login", "target_branch": "main", "title": "Add login"}

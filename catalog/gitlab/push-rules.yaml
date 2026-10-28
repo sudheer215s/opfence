@@ -1,0 +1,98 @@
+# GitLab REST API (gitlab.com/api/v4): Push rules.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.push-rules.add-push-rules-to-group
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/push_rule" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Add push rules to group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Push rules reject commits by author, message, file or secret; removing one lets them through.
+    tests:
+      - fixture: fixtures/push-rules-add-push-rules-to-group.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.push-rules.update-push-rules-of-group
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/push_rule" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Update push rules of group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Push rules reject commits by author, message, file or secret; removing one lets them through.
+    tests:
+      - fixture: fixtures/push-rules-update-push-rules-of-group.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.push-rules.delete-push-rules-of-group
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/push_rule" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Delete the push rules of group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Push rules reject commits by author, message, file or secret; removing one lets them through.
+    tests:
+      - fixture: fixtures/push-rules-delete-push-rules-of-group.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.push-rules.add-push-rules-to-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/push_rule" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Add push rules to project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Push rules reject commits by author, message, file or secret; removing one lets them through.
+    tests:
+      - fixture: fixtures/push-rules-add-push-rules-to-project.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.push-rules.update-push-rules-of-project
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/push_rule" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Update push rules of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Push rules reject commits by author, message, file or secret; removing one lets them through.
+    tests:
+      - fixture: fixtures/push-rules-update-push-rules-of-project.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.push-rules.delete-push-rules-of-project
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/push_rule" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Delete the push rules of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Push rules reject commits by author, message, file or secret; removing one lets them through.
+    tests:
+      - fixture: fixtures/push-rules-delete-push-rules-of-project.http
+        expect: access
+        resource: "acme/shop"

@@ -1,0 +1,7 @@
+# description: Get Slack interactive component options
+POST /api/v4/integrations/slack/options HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

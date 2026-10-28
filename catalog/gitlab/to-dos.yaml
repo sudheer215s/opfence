@@ -1,0 +1,54 @@
+# GitLab REST API (gitlab.com/api/v4): To-dos.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.to-dos.project-create-to-do-item-for-issuable-merge-requests-todo
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/todo" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create a to-do item for an issuable {merge_request_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/to-dos-project-create-to-do-item-for-issuable-merge-requests-todo.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.to-dos.project-create-to-do-item-for-issuable-issues-todo
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/issues/{issue_iid}/todo" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create a to-do item for an issuable {issue_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/to-dos-project-create-to-do-item-for-issuable-issues-todo.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.to-dos.mark-to-do-item-as-done
+    match: { rest: { method: POST, path: "/api/v4/todos/{id}/mark_as_done" } }
+    class: write
+    card: "Mark a to-do item as done {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/to-dos-mark-to-do-item-as-done.http
+        expect: write
+
+  - id: gitlab.to-dos.mark-all-to-do-items-as-done
+    match: { rest: { method: POST, path: "/api/v4/todos/mark_as_done" } }
+    class: write
+    card: "Mark all to-do items as done"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/to-dos-mark-all-to-do-items-as-done.http
+        expect: write

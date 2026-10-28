@@ -1,0 +1,50 @@
+# GitLab REST API (gitlab.com/api/v4): Enterprise users.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.enterprise-users.update-enterprise-user
+    match: { rest: { method: PATCH, path: "/api/v4/groups/{id}/enterprise_users/{user_id}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Update an enterprise user {user_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Changing an enterprise user's email or two-factor authentication can hand over the account.
+    tests:
+      - fixture: fixtures/enterprise-users-update-enterprise-user.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.enterprise-users.delete-enterprise-user
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/enterprise_users/{user_id}" } }
+    class: irreversible
+    resource: { arg: id, kind: group }
+    card: "Delete an enterprise user {user_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Deletes the account.
+    tests:
+      - fixture: fixtures/enterprise-users-delete-enterprise-user.http
+        expect: irreversible
+        resource: "acme"
+
+  - id: gitlab.enterprise-users.disable-two-factor-authentication-for-enterprise-user
+    match: { rest: { method: PATCH, path: "/api/v4/groups/{id}/enterprise_users/{user_id}/disable_two_factor" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Disable two-factor authentication for an enterprise user {user_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Changing an enterprise user's email or two-factor authentication can hand over the account.
+    tests:
+      - fixture: fixtures/enterprise-users-disable-two-factor-authentication-for-enterprise-user.http
+        expect: access
+        resource: "acme"

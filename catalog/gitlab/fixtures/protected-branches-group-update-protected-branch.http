@@ -1,0 +1,7 @@
+# description: Update a protected branch main in group acme
+PATCH /api/v4/groups/acme/protected_branches/main HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

@@ -1,0 +1,98 @@
+# GitLab REST API (gitlab.com/api/v4): Environments.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.environments.create-environment
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/environments" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create an environment in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/environments-create-environment.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.environments.update-environment
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/environments/{environment_id}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update an existing environment {environment_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/environments-update-environment.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.environments.delete-environment
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/environments/{environment_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete environment {environment_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Deletes the environment's deployment history; GitLab environments hold no secrets (variables
+      are scoped by name and stay).
+    tests:
+      - fixture: fixtures/environments-delete-environment.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.environments.schedule-multiple-stopped-review-apps-for-deletion
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/environments/review_apps" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Schedule multiple stopped review apps for deletion in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Deletes the environment's deployment history; GitLab environments hold no secrets (variables
+      are scoped by name and stay).
+    tests:
+      - fixture: fixtures/environments-schedule-multiple-stopped-review-apps-for-deletion.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.environments.stop-environment
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/environments/{environment_id}/stop" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Stop environment {environment_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Stopping runs the environment's on_stop job, which usually tears the deployment down; it can
+      be deployed again.
+    tests:
+      - fixture: fixtures/environments-stop-environment.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.environments.stop-stale-environments
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/environments/stop_stale" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Stop stale environments in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Stopping runs the environment's on_stop job, which usually tears the deployment down; it can
+      be deployed again.
+    tests:
+      - fixture: fixtures/environments-stop-stale-environments.http
+        expect: delete
+        resource: "acme/shop"

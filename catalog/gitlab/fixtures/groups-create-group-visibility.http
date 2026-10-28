@@ -1,0 +1,7 @@
+# description: Create GitLab group … (visibility)
+POST /api/v4/groups HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{"name": "Acme", "path": "acme", "visibility": "public"}

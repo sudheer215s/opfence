@@ -1,0 +1,5 @@
+# description: Remove member role of group acme 7
+DELETE /api/v4/groups/acme/member_roles/7 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

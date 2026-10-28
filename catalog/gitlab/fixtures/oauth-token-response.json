@@ -1,0 +1,8 @@
+{
+  "access_token": "EXAMPLEaccesstoken0123456789abcdef0123456789abcdef0123456789ab",
+  "token_type": "Bearer",
+  "expires_in": 7200,
+  "refresh_token": "EXAMPLErefreshtoken0123456789abcdef0123456789abcdef0123456789a",
+  "scope": "api write_repository openid",
+  "created_at": 1761600000
+}

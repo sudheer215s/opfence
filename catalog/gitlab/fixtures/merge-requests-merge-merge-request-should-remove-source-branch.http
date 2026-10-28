@@ -1,0 +1,7 @@
+# description: Merge merge request !12 of project acme/shop (should_remove_source_branch)
+PUT /api/v4/projects/acme%2Fshop/merge_requests/12/merge HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{"squash": true, "should_remove_source_branch": "true"}

@@ -1,0 +1,232 @@
+# GitLab REST API (gitlab.com/api/v4): GitLab Duo workflows.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.gitlab-duo-workflows.ingest-ai-audit-events-from-duo-workflow-service
+    match: { rest: { method: POST, path: "/api/v4/ai/duo_workflows/workflows/{id}/audit_events" } }
+    class: write
+    card: "Ingest AI audit events from Duo Workflow Service {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/gitlab-duo-workflows-ingest-ai-audit-events-from-duo-workflow-service.http
+        expect: write
+
+  - id: gitlab.gitlab-duo-workflows.submit-risk-assessment-results-for-merge-request-risk-assessment-results
+    match: { rest: { method: POST, path: "/api/v4/ai/duo_workflows/tools/risk_assessment/results" } }
+    class: write
+    card: "Submit risk assessment results for a merge request"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/gitlab-duo-workflows-submit-risk-assessment-results-for-merge-request-risk-assessment-results.http
+        expect: write
+
+  - id: gitlab.gitlab-duo-workflows.submit-risk-assessment-results-for-merge-request-risk-classification-results
+    match: { rest: { method: POST, path: "/api/v4/ai/duo_workflows/tools/risk_classification/results" } }
+    class: write
+    card: "Submit risk assessment results for a merge request"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      GitLab has deprecated this endpoint.
+    tests:
+      - fixture: fixtures/gitlab-duo-workflows-submit-risk-assessment-results-for-merge-request-risk-classification-results.http
+        expect: write
+
+  - id: gitlab.gitlab-duo-workflows.add-code-review-comments-to-merge-request
+    match: { rest: { method: POST, path: "/api/v4/ai/duo_workflows/code_review/add_comments" } }
+    class: write
+    card: "Add code review comments to a merge request"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/gitlab-duo-workflows-add-code-review-comments-to-merge-request.http
+        expect: write
+
+  - id: gitlab.gitlab-duo-workflows.create-workflow-persistence
+    match: { rest: { method: POST, path: "/api/v4/ai/duo_workflows/agent_workflows" } }
+    class: write
+    card: "Create workflow persistence (agent-initiated, limited privileges)"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/gitlab-duo-workflows-create-workflow-persistence.http
+        expect: write
+
+  - id: gitlab.gitlab-duo-workflows.revoke-ai-workflows-token
+    match: { rest: { method: POST, path: "/api/v4/ai/duo_workflows/revoke_token" } }
+    class: write
+    card: "Revoke ai_workflows token"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/gitlab-duo-workflows-revoke-ai-workflows-token.http
+        expect: write
+
+  - id: gitlab.gitlab-duo-workflows.update-workflow-status
+    match: { rest: { method: PATCH, path: "/api/v4/ai/duo_workflows/workflows/{id}" } }
+    class: write
+    card: "Update the workflow status {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/gitlab-duo-workflows-update-workflow-status.http
+        expect: write
+
+  - id: gitlab.gitlab-duo-workflows.create-workflow-checkpoint
+    match: { rest: { method: POST, path: "/api/v4/ai/duo_workflows/workflows/{id}/checkpoints" } }
+    class: write
+    card: "Create workflow checkpoint {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/gitlab-duo-workflows-create-workflow-checkpoint.http
+        expect: write
+
+  - id: gitlab.gitlab-duo-workflows.create-multiple-workflow-checkpoint-writes
+    match: { rest: { method: POST, path: "/api/v4/ai/duo_workflows/workflows/{id}/checkpoint_writes_batch" } }
+    class: write
+    card: "Create multiple workflow checkpoint writes {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/gitlab-duo-workflows-create-multiple-workflow-checkpoint-writes.http
+        expect: write
+
+  - id: gitlab.gitlab-duo-workflows.create-workflow-event
+    match: { rest: { method: POST, path: "/api/v4/ai/duo_workflows/workflows/{id}/events" } }
+    class: write
+    card: "Create workflow event {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/gitlab-duo-workflows-create-workflow-event.http
+        expect: write
+
+  - id: gitlab.gitlab-duo-workflows.update-workflow-event
+    match: { rest: { method: PUT, path: "/api/v4/ai/duo_workflows/workflows/{id}/events/{event_id}" } }
+    class: write
+    card: "Update workflow event {event_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/gitlab-duo-workflows-update-workflow-event.http
+        expect: write
+
+  - id: gitlab.gitlab-duo-workflows.connection-details-for-accessing-duo-agent-platform-service-directly
+    match: { rest: { method: POST, path: "/api/v4/ai/duo_workflows/direct_access" } }
+    class: read
+    card: "Connection details for accessing Duo Agent Platform Service directly"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns a short-lived token for the same user, as exchanging a credential the caller already
+      holds is (ARCHITECTURE §4.5).
+    tests:
+      - fixture: fixtures/gitlab-duo-workflows-connection-details-for-accessing-duo-agent-platform-service-directly.http
+        expect: read
+
+  - id: gitlab.gitlab-duo-workflows.create-flow
+    match: { rest: { method: POST, path: "/api/v4/ai/duo_workflows/workflows" } }
+    class: write
+    when:
+      - if: { arg: body.start_workflow, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: irreversible
+      - if: { arg: query.start_workflow, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: irreversible
+    card: "Create a GitLab Duo flow with goal {body.goal}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Creating a flow is a write; starting it is irreversible (condition below). With start_workflow
+      the flow starts at once, handing its goal to an agent, which is irreversible.
+    tests:
+      - fixture: fixtures/gitlab-duo-workflows-create-flow.http
+        expect: write
+      - fixture: fixtures/gitlab-duo-workflows-create-flow-start-workflow.http
+        expect: irreversible
+
+  - id: gitlab.gitlab-duo-workflows.request-duo-workflows-server-side-execution-connection-details
+    match: { rest: { method: POST, path: "/api/v4/ai/duo_workflows/workflows/{workflow_id}/execute" } }
+    class: irreversible
+    card: "Request Duo Workflows server-side execution connection details {workflow_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Runs the flow, which hands a free-form goal to an agent acting in the project; tools that hand
+      a task to another agent are irreversible.
+    tests:
+      - fixture: fixtures/gitlab-duo-workflows-request-duo-workflows-server-side-execution-connection-details.http
+        expect: irreversible
+
+  - id: gitlab.gitlab-duo-workflows.resume-paused-workflow
+    match: { rest: { method: POST, path: "/api/v4/ai/duo_workflows/workflows/{workflow_id}/resume" } }
+    class: irreversible
+    card: "Resume a paused workflow {workflow_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Runs the flow, which hands a free-form goal to an agent acting in the project; tools that hand
+      a task to another agent are irreversible.
+    tests:
+      - fixture: fixtures/gitlab-duo-workflows-resume-paused-workflow.http
+        expect: irreversible
+
+  - id: gitlab.gitlab-duo-workflows.restart-failed-or-stopped-workflow-as-session
+    match: { rest: { method: POST, path: "/api/v4/ai/duo_workflows/workflows/{workflow_id}/restart" } }
+    class: irreversible
+    card: "Restart a failed or stopped workflow as a new session {workflow_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Runs the flow, which hands a free-form goal to an agent acting in the project; tools that hand
+      a task to another agent are irreversible.
+    tests:
+      - fixture: fixtures/gitlab-duo-workflows-restart-failed-or-stopped-workflow-as-session.http
+        expect: irreversible
+
+  - id: gitlab.gitlab-duo-workflows.set-ai-recommended-reviewers-for-merge-request
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/suggested_reviewers" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Set the AI-recommended reviewers for merge request !{merge_request_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/gitlab-duo-workflows-set-ai-recommended-reviewers-for-merge-request.http
+        expect: write
+        resource: "acme/shop"

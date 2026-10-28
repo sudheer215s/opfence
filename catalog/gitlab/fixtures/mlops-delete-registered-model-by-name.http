@@ -1,0 +1,5 @@
+# description: Delete a Registered Model by Name in project acme/shop
+DELETE /api/v4/projects/acme%2Fshop/ml/mlflow/api/2.0/mlflow/registered-models/delete HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

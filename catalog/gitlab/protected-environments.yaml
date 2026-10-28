@@ -1,0 +1,98 @@
+# GitLab REST API (gitlab.com/api/v4): Protected environments.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.protected-environments.protect-environment-for-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/protected_environments" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Protect an environment for project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Environment protection decides who can deploy.
+    tests:
+      - fixture: fixtures/protected-environments-protect-environment-for-project.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.protected-environments.update-protected-environment-for-project
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/protected_environments/{name}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Update a protected environment for project {id} {name}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Environment protection decides who can deploy.
+    tests:
+      - fixture: fixtures/protected-environments-update-protected-environment-for-project.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.protected-environments.unprotect-protected-environment-for-project
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/protected_environments/{name}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Unprotect a protected environment for project {id} {name}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Environment protection decides who can deploy.
+    tests:
+      - fixture: fixtures/protected-environments-unprotect-protected-environment-for-project.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.protected-environments.protect-environment-for-group
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/protected_environments" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Protect an environment for group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Environment protection decides who can deploy.
+    tests:
+      - fixture: fixtures/protected-environments-protect-environment-for-group.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.protected-environments.update-protected-environment-for-group
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/protected_environments/{name}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Update a protected environment for group {id} {name}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Environment protection decides who can deploy.
+    tests:
+      - fixture: fixtures/protected-environments-update-protected-environment-for-group.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.protected-environments.unprotect-group-environment
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/protected_environments/{name}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Unprotect a group environment {name} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Environment protection decides who can deploy.
+    tests:
+      - fixture: fixtures/protected-environments-unprotect-group-environment.http
+        expect: access
+        resource: "acme"

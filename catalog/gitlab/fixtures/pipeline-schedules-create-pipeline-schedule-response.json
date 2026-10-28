@@ -1,0 +1,12 @@
+{
+  "id": 3,
+  "description": "nightly",
+  "ref": "main",
+  "variables": [
+    {
+      "key": "DEPLOY_TOKEN",
+      "value": "example-secret",
+      "variable_type": "env_var"
+    }
+  ]
+}

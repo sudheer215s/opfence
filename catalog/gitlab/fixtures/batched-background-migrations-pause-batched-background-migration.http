@@ -1,0 +1,7 @@
+# description: Pause a batched background migration 7
+PUT /api/v4/admin/batched_background_migrations/7/pause HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

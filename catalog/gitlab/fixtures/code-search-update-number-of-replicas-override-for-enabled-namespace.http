@@ -1,0 +1,7 @@
+# description: Update the number of replicas override for an enabled namespace 7
+PATCH /api/v4/admin/zoekt/namespaces/7 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

@@ -1,0 +1,7 @@
+# description: Add an email address
+POST /api/v4/user/emails HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

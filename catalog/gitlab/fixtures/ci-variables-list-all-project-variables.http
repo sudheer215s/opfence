@@ -1,0 +1,5 @@
+# description: Read project acme/shop's CI/CD variables with their values
+GET /api/v4/projects/acme%2Fshop/variables HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

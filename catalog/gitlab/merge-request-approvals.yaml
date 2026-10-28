@@ -1,0 +1,145 @@
+# GitLab REST API (gitlab.com/api/v4): Merge request approvals.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.merge-request-approvals.create-approval-rule-for-merge-request
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/approval_rules" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create an approval rule for merge request !{merge_request_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Approval rules and settings decide who must approve a merge request before it can merge.
+    tests:
+      - fixture: fixtures/merge-request-approvals-create-approval-rule-for-merge-request.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.merge-request-approvals.update-approval-rule-for-merge-request
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/approval_rules/{approval_rule_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Update an approval rule for merge request !{merge_request_iid} {approval_rule_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Approval rules and settings decide who must approve a merge request before it can merge.
+    tests:
+      - fixture: fixtures/merge-request-approvals-update-approval-rule-for-merge-request.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.merge-request-approvals.delete-approval-rule-for-merge-request
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/approval_rules/{approval_rule_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Delete an approval rule for merge request !{merge_request_iid} {approval_rule_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Approval rules and settings decide who must approve a merge request before it can merge.
+    tests:
+      - fixture: fixtures/merge-request-approvals-delete-approval-rule-for-merge-request.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.merge-request-approvals.update-mr-approval-settings-for-project
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/merge_request_approval_setting" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Update MR approval settings for project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Approval rules and settings decide who must approve a merge request before it can merge.
+    tests:
+      - fixture: fixtures/merge-request-approvals-update-mr-approval-settings-for-project.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.merge-request-approvals.update-mr-approval-settings-for-group
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/merge_request_approval_setting" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Update MR approval settings for group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Approval rules and settings decide who must approve a merge request before it can merge.
+    tests:
+      - fixture: fixtures/merge-request-approvals-update-mr-approval-settings-for-group.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.merge-request-approvals.change-approval-related-configuration
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/approvals" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Change approval-related configuration {merge_request_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Approval rules and settings decide who must approve a merge request before it can merge.
+      GitLab has deprecated this endpoint.
+    tests:
+      - fixture: fixtures/merge-request-approvals-change-approval-related-configuration.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.merge-request-approvals.approve-merge-request
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/approve" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Approve merge request !{merge_request_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Approving is the reviewer's part, as GitHub's reviews are writes.
+    tests:
+      - fixture: fixtures/merge-request-approvals-approve-merge-request.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.merge-request-approvals.unapprove-merge-request
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/unapprove" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Unapprove merge request !{merge_request_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Approving is the reviewer's part, as GitHub's reviews are writes.
+    tests:
+      - fixture: fixtures/merge-request-approvals-unapprove-merge-request.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.merge-request-approvals.reset-approvals-for-merge-request
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/reset_approvals" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Reset approvals for merge request !{merge_request_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/merge-request-approvals-reset-approvals-for-merge-request.http
+        expect: write
+        resource: "acme/shop"

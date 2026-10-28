@@ -1,0 +1,34 @@
+# GitLab REST API (gitlab.com/api/v4): Packages: PyPi.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.packages-pypi.upload-package
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/packages/pypi" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Upload a package in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Publishing a package is a write.
+    tests:
+      - fixture: fixtures/packages-pypi-upload-package.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.packages-pypi.authorize-pypi-package-upload-from-workhorse
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/packages/pypi/authorize" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Authorize the PyPi package upload from workhorse in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/packages-pypi-authorize-pypi-package-upload-from-workhorse.http
+        expect: read
+        resource: "acme/shop"

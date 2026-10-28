@@ -1,0 +1,5 @@
+# description: Delete epic &12 comment 7 in group acme
+DELETE /api/v4/groups/acme/epics/12/notes/7 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

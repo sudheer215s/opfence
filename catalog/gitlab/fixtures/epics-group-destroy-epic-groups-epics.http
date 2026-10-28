@@ -1,0 +1,5 @@
+# description: Destroy epic &5 in group acme
+DELETE /api/v4/groups/acme/epics/5 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

@@ -1,0 +1,5 @@
+# description: Delete feature flag new-checkout in project acme/shop
+DELETE /api/v4/projects/acme%2Fshop/feature_flags/new-checkout HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

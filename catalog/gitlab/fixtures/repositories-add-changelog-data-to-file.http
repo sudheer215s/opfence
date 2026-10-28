@@ -1,0 +1,7 @@
+# description: Add changelog data to file in project acme/shop
+POST /api/v4/projects/acme%2Fshop/repository/changelog HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

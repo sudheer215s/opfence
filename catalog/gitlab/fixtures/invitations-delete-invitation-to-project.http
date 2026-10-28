@@ -1,0 +1,5 @@
+# description: Delete an invitation to project acme/shop dev@example.com
+DELETE /api/v4/projects/acme%2Fshop/invitations/dev%40example.com HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

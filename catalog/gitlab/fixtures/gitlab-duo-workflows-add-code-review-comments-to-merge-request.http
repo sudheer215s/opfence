@@ -1,0 +1,7 @@
+# description: Add code review comments to a merge request
+POST /api/v4/ai/duo_workflows/code_review/add_comments HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

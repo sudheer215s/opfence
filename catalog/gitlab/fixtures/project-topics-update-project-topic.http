@@ -1,0 +1,7 @@
+# description: Update a project topic 7
+PUT /api/v4/topics/7 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

@@ -1,0 +1,5 @@
+# description: Delete Terraform state main of project acme/shop with every version
+DELETE /api/v4/projects/acme%2Fshop/terraform/state/main HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

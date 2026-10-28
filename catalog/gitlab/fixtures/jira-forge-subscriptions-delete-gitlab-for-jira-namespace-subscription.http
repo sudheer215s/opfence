@@ -1,0 +1,5 @@
+# description: Delete a GitLab for Jira (Forge) namespace subscription 7
+DELETE /api/v4/integrations/jira_forge/subscriptions/7 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

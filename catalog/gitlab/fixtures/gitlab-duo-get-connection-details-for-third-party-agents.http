@@ -1,0 +1,7 @@
+# description: Get connection details for third party agents
+POST /api/v4/ai/third_party_agents/direct_access HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

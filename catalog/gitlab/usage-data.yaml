@@ -1,0 +1,62 @@
+# GitLab REST API (gitlab.com/api/v4): Usage data.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.usage-data.track-usage-data-event
+    match: { rest: { method: POST, path: "/api/v4/usage_data/increment_counter" } }
+    class: read
+    card: "Track usage data event"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Records a product analytics event about the caller (glab sends one after each command);
+      nothing in the user's projects or settings changes.
+    tests:
+      - fixture: fixtures/usage-data-track-usage-data-event.http
+        expect: read
+
+  - id: gitlab.usage-data.track-usage-data-event-for-user
+    match: { rest: { method: POST, path: "/api/v4/usage_data/increment_unique_users" } }
+    class: read
+    card: "Track usage data event for the current user"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Records a product analytics event about the caller (glab sends one after each command);
+      nothing in the user's projects or settings changes.
+    tests:
+      - fixture: fixtures/usage-data-track-usage-data-event-for-user.http
+        expect: read
+
+  - id: gitlab.usage-data.track-multiple-internal-gitlab-events
+    match: { rest: { method: POST, path: "/api/v4/usage_data/track_events" } }
+    class: read
+    card: "Track multiple internal GitLab events"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Records a product analytics event about the caller (glab sends one after each command);
+      nothing in the user's projects or settings changes.
+    tests:
+      - fixture: fixtures/usage-data-track-multiple-internal-gitlab-events.http
+        expect: read
+
+  - id: gitlab.usage-data.track-internal-gitlab-event
+    match: { rest: { method: POST, path: "/api/v4/usage_data/track_event" } }
+    class: read
+    card: "Track an internal GitLab event"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Records a product analytics event about the caller (glab sends one after each command);
+      nothing in the user's projects or settings changes.
+    tests:
+      - fixture: fixtures/usage-data-track-internal-gitlab-event.http
+        expect: read

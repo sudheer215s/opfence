@@ -1,0 +1,152 @@
+# GitLab REST API (gitlab.com/api/v4): Vulnerabilities.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.vulnerabilities.create-project-level-vulnerability-export
+    match: { rest: { method: POST, path: "/api/v4/security/projects/{id}/vulnerability_exports" } }
+    class: write
+    card: "Create a project-level vulnerability export {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/vulnerabilities-create-project-level-vulnerability-export.http
+        expect: write
+
+  - id: gitlab.vulnerabilities.create-group-level-vulnerability-export
+    match: { rest: { method: POST, path: "/api/v4/security/groups/{id}/vulnerability_exports" } }
+    class: write
+    card: "Create a group-level vulnerability export {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/vulnerabilities-create-group-level-vulnerability-export.http
+        expect: write
+
+  - id: gitlab.vulnerabilities.create-instance-level-vulnerability-export
+    match: { rest: { method: POST, path: "/api/v4/security/vulnerability_exports" } }
+    class: write
+    card: "Create an instance-level vulnerability export"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/vulnerabilities-create-instance-level-vulnerability-export.http
+        expect: write
+
+  - id: gitlab.vulnerabilities.create-export-for-archived-vulnerabilities
+    match: { rest: { method: POST, path: "/api/v4/security/projects/{id}/vulnerability_archive_exports" } }
+    class: write
+    card: "Create an export for archived vulnerabilities {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/vulnerabilities-create-export-for-archived-vulnerabilities.http
+        expect: write
+
+  - id: gitlab.vulnerabilities.relate-issue-to-vulnerability
+    match: { rest: { method: POST, path: "/api/v4/vulnerabilities/{id}/issue_links" } }
+    class: write
+    card: "Relate an issue to a vulnerability {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/vulnerabilities-relate-issue-to-vulnerability.http
+        expect: write
+
+  - id: gitlab.vulnerabilities.delete-link-between-issue-and-vulnerability
+    match: { rest: { method: DELETE, path: "/api/v4/vulnerabilities/{id}/issue_links/{issue_link_id}" } }
+    class: delete
+    card: "Delete a link between an issue and a vulnerability {issue_link_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/vulnerabilities-delete-link-between-issue-and-vulnerability.http
+        expect: delete
+
+  - id: gitlab.vulnerabilities.update-ai-false-positive-detection-results
+    match: { rest: { method: POST, path: "/api/v4/vulnerabilities/{vulnerability_id}/flags/ai_detection" } }
+    class: write
+    card: "Update AI False Positive Detection results {vulnerability_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/vulnerabilities-update-ai-false-positive-detection-results.http
+        expect: write
+
+  - id: gitlab.vulnerabilities.resolve-vulnerability
+    match: { rest: { method: POST, path: "/api/v4/vulnerabilities/{id}/resolve" } }
+    class: access
+    card: "Resolve a vulnerability {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Dismissed and resolved vulnerabilities no longer block merge requests under security policies.
+    tests:
+      - fixture: fixtures/vulnerabilities-resolve-vulnerability.http
+        expect: access
+
+  - id: gitlab.vulnerabilities.dismiss-vulnerability
+    match: { rest: { method: POST, path: "/api/v4/vulnerabilities/{id}/dismiss" } }
+    class: access
+    card: "Dismiss a vulnerability {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Dismissed and resolved vulnerabilities no longer block merge requests under security policies.
+    tests:
+      - fixture: fixtures/vulnerabilities-dismiss-vulnerability.http
+        expect: access
+
+  - id: gitlab.vulnerabilities.confirm-vulnerability
+    match: { rest: { method: POST, path: "/api/v4/vulnerabilities/{id}/confirm" } }
+    class: write
+    card: "Confirm a vulnerability {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/vulnerabilities-confirm-vulnerability.http
+        expect: write
+
+  - id: gitlab.vulnerabilities.revert-vulnerability-to-detected-state
+    match: { rest: { method: POST, path: "/api/v4/vulnerabilities/{id}/revert" } }
+    class: write
+    card: "Revert a vulnerability to detected state {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/vulnerabilities-revert-vulnerability-to-detected-state.http
+        expect: write
+
+  - id: gitlab.vulnerabilities.create-vulnerability
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/vulnerabilities" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create a new vulnerability in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/vulnerabilities-create-vulnerability.http
+        expect: write
+        resource: "acme/shop"

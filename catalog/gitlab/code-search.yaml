@@ -1,0 +1,58 @@
+# GitLab REST API (gitlab.com/api/v4): Code search.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.code-search.triggers-indexing-for-project
+    match: { rest: { method: PUT, path: "/api/v4/admin/zoekt/projects/{project_id}/index" } }
+    class: write
+    card: "Trigger indexing for the specified project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/code-search-triggers-indexing-for-project.http
+        expect: write
+
+  - id: gitlab.code-search.update-number-of-replicas-override-for-enabled-namespace
+    match: { rest: { method: PATCH, path: "/api/v4/admin/zoekt/namespaces/{id}" } }
+    class: write
+    card: "Update the number of replicas override for an enabled namespace {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/code-search-update-number-of-replicas-override-for-enabled-namespace.http
+        expect: write
+
+  - id: gitlab.code-search.add-namespace-to-node-for-zoekt-indexing
+    match: { rest: { method: PUT, path: "/api/v4/admin/zoekt/shards/{node_id}/indexed_namespaces/{namespace_id}" } }
+    class: write
+    card: "Add a namespace to a node for Zoekt indexing {namespace_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/code-search-add-namespace-to-node-for-zoekt-indexing.http
+        expect: write
+
+  - id: gitlab.code-search.remove-namespace-from-node-for-zoekt-indexing
+    match: { rest: { method: DELETE, path: "/api/v4/admin/zoekt/shards/{node_id}/indexed_namespaces/{namespace_id}" } }
+    class: delete
+    card: "Remove a namespace from a node for Zoekt indexing {namespace_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      The index can be rebuilt.
+    tests:
+      - fixture: fixtures/code-search-remove-namespace-from-node-for-zoekt-indexing.http
+        expect: delete

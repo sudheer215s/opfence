@@ -106,15 +106,37 @@ func TestGitPaths(t *testing.T) {
 		"/a/b/info/lfs/objects/batch": true,
 		"/a/b/git-receive-pack/x":     false,
 		"/a/git-receive-pack":         false,
-		"/a/b/c/git-receive-pack":     false,
-		"/a/b/info/refs/x":            false,
-		"/repos/a/b/git/refs":         false,
-		"/a/b/git%2Dreceive-pack":     true,
-		"/a/b/./git-receive-pack":     true,
+		"/a/b/c.git/git-receive-pack": true, // GitLab's nested groups
+		"/g/s/t/p.git/info/refs":      true,
+		"/g/s/p.git/info/lfs/locks":   true,
+		"/g/s/p.git/info/lfs":         true,
+		// Deeper than owner/repo needs .git, as GitLab serves it: without
+		// it the path is a REST call on a host that also serves an API.
+		"/a/b/c/git-receive-pack":                             false,
+		"/api/v4/projects/1/repository/files/git-upload-pack": false,
+		"/api/v4/projects/1/repository/files/info/refs":       false,
+		"/g/s/p/info/lfs/objects/batch":                       false,
+		"/a/info/refs":                                        false,
+		"/a/info/lfs/locks":                                   false,
+		// Two places the LFS API could start: ambiguous, so not git.
+		"/a/b/info/lfs/c/info/lfs/locks": false,
+		"/a/b/info/refs/x":               false,
+		"/repos/a/b/git/refs":            false,
+		"/a/b/git%2Dreceive-pack":        true,
+		"/a/b/./git-receive-pack":        true,
 	} {
 		if got := isGitPath(path); got != want {
 			t.Errorf("isGitPath(%q) = %v", path, got)
 		}
+	}
+	// The owner is every segment before the repository.
+	nested := Decode(gitReq("GET", "/acme/platform/infra/api.git/info/refs?service=git-receive-pack", nil), Hints{Git: true})
+	if a := nested[0].Args; nested[0].Protocol != Git || a["owner"] != "acme/platform/infra" || a["repo"] != "api" || a["repository"] != "acme/platform/infra/api" {
+		t.Errorf("nested = %+v", nested[0])
+	}
+	lfs := Decode(gitReq("POST", "/acme/platform/api.git/info/lfs/locks/7/unlock", []byte("{}")), Hints{Git: true})
+	if a := lfs[0].Args; lfs[0].Action != LFSUnlock || a["owner"] != "acme/platform" || a["id"] != "7" {
+		t.Errorf("lfs = %+v", lfs[0])
 	}
 	r := gitReq("POST", "/a/b/git-receive-pack", []byte("0000"))
 	if ops := Decode(r, Hints{}); ops[0].Protocol != REST {
@@ -172,4 +194,12 @@ func FuzzGitReceivePack(f *testing.F) {
 			}
 		}
 	})
+}
+
+// An LFS lock's file path and the repository's path are separate arguments.
+func TestGitLFSLockPath(t *testing.T) {
+	ops := Decode(gitReq("POST", "/acme/platform/api.git/info/lfs/locks", []byte(`{"path":"assets/logo.psd"}`)), Hints{Git: true})
+	if a := ops[0].Args; ops[0].Action != LFSLock || a["path"] != "assets/logo.psd" || a["repository"] != "acme/platform/api" {
+		t.Fatalf("lock = %+v", ops[0])
+	}
 }

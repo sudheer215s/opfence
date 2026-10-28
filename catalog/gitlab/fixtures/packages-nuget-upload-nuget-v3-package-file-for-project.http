@@ -1,0 +1,7 @@
+# description: Upload a NuGet v3 package file for project acme/shop
+PUT /api/v4/projects/acme%2Fshop/packages/nuget HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

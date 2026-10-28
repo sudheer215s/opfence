@@ -1,0 +1,7 @@
+# description: Create workflow persistence (agent-initiated, limited privileges)
+POST /api/v4/ai/duo_workflows/agent_workflows HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

@@ -1,0 +1,7 @@
+# description: Trigger a slash command for mattermost-slash-commands in project acme/shop
+POST /api/v4/projects/acme%2Fshop/integrations/mattermost_slash_commands/trigger HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

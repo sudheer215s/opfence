@@ -1,0 +1,5 @@
+# description: Delete Admin Role 7
+DELETE /api/v4/admin_member_roles/7 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

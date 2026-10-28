@@ -1,0 +1,308 @@
+# GitLab REST API (gitlab.com/api/v4): Packages: Conan.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.packages-conan.delete-recipe-revision
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete recipe revision {recipe_revision} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A package can be published again from its source.
+    tests:
+      - fixture: fixtures/packages-conan-delete-recipe-revision.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.packages-conan.project-upload-recipe-file-revisions-files
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/files/{file_name}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Upload a recipe file {file_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Publishing a package is a write.
+    tests:
+      - fixture: fixtures/packages-conan-project-upload-recipe-file-revisions-files.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.packages-conan.project-workhorse-authorize-conan-recipe-file-files-authorize
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/files/{file_name}/authorize" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Workhorse authorize the Conan recipe file {file_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/packages-conan-project-workhorse-authorize-conan-recipe-file-files-authorize.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.packages-conan.delete-package-revision
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/packages/{conan_package_reference}/revisions/{package_revision}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete a package revision {package_revision} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A package can be published again from its source.
+    tests:
+      - fixture: fixtures/packages-conan-delete-package-revision.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.packages-conan.project-upload-package-file-revisions-files
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/packages/{conan_package_reference}/revisions/{package_revision}/files/{file_name}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Upload a package file {file_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Publishing a package is a write.
+    tests:
+      - fixture: fixtures/packages-conan-project-upload-package-file-revisions-files.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.packages-conan.project-workhorse-authorize-conan-package-file-files-authorize
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/packages/{conan_package_reference}/revisions/{package_revision}/files/{file_name}/authorize" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Workhorse authorize the Conan package file {file_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/packages-conan-project-workhorse-authorize-conan-package-file-files-authorize.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.packages-conan.project-delete-recipe-and-package
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete a recipe and package {package_channel} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A package can be published again from its source.
+    tests:
+      - fixture: fixtures/packages-conan-project-delete-recipe-and-package.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.packages-conan.project-list-all-package-upload-urls
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "List all package upload URLs {conan_package_reference} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Lists URLs or advisories; nothing is stored.
+    tests:
+      - fixture: fixtures/packages-conan-project-list-all-package-upload-urls.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.packages-conan.project-list-all-recipe-upload-urls
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "List all recipe upload URLs {package_channel} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Lists URLs or advisories; nothing is stored.
+    tests:
+      - fixture: fixtures/packages-conan-project-list-all-recipe-upload-urls.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.packages-conan.project-upload-recipe-file-files-export
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/export/{file_name}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Upload a recipe file {file_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Publishing a package is a write.
+    tests:
+      - fixture: fixtures/packages-conan-project-upload-recipe-file-files-export.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.packages-conan.project-workhorse-authorize-conan-recipe-file-export-authorize
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/export/{file_name}/authorize" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Workhorse authorize the Conan recipe file {file_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/packages-conan-project-workhorse-authorize-conan-recipe-file-export-authorize.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.packages-conan.project-upload-package-file-files-package
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/package/{conan_package_reference}/{package_revision}/{file_name}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Upload a package file {file_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Publishing a package is a write.
+    tests:
+      - fixture: fixtures/packages-conan-project-upload-package-file-files-package.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.packages-conan.project-workhorse-authorize-conan-package-file-package-authorize
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/package/{conan_package_reference}/{package_revision}/{file_name}/authorize" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Workhorse authorize the Conan package file {file_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/packages-conan-project-workhorse-authorize-conan-package-file-package-authorize.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.packages-conan.delete-recipe-and-package
+    match: { rest: { method: DELETE, path: "/api/v4/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}" } }
+    class: delete
+    card: "Delete a recipe and package {package_channel}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A package can be published again from its source.
+    tests:
+      - fixture: fixtures/packages-conan-delete-recipe-and-package.http
+        expect: delete
+
+  - id: gitlab.packages-conan.list-all-package-upload-urls
+    match: { rest: { method: POST, path: "/api/v4/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls" } }
+    class: read
+    card: "List all package upload URLs {conan_package_reference}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Lists URLs or advisories; nothing is stored.
+    tests:
+      - fixture: fixtures/packages-conan-list-all-package-upload-urls.http
+        expect: read
+
+  - id: gitlab.packages-conan.list-all-recipe-upload-urls
+    match: { rest: { method: POST, path: "/api/v4/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls" } }
+    class: read
+    card: "List all recipe upload URLs {package_channel}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Lists URLs or advisories; nothing is stored.
+    tests:
+      - fixture: fixtures/packages-conan-list-all-recipe-upload-urls.http
+        expect: read
+
+  - id: gitlab.packages-conan.upload-recipe-file
+    match: { rest: { method: PUT, path: "/api/v4/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/export/{file_name}" } }
+    class: write
+    card: "Upload a recipe file {file_name}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Publishing a package is a write.
+    tests:
+      - fixture: fixtures/packages-conan-upload-recipe-file.http
+        expect: write
+
+  - id: gitlab.packages-conan.workhorse-authorize-conan-recipe-file
+    match: { rest: { method: PUT, path: "/api/v4/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/export/{file_name}/authorize" } }
+    class: read
+    card: "Workhorse authorize the Conan recipe file {file_name}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/packages-conan-workhorse-authorize-conan-recipe-file.http
+        expect: read
+
+  - id: gitlab.packages-conan.upload-package-file
+    match: { rest: { method: PUT, path: "/api/v4/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/package/{conan_package_reference}/{package_revision}/{file_name}" } }
+    class: write
+    card: "Upload a package file {file_name}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Publishing a package is a write.
+    tests:
+      - fixture: fixtures/packages-conan-upload-package-file.http
+        expect: write
+
+  - id: gitlab.packages-conan.workhorse-authorize-conan-package-file
+    match: { rest: { method: PUT, path: "/api/v4/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/package/{conan_package_reference}/{package_revision}/{file_name}/authorize" } }
+    class: read
+    card: "Workhorse authorize the Conan package file {file_name}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/packages-conan-workhorse-authorize-conan-package-file.http
+        expect: read

@@ -1,0 +1,7 @@
+# description: Register Unleash client 9
+POST /api/v4/feature_flags/unleash/9/client/register HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

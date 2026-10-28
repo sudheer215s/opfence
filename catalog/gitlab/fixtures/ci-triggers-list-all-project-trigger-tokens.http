@@ -1,0 +1,5 @@
+# description: Read project acme/shop's pipeline trigger tokens
+GET /api/v4/projects/acme%2Fshop/triggers HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

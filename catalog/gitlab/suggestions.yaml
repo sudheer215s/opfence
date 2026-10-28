@@ -1,0 +1,30 @@
+# GitLab REST API (gitlab.com/api/v4): Suggestions.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.suggestions.apply-suggestion-to-merge-request
+    match: { rest: { method: PUT, path: "/api/v4/suggestions/{id}/apply" } }
+    class: write
+    card: "Apply a suggestion to a merge request {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Applies suggested changes as a commit.
+    tests:
+      - fixture: fixtures/suggestions-apply-suggestion-to-merge-request.http
+        expect: write
+
+  - id: gitlab.suggestions.apply-multiple-suggestions-to-merge-request
+    match: { rest: { method: PUT, path: "/api/v4/suggestions/batch_apply" } }
+    class: write
+    card: "Apply multiple suggestions to a merge request"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Applies suggested changes as a commit.
+    tests:
+      - fixture: fixtures/suggestions-apply-multiple-suggestions-to-merge-request.http
+        expect: write

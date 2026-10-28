@@ -1,0 +1,7 @@
+# description: Update AI False Positive Detection results 7
+POST /api/v4/vulnerabilities/7/flags/ai_detection HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

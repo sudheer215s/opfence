@@ -1,0 +1,7 @@
+# description: Run pipeline schedule 3 in project acme/shop
+POST /api/v4/projects/acme%2Fshop/pipeline_schedules/3/play HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

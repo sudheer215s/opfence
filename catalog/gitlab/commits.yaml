@@ -1,0 +1,79 @@
+# GitLab REST API (gitlab.com/api/v4): Commits.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.commits.create-commit
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/repository/commits" } }
+    class: write
+    when:
+      - if: { arg: body.force, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: delete
+      - if: { arg: query.force, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: delete
+      - if: { arg: body.actions.action, in: ["delete"] }
+        class: delete
+      - if: { arg: query.actions.action, in: ["delete"] }
+        class: delete
+    resource: { arg: id, kind: project }
+    card: "Commit to branch {body.branch} of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      force overwrites the branch with the new commit, as a forced push does, and a delete action
+      removes a file; both are delete (the old commits and files stay in any clone).
+    tests:
+      - fixture: fixtures/commits-create-commit.http
+        expect: write
+        resource: "acme/shop"
+      - fixture: fixtures/commits-create-commit-force.http
+        expect: delete
+        resource: "acme/shop"
+      - fixture: fixtures/commits-create-commit-actions.http
+        expect: delete
+        resource: "acme/shop"
+      - fixture: fixtures/commits-create-commit-format-suffix.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.commits.create-comment-on-commit
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/repository/commits/{sha}/comments" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create a comment on commit {sha} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/commits-create-comment-on-commit.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.commits.cherry-pick-commit
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/repository/commits/{sha}/cherry_pick" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Cherry-pick commit {sha} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/commits-cherry-pick-commit.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.commits.revert-commit
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/repository/commits/{sha}/revert" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Revert commit {sha} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/commits-revert-commit.http
+        expect: write
+        resource: "acme/shop"

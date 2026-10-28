@@ -1,0 +1,7 @@
+# description: Change CI/CD variable DATABASE_URL in group acme (protected)
+PUT /api/v4/groups/acme/variables/DATABASE_URL HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{"value": "debug", "protected": "false"}

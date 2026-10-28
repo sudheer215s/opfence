@@ -1,0 +1,1238 @@
+# GitLab REST API (gitlab.com/api/v4): Projects.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.projects.create-external-agent-session
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/ai_agent/sessions" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create an external agent session in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/projects-create-external-agent-session.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.projects.complete-or-fail-external-agent-session
+    match: { rest: { method: PATCH, path: "/api/v4/projects/{id}/ai_agent/sessions/{session_id}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Complete or fail an external agent session {session_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/projects-complete-or-fail-external-agent-session.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.projects.register-external-agent-identity
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/ai_agent/identities" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Register an external agent identity in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/projects-register-external-agent-identity.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.projects.ingest-external-agent-audit-events
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/ai_agent/audit_events" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Ingest external agent audit events in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/projects-ingest-external-agent-audit-events.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.projects.update-project-security-settings
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/security_settings" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Update project security settings in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/projects-update-project-security-settings.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.projects.create-terraform-state-protection-rule-for-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/terraform/state_protection_rules" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create a Terraform state protection rule for project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Protection rules decide who can push or delete packages, images and Terraform state.
+    tests:
+      - fixture: fixtures/projects-create-terraform-state-protection-rule-for-project.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.projects.update-terraform-state-protection-rule-for-project
+    match: { rest: { method: PATCH, path: "/api/v4/projects/{id}/terraform/state_protection_rules/{terraform_state_protection_rule_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Update a Terraform state protection rule for project {id} {terraform_state_protection_rule_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Protection rules decide who can push or delete packages, images and Terraform state.
+    tests:
+      - fixture: fixtures/projects-update-terraform-state-protection-rule-for-project.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.projects.delete-terraform-state-protection-rule
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/terraform/state_protection_rules/{terraform_state_protection_rule_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Delete a Terraform state protection rule {terraform_state_protection_rule_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Protection rules decide who can push or delete packages, images and Terraform state.
+    tests:
+      - fixture: fixtures/projects-delete-terraform-state-protection-rule.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.projects.list-all-personal-projects-for-user
+    match: { rest: { method: GET, path: "/api/v4/users/{user_id}/projects" } }
+    class: credential
+    response:
+      redact: ["**.runners_token"]
+      class: read
+    resource: { arg: user_id, kind: user }
+    card: "List projects of user {user_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential.
+    tests:
+      - fixture: fixtures/projects-list-all-personal-projects-for-user.http
+        expect: credential
+        response: fixtures/projects-list-all-personal-projects-for-user-response.json
+        resource: "42"
+
+  - id: gitlab.projects.list-all-projects-contributions-for-user
+    match: { rest: { method: GET, path: "/api/v4/users/{user_id}/contributed_projects" } }
+    class: credential
+    response:
+      redact: ["**.runners_token"]
+      class: read
+    resource: { arg: user_id, kind: user }
+    card: "List projects user {user_id} contributed to"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential.
+    tests:
+      - fixture: fixtures/projects-list-all-projects-contributions-for-user.http
+        expect: credential
+        response: fixtures/projects-list-all-projects-contributions-for-user-response.json
+        resource: "42"
+
+  - id: gitlab.projects.list-all-projects-starred-by-user
+    match: { rest: { method: GET, path: "/api/v4/users/{user_id}/starred_projects" } }
+    class: credential
+    response:
+      redact: ["**.runners_token"]
+      class: read
+    resource: { arg: user_id, kind: user }
+    card: "List projects user {user_id} starred"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential.
+    tests:
+      - fixture: fixtures/projects-list-all-projects-starred-by-user.http
+        expect: credential
+        response: fixtures/projects-list-all-projects-starred-by-user-response.json
+        resource: "42"
+
+  - id: gitlab.projects.restore-project-marked-for-deletion
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/restore" } }
+    class: credential
+    response:
+      redact: ["**.runners_token"]
+      class: write
+    resource: { arg: id, kind: project }
+    card: "Restore project {id}, which is marked for deletion"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential,
+      for its response.
+    tests:
+      - fixture: fixtures/projects-restore-project-marked-for-deletion.http
+        expect: credential
+        response: fixtures/projects-restore-project-marked-for-deletion-response.json
+        resource: "acme/shop"
+
+  - id: gitlab.projects.list-all-projects
+    match: { rest: { method: GET, path: "/api/v4/projects" } }
+    class: credential
+    response:
+      redact: ["**.runners_token"]
+      class: read
+    card: "List GitLab projects"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential.
+    tests:
+      - fixture: fixtures/projects-list-all-projects.http
+        expect: credential
+        response: fixtures/projects-list-all-projects-response.json
+
+  - id: gitlab.projects.create-project
+    match: { rest: { method: POST, path: "/api/v4/projects" } }
+    class: credential
+    when:
+      - if: { arg: body.visibility, in: ["public", "internal"] }
+        class: access
+      - if: { arg: query.visibility, in: ["public", "internal"] }
+        class: access
+      - if: { arg: body.pages_access_level, in: ["public"] }
+        class: access
+      - if: { arg: query.pages_access_level, in: ["public"] }
+        class: access
+      - if: { arg: body.public_builds, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+      - if: { arg: query.public_builds, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+      - if: { arg: body.public_jobs, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+      - if: { arg: query.public_jobs, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+    response:
+      redact: ["**.runners_token"]
+      class: write
+    card: "Create GitLab project {body.name}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential,
+      for its response. A public or internal project, public Pages or public job logs are access.
+    tests:
+      - fixture: fixtures/projects-create-project.http
+        expect: credential
+        response: fixtures/projects-create-project-response.json
+      - fixture: fixtures/projects-create-project-visibility.http
+        expect: access
+
+  - id: gitlab.projects.create-project-for-user
+    match: { rest: { method: POST, path: "/api/v4/projects/user/{user_id}" } }
+    class: credential
+    when:
+      - if: { arg: body.visibility, in: ["public", "internal"] }
+        class: access
+      - if: { arg: query.visibility, in: ["public", "internal"] }
+        class: access
+      - if: { arg: body.pages_access_level, in: ["public"] }
+        class: access
+      - if: { arg: query.pages_access_level, in: ["public"] }
+        class: access
+      - if: { arg: body.public_builds, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+      - if: { arg: query.public_builds, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+      - if: { arg: body.public_jobs, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+      - if: { arg: query.public_jobs, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+    response:
+      redact: ["**.runners_token"]
+      class: write
+    card: "Create a project for user {user_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential,
+      for its response. A public or internal project, public Pages or public job logs are access.
+    tests:
+      - fixture: fixtures/projects-create-project-for-user.http
+        expect: credential
+        response: fixtures/projects-create-project-for-user-response.json
+      - fixture: fixtures/projects-create-project-for-user-visibility.http
+        expect: access
+
+  - id: gitlab.projects.retrieve-project
+    match: { rest: { method: GET, path: "/api/v4/projects/{id}" } }
+    class: credential
+    response:
+      redact: ["**.runners_token"]
+      class: read
+    resource: { arg: id, kind: project }
+    card: "Read project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential.
+    tests:
+      - fixture: fixtures/projects-retrieve-project.http
+        expect: credential
+        response: fixtures/projects-retrieve-project-response.json
+        resource: "acme/shop"
+
+  - id: gitlab.projects.update-project
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}" } }
+    class: credential
+    when:
+      - if: { arg: body.visibility, in: ["public", "internal"] }
+        class: access
+      - if: { arg: query.visibility, in: ["public", "internal"] }
+        class: access
+      - if: { arg: body.analytics_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: query.analytics_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: body.builds_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: query.builds_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: body.container_registry_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: query.container_registry_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: body.environments_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: query.environments_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: body.feature_flags_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: query.feature_flags_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: body.forking_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: query.forking_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: body.infrastructure_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: query.infrastructure_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: body.issues_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: query.issues_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: body.merge_requests_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: query.merge_requests_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: body.model_experiments_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: query.model_experiments_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: body.model_registry_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: query.model_registry_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: body.monitor_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: query.monitor_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: body.package_registry_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: query.package_registry_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: body.pages_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: query.pages_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: body.releases_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: query.releases_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: body.repository_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: query.repository_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: body.requirements_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: query.requirements_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: body.security_and_compliance_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: query.security_and_compliance_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: body.snippets_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: query.snippets_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: body.wiki_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: query.wiki_access_level, in: ["enabled", "public"] }
+        class: access
+      - if: { arg: body.public_builds, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+      - if: { arg: query.public_builds, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+      - if: { arg: body.public_jobs, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+      - if: { arg: query.public_jobs, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+      - if: { arg: body.only_allow_merge_if_pipeline_succeeds, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: query.only_allow_merge_if_pipeline_succeeds, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: body.allow_merge_on_skipped_pipeline, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+      - if: { arg: query.allow_merge_on_skipped_pipeline, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+      - if: { arg: body.only_allow_merge_if_all_status_checks_passed, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: query.only_allow_merge_if_all_status_checks_passed, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: body.restrict_user_defined_variables, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: query.restrict_user_defined_variables, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: body.ci_pipeline_variables_minimum_override_role, present: true }
+        class: access
+      - if: { arg: query.ci_pipeline_variables_minimum_override_role, present: true }
+        class: access
+      - if: { arg: body.ci_push_repository_for_job_token_allowed, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+      - if: { arg: query.ci_push_repository_for_job_token_allowed, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+      - if: { arg: body.ci_allow_fork_pipelines_to_run_in_parent_project, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+      - if: { arg: query.ci_allow_fork_pipelines_to_run_in_parent_project, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+      - if: { arg: body.ci_separated_caches, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: query.ci_separated_caches, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: body.protect_merge_request_pipelines, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: query.protect_merge_request_pipelines, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: body.allow_pipeline_trigger_approve_deployment, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+      - if: { arg: query.allow_pipeline_trigger_approve_deployment, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+      - if: { arg: body.ci_forward_deployment_enabled, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: query.ci_forward_deployment_enabled, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: body.approvals_before_merge, present: true }
+        class: access
+      - if: { arg: query.approvals_before_merge, present: true }
+        class: access
+      - if: { arg: body.fallback_approvals_required, present: true }
+        class: access
+      - if: { arg: query.fallback_approvals_required, present: true }
+        class: access
+      - if: { arg: body.import_url, present: true }
+        class: access
+      - if: { arg: query.import_url, present: true }
+        class: access
+      - if: { arg: body.mirror, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+      - if: { arg: query.mirror, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+      - if: { arg: body.mirror_user_id, present: true }
+        class: access
+      - if: { arg: query.mirror_user_id, present: true }
+        class: access
+      - if: { arg: body.external_authorization_classification_label, present: true }
+        class: access
+      - if: { arg: query.external_authorization_classification_label, present: true }
+        class: access
+      - if: { arg: body.security_policy_pipeline_must_succeed, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: query.security_policy_pipeline_must_succeed, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: body.enforce_auth_checks_on_uploads, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: query.enforce_auth_checks_on_uploads, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: body.mirror_overwrites_diverged_branches, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: irreversible
+      - if: { arg: query.mirror_overwrites_diverged_branches, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: irreversible
+      - if: { arg: body.ci_delete_pipelines_in_seconds, present: true }
+        class: irreversible
+      - if: { arg: query.ci_delete_pipelines_in_seconds, present: true }
+        class: irreversible
+      - if: { arg: body.container_expiration_policy_attributes.enabled, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: irreversible
+      - if: { arg: query.container_expiration_policy_attributes.enabled, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: irreversible
+    response:
+      redact: ["**.runners_token"]
+      class: write
+    resource: { arg: id, kind: project }
+    card: "Change the settings of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential,
+      for its response. Making the project or one of its features public or internal, or switching
+      off a merge or pipeline safeguard (pipelines must pass, user-defined variables restricted,
+      separated caches, protected merge request pipelines, approvals, pull mirroring settings) is
+      access. Overwriting diverged branches from a mirror, automatic pipeline deletion and container
+      cleanup policies delete data later, so they are irreversible. On a public or internal project,
+      a feature's access level enabled makes it visible to everyone who can see the project.
+    tests:
+      - fixture: fixtures/projects-update-project.http
+        expect: credential
+        response: fixtures/projects-update-project-response.json
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-project-visibility.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-project-analytics-access-level.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-project-builds-access-level.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-project-container-registry-access-level.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-project-environments-access-level.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-project-feature-flags-access-level.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-project-forking-access-level.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-project-infrastructure-access-level.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-project-issues-access-level.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-project-merge-requests-access-level.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-project-model-experiments-access-level.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-project-model-registry-access-level.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-project-monitor-access-level.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-project-package-registry-access-level.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-project-pages-access-level.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-project-releases-access-level.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-project-repository-access-level.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-project-requirements-access-level.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-project-security-and-compliance-access-level.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-project-snippets-access-level.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-project-wiki-access-level.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-project-public-builds.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-project-public-jobs.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-project-mirror-overwrites-diverged-branches.http
+        expect: irreversible
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-project-ci-delete-pipelines-in-seconds.http
+        expect: irreversible
+        resource: "acme/shop"
+
+  - id: gitlab.projects.delete-project
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}" } }
+    class: delete
+    when:
+      - if: { arg: body.permanently_remove, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: irreversible
+      - if: { arg: query.permanently_remove, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: irreversible
+    resource: { arg: id, kind: project }
+    card: "Delete GitLab project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Marks the project for deletion; it can be restored until then. permanently_remove deletes it
+      at once (condition below).
+    tests:
+      - fixture: fixtures/projects-delete-project.http
+        expect: delete
+        resource: "acme/shop"
+      - fixture: fixtures/projects-delete-project-permanently-remove.http
+        expect: irreversible
+        resource: "acme/shop"
+
+  - id: gitlab.projects.create-fork-of-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/fork" } }
+    class: credential
+    response:
+      redact: ["**.runners_token"]
+      class: write
+    resource: { arg: id, kind: project }
+    card: "Fork project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential,
+      for its response.
+    tests:
+      - fixture: fixtures/projects-create-fork-of-project.http
+        expect: credential
+        response: fixtures/projects-create-fork-of-project-response.json
+        resource: "acme/shop"
+
+  - id: gitlab.projects.delete-fork-relationship
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/fork" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Delete a fork relationship in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Removes the fork relationship; the code stays.
+    tests:
+      - fixture: fixtures/projects-delete-fork-relationship.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.projects.list-all-forks-of-project
+    match: { rest: { method: GET, path: "/api/v4/projects/{id}/forks" } }
+    class: credential
+    response:
+      redact: ["**.runners_token"]
+      class: read
+    resource: { arg: id, kind: project }
+    card: "List forks of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential.
+    tests:
+      - fixture: fixtures/projects-list-all-forks-of-project.http
+        expect: credential
+        response: fixtures/projects-list-all-forks-of-project-response.json
+        resource: "acme/shop"
+
+  - id: gitlab.projects.archive-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/archive" } }
+    class: credential
+    response:
+      redact: ["**.runners_token"]
+      class: write
+    resource: { arg: id, kind: project }
+    card: "Archive project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential,
+      for its response.
+    tests:
+      - fixture: fixtures/projects-archive-project.http
+        expect: credential
+        response: fixtures/projects-archive-project-response.json
+        resource: "acme/shop"
+
+  - id: gitlab.projects.unarchive-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/unarchive" } }
+    class: credential
+    response:
+      redact: ["**.runners_token"]
+      class: write
+    resource: { arg: id, kind: project }
+    card: "Unarchive project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential,
+      for its response.
+    tests:
+      - fixture: fixtures/projects-unarchive-project.http
+        expect: credential
+        response: fixtures/projects-unarchive-project-response.json
+        resource: "acme/shop"
+
+  - id: gitlab.projects.star-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/star" } }
+    class: credential
+    response:
+      redact: ["**.runners_token"]
+      class: write
+    resource: { arg: id, kind: project }
+    card: "Star project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential,
+      for its response.
+    tests:
+      - fixture: fixtures/projects-star-project.http
+        expect: credential
+        response: fixtures/projects-star-project-response.json
+        resource: "acme/shop"
+
+  - id: gitlab.projects.unstar-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/unstar" } }
+    class: credential
+    response:
+      redact: ["**.runners_token"]
+      class: write
+    resource: { arg: id, kind: project }
+    card: "Unstar project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential,
+      for its response.
+    tests:
+      - fixture: fixtures/projects-unstar-project.http
+        expect: credential
+        response: fixtures/projects-unstar-project-response.json
+        resource: "acme/shop"
+
+  - id: gitlab.projects.create-fork-relationship
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/fork/{forked_from_id}" } }
+    class: credential
+    response:
+      redact: ["**.runners_token"]
+      class: write
+    resource: { arg: id, kind: project }
+    card: "Create a fork relationship {forked_from_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential,
+      for its response.
+    tests:
+      - fixture: fixtures/projects-create-fork-relationship.http
+        expect: credential
+        response: fixtures/projects-create-fork-relationship-response.json
+        resource: "acme/shop"
+
+  - id: gitlab.projects.share-project-with-group
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/share" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Share project {id} with group {body.group_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/projects-share-project-with-group.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.projects.delete-shared-project-link-in-group
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/share/{group_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Stop sharing project {id} with group {group_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/projects-delete-shared-project-link-in-group.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.projects.import-members
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/import_project_members/{project_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Import members {project_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/projects-import-members.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.projects.start-housekeeping-task-for-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/housekeeping" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Start the housekeeping task for project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/projects-start-housekeeping-task-for-project.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.projects.start-task-to-recalculate-repository-size-for-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/repository_size" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Start a task to recalculate repository size for project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/projects-start-task-to-recalculate-repository-size-for-project.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.projects.transfer-project-to-another-namespace
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/transfer" } }
+    class: credential
+    response:
+      redact: ["**.runners_token"]
+      class: access
+    resource: { arg: id, kind: project }
+    card: "Transfer project {id} to namespace {body.namespace}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential,
+      for its response.
+    tests:
+      - fixture: fixtures/projects-transfer-project-to-another-namespace.http
+        expect: credential
+        response: fixtures/projects-transfer-project-to-another-namespace-response.json
+        resource: "acme/shop"
+
+  - id: gitlab.projects.create-package-protection-rule
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/packages/protection/rules" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create a package protection rule in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Protection rules decide who can push or delete packages, images and Terraform state.
+    tests:
+      - fixture: fixtures/projects-create-package-protection-rule.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.projects.update-package-protection-rule
+    match: { rest: { method: PATCH, path: "/api/v4/projects/{id}/packages/protection/rules/{package_protection_rule_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Update a package protection rule {package_protection_rule_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Protection rules decide who can push or delete packages, images and Terraform state.
+    tests:
+      - fixture: fixtures/projects-update-package-protection-rule.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.projects.delete-package-protection-rule
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/packages/protection/rules/{package_protection_rule_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Delete a package protection rule {package_protection_rule_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Protection rules decide who can push or delete packages, images and Terraform state.
+    tests:
+      - fixture: fixtures/projects-delete-package-protection-rule.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.projects.create-container-registry-protection-tag-rule
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/registry/protection/tag/rules" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create a container registry protection tag rule in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Protection rules decide who can push or delete packages, images and Terraform state.
+    tests:
+      - fixture: fixtures/projects-create-container-registry-protection-tag-rule.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.projects.update-container-registry-protection-tag-rule
+    match: { rest: { method: PATCH, path: "/api/v4/projects/{id}/registry/protection/tag/rules/{protection_rule_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Update a container registry protection tag rule {protection_rule_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Protection rules decide who can push or delete packages, images and Terraform state.
+    tests:
+      - fixture: fixtures/projects-update-container-registry-protection-tag-rule.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.projects.delete-container-registry-protection-tag-rule
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/registry/protection/tag/rules/{protection_rule_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Delete a container registry protection tag rule {protection_rule_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Protection rules decide who can push or delete packages, images and Terraform state.
+    tests:
+      - fixture: fixtures/projects-delete-container-registry-protection-tag-rule.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.projects.create-container-repository-protection-rule
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/registry/protection/repository/rules" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create a container repository protection rule in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Protection rules decide who can push or delete packages, images and Terraform state.
+    tests:
+      - fixture: fixtures/projects-create-container-repository-protection-rule.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.projects.update-container-repository-protection-rule
+    match: { rest: { method: PATCH, path: "/api/v4/projects/{id}/registry/protection/repository/rules/{protection_rule_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Update a container repository protection rule {protection_rule_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Protection rules decide who can push or delete packages, images and Terraform state.
+    tests:
+      - fixture: fixtures/projects-update-container-repository-protection-rule.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.projects.delete-container-repository-protection-rule
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/registry/protection/repository/rules/{protection_rule_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Delete a container repository protection rule {protection_rule_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Protection rules decide who can push or delete packages, images and Terraform state.
+    tests:
+      - fixture: fixtures/projects-delete-container-repository-protection-rule.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.projects.create-ci-configuration-merge-request
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/create_ci_config" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create a CI configuration merge request in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/projects-create-ci-configuration-merge-request.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.projects.workhorse-authorize-file-upload
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/uploads/authorize" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Workhorse authorize the file upload in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/projects-workhorse-authorize-file-upload.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.projects.create-upload
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/uploads" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create an upload in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/projects-create-upload.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.projects.delete-uploaded-file-by-id
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/uploads/{upload_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete an uploaded file by ID {upload_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/projects-delete-uploaded-file-by-id.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.projects.delete-uploaded-file-by-secret-and-filename
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/uploads/{secret}/{filename}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete an uploaded file by secret and filename {filename} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/projects-delete-uploaded-file-by-secret-and-filename.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.projects.create-issue
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/issues" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Open issue {body.title} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/projects-create-issue.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.projects.update-issue
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/issues/{issue_iid}" } }
+    class: write
+    when:
+      - if: { arg: body.confidential, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: query.confidential, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+    resource: { arg: id, kind: project }
+    card: "Update issue #{issue_iid} of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Making a confidential issue visible is access.
+    tests:
+      - fixture: fixtures/projects-update-issue.http
+        expect: write
+        resource: "acme/shop"
+      - fixture: fixtures/projects-update-issue-confidential.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.projects.delete-issue
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/issues/{issue_iid}" } }
+    class: irreversible
+    resource: { arg: id, kind: project }
+    card: "Delete issue #{issue_iid} of project {id} with its discussion"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      GitLab keeps no deleted issue, with its discussion.
+    tests:
+      - fixture: fixtures/projects-delete-issue.http
+        expect: irreversible
+        resource: "acme/shop"
+
+  - id: gitlab.projects.update-order-of-issue
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/issues/{issue_iid}/reorder" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update the order of issue #{issue_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/projects-update-order-of-issue.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.projects.move-issue
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/issues/{issue_iid}/move" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Move issue #{issue_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/projects-move-issue.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.projects.clone-issue
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/issues/{issue_iid}/clone" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Clone issue #{issue_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/projects-clone-issue.http
+        expect: write
+        resource: "acme/shop"

@@ -1,0 +1,7 @@
+# description: Update status of a migration 20261001000000
+POST /api/v4/admin/migrations/20261001000000/mark HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

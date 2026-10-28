@@ -1,0 +1,7 @@
+# description: Start maintenance on an organization (active -> maintenance_initialization)
+POST /api/v4/internal/org_mover/start_maintenance HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

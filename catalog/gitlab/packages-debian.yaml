@@ -1,0 +1,130 @@
+# GitLab REST API (gitlab.com/api/v4): Packages: Debian.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.packages-debian.create-debian-project-distribution
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/debian_distributions" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create a Debian project distribution in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Publishing a package is a write.
+    tests:
+      - fixture: fixtures/packages-debian-create-debian-project-distribution.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.packages-debian.update-debian-project-distribution
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/debian_distributions/{codename}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update a Debian project distribution {codename} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Publishing a package is a write.
+    tests:
+      - fixture: fixtures/packages-debian-update-debian-project-distribution.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.packages-debian.delete-debian-project-distribution
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/debian_distributions/{codename}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete a Debian project distribution {codename} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A package can be published again from its source.
+    tests:
+      - fixture: fixtures/packages-debian-delete-debian-project-distribution.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.packages-debian.create-debian-group-distribution
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/-/debian_distributions" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Create a Debian group distribution in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Publishing a package is a write.
+    tests:
+      - fixture: fixtures/packages-debian-create-debian-group-distribution.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.packages-debian.update-debian-group-distribution
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/-/debian_distributions/{codename}" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Update a Debian group distribution {codename} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Publishing a package is a write.
+    tests:
+      - fixture: fixtures/packages-debian-update-debian-group-distribution.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.packages-debian.delete-debian-group-distribution
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/-/debian_distributions/{codename}" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Delete a Debian group distribution {codename} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A package can be published again from its source.
+    tests:
+      - fixture: fixtures/packages-debian-delete-debian-group-distribution.http
+        expect: delete
+        resource: "acme"
+
+  - id: gitlab.packages-debian.upload-debian-package-file
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/debian/{file_name}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Upload a Debian package file {file_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Publishing a package is a write.
+    tests:
+      - fixture: fixtures/packages-debian-upload-debian-package-file.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.packages-debian.authorize-debian-package-upload
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/debian/{file_name}/authorize" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Authorize Debian package upload {file_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/packages-debian-authorize-debian-package-upload.http
+        expect: read
+        resource: "acme/shop"

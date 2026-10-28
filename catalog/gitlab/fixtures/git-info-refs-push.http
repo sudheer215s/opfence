@@ -1,0 +1,6 @@
+# description: Ref advertisement before a push to acme/platform/shop
+GET /acme/platform/shop.git/info/refs?service=git-receive-pack HTTP/1.1
+Host: gitlab.com
+Authorization: Basic b2F1dGgyOm9wZl9naXRsYWJfRVhBTVBMRQ==
+User-Agent: git/2.47.0
+

@@ -1,0 +1,7 @@
+# description: Create a GitLab Duo flow with goal … (start_workflow)
+POST /api/v4/ai/duo_workflows/workflows HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{"project_id": "9", "goal": "Fix the failing checkout test", "start_workflow": "true"}

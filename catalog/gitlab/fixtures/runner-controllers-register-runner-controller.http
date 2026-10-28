@@ -1,0 +1,7 @@
+# description: Register a runner controller
+POST /api/v4/runner_controllers HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

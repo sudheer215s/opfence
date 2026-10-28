@@ -1,0 +1,56 @@
+# GitLab REST API (gitlab.com/api/v4): Group import and export.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.group-import-and-export.workhorse-authorize-group-import-upload
+    match: { rest: { method: POST, path: "/api/v4/groups/import/authorize" } }
+    class: read
+    card: "Workhorse authorize the group import upload"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/group-import-and-export-workhorse-authorize-group-import-upload.http
+        expect: read
+
+  - id: gitlab.group-import-and-export.create-group-import
+    match: { rest: { method: POST, path: "/api/v4/groups/import" } }
+    class: write
+    card: "Create a group import"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/group-import-and-export-create-group-import.http
+        expect: write
+
+  - id: gitlab.group-import-and-export.create-group-export
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/export" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Create a group export in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/group-import-and-export-create-group-export.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.group-import-and-export.schedule-relations-export-for-group
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/export_relations" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Schedule a relations export for group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/group-import-and-export-schedule-relations-export-for-group.http
+        expect: write
+        resource: "acme"

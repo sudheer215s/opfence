@@ -1,0 +1,72 @@
+# GitLab REST API (gitlab.com/api/v4): CI runners.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.ci-runners.create-runner
+    match: { rest: { method: POST, path: "/api/v4/runners" } }
+    class: credential
+    card: "Create a runner"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns a runner authentication token, which picks up jobs with their CI/CD variables.
+    tests:
+      - fixture: fixtures/ci-runners-create-runner.http
+        expect: credential
+
+  - id: gitlab.ci-runners.delete-registered-runner
+    match: { rest: { method: DELETE, path: "/api/v4/runners" } }
+    class: delete
+    card: "Delete a registered runner"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Unregisters with the runner's own token; it can be registered again.
+    tests:
+      - fixture: fixtures/ci-runners-delete-registered-runner.http
+        expect: delete
+
+  - id: gitlab.ci-runners.delete-registered-runner-manager
+    match: { rest: { method: DELETE, path: "/api/v4/runners/managers" } }
+    class: delete
+    card: "Delete a registered runner manager"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Unregisters with the runner's own token; it can be registered again.
+    tests:
+      - fixture: fixtures/ci-runners-delete-registered-runner-manager.http
+        expect: delete
+
+  - id: gitlab.ci-runners.verify-authentication-for-registered-runner
+    match: { rest: { method: POST, path: "/api/v4/runners/verify" } }
+    class: read
+    card: "Verify authentication for a registered runner"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Checks a runner token the caller already holds.
+    tests:
+      - fixture: fixtures/ci-runners-verify-authentication-for-registered-runner.http
+        expect: read
+
+  - id: gitlab.ci-runners.reset-runner-authentication-token-with-token
+    match: { rest: { method: POST, path: "/api/v4/runners/reset_authentication_token" } }
+    class: credential
+    card: "Reset a runner authentication token with the current token"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns a runner authentication token, which picks up jobs with their CI/CD variables.
+    tests:
+      - fixture: fixtures/ci-runners-reset-runner-authentication-token-with-token.http
+        expect: credential

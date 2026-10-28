@@ -1,0 +1,49 @@
+# GitLab REST API (gitlab.com/api/v4): Files.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.files.create-file-in-repository
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/repository/files/{file_path}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create file {file_path} on branch {body.branch} of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/files-create-file-in-repository.http
+        expect: write
+        resource: "acme/shop"
+      - fixture: fixtures/files-create-file-in-repository-named-git-upload-pack.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.files.update-file-in-repository
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/repository/files/{file_path}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Change file {file_path} on branch {body.branch} of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/files-update-file-in-repository.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.files.delete-file-in-repository
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/repository/files/{file_path}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete file {file_path} on branch {body.branch} of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      The file stays in the repository's history, as for GitHub's contents.
+    tests:
+      - fixture: fixtures/files-delete-file-in-repository.http
+        expect: delete
+        resource: "acme/shop"

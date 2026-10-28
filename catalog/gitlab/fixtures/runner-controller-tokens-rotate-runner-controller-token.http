@@ -1,0 +1,7 @@
+# description: Rotate a runner controller token of runner controller 7 7
+POST /api/v4/runner_controllers/7/tokens/7/rotate HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

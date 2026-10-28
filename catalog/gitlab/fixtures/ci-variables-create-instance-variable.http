@@ -1,0 +1,7 @@
+# description: Set instance CI/CD variable …
+POST /api/v4/admin/ci/variables HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{"key": "LOG_LEVEL", "value": "debug"}

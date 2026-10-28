@@ -1,0 +1,86 @@
+# GitLab REST API (gitlab.com/api/v4): Custom attributes.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.custom-attributes.creates-or-updates-custom-attribute-for-user
+    match: { rest: { method: PUT, path: "/api/v4/users/{id}/custom_attributes/{key}" } }
+    class: write
+    resource: { arg: id, kind: user }
+    card: "Create or updates a custom attribute for user {id} {key}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/custom-attributes-creates-or-updates-custom-attribute-for-user.http
+        expect: write
+        resource: "42"
+
+  - id: gitlab.custom-attributes.delete-custom-attribute-for-user
+    match: { rest: { method: DELETE, path: "/api/v4/users/{id}/custom_attributes/{key}" } }
+    class: delete
+    resource: { arg: id, kind: user }
+    card: "Delete a custom attribute for user {id} {key}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/custom-attributes-delete-custom-attribute-for-user.http
+        expect: delete
+        resource: "42"
+
+  - id: gitlab.custom-attributes.creates-or-updates-custom-attribute-for-project
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/custom_attributes/{key}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create or updates a custom attribute for project {id} {key}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/custom-attributes-creates-or-updates-custom-attribute-for-project.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.custom-attributes.delete-custom-attribute-for-project
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/custom_attributes/{key}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete a custom attribute for project {id} {key}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/custom-attributes-delete-custom-attribute-for-project.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.custom-attributes.creates-or-updates-custom-attribute-for-group
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/custom_attributes/{key}" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Create or updates a custom attribute for group {id} {key}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/custom-attributes-creates-or-updates-custom-attribute-for-group.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.custom-attributes.delete-custom-attribute-for-group
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/custom_attributes/{key}" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Delete a custom attribute for group {id} {key}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/custom-attributes-delete-custom-attribute-for-group.http
+        expect: delete
+        resource: "acme"

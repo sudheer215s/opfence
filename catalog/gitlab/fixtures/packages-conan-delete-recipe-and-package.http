@@ -1,0 +1,5 @@
+# description: Delete a recipe and package stable
+DELETE /api/v4/packages/conan/v1/conans/shop-ui/1.0.0/acme/stable HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

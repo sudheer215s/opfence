@@ -1,0 +1,5 @@
+# description: Soft-delete an organization 7
+DELETE /api/v4/organizations/7 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

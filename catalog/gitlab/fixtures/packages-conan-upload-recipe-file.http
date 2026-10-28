@@ -1,0 +1,7 @@
+# description: Upload a recipe file shop-ui-1.0.0.tgz
+PUT /api/v4/packages/conan/v1/files/shop-ui/1.0.0/acme/stable/0/export/shop-ui-1.0.0.tgz HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

@@ -1,0 +1,334 @@
+# GitLab REST API (gitlab.com/api/v4): CI variables.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.ci-variables.list-all-group-variables
+    match: { rest: { method: GET, path: "/api/v4/groups/{id}/variables" } }
+    class: credential
+    resource: { arg: id, kind: group }
+    card: "Read group {id}'s CI/CD variables with their values"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the group's CI/CD variables with their values.
+    tests:
+      - fixture: fixtures/ci-variables-list-all-group-variables.http
+        expect: credential
+        resource: "acme"
+
+  - id: gitlab.ci-variables.create-group-variable
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/variables" } }
+    class: write
+    when:
+      - if: { arg: body.masked, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: credential
+      - if: { arg: query.masked, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: credential
+      - if: { arg: body.masked_and_hidden, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: credential
+      - if: { arg: query.masked_and_hidden, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: credential
+    resource: { arg: id, kind: group }
+    card: "Set CI/CD variable {body.key} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Plain variables are settings; masked and hidden ones are secrets (conditions below). A masked
+      or hidden variable is a secret, so setting one is credential.
+    tests:
+      - fixture: fixtures/ci-variables-create-group-variable.http
+        expect: write
+        resource: "acme"
+      - fixture: fixtures/ci-variables-create-group-variable-masked.http
+        expect: credential
+        resource: "acme"
+      - fixture: fixtures/ci-variables-create-group-variable-masked-and-hidden.http
+        expect: credential
+        resource: "acme"
+
+  - id: gitlab.ci-variables.retrieve-details-of-group-variable
+    match: { rest: { method: GET, path: "/api/v4/groups/{id}/variables/{key}" } }
+    class: credential
+    resource: { arg: id, kind: group }
+    card: "Read CI/CD variable {key} of group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the variable's value.
+    tests:
+      - fixture: fixtures/ci-variables-retrieve-details-of-group-variable.http
+        expect: credential
+        resource: "acme"
+
+  - id: gitlab.ci-variables.update-group-variable
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/variables/{key}" } }
+    class: write
+    when:
+      - if: { arg: body.masked, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: credential
+      - if: { arg: query.masked, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: credential
+      - if: { arg: body.masked_and_hidden, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: credential
+      - if: { arg: query.masked_and_hidden, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: credential
+      - if: { arg: body.protected, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: query.protected, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+    resource: { arg: id, kind: group }
+    card: "Change CI/CD variable {key} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Plain variables are settings; masked and hidden ones are secrets (conditions below). A masked
+      or hidden variable is a secret, so setting one is credential; making one unprotected sends it
+      to pipelines on every branch, which is access.
+    tests:
+      - fixture: fixtures/ci-variables-update-group-variable.http
+        expect: write
+        resource: "acme"
+      - fixture: fixtures/ci-variables-update-group-variable-masked.http
+        expect: credential
+        resource: "acme"
+      - fixture: fixtures/ci-variables-update-group-variable-masked-and-hidden.http
+        expect: credential
+        resource: "acme"
+      - fixture: fixtures/ci-variables-update-group-variable-protected.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.ci-variables.delete-group-variable
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/variables/{key}" } }
+    class: irreversible
+    resource: { arg: id, kind: group }
+    card: "Delete CI/CD variable {key} from group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      GitLab keeps no earlier value, and variables often hold secrets.
+    tests:
+      - fixture: fixtures/ci-variables-delete-group-variable.http
+        expect: irreversible
+        resource: "acme"
+
+  - id: gitlab.ci-variables.list-all-project-variables
+    match: { rest: { method: GET, path: "/api/v4/projects/{id}/variables" } }
+    class: credential
+    resource: { arg: id, kind: project }
+    card: "Read project {id}'s CI/CD variables with their values"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the project's CI/CD variables with their values.
+    tests:
+      - fixture: fixtures/ci-variables-list-all-project-variables.http
+        expect: credential
+        resource: "acme/shop"
+
+  - id: gitlab.ci-variables.create-variable
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/variables" } }
+    class: write
+    when:
+      - if: { arg: body.masked, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: credential
+      - if: { arg: query.masked, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: credential
+      - if: { arg: body.masked_and_hidden, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: credential
+      - if: { arg: query.masked_and_hidden, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: credential
+    resource: { arg: id, kind: project }
+    card: "Set CI/CD variable {body.key} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Plain variables are settings; masked and hidden ones are secrets (conditions below). A masked
+      or hidden variable is a secret, so setting one is credential.
+    tests:
+      - fixture: fixtures/ci-variables-create-variable.http
+        expect: write
+        resource: "acme/shop"
+      - fixture: fixtures/ci-variables-create-variable-masked.http
+        expect: credential
+        resource: "acme/shop"
+      - fixture: fixtures/ci-variables-create-variable-masked-and-hidden.http
+        expect: credential
+        resource: "acme/shop"
+
+  - id: gitlab.ci-variables.retrieve-variable
+    match: { rest: { method: GET, path: "/api/v4/projects/{id}/variables/{key}" } }
+    class: credential
+    resource: { arg: id, kind: project }
+    card: "Read CI/CD variable {key} of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the variable's value.
+    tests:
+      - fixture: fixtures/ci-variables-retrieve-variable.http
+        expect: credential
+        resource: "acme/shop"
+
+  - id: gitlab.ci-variables.update-variable
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/variables/{key}" } }
+    class: write
+    when:
+      - if: { arg: body.masked, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: credential
+      - if: { arg: query.masked, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: credential
+      - if: { arg: body.masked_and_hidden, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: credential
+      - if: { arg: query.masked_and_hidden, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: credential
+      - if: { arg: body.protected, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: query.protected, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+    resource: { arg: id, kind: project }
+    card: "Change CI/CD variable {key} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Plain variables are settings; masked and hidden ones are secrets (conditions below). A masked
+      or hidden variable is a secret, so setting one is credential; making one unprotected sends it
+      to pipelines on every branch, including ones the agent can push, which is access.
+    tests:
+      - fixture: fixtures/ci-variables-update-variable.http
+        expect: write
+        resource: "acme/shop"
+      - fixture: fixtures/ci-variables-update-variable-masked.http
+        expect: credential
+        resource: "acme/shop"
+      - fixture: fixtures/ci-variables-update-variable-masked-and-hidden.http
+        expect: credential
+        resource: "acme/shop"
+      - fixture: fixtures/ci-variables-update-variable-protected.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.ci-variables.delete-variable
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/variables/{key}" } }
+    class: irreversible
+    resource: { arg: id, kind: project }
+    card: "Delete CI/CD variable {key} from project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      GitLab keeps no earlier value, and variables often hold secrets.
+    tests:
+      - fixture: fixtures/ci-variables-delete-variable.http
+        expect: irreversible
+        resource: "acme/shop"
+
+  - id: gitlab.ci-variables.list-all-instance-variables
+    match: { rest: { method: GET, path: "/api/v4/admin/ci/variables" } }
+    class: credential
+    card: "Read the instance's CI/CD variables with their values"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the instance's CI/CD variables with their values.
+    tests:
+      - fixture: fixtures/ci-variables-list-all-instance-variables.http
+        expect: credential
+
+  - id: gitlab.ci-variables.create-instance-variable
+    match: { rest: { method: POST, path: "/api/v4/admin/ci/variables" } }
+    class: write
+    when:
+      - if: { arg: body.masked, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: credential
+      - if: { arg: query.masked, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: credential
+    card: "Set instance CI/CD variable {body.key}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Plain variables are settings; masked and hidden ones are secrets (conditions below). A masked
+      variable is a secret, so setting one is credential.
+    tests:
+      - fixture: fixtures/ci-variables-create-instance-variable.http
+        expect: write
+      - fixture: fixtures/ci-variables-create-instance-variable-masked.http
+        expect: credential
+
+  - id: gitlab.ci-variables.retrieve-instance-variable-details
+    match: { rest: { method: GET, path: "/api/v4/admin/ci/variables/{key}" } }
+    class: credential
+    card: "Read instance CI/CD variable {key}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the variable's value.
+    tests:
+      - fixture: fixtures/ci-variables-retrieve-instance-variable-details.http
+        expect: credential
+
+  - id: gitlab.ci-variables.update-instance-variable
+    match: { rest: { method: PUT, path: "/api/v4/admin/ci/variables/{key}" } }
+    class: write
+    when:
+      - if: { arg: body.masked, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: credential
+      - if: { arg: query.masked, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: credential
+      - if: { arg: body.protected, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: query.protected, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+    card: "Change instance CI/CD variable {key}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Plain variables are settings; masked and hidden ones are secrets (conditions below). A masked
+      variable is a secret, so setting one is credential; making one unprotected is access.
+    tests:
+      - fixture: fixtures/ci-variables-update-instance-variable.http
+        expect: write
+      - fixture: fixtures/ci-variables-update-instance-variable-masked.http
+        expect: credential
+      - fixture: fixtures/ci-variables-update-instance-variable-protected.http
+        expect: access
+
+  - id: gitlab.ci-variables.delete-instance-variable
+    match: { rest: { method: DELETE, path: "/api/v4/admin/ci/variables/{key}" } }
+    class: irreversible
+    card: "Delete instance CI/CD variable {key}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      GitLab keeps no earlier value, and variables often hold secrets.
+    tests:
+      - fixture: fixtures/ci-variables-delete-instance-variable.http
+        expect: irreversible

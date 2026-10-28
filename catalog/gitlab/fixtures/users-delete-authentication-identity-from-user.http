@@ -1,0 +1,5 @@
+# description: Delete authentication identity from user 42 ldapmain
+DELETE /api/v4/users/42/identities/ldapmain HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

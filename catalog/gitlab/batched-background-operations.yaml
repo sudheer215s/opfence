@@ -1,0 +1,30 @@
+# GitLab REST API (gitlab.com/api/v4): Batched background operations.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.batched-background-operations.stop-batched-background-operation
+    match: { rest: { method: PUT, path: "/api/v4/admin/batched_background_operations/{id}/stop" } }
+    class: write
+    card: "Stop a batched background operation {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/batched-background-operations-stop-batched-background-operation.http
+        expect: write
+
+  - id: gitlab.batched-background-operations.restart-batched-background-operation
+    match: { rest: { method: PUT, path: "/api/v4/admin/batched_background_operations/{id}/restart" } }
+    class: write
+    card: "Restart a batched background operation {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/batched-background-operations-restart-batched-background-operation.http
+        expect: write

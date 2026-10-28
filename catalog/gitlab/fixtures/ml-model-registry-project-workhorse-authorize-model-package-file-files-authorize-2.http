@@ -1,0 +1,7 @@
+# description: Workhorse authorize model package file shop-ui-1.0.0.tgz in project acme/shop
+PUT /api/v4/projects/acme%2Fshop/packages/ml_models/7/files/com%2Facme%2Fshop/shop-ui-1.0.0.tgz/authorize HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

@@ -1,0 +1,7 @@
+# description: Verify authentication for a registered runner
+POST /api/v4/runners/verify HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

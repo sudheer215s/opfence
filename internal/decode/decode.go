@@ -72,6 +72,9 @@ type Hints struct {
 	MCPPaths     []string    // paths that carry MCP, with everything under them; empty means every path
 	Git          bool        // host serves git's smart HTTP protocol
 	HeaderArgs   []HeaderArg // headers whose non-secret parts become arguments
+	// FormatSuffix: the server routes a last segment "x.json" as "x"
+	// (Grape, Rails), so the request is also read without the extension.
+	FormatSuffix bool
 	// HostArg, when set, is an argument that gets HostArgValue, the part
 	// of the host a "*." host pattern stands for (a project's ref).
 	HostArg, HostArgValue string
@@ -100,6 +103,16 @@ type HeaderArg struct {
 
 // Decode returns the operations in r. It always returns at least one.
 func Decode(r *request.Request, h Hints) []Operation {
+	// A server that reads "x.json" as "x" (FormatSuffix) routes the
+	// request by alt as well, so MCP and GraphQL paths are recognised
+	// either way and REST operations are decoded for both paths.
+	alt := ""
+	if h.FormatSuffix {
+		alt = StripFormatSuffix(r.Path)
+	}
+	either := func(match func(string) bool) bool {
+		return match(r.Path) || (alt != "" && match(alt))
+	}
 	var ops []Operation
 	switch {
 	case IsWebSocketUpgrade(r.Method, r.Header):
@@ -108,16 +121,22 @@ func Decode(r *request.Request, h Hints) []Operation {
 		ops = []Operation{decodeWebSocketConnect(r, h.WebSocket)}
 	case h.SigV4:
 		ops = decodeAWS(r)
-	case h.MCP && isMCPPath(r.Path, h.MCPPaths):
+	case h.MCP && either(func(p string) bool { return isMCPPath(p, h.MCPPaths) }):
 		ops = decodeMCP(r)
 	case h.Git && isGitPath(r.Path):
 		ops = decodeGit(r)
-	case isGraphQLPath(r.Path, h.GraphQLPaths):
+	case either(func(p string) bool { return isGraphQLPath(p, h.GraphQLPaths) }):
 		ops = decodeGraphQL(r)
 	case r.Method == "POST" && isBatchPath(r.Path, h.BatchPaths):
 		ops = decodeBatch(r, h.BatchPaths)
 	default:
 		ops = decodeREST(r)
+		if alt != "" {
+			for _, o := range ops[:len(ops):len(ops)] {
+				o.Path = alt
+				ops = append(ops, o)
+			}
+		}
 	}
 	if len(ops) == 0 {
 		ops = []Operation{failed(r, "", "request carries no operation")}

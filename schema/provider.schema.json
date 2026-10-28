@@ -92,6 +92,7 @@
       }
     },
     "fallback": { "type": "boolean", "description": "A provider for every API on a domain that no other provider claims: its *. hosts may cover other providers' hosts, and it applies only where none of them do" },
+    "format_suffix": { "type": "boolean", "description": "The router reads a last path segment x.json (any one extension) as x, as Grape and Rails do; requests are also decoded with the extension removed, and the strictest decision wins" },
     "secrets_from": {
       "type": "array",
       "description": "Providers whose secrets this provider's auth locations also take (a hosted MCP server that accepts its vendor's API token)",

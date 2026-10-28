@@ -1,0 +1,202 @@
+# GitLab REST API (gitlab.com/api/v4): Packages: NPM.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.packages-npm.project-create-or-update-tag-for-npm-package-and-version
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/npm/-/package/{package_name}/dist-tags/{tag}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create or Update the given tag for the given NPM package and version {tag} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Publishing a package is a write.
+    tests:
+      - fixture: fixtures/packages-npm-project-create-or-update-tag-for-npm-package-and-version.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.packages-npm.project-deletes-tag
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/packages/npm/-/package/{package_name}/dist-tags/{tag}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete the given tag {tag} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A package can be published again from its source.
+    tests:
+      - fixture: fixtures/packages-npm-project-deletes-tag.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.packages-npm.project-npm-registry-bulk-advisory-endpoint
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/packages/npm/-/npm/v1/security/advisories/bulk" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "NPM registry bulk advisory endpoint in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Lists URLs or advisories; nothing is stored.
+    tests:
+      - fixture: fixtures/packages-npm-project-npm-registry-bulk-advisory-endpoint.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.packages-npm.project-npm-registry-quick-audit-endpoint
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/packages/npm/-/npm/v1/security/audits/quick" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "NPM registry quick audit endpoint in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Lists URLs or advisories; nothing is stored.
+    tests:
+      - fixture: fixtures/packages-npm-project-npm-registry-quick-audit-endpoint.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.packages-npm.create-or-deprecate-npm-package
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/npm/{package_name}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create or deprecate an NPM package {package_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Publishing a package is a write.
+    tests:
+      - fixture: fixtures/packages-npm-create-or-deprecate-npm-package.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.packages-npm.create-or-update-tag-for-npm-package-and-version
+    match: { rest: { method: PUT, path: "/api/v4/packages/npm/-/package/{package_name}/dist-tags/{tag}" } }
+    class: write
+    card: "Create or Update the given tag for the given NPM package and version {tag}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Publishing a package is a write.
+    tests:
+      - fixture: fixtures/packages-npm-create-or-update-tag-for-npm-package-and-version.http
+        expect: write
+
+  - id: gitlab.packages-npm.deletes-tag
+    match: { rest: { method: DELETE, path: "/api/v4/packages/npm/-/package/{package_name}/dist-tags/{tag}" } }
+    class: delete
+    card: "Delete the given tag {tag}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A package can be published again from its source.
+    tests:
+      - fixture: fixtures/packages-npm-deletes-tag.http
+        expect: delete
+
+  - id: gitlab.packages-npm.npm-registry-bulk-advisory-endpoint
+    match: { rest: { method: POST, path: "/api/v4/packages/npm/-/npm/v1/security/advisories/bulk" } }
+    class: read
+    card: "NPM registry bulk advisory endpoint"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Lists URLs or advisories; nothing is stored.
+    tests:
+      - fixture: fixtures/packages-npm-npm-registry-bulk-advisory-endpoint.http
+        expect: read
+
+  - id: gitlab.packages-npm.npm-registry-quick-audit-endpoint
+    match: { rest: { method: POST, path: "/api/v4/packages/npm/-/npm/v1/security/audits/quick" } }
+    class: read
+    card: "NPM registry quick audit endpoint"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Lists URLs or advisories; nothing is stored.
+    tests:
+      - fixture: fixtures/packages-npm-npm-registry-quick-audit-endpoint.http
+        expect: read
+
+  - id: gitlab.packages-npm.group-create-or-update-tag-for-npm-package-and-version
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/-/packages/npm/-/package/{package_name}/dist-tags/{tag}" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Create or Update the given tag for the given NPM package and version {tag} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Publishing a package is a write.
+    tests:
+      - fixture: fixtures/packages-npm-group-create-or-update-tag-for-npm-package-and-version.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.packages-npm.group-deletes-tag
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/-/packages/npm/-/package/{package_name}/dist-tags/{tag}" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Delete the given tag {tag} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A package can be published again from its source.
+    tests:
+      - fixture: fixtures/packages-npm-group-deletes-tag.http
+        expect: delete
+        resource: "acme"
+
+  - id: gitlab.packages-npm.group-npm-registry-bulk-advisory-endpoint
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/-/packages/npm/-/npm/v1/security/advisories/bulk" } }
+    class: read
+    resource: { arg: id, kind: group }
+    card: "NPM registry bulk advisory endpoint in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Lists URLs or advisories; nothing is stored.
+    tests:
+      - fixture: fixtures/packages-npm-group-npm-registry-bulk-advisory-endpoint.http
+        expect: read
+        resource: "acme"
+
+  - id: gitlab.packages-npm.group-npm-registry-quick-audit-endpoint
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/-/packages/npm/-/npm/v1/security/audits/quick" } }
+    class: read
+    resource: { arg: id, kind: group }
+    card: "NPM registry quick audit endpoint in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Lists URLs or advisories; nothing is stored.
+    tests:
+      - fixture: fixtures/packages-npm-group-npm-registry-quick-audit-endpoint.http
+        expect: read
+        resource: "acme"

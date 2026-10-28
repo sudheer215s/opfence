@@ -1,0 +1,5 @@
+# description: Disable a namespace for Knowledge Graph 7
+DELETE /api/v4/admin/knowledge_graph/namespaces/7 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

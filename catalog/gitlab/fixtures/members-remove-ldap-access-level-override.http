@@ -1,0 +1,5 @@
+# description: Remove an LDAP access level override 42 in group acme
+DELETE /api/v4/groups/acme/members/42/override HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

@@ -1,0 +1,7 @@
+# description: Receive Slack events
+POST /api/v4/integrations/slack/events HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

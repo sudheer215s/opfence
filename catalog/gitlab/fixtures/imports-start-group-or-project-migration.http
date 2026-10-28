@@ -1,0 +1,7 @@
+# description: Start a group or project migration
+POST /api/v4/bulk_imports HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

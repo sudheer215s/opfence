@@ -1,0 +1,5 @@
+# description: List projects user 42 contributed to
+GET /api/v4/users/42/contributed_projects HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

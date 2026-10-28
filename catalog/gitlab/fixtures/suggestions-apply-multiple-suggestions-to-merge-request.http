@@ -1,0 +1,7 @@
+# description: Apply multiple suggestions to a merge request
+PUT /api/v4/suggestions/batch_apply HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

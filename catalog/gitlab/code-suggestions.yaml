@@ -1,0 +1,60 @@
+# GitLab REST API (gitlab.com/api/v4): Code Suggestions.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.code-suggestions.generate-code-completions
+    match: { rest: { method: POST, path: "/api/v4/code_suggestions/completions" } }
+    class: read
+    card: "Generate code completions"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Asks the model for completions; nothing is changed.
+    tests:
+      - fixture: fixtures/code-suggestions-generate-code-completions.http
+        expect: read
+
+  - id: gitlab.code-suggestions.retrieve-direct-connection-details-for-ai-gateway
+    match: { rest: { method: POST, path: "/api/v4/code_suggestions/direct_access" } }
+    class: read
+    card: "Retrieve direct connection details for the AI Gateway"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns a short-lived token for the same user, as exchanging a credential the caller already
+      holds is (ARCHITECTURE §4.5).
+    tests:
+      - fixture: fixtures/code-suggestions-retrieve-direct-connection-details-for-ai-gateway.http
+        expect: read
+
+  - id: gitlab.code-suggestions.validate-status-of-code-suggestions
+    match: { rest: { method: POST, path: "/api/v4/code_suggestions/enabled" } }
+    class: read
+    card: "Validate status of Code Suggestions"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Asks the model for completions; nothing is changed.
+    tests:
+      - fixture: fixtures/code-suggestions-validate-status-of-code-suggestions.http
+        expect: read
+
+  - id: gitlab.code-suggestions.retrieve-connection-details
+    match: { rest: { method: POST, path: "/api/v4/code_suggestions/connection_details" } }
+    class: read
+    card: "Retrieve connection details"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns a short-lived token for the same user, as exchanging a credential the caller already
+      holds is (ARCHITECTURE §4.5).
+    tests:
+      - fixture: fixtures/code-suggestions-retrieve-connection-details.http
+        expect: read

@@ -1,0 +1,7 @@
+# description: Create a user
+POST /api/v4/users HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

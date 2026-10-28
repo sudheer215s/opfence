@@ -1,0 +1,98 @@
+# GitLab REST API (gitlab.com/api/v4): Runner controllers.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.runner-controllers.add-instance-scope
+    match: { rest: { method: POST, path: "/api/v4/runner_controllers/{id}/scopes/instance" } }
+    class: access
+    card: "Add instance scope {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Runner controllers decide which runners pick up which jobs.
+    tests:
+      - fixture: fixtures/runner-controllers-add-instance-scope.http
+        expect: access
+
+  - id: gitlab.runner-controllers.remove-instance-scope
+    match: { rest: { method: DELETE, path: "/api/v4/runner_controllers/{id}/scopes/instance" } }
+    class: access
+    card: "Remove instance scope {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Runner controllers decide which runners pick up which jobs.
+    tests:
+      - fixture: fixtures/runner-controllers-remove-instance-scope.http
+        expect: access
+
+  - id: gitlab.runner-controllers.add-runner-scope
+    match: { rest: { method: POST, path: "/api/v4/runner_controllers/{id}/scopes/runners/{runner_id}" } }
+    class: access
+    card: "Add runner {runner_id} scope {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Runner controllers decide which runners pick up which jobs.
+    tests:
+      - fixture: fixtures/runner-controllers-add-runner-scope.http
+        expect: access
+
+  - id: gitlab.runner-controllers.remove-runner-scope
+    match: { rest: { method: DELETE, path: "/api/v4/runner_controllers/{id}/scopes/runners/{runner_id}" } }
+    class: access
+    card: "Remove runner {runner_id} scope {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Runner controllers decide which runners pick up which jobs.
+    tests:
+      - fixture: fixtures/runner-controllers-remove-runner-scope.http
+        expect: access
+
+  - id: gitlab.runner-controllers.register-runner-controller
+    match: { rest: { method: POST, path: "/api/v4/runner_controllers" } }
+    class: access
+    card: "Register a runner controller"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Runner controllers decide which runners pick up which jobs.
+    tests:
+      - fixture: fixtures/runner-controllers-register-runner-controller.http
+        expect: access
+
+  - id: gitlab.runner-controllers.update-runner-controller
+    match: { rest: { method: PUT, path: "/api/v4/runner_controllers/{id}" } }
+    class: access
+    card: "Update a runner controller {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Runner controllers decide which runners pick up which jobs.
+    tests:
+      - fixture: fixtures/runner-controllers-update-runner-controller.http
+        expect: access
+
+  - id: gitlab.runner-controllers.delete-runner-controller
+    match: { rest: { method: DELETE, path: "/api/v4/runner_controllers/{id}" } }
+    class: delete
+    card: "Delete a runner controller {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/runner-controllers-delete-runner-controller.http
+        expect: delete

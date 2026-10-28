@@ -1,0 +1,184 @@
+# GitLab REST API (gitlab.com/api/v4): Keys.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.keys.add-ssh-key-for-user
+    match: { rest: { method: POST, path: "/api/v4/users/{user_id}/keys" } }
+    class: access
+    resource: { arg: user_id, kind: user }
+    card: "Add an SSH key for user {user_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      SSH and GPG keys decide who can push and whose commits verify; GitHub's are access too.
+    tests:
+      - fixture: fixtures/keys-add-ssh-key-for-user.http
+        expect: access
+        resource: "42"
+
+  - id: gitlab.keys.delete-ssh-key-for-user
+    match: { rest: { method: DELETE, path: "/api/v4/users/{id}/keys/{key_id}" } }
+    class: access
+    resource: { arg: id, kind: user }
+    card: "Delete SSH key {key_id} for user {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      SSH and GPG keys decide who can push and whose commits verify; GitHub's are access too.
+    tests:
+      - fixture: fixtures/keys-delete-ssh-key-for-user.http
+        expect: access
+        resource: "42"
+
+  - id: gitlab.keys.add-gpg-key-for-user
+    match: { rest: { method: POST, path: "/api/v4/users/{id}/gpg_keys" } }
+    class: access
+    resource: { arg: id, kind: user }
+    card: "Add a GPG key for user {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      SSH and GPG keys decide who can push and whose commits verify; GitHub's are access too.
+    tests:
+      - fixture: fixtures/keys-add-gpg-key-for-user.http
+        expect: access
+        resource: "42"
+
+  - id: gitlab.keys.delete-gpg-key-for-user
+    match: { rest: { method: DELETE, path: "/api/v4/users/{id}/gpg_keys/{key_id}" } }
+    class: access
+    resource: { arg: id, kind: user }
+    card: "Delete GPG key {key_id} for user {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      SSH and GPG keys decide who can push and whose commits verify; GitHub's are access too.
+    tests:
+      - fixture: fixtures/keys-delete-gpg-key-for-user.http
+        expect: access
+        resource: "42"
+
+  - id: gitlab.keys.revoke-gpg-key-for-user
+    match: { rest: { method: POST, path: "/api/v4/users/{id}/gpg_keys/{key_id}/revoke" } }
+    class: access
+    resource: { arg: id, kind: user }
+    card: "Revoke GPG key {key_id} for user {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      SSH and GPG keys decide who can push and whose commits verify; GitHub's are access too.
+    tests:
+      - fixture: fixtures/keys-revoke-gpg-key-for-user.http
+        expect: access
+        resource: "42"
+
+  - id: gitlab.keys.add-ssh-key
+    match: { rest: { method: POST, path: "/api/v4/user/keys" } }
+    class: access
+    card: "Add an SSH key"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      SSH and GPG keys decide who can push and whose commits verify; GitHub's are access too.
+    tests:
+      - fixture: fixtures/keys-add-ssh-key.http
+        expect: access
+
+  - id: gitlab.keys.delete-ssh-key
+    match: { rest: { method: DELETE, path: "/api/v4/user/keys/{key_id}" } }
+    class: access
+    card: "Delete SSH key {key_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      SSH and GPG keys decide who can push and whose commits verify; GitHub's are access too.
+    tests:
+      - fixture: fixtures/keys-delete-ssh-key.http
+        expect: access
+
+  - id: gitlab.keys.add-gpg-key
+    match: { rest: { method: POST, path: "/api/v4/user/gpg_keys" } }
+    class: access
+    card: "Add a GPG key"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      SSH and GPG keys decide who can push and whose commits verify; GitHub's are access too.
+    tests:
+      - fixture: fixtures/keys-add-gpg-key.http
+        expect: access
+
+  - id: gitlab.keys.delete-gpg-key
+    match: { rest: { method: DELETE, path: "/api/v4/user/gpg_keys/{key_id}" } }
+    class: access
+    card: "Delete GPG key {key_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      SSH and GPG keys decide who can push and whose commits verify; GitHub's are access too.
+    tests:
+      - fixture: fixtures/keys-delete-gpg-key.http
+        expect: access
+
+  - id: gitlab.keys.revoke-gpg-key
+    match: { rest: { method: POST, path: "/api/v4/user/gpg_keys/{key_id}/revoke" } }
+    class: access
+    card: "Revoke GPG key {key_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      SSH and GPG keys decide who can push and whose commits verify; GitHub's are access too.
+    tests:
+      - fixture: fixtures/keys-revoke-gpg-key.http
+        expect: access
+
+  - id: gitlab.keys.add-group-ssh-certificate
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/ssh_certificates" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Add a group SSH certificate in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      SSH and GPG keys decide who can push and whose commits verify; GitHub's are access too.
+    tests:
+      - fixture: fixtures/keys-add-group-ssh-certificate.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.keys.delete-group-ssh-certificate
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/ssh_certificates/{ssh_certificates_id}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Delete a group SSH certificate {ssh_certificates_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      SSH and GPG keys decide who can push and whose commits verify; GitHub's are access too.
+    tests:
+      - fixture: fixtures/keys-delete-group-ssh-certificate.http
+        expect: access
+        resource: "acme"

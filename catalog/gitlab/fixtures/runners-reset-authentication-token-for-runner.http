@@ -1,0 +1,7 @@
+# description: Reset an authentication token for a runner 7
+POST /api/v4/runners/7/reset_authentication_token HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

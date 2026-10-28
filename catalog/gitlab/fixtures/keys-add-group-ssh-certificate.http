@@ -1,0 +1,7 @@
+# description: Add a group SSH certificate in group acme
+POST /api/v4/groups/acme/ssh_certificates HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

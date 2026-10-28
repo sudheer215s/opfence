@@ -1,0 +1,38 @@
+# GitLab REST API (gitlab.com/api/v4): Imports.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.imports.import-github-gists-into-gitlab-snippets
+    match: { rest: { method: POST, path: "/api/v4/import/github/gists" } }
+    class: write
+    card: "Import GitHub gists into GitLab snippets"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/imports-import-github-gists-into-gitlab-snippets.http
+        expect: write
+
+  - id: gitlab.imports.start-group-or-project-migration
+    match: { rest: { method: POST, path: "/api/v4/bulk_imports" } }
+    class: write
+    card: "Start a group or project migration"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/imports-start-group-or-project-migration.http
+        expect: write
+
+  - id: gitlab.imports.cancel-migration
+    match: { rest: { method: POST, path: "/api/v4/bulk_imports/{import_id}/cancel" } }
+    class: write
+    card: "Cancel a migration {import_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/imports-cancel-migration.http
+        expect: write

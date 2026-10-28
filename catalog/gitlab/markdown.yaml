@@ -1,0 +1,16 @@
+# GitLab REST API (gitlab.com/api/v4): Markdown.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.markdown.render-markdown-content
+    match: { rest: { method: POST, path: "/api/v4/markdown" } }
+    class: read
+    card: "Render Markdown content"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Renders Markdown; nothing is stored.
+    tests:
+      - fixture: fixtures/markdown-render-markdown-content.http
+        expect: read

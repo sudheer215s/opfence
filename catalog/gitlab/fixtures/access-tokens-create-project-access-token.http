@@ -1,0 +1,7 @@
+# description: Create access token … for project acme/shop
+POST /api/v4/projects/acme%2Fshop/access_tokens HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{"name": "release-bot", "scopes": ["api"], "access_level": 30, "expires_at": "2027-01-01"}

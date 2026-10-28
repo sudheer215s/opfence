@@ -1,0 +1,5 @@
+# description: Read the instance's settings with their secrets
+GET /api/v4/application/settings HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

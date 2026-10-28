@@ -1,0 +1,5 @@
+# description: Unprotect a protected environment for project acme/shop main
+DELETE /api/v4/projects/acme%2Fshop/protected_environments/main HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

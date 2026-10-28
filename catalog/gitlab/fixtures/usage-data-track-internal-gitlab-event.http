@@ -1,0 +1,7 @@
+# description: Track an internal GitLab event
+POST /api/v4/usage_data/track_event HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

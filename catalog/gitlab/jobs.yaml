@@ -1,0 +1,72 @@
+# GitLab REST API (gitlab.com/api/v4): Jobs.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.jobs.request-job
+    match: { rest: { method: POST, path: "/api/v4/jobs/request" } }
+    class: credential
+    card: "Request a job"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A runner picking up a job receives its CI/CD variables, secrets included.
+    tests:
+      - fixture: fixtures/jobs-request-job.http
+        expect: credential
+
+  - id: gitlab.jobs.update-job
+    match: { rest: { method: PUT, path: "/api/v4/jobs/{id}" } }
+    class: write
+    card: "Update a job {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Runner API: job state, logs and artifacts.
+    tests:
+      - fixture: fixtures/jobs-update-job.http
+        expect: write
+
+  - id: gitlab.jobs.update-trace-of-job
+    match: { rest: { method: PATCH, path: "/api/v4/jobs/{id}/trace" } }
+    class: write
+    card: "Update the trace of a job {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Runner API: job state, logs and artifacts.
+    tests:
+      - fixture: fixtures/jobs-update-trace-of-job.http
+        expect: write
+
+  - id: gitlab.jobs.authorize-artifacts-upload
+    match: { rest: { method: POST, path: "/api/v4/jobs/{id}/artifacts/authorize" } }
+    class: read
+    card: "Authorize artifacts upload {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/jobs-authorize-artifacts-upload.http
+        expect: read
+
+  - id: gitlab.jobs.upload-job-artifacts
+    match: { rest: { method: POST, path: "/api/v4/jobs/{id}/artifacts" } }
+    class: write
+    card: "Upload job artifacts {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Runner API: job state, logs and artifacts.
+    tests:
+      - fixture: fixtures/jobs-upload-job-artifacts.http
+        expect: write

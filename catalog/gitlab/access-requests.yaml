@@ -1,0 +1,94 @@
+# GitLab REST API (gitlab.com/api/v4): Access requests.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.access-requests.request-access-to-group
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/access_requests" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Request access to group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/access-requests-request-access-to-group.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.access-requests.group-approve-access-request
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/access_requests/{user_id}/approve" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Approve an access request {user_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Gives the user a role in the group or project.
+    tests:
+      - fixture: fixtures/access-requests-group-approve-access-request.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.access-requests.group-deny-access-request
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/access_requests/{user_id}" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Deny an access request {user_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Denying a request leaves access as it was.
+    tests:
+      - fixture: fixtures/access-requests-group-deny-access-request.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.access-requests.request-access-to-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/access_requests" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Request access to project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/access-requests-request-access-to-project.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.access-requests.project-approve-access-request
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/access_requests/{user_id}/approve" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Approve an access request {user_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Gives the user a role in the group or project.
+    tests:
+      - fixture: fixtures/access-requests-project-approve-access-request.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.access-requests.project-deny-access-request
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/access_requests/{user_id}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Deny an access request {user_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Denying a request leaves access as it was.
+    tests:
+      - fixture: fixtures/access-requests-project-deny-access-request.http
+        expect: write
+        resource: "acme/shop"

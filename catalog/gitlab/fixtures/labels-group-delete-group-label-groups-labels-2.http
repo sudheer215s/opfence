@@ -1,0 +1,5 @@
+# description: Delete a group label main in group acme
+DELETE /api/v4/groups/acme/labels/main HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

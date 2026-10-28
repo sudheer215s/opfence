@@ -1,0 +1,7 @@
+# description: Retry failed status check for merge request !12 2 in project acme/shop
+POST /api/v4/projects/acme%2Fshop/merge_requests/12/status_checks/2/retry HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

@@ -1,0 +1,62 @@
+# GitLab REST API (gitlab.com/api/v4): ML Model Registry.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.ml-model-registry.project-workhorse-authorize-model-package-file-files-authorize
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/ml_models/{model_version_id}/files/{file_name}/authorize" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Workhorse authorize model package file {file_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/ml-model-registry-project-workhorse-authorize-model-package-file-files-authorize.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.ml-model-registry.project-workhorse-authorize-model-package-file-files-authorize-2
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/ml_models/{model_version_id}/files/{path}/{file_name}/authorize" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Workhorse authorize model package file {file_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/ml-model-registry-project-workhorse-authorize-model-package-file-files-authorize-2.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.ml-model-registry.project-workhorse-upload-model-package-file-ml-models-files
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/ml_models/{model_version_id}/files/{file_name}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Workhorse upload model package file {file_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/ml-model-registry-project-workhorse-upload-model-package-file-ml-models-files.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.ml-model-registry.project-workhorse-upload-model-package-file-ml-models-files-2
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/ml_models/{model_version_id}/files/{path}/{file_name}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Workhorse upload model package file {file_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/ml-model-registry-project-workhorse-upload-model-package-file-ml-models-files-2.http
+        expect: write
+        resource: "acme/shop"

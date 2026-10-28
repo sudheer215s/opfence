@@ -1,0 +1,7 @@
+# description: Set CI/CD variable … in group acme (masked)
+POST /api/v4/groups/acme/variables HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{"key": "LOG_LEVEL", "value": "debug", "masked": "true"}

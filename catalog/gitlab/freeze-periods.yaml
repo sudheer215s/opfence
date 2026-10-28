@@ -1,0 +1,48 @@
+# GitLab REST API (gitlab.com/api/v4): Freeze periods.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.freeze-periods.create-freeze-period
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/freeze_periods" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create a freeze period in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/freeze-periods-create-freeze-period.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.freeze-periods.update-freeze-period
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/freeze_periods/{freeze_period_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Update a freeze period {freeze_period_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Deploy freezes decide when deployments may run; changing or removing one lets them run.
+    tests:
+      - fixture: fixtures/freeze-periods-update-freeze-period.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.freeze-periods.delete-freeze-period
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/freeze_periods/{freeze_period_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Delete a freeze period {freeze_period_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Deploy freezes decide when deployments may run; changing or removing one lets them run.
+    tests:
+      - fixture: fixtures/freeze-periods-delete-freeze-period.http
+        expect: access
+        resource: "acme/shop"

@@ -1,0 +1,7 @@
+# description: Update snippet 7 (visibility)
+PUT /api/v4/snippets/7 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{"visibility": "public"}

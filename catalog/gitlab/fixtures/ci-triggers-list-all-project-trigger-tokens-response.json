@@ -1,0 +1,10 @@
+[
+  {
+    "id": 10,
+    "description": "deploy",
+    "token": "glptt-EXAMPLEtriggertoken",
+    "owner": {
+      "username": "jdoe"
+    }
+  }
+]

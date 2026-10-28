@@ -1,0 +1,5 @@
+# description: Delete comment 7 from commit 12 discussion 7 in project acme/shop
+DELETE /api/v4/projects/acme%2Fshop/repository/commits/12/discussions/7/notes/7 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

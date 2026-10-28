@@ -1,0 +1,7 @@
+# description: NPM registry quick audit endpoint
+POST /api/v4/packages/npm/-/npm/v1/security/audits/quick HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

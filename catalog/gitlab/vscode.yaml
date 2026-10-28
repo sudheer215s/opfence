@@ -1,0 +1,50 @@
+# GitLab REST API (gitlab.com/api/v4): VSCode.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.vscode.create-or-update-setting-v1-resource
+    match: { rest: { method: POST, path: "/api/v4/vscode/settings_sync/v1/resource/{resource_name}" } }
+    class: write
+    card: "Create or update a specific setting {resource_name}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/vscode-create-or-update-setting-v1-resource.http
+        expect: write
+
+  - id: gitlab.vscode.create-or-update-setting-v1-resource-2
+    match: { rest: { method: POST, path: "/api/v4/vscode/settings_sync/{settings_context_hash}/v1/resource/{resource_name}" } }
+    class: write
+    card: "Create or update a specific setting {resource_name}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/vscode-create-or-update-setting-v1-resource-2.http
+        expect: write
+
+  - id: gitlab.vscode.delete-all-vs-code-setting-resources-for-user-v1-collection
+    match: { rest: { method: DELETE, path: "/api/v4/vscode/settings_sync/v1/collection" } }
+    class: delete
+    card: "Delete all VS Code setting resources for a user"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/vscode-delete-all-vs-code-setting-resources-for-user-v1-collection.http
+        expect: delete
+
+  - id: gitlab.vscode.delete-all-vs-code-setting-resources-for-user-v1-collection-2
+    match: { rest: { method: DELETE, path: "/api/v4/vscode/settings_sync/{settings_context_hash}/v1/collection" } }
+    class: delete
+    card: "Delete all VS Code setting resources for a user {settings_context_hash}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/vscode-delete-all-vs-code-setting-resources-for-user-v1-collection-2.http
+        expect: delete

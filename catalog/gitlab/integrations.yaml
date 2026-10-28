@@ -1,0 +1,2737 @@
+# GitLab REST API (gitlab.com/api/v4): Integrations.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.integrations.get-slack-interactive-component-options
+    match: { rest: { method: POST, path: "/api/v4/integrations/slack/options" } }
+    class: read
+    card: "Get Slack interactive component options"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/integrations-get-slack-interactive-component-options.http
+        expect: read
+
+  - id: gitlab.integrations.process-slack-interaction-events
+    match: { rest: { method: POST, path: "/api/v4/integrations/slack/interactions" } }
+    class: write
+    card: "Process Slack interaction events"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Runs a chat command (issue, deploy) or delivers a chat event.
+    tests:
+      - fixture: fixtures/integrations-process-slack-interaction-events.http
+        expect: write
+
+  - id: gitlab.integrations.receive-slack-events
+    match: { rest: { method: POST, path: "/api/v4/integrations/slack/events" } }
+    class: write
+    card: "Receive Slack events"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Runs a chat command (issue, deploy) or delivers a chat event.
+    tests:
+      - fixture: fixtures/integrations-receive-slack-events.http
+        expect: write
+
+  - id: gitlab.integrations.project-apple-app-store-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/apple-app-store" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Apple App Store integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-apple-app-store-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-asana-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/asana" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Asana integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-asana-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-assembla-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/assembla" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Assembla integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-assembla-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-bamboo-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/bamboo" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Bamboo integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-bamboo-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-bugzilla-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/bugzilla" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Bugzilla integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-bugzilla-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-buildkite-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/buildkite" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Buildkite integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-buildkite-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-campfire-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/campfire" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Campfire integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-campfire-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-confluence-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/confluence" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Confluence integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-confluence-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-custom-issue-tracker-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/custom-issue-tracker" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Custom Issue Tracker integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-custom-issue-tracker-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-datadog-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/datadog" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Datadog integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-datadog-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-diffblue-cover-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/diffblue-cover" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Diffblue Cover integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-diffblue-cover-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-discord-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/discord" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Discord integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-discord-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-drone-ci-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/drone-ci" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Drone Ci integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-drone-ci-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-emails-on-push-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/emails-on-push" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Emails On Push integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-emails-on-push-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-external-wiki-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/external-wiki" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the External Wiki integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-external-wiki-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-gitlab-slack-application-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/gitlab-slack-application" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Gitlab Slack Application integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-gitlab-slack-application-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-google-play-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/google-play" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Google Play integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-google-play-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-hangouts-chat-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/hangouts-chat" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Hangouts Chat integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-hangouts-chat-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-harbor-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/harbor" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Harbor integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-harbor-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-irker-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/irker" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Irker integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-irker-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-jenkins-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/jenkins" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Jenkins integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-jenkins-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-jira-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/jira" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Jira integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-jira-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-jira-cloud-app-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/jira-cloud-app" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Jira Cloud App integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-jira-cloud-app-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-linear-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/linear" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Linear integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-linear-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-matrix-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/matrix" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Matrix integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-matrix-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-mattermost-slash-commands-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/mattermost-slash-commands" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Mattermost Slash Commands integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-mattermost-slash-commands-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-packagist-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/packagist" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Packagist integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-packagist-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-phorge-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/phorge" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Phorge integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-phorge-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-pipelines-email-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/pipelines-email" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Pipelines Email integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-pipelines-email-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-pivotaltracker-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/pivotaltracker" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Pivotaltracker integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-pivotaltracker-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-pumble-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/pumble" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Pumble integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-pumble-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-pushover-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/pushover" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Pushover integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-pushover-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-redmine-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/redmine" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Redmine integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-redmine-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-ewm-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/ewm" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Ewm integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-ewm-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-youtrack-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/youtrack" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Youtrack integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-youtrack-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-clickup-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/clickup" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Clickup integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-clickup-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-slack-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/slack" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Slack integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-slack-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-microsoft-teams-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/microsoft-teams" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Microsoft Teams integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-microsoft-teams-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-mattermost-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/mattermost" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Mattermost integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-mattermost-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-teamcity-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/teamcity" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Teamcity integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-teamcity-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-telegram-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/telegram" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Telegram integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-telegram-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-unify-circuit-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/unify-circuit" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Unify Circuit integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-unify-circuit-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-webex-teams-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/webex-teams" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Webex Teams integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-webex-teams-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-zentao-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/zentao" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Zentao integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-zentao-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-squash-tm-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/squash-tm" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Squash Tm integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-squash-tm-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-github-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/github" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Github integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-github-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-git-guardian-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/git-guardian" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Git Guardian integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-git-guardian-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-google-cloud-platform-artifact-registry-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/google-cloud-platform-artifact-registry" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Google Cloud Platform Artifact Registry integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-google-cloud-platform-artifact-registry-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-google-cloud-platform-workload-identity-federation-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/google-cloud-platform-workload-identity-federation" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Google Cloud Platform Workload Identity Federation integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-google-cloud-platform-workload-identity-federation-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-mock-ci-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/mock-ci" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Mock Ci integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-mock-ci-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-mock-monitoring-update-services
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/services/mock-monitoring" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Mock Monitoring integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-mock-monitoring-update-services.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-disable-services
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/services/{slug}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Disable an integration {slug} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Turns the integration off; its settings can be entered again.
+    tests:
+      - fixture: fixtures/integrations-project-disable-services.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-mattermost-slash-commands-trigger-services
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/services/mattermost_slash_commands/trigger" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Trigger a slash command for mattermost-slash-commands in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Runs a chat command (issue, deploy) or delivers a chat event.
+    tests:
+      - fixture: fixtures/integrations-project-mattermost-slash-commands-trigger-services.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-apple-app-store-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/apple-app-store" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Apple App Store integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-apple-app-store-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-asana-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/asana" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Asana integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-asana-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-assembla-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/assembla" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Assembla integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-assembla-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-bamboo-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/bamboo" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Bamboo integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-bamboo-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-bugzilla-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/bugzilla" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Bugzilla integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-bugzilla-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-buildkite-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/buildkite" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Buildkite integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-buildkite-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-campfire-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/campfire" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Campfire integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-campfire-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-confluence-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/confluence" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Confluence integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-confluence-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-custom-issue-tracker-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/custom-issue-tracker" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Custom Issue Tracker integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-custom-issue-tracker-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-datadog-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/datadog" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Datadog integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-datadog-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-diffblue-cover-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/diffblue-cover" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Diffblue Cover integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-diffblue-cover-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-discord-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/discord" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Discord integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-discord-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-drone-ci-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/drone-ci" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Drone Ci integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-drone-ci-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-emails-on-push-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/emails-on-push" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Emails On Push integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-emails-on-push-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-external-wiki-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/external-wiki" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the External Wiki integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-external-wiki-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-gitlab-slack-application-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/gitlab-slack-application" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Gitlab Slack Application integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-gitlab-slack-application-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-google-play-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/google-play" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Google Play integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-google-play-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-hangouts-chat-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/hangouts-chat" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Hangouts Chat integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-hangouts-chat-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-harbor-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/harbor" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Harbor integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-harbor-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-irker-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/irker" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Irker integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-irker-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-jenkins-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/jenkins" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Jenkins integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-jenkins-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-jira-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/jira" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Jira integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-jira-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-jira-cloud-app-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/jira-cloud-app" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Jira Cloud App integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-jira-cloud-app-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-linear-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/linear" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Linear integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-linear-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-matrix-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/matrix" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Matrix integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-matrix-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-mattermost-slash-commands-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/mattermost-slash-commands" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Mattermost Slash Commands integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-mattermost-slash-commands-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-packagist-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/packagist" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Packagist integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-packagist-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-phorge-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/phorge" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Phorge integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-phorge-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-pipelines-email-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/pipelines-email" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Pipelines Email integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-pipelines-email-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-pivotaltracker-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/pivotaltracker" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Pivotaltracker integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-pivotaltracker-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-pumble-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/pumble" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Pumble integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-pumble-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-pushover-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/pushover" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Pushover integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-pushover-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-redmine-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/redmine" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Redmine integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-redmine-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-ewm-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/ewm" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Ewm integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-ewm-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-youtrack-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/youtrack" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Youtrack integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-youtrack-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-clickup-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/clickup" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Clickup integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-clickup-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-slack-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/slack" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Slack integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-slack-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-microsoft-teams-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/microsoft-teams" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Microsoft Teams integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-microsoft-teams-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-mattermost-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/mattermost" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Mattermost integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-mattermost-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-teamcity-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/teamcity" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Teamcity integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-teamcity-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-telegram-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/telegram" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Telegram integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-telegram-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-unify-circuit-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/unify-circuit" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Unify Circuit integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-unify-circuit-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-webex-teams-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/webex-teams" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Webex Teams integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-webex-teams-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-zentao-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/zentao" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Zentao integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-zentao-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-squash-tm-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/squash-tm" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Squash Tm integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-squash-tm-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-github-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/github" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Github integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-github-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-git-guardian-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/git-guardian" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Git Guardian integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-git-guardian-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-google-cloud-platform-artifact-registry-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/google-cloud-platform-artifact-registry" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Google Cloud Platform Artifact Registry integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-google-cloud-platform-artifact-registry-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-google-cloud-platform-workload-identity-federation-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/google-cloud-platform-workload-identity-federation" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Google Cloud Platform Workload Identity Federation integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-google-cloud-platform-workload-identity-federation-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-mock-ci-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/mock-ci" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Mock Ci integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-mock-ci-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-mock-monitoring-update
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/integrations/mock-monitoring" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update the Mock Monitoring integration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-project-mock-monitoring-update.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-disable
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/integrations/{slug}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Disable an integration {slug} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Turns the integration off; its settings can be entered again.
+    tests:
+      - fixture: fixtures/integrations-project-disable.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.project-mattermost-slash-commands-trigger
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/integrations/mattermost_slash_commands/trigger" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Trigger a slash command for mattermost-slash-commands in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Runs a chat command (issue, deploy) or delivers a chat event.
+    tests:
+      - fixture: fixtures/integrations-project-mattermost-slash-commands-trigger.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.integrations.group-apple-app-store-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/apple-app-store" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Apple App Store integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-apple-app-store-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-asana-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/asana" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Asana integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-asana-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-assembla-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/assembla" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Assembla integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-assembla-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-bamboo-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/bamboo" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Bamboo integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-bamboo-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-bugzilla-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/bugzilla" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Bugzilla integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-bugzilla-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-buildkite-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/buildkite" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Buildkite integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-buildkite-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-campfire-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/campfire" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Campfire integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-campfire-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-confluence-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/confluence" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Confluence integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-confluence-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-custom-issue-tracker-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/custom-issue-tracker" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Custom Issue Tracker integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-custom-issue-tracker-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-datadog-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/datadog" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Datadog integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-datadog-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-diffblue-cover-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/diffblue-cover" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Diffblue Cover integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-diffblue-cover-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-discord-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/discord" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Discord integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-discord-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-drone-ci-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/drone-ci" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Drone Ci integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-drone-ci-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-emails-on-push-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/emails-on-push" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Emails On Push integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-emails-on-push-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-external-wiki-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/external-wiki" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the External Wiki integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-external-wiki-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-gitlab-slack-application-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/gitlab-slack-application" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Gitlab Slack Application integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-gitlab-slack-application-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-google-play-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/google-play" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Google Play integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-google-play-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-hangouts-chat-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/hangouts-chat" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Hangouts Chat integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-hangouts-chat-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-harbor-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/harbor" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Harbor integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-harbor-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-irker-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/irker" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Irker integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-irker-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-jenkins-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/jenkins" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Jenkins integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-jenkins-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-jira-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/jira" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Jira integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-jira-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-jira-cloud-app-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/jira-cloud-app" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Jira Cloud App integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-jira-cloud-app-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-linear-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/linear" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Linear integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-linear-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-matrix-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/matrix" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Matrix integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-matrix-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-mattermost-slash-commands-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/mattermost-slash-commands" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Mattermost Slash Commands integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-mattermost-slash-commands-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-packagist-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/packagist" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Packagist integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-packagist-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-phorge-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/phorge" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Phorge integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-phorge-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-pipelines-email-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/pipelines-email" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Pipelines Email integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-pipelines-email-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-pivotaltracker-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/pivotaltracker" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Pivotaltracker integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-pivotaltracker-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-pumble-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/pumble" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Pumble integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-pumble-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-pushover-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/pushover" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Pushover integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-pushover-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-redmine-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/redmine" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Redmine integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-redmine-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-ewm-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/ewm" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Ewm integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-ewm-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-youtrack-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/youtrack" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Youtrack integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-youtrack-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-clickup-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/clickup" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Clickup integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-clickup-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-slack-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/slack" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Slack integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-slack-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-microsoft-teams-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/microsoft-teams" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Microsoft Teams integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-microsoft-teams-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-mattermost-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/mattermost" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Mattermost integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-mattermost-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-teamcity-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/teamcity" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Teamcity integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-teamcity-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-telegram-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/telegram" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Telegram integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-telegram-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-unify-circuit-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/unify-circuit" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Unify Circuit integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-unify-circuit-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-webex-teams-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/webex-teams" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Webex Teams integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-webex-teams-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-zentao-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/zentao" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Zentao integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-zentao-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-squash-tm-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/squash-tm" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Squash Tm integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-squash-tm-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-github-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/github" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Github integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-github-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-git-guardian-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/git-guardian" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Git Guardian integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-git-guardian-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-google-cloud-platform-artifact-registry-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/google-cloud-platform-artifact-registry" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Google Cloud Platform Artifact Registry integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-google-cloud-platform-artifact-registry-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-google-cloud-platform-workload-identity-federation-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/google-cloud-platform-workload-identity-federation" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Google Cloud Platform Workload Identity Federation integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-google-cloud-platform-workload-identity-federation-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-mock-ci-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/mock-ci" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Mock Ci integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-mock-ci-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-mock-monitoring-update
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/integrations/mock-monitoring" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create or update the Mock Monitoring integration in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Integrations send the project's events and content to another service, with credentials stored
+      in GitLab.
+    tests:
+      - fixture: fixtures/integrations-group-mock-monitoring-update.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.integrations.group-disable
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/integrations/{slug}" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Disable an integration {slug} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Turns the integration off; its settings can be entered again.
+    tests:
+      - fixture: fixtures/integrations-group-disable.http
+        expect: delete
+        resource: "acme"
+
+  - id: gitlab.integrations.trigger-global-slack-command
+    match: { rest: { method: POST, path: "/api/v4/slack/trigger" } }
+    class: write
+    card: "Trigger a global slack command"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Runs a chat command (issue, deploy) or delivers a chat event.
+    tests:
+      - fixture: fixtures/integrations-trigger-global-slack-command.http
+        expect: write

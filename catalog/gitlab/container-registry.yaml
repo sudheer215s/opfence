@@ -1,0 +1,64 @@
+# GitLab REST API (gitlab.com/api/v4): Container registry.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.container-registry.delete-registry-repository
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/registry/repositories/{repository_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete container repository {repository_id} of project {id} with its images"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Images can be pushed again from their builds, as for Artifact Registry's Docker images.
+    tests:
+      - fixture: fixtures/container-registry-delete-registry-repository.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.container-registry.delete-multiple-registry-repository-tags
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/registry/repositories/{repository_id}/tags" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete multiple registry repository tags {repository_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Images can be pushed again from their builds, as for Artifact Registry's Docker images.
+    tests:
+      - fixture: fixtures/container-registry-delete-multiple-registry-repository-tags.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.container-registry.delete-registry-repository-tag
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/registry/repositories/{repository_id}/tags/{tag_name}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete a registry tag {tag_name} of container repository {repository_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Images can be pushed again from their builds, as for Artifact Registry's Docker images.
+    tests:
+      - fixture: fixtures/container-registry-delete-registry-repository-tag.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.container-registry.receives-notifications-from-container-registry-when-operation-occurs
+    match: { rest: { method: POST, path: "/api/v4/container_registry_event/events" } }
+    class: write
+    card: "Receive notifications from the container registry when an operation occurs"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Notifications from the registry itself.
+    tests:
+      - fixture: fixtures/container-registry-receives-notifications-from-container-registry-when-operation-occurs.http
+        expect: write

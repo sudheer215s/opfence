@@ -1,0 +1,5 @@
+# description: Delete an agent URL configuration of agent 7 7 in project acme/shop
+DELETE /api/v4/projects/acme%2Fshop/cluster_agents/7/url_configurations/7 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

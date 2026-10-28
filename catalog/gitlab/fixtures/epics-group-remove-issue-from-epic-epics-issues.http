@@ -1,0 +1,5 @@
+# description: Remove an issue from epic &5 7 in group acme
+DELETE /api/v4/groups/acme/epics/5/issues/7 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

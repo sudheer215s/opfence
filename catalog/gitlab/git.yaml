@@ -1,0 +1,210 @@
+# git over HTTPS to gitlab.com: smart HTTP fetches and pushes, and Git LFS. Repositories
+# sit under nested groups, so the resource is the project's whole path. As for GitHub's
+# git rules (catalog/github/git.yaml).
+operations:
+  - id: gitlab.git.fetch
+    match: { git: { service: upload-pack, command: fetch } }
+    class: read
+    resource: { arg: repository, kind: repository }
+    card: "Fetch from {repository}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://git-scm.com/docs/gitprotocol-http
+      - https://docs.gitlab.com/topics/git/lfs/
+    notes: >-
+      Every upload-pack request, the ref advertisement included, only reads, in protocol v0, v1 and
+      v2. A project path deeper than owner/repo is read as git only with .git, as GitLab serves it
+      (it redirects the path without it), since the host also serves the REST API.
+    tests:
+      - fixture: fixtures/git-info-refs-fetch.http
+        expect: read
+        resource: acme/platform/shop
+      - fixture: fixtures/git-upload-pack.http
+        expect: read
+        resource: acme/platform/shop
+
+  - id: gitlab.git.list-refs
+    match: { git: { service: receive-pack, command: list } }
+    class: read
+    resource: { arg: repository, kind: repository }
+    card: "List refs of {repository} before a push"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://git-scm.com/docs/gitprotocol-http
+      - https://docs.gitlab.com/topics/git/lfs/
+    notes: >-
+      The ref advertisement that starts a push, and the empty push git sends to check credentials
+      before a large upload. Neither changes a ref.
+    tests:
+      - fixture: fixtures/git-info-refs-push.http
+        expect: read
+        resource: acme/platform/shop
+      - fixture: fixtures/git-push-probe.http
+        expect: read
+        resource: acme/platform/shop
+
+  - id: gitlab.git.create-ref
+    match: { git: { service: receive-pack, command: create } }
+    class: write
+    resource: { arg: repository, kind: repository }
+    card: "Push new {ref} to {repository}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://git-scm.com/docs/gitprotocol-http
+      - https://docs.gitlab.com/topics/git/lfs/
+    tests:
+      - fixture: fixtures/git-push-create.http
+        expect: write
+        resource: acme/platform/shop
+      - fixture: fixtures/git-push-create-tag.http
+        expect: write
+        resource: acme/platform/shop
+
+  - id: gitlab.git.update-ref
+    match: { git: { service: receive-pack, command: update } }
+    class: write
+    resource: { arg: repository, kind: repository }
+    card: "Push {ref} of {repository} to {new}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://git-scm.com/docs/gitprotocol-http
+      - https://docs.gitlab.com/topics/git/lfs/
+    notes: >-
+      A forced push sends the same command as a fast-forward, so Opfence cannot tell them apart. On
+      feature branches that is accepted as a write; the default branch and tags have their own
+      rules. GitLab's protected branches refuse forced pushes unless allowed.
+    tests:
+      - fixture: fixtures/git-push-update.http
+        expect: write
+        resource: acme/platform/shop
+
+  - id: gitlab.git.update-default-branch
+    match: { git: { service: receive-pack, command: update, refs: [refs/heads/main, refs/heads/master] } }
+    class: delete
+    resource: { arg: repository, kind: repository }
+    card: "Push {ref} of {repository} to {new} (may be a force push)"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://git-scm.com/docs/gitprotocol-http
+      - https://docs.gitlab.com/topics/git/lfs/
+    notes: >-
+      The push may be forced, which rewrites the default branch; the old commits can be pushed back
+      from a clone.
+    tests:
+      - fixture: fixtures/git-push-update-main.http
+        expect: delete
+        resource: acme/platform/shop
+
+  - id: gitlab.git.update-tag
+    match: { git: { service: receive-pack, command: update, refs: ["refs/tags/*"] } }
+    class: delete
+    resource: { arg: repository, kind: repository }
+    card: "Move tag {ref} of {repository} to {new}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://git-scm.com/docs/gitprotocol-http
+      - https://docs.gitlab.com/topics/git/lfs/
+    notes: >-
+      Moving a tag changes what a release points at; the old target can be pushed back from a clone.
+    tests:
+      - fixture: fixtures/git-push-update-tag.http
+        expect: delete
+        resource: acme/platform/shop
+
+  - id: gitlab.git.delete-ref
+    match: { git: { service: receive-pack, command: delete } }
+    class: delete
+    resource: { arg: repository, kind: repository }
+    card: "Delete {ref} from {repository}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://git-scm.com/docs/gitprotocol-http
+      - https://docs.gitlab.com/topics/git/lfs/
+    notes: >-
+      The commits stay until garbage-collected and the ref can be pushed again from any clone.
+    tests:
+      - fixture: fixtures/git-push-delete.http
+        expect: delete
+        resource: acme/platform/shop
+
+  - id: gitlab.git.lfs-download
+    match: { git: { service: lfs, command: download } }
+    class: read
+    resource: { arg: repository, kind: repository }
+    card: "Download Git LFS objects from {repository}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://git-scm.com/docs/gitprotocol-http
+      - https://docs.gitlab.com/topics/git/lfs/
+    tests:
+      - fixture: fixtures/git-lfs-batch-download.http
+        expect: read
+        resource: acme/platform/shop
+
+  - id: gitlab.git.lfs-upload
+    match: { git: { service: lfs, command: upload } }
+    class: write
+    resource: { arg: repository, kind: repository }
+    card: "Upload Git LFS objects to {repository}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://git-scm.com/docs/gitprotocol-http
+      - https://docs.gitlab.com/topics/git/lfs/
+    tests:
+      - fixture: fixtures/git-lfs-batch-upload.http
+        expect: write
+        resource: acme/platform/shop
+
+  - id: gitlab.git.lfs-list-locks
+    match: { git: { service: lfs, command: list-locks } }
+    class: read
+    resource: { arg: repository, kind: repository }
+    card: "List Git LFS locks of {repository}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://git-scm.com/docs/gitprotocol-http
+      - https://docs.gitlab.com/topics/git/lfs/
+    tests:
+      - fixture: fixtures/git-lfs-locks-list.http
+        expect: read
+        resource: acme/platform/shop
+
+  - id: gitlab.git.lfs-lock
+    match: { git: { service: lfs, command: lock } }
+    class: write
+    resource: { arg: repository, kind: repository }
+    card: "Lock {path} in {repository} with Git LFS"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://git-scm.com/docs/gitprotocol-http
+      - https://docs.gitlab.com/topics/git/lfs/
+    tests:
+      - fixture: fixtures/git-lfs-lock.http
+        expect: write
+        resource: acme/platform/shop
+
+  - id: gitlab.git.lfs-unlock
+    match: { git: { service: lfs, command: unlock } }
+    class: write
+    resource: { arg: repository, kind: repository }
+    card: "Remove Git LFS lock {id} in {repository}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://git-scm.com/docs/gitprotocol-http
+      - https://docs.gitlab.com/topics/git/lfs/
+    tests:
+      - fixture: fixtures/git-lfs-unlock.http
+        expect: write
+        resource: acme/platform/shop

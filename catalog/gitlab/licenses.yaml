@@ -1,0 +1,90 @@
+# GitLab REST API (gitlab.com/api/v4): Licenses.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.licenses.create-software-license-policy
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/managed_licenses" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create a software license policy in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      License policies decide which dependencies merge requests may bring in.
+    tests:
+      - fixture: fixtures/licenses-create-software-license-policy.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.licenses.update-software-license-policy
+    match: { rest: { method: PATCH, path: "/api/v4/projects/{id}/managed_licenses/{managed_license_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Update a software license policy {managed_license_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      License policies decide which dependencies merge requests may bring in.
+    tests:
+      - fixture: fixtures/licenses-update-software-license-policy.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.licenses.delete-software-license-policy
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/managed_licenses/{managed_license_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Delete a software license policy {managed_license_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      License policies decide which dependencies merge requests may bring in.
+    tests:
+      - fixture: fixtures/licenses-delete-software-license-policy.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.licenses.create-license
+    match: { rest: { method: POST, path: "/api/v4/license" } }
+    class: write
+    card: "Create a license"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/licenses-create-license.http
+        expect: write
+
+  - id: gitlab.licenses.delete-license
+    match: { rest: { method: DELETE, path: "/api/v4/license/{id}" } }
+    class: delete
+    card: "Delete a license {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/licenses-delete-license.http
+        expect: delete
+
+  - id: gitlab.licenses.trigger-recalculation-of-billable-users
+    match: { rest: { method: PUT, path: "/api/v4/license/{id}/refresh_billable_users" } }
+    class: write
+    card: "Trigger recalculation of billable users {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/licenses-trigger-recalculation-of-billable-users.http
+        expect: write

@@ -1,0 +1,9 @@
+# description: Git LFS upload to acme/platform/shop
+POST /acme/platform/shop.git/info/lfs/objects/batch HTTP/1.1
+Host: gitlab.com
+Authorization: Basic b2F1dGgyOm9wZl9naXRsYWJfRVhBTVBMRQ==
+User-Agent: git/2.47.0
+Accept: application/vnd.git-lfs+json
+Content-Type: application/vnd.git-lfs+json
+
+{"operation": "upload", "transfers": ["basic"], "objects": [{"oid": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "size": 1024}]}

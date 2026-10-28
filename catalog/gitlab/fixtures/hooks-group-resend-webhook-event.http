@@ -1,0 +1,7 @@
+# description: Resend webhook 7 event 11 in group acme
+POST /api/v4/groups/acme/hooks/7/events/11/resend HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

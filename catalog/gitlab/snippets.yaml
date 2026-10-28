@@ -1,0 +1,122 @@
+# GitLab REST API (gitlab.com/api/v4): Snippets.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.snippets.create-snippet
+    match: { rest: { method: POST, path: "/api/v4/snippets" } }
+    class: write
+    when:
+      - if: { arg: body.visibility, in: ["public", "internal"] }
+        class: access
+      - if: { arg: query.visibility, in: ["public", "internal"] }
+        class: access
+    card: "Create a snippet"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A public or internal snippet is access, as a public gist is.
+    tests:
+      - fixture: fixtures/snippets-create-snippet.http
+        expect: write
+      - fixture: fixtures/snippets-create-snippet-visibility.http
+        expect: access
+
+  - id: gitlab.snippets.update-snippet
+    match: { rest: { method: PUT, path: "/api/v4/snippets/{id}" } }
+    class: write
+    when:
+      - if: { arg: body.visibility, in: ["public", "internal"] }
+        class: access
+      - if: { arg: query.visibility, in: ["public", "internal"] }
+        class: access
+    card: "Update snippet {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A public or internal snippet is access, as a public gist is.
+    tests:
+      - fixture: fixtures/snippets-update-snippet.http
+        expect: write
+      - fixture: fixtures/snippets-update-snippet-visibility.http
+        expect: access
+
+  - id: gitlab.snippets.delete-snippet
+    match: { rest: { method: DELETE, path: "/api/v4/snippets/{id}" } }
+    class: irreversible
+    card: "Delete snippet {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Deletes the snippet with its repository.
+    tests:
+      - fixture: fixtures/snippets-delete-snippet.http
+        expect: irreversible
+
+  - id: gitlab.snippets.create-project-snippet
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/snippets" } }
+    class: write
+    when:
+      - if: { arg: body.visibility, in: ["public", "internal"] }
+        class: access
+      - if: { arg: query.visibility, in: ["public", "internal"] }
+        class: access
+    resource: { arg: id, kind: project }
+    card: "Create a project snippet in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A public or internal snippet is access, as a public gist is.
+    tests:
+      - fixture: fixtures/snippets-create-project-snippet.http
+        expect: write
+        resource: "acme/shop"
+      - fixture: fixtures/snippets-create-project-snippet-visibility.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.snippets.update-project-snippet
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/snippets/{snippet_id}" } }
+    class: write
+    when:
+      - if: { arg: body.visibility, in: ["public", "internal"] }
+        class: access
+      - if: { arg: query.visibility, in: ["public", "internal"] }
+        class: access
+    resource: { arg: id, kind: project }
+    card: "Update a project snippet {snippet_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A public or internal snippet is access, as a public gist is.
+    tests:
+      - fixture: fixtures/snippets-update-project-snippet.http
+        expect: write
+        resource: "acme/shop"
+      - fixture: fixtures/snippets-update-project-snippet-visibility.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.snippets.delete-project-snippet
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/snippets/{snippet_id}" } }
+    class: irreversible
+    resource: { arg: id, kind: project }
+    card: "Delete a project snippet {snippet_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Deletes the snippet with its repository.
+    tests:
+      - fixture: fixtures/snippets-delete-project-snippet.http
+        expect: irreversible
+        resource: "acme/shop"

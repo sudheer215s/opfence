@@ -1,0 +1,545 @@
+# GitLab REST API (gitlab.com/api/v4): Groups.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.groups.update-group-security-settings
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/security_settings" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Update group security settings in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/groups-update-group-security-settings.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.groups.workhorse-authorize-file-upload
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/uploads/authorize" } }
+    class: read
+    resource: { arg: id, kind: group }
+    card: "Workhorse authorize the file upload in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/groups-workhorse-authorize-file-upload.http
+        expect: read
+        resource: "acme"
+
+  - id: gitlab.groups.upload-file-to-group
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/uploads" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Upload a file to group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/groups-upload-file-to-group.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.groups.delete-uploaded-file-by-id
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/uploads/{upload_id}" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Delete an uploaded file by ID {upload_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/groups-delete-uploaded-file-by-id.http
+        expect: delete
+        resource: "acme"
+
+  - id: gitlab.groups.delete-uploaded-file-by-secret-and-filename
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/uploads/{secret}/{filename}" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Delete an uploaded file by secret and filename {filename} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/groups-delete-uploaded-file-by-secret-and-filename.http
+        expect: delete
+        resource: "acme"
+
+  - id: gitlab.groups.reassign-placeholders
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/placeholder_reassignments" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Reassign placeholders in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/groups-reassign-placeholders.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.groups.workhorse-authorization-for-reassignment-csv-file
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/placeholder_reassignments/authorize" } }
+    class: read
+    resource: { arg: id, kind: group }
+    card: "Workhorse authorization for the reassignment CSV file in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/groups-workhorse-authorization-for-reassignment-csv-file.http
+        expect: read
+        resource: "acme"
+
+  - id: gitlab.groups.create-group
+    match: { rest: { method: POST, path: "/api/v4/groups" } }
+    class: credential
+    when:
+      - if: { arg: body.visibility, in: ["public", "internal"] }
+        class: access
+      - if: { arg: query.visibility, in: ["public", "internal"] }
+        class: access
+      - if: { arg: body.require_two_factor_authentication, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: query.require_two_factor_authentication, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+    response:
+      redact: ["**.runners_token"]
+      class: write
+    card: "Create GitLab group {body.name}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential,
+      for its response. A public or internal group, or one that does not require two-factor
+      authentication, is access.
+    tests:
+      - fixture: fixtures/groups-create-group.http
+        expect: credential
+        response: fixtures/groups-create-group-response.json
+      - fixture: fixtures/groups-create-group-visibility.http
+        expect: access
+
+  - id: gitlab.groups.update-group-attributes
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}" } }
+    class: credential
+    when:
+      - if: { arg: body.visibility, in: ["public", "internal"] }
+        class: access
+      - if: { arg: query.visibility, in: ["public", "internal"] }
+        class: access
+      - if: { arg: body.require_two_factor_authentication, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: query.require_two_factor_authentication, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: body.two_factor_grace_period, present: true }
+        class: access
+      - if: { arg: query.two_factor_grace_period, present: true }
+        class: access
+      - if: { arg: body.share_with_group_lock, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: query.share_with_group_lock, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: body.membership_lock, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: query.membership_lock, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: body.prevent_sharing_groups_outside_hierarchy, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: query.prevent_sharing_groups_outside_hierarchy, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: body.prevent_forking_outside_group, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: query.prevent_forking_outside_group, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: body.ip_restriction_ranges, present: true }
+        class: access
+      - if: { arg: query.ip_restriction_ranges, present: true }
+        class: access
+      - if: { arg: body.allowed_email_domains_list, present: true }
+        class: access
+      - if: { arg: query.allowed_email_domains_list, present: true }
+        class: access
+      - if: { arg: body.default_branch_protection, present: true }
+        class: access
+      - if: { arg: query.default_branch_protection, present: true }
+        class: access
+      - if: { arg: body.default_branch_protection_defaults, present: true }
+        class: access
+      - if: { arg: query.default_branch_protection_defaults, present: true }
+        class: access
+      - if: { arg: body.enabled_git_access_protocol, present: true }
+        class: access
+      - if: { arg: query.enabled_git_access_protocol, present: true }
+        class: access
+      - if: { arg: body.request_access_enabled, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+      - if: { arg: query.request_access_enabled, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+      - if: { arg: body.only_allow_merge_if_pipeline_succeeds, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: query.only_allow_merge_if_pipeline_succeeds, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: body.allow_merge_on_skipped_pipeline, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+      - if: { arg: query.allow_merge_on_skipped_pipeline, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: access
+      - if: { arg: body.require_sha_for_merge, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: query.require_sha_for_merge, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: body.ldap_cn, present: true }
+        class: access
+      - if: { arg: query.ldap_cn, present: true }
+        class: access
+      - if: { arg: body.ldap_access, present: true }
+        class: access
+      - if: { arg: query.ldap_access, present: true }
+        class: access
+      - if: { arg: body.step_up_auth_required_oauth_provider, present: true }
+        class: access
+      - if: { arg: query.step_up_auth_required_oauth_provider, present: true }
+        class: access
+      - if: { arg: body.service_access_tokens_expiration_enforced, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: query.service_access_tokens_expiration_enforced, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: body.auto_ban_user_on_excessive_projects_download, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: query.auto_ban_user_on_excessive_projects_download, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+      - if: { arg: body.unique_project_download_limit, present: true }
+        class: access
+      - if: { arg: query.unique_project_download_limit, present: true }
+        class: access
+      - if: { arg: body.shared_runners_minutes_limit, present: true }
+        class: money
+      - if: { arg: query.shared_runners_minutes_limit, present: true }
+        class: money
+      - if: { arg: body.extra_shared_runners_minutes_limit, present: true }
+        class: money
+      - if: { arg: query.extra_shared_runners_minutes_limit, present: true }
+        class: money
+    response:
+      redact: ["**.runners_token"]
+      class: write
+    resource: { arg: id, kind: group }
+    card: "Change the settings of group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential,
+      for its response. A public or internal group, and any change to two-factor enforcement,
+      sharing and forking locks, IP and email domain restrictions, default branch protection, merge
+      safeguards, LDAP links or token expiry enforcement, is access; compute minute limits are
+      money.
+    tests:
+      - fixture: fixtures/groups-update-group-attributes.http
+        expect: credential
+        response: fixtures/groups-update-group-attributes-response.json
+        resource: "acme"
+      - fixture: fixtures/groups-update-group-attributes-visibility.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.groups.retrieve-group
+    match: { rest: { method: GET, path: "/api/v4/groups/{id}" } }
+    class: credential
+    response:
+      redact: ["**.runners_token"]
+      class: read
+    resource: { arg: id, kind: group }
+    card: "Read group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential.
+    tests:
+      - fixture: fixtures/groups-retrieve-group.http
+        expect: credential
+        response: fixtures/groups-retrieve-group-response.json
+        resource: "acme"
+
+  - id: gitlab.groups.schedule-group-for-deletion
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}" } }
+    class: delete
+    when:
+      - if: { arg: body.permanently_remove, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: irreversible
+      - if: { arg: query.permanently_remove, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: irreversible
+    resource: { arg: id, kind: group }
+    card: "Delete GitLab group {id} with its subgroups and projects"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Marks the group for deletion; it can be restored until then. permanently_remove deletes it at
+      once (condition below).
+    tests:
+      - fixture: fixtures/groups-schedule-group-for-deletion.http
+        expect: delete
+        resource: "acme"
+      - fixture: fixtures/groups-schedule-group-for-deletion-permanently-remove.http
+        expect: irreversible
+        resource: "acme"
+
+  - id: gitlab.groups.archive-group
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/archive" } }
+    class: credential
+    response:
+      redact: ["**.runners_token"]
+      class: write
+    resource: { arg: id, kind: group }
+    card: "Archive group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential,
+      for its response.
+    tests:
+      - fixture: fixtures/groups-archive-group.http
+        expect: credential
+        response: fixtures/groups-archive-group-response.json
+        resource: "acme"
+
+  - id: gitlab.groups.unarchive-group
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/unarchive" } }
+    class: credential
+    response:
+      redact: ["**.runners_token"]
+      class: write
+    resource: { arg: id, kind: group }
+    card: "Unarchive group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential,
+      for its response.
+    tests:
+      - fixture: fixtures/groups-unarchive-group.http
+        expect: credential
+        response: fixtures/groups-unarchive-group-response.json
+        resource: "acme"
+
+  - id: gitlab.groups.restore-group
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/restore" } }
+    class: credential
+    response:
+      redact: ["**.runners_token"]
+      class: write
+    resource: { arg: id, kind: group }
+    card: "Restore group {id}, which is marked for deletion"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential,
+      for its response.
+    tests:
+      - fixture: fixtures/groups-restore-group.http
+        expect: credential
+        response: fixtures/groups-restore-group-response.json
+        resource: "acme"
+
+  - id: gitlab.groups.list-all-projects-in-group
+    match: { rest: { method: GET, path: "/api/v4/groups/{id}/projects" } }
+    class: credential
+    response:
+      redact: ["**.runners_token"]
+      class: read
+    resource: { arg: id, kind: group }
+    card: "List projects of group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential.
+    tests:
+      - fixture: fixtures/groups-list-all-projects-in-group.http
+        expect: credential
+        response: fixtures/groups-list-all-projects-in-group-response.json
+        resource: "acme"
+
+  - id: gitlab.groups.list-all-shared-projects
+    match: { rest: { method: GET, path: "/api/v4/groups/{id}/projects/shared" } }
+    class: credential
+    response:
+      redact: ["**.runners_token"]
+      class: read
+    resource: { arg: id, kind: group }
+    card: "List projects shared with group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential.
+    tests:
+      - fixture: fixtures/groups-list-all-shared-projects.http
+        expect: credential
+        response: fixtures/groups-list-all-shared-projects-response.json
+        resource: "acme"
+
+  - id: gitlab.groups.transfer-project-to-group
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/projects/{project_id}" } }
+    class: credential
+    response:
+      redact: ["**.runners_token"]
+      class: access
+    resource: { arg: id, kind: group }
+    card: "Move project {project_id} into group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Moves a project into the group, whose members gain access to it. Maintainers and owners get
+      the legacy runner registration token (runners_token) in the project or group, which registers
+      a runner that then receives the project's jobs and their CI/CD variables. Under opfence run
+      the proxy redacts it; anywhere else the call stays credential, for its response.
+    tests:
+      - fixture: fixtures/groups-transfer-project-to-group.http
+        expect: credential
+        response: fixtures/groups-transfer-project-to-group-response.json
+        resource: "acme"
+
+  - id: gitlab.groups.transfer-group
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/transfer" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Transfer group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/groups-transfer-group.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.groups.transfer-group-to-organization
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/transfer_to_organization" } }
+    class: credential
+    response:
+      redact: ["**.runners_token"]
+      class: access
+    resource: { arg: id, kind: group }
+    card: "Transfer group {id} to an organization"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential,
+      for its response.
+    tests:
+      - fixture: fixtures/groups-transfer-group-to-organization.http
+        expect: credential
+        response: fixtures/groups-transfer-group-to-organization-response.json
+        resource: "acme"
+
+  - id: gitlab.groups.add-group-to-group
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/share" } }
+    class: credential
+    response:
+      redact: ["**.runners_token"]
+      class: access
+    resource: { arg: id, kind: group }
+    card: "Share group {id} with group {body.group_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Maintainers and owners get the legacy runner registration token (runners_token) in the project
+      or group, which registers a runner that then receives the project's jobs and their CI/CD
+      variables. Under opfence run the proxy redacts it; anywhere else the call stays credential,
+      for its response.
+    tests:
+      - fixture: fixtures/groups-add-group-to-group.http
+        expect: credential
+        response: fixtures/groups-add-group-to-group-response.json
+        resource: "acme"
+
+  - id: gitlab.groups.remove-group-from-group
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/share/{group_id}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Stop sharing group {id} with group {group_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/groups-remove-group-from-group.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.groups.remove-shared-project-from-group
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/shared_projects/{project_id}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Remove a shared project from group {id} {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/groups-remove-shared-project-from-group.http
+        expect: access
+        resource: "acme"

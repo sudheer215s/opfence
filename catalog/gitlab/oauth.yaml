@@ -1,0 +1,61 @@
+# OAuth on gitlab.com (Doorkeeper): glab signs in with the device flow and refreshes
+# its session at /oauth/token.
+operations:
+  - id: gitlab.oauth.token
+    match: { rest: { method: POST, path: "/oauth/token" } }
+    class: credential
+    unlisted: "Doorkeeper's OAuth routes, outside the REST API's OpenAPI description"
+    response:
+      mint: [access_token, refresh_token]
+      class: read
+    card: "Exchange an OAuth grant for GitLab tokens"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://docs.gitlab.com/api/oauth2/
+      - https://github.com/doorkeeper-gem/doorkeeper/blob/main/config/routes.rb
+    notes: >-
+      Returns an access token and a refresh token for whichever grant is sent: an authorization
+      code, a device code, a refresh token, or a user's password. Under opfence run both reach the
+      agent as placeholders minted for this session, and the refresh token is swapped back in when
+      glab refreshes, so the exchange is a read there, as exchanging a credential the caller already
+      holds is (ARCHITECTURE §4.5); anywhere else it stays credential.
+    tests:
+      - fixture: fixtures/oauth-token-refresh.http
+        expect: credential
+        response: fixtures/oauth-token-response.json
+      - fixture: fixtures/oauth-token-device.http
+        expect: credential
+        response: fixtures/oauth-token-response.json
+
+  - id: gitlab.oauth.revoke
+    match: { rest: { method: POST, path: "/oauth/revoke" } }
+    class: access
+    unlisted: "Doorkeeper's OAuth routes, outside the REST API's OpenAPI description"
+    card: "Revoke an OAuth token"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://docs.gitlab.com/api/oauth2/
+      - https://github.com/doorkeeper-gem/doorkeeper/blob/main/config/routes.rb
+    notes: >-
+      Whatever uses the token stops working.
+    tests:
+      - fixture: fixtures/oauth-revoke.http
+        expect: access
+
+  - id: gitlab.oauth.authorize-device
+    match: { rest: { method: POST, path: "/oauth/authorize_device" } }
+    class: read
+    unlisted: "Doorkeeper's OAuth routes, outside the REST API's OpenAPI description"
+    card: "Start a device sign-in"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://docs.gitlab.com/api/oauth2/
+      - https://github.com/doorkeeper-gem/doorkeeper/blob/main/config/routes.rb
+    notes: >-
+      Returns a code the user enters in a browser; no token is issued until they approve it.
+    tests:
+      - fixture: fixtures/oauth-device-authorize.http
+        expect: read

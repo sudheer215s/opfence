@@ -1,0 +1,7 @@
+# description: Create an organization
+POST /api/v4/organizations HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

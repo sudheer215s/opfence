@@ -1,0 +1,100 @@
+# GitLab REST API (gitlab.com/api/v4): Feature flags.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.feature-flags.create-feature-flag-user-list
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/feature_flags_user_lists" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create a feature flag user list in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/feature-flags-create-feature-flag-user-list.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.feature-flags.update-feature-flag-user-list
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/feature_flags_user_lists/{iid}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update a feature flag user list {iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/feature-flags-update-feature-flag-user-list.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.feature-flags.delete-feature-flag-user-list
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/feature_flags_user_lists/{iid}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete feature flag user list {iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/feature-flags-delete-feature-flag-user-list.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.feature-flags.create-feature-flag
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/feature_flags" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create a feature flag in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/feature-flags-create-feature-flag.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.feature-flags.update-feature-flag-settings
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/feature_flags_settings" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update feature flag settings in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/feature-flags-update-feature-flag-settings.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.feature-flags.update-feature-flag
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/feature_flags/{feature_flag_name}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update feature flag {feature_flag_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/feature-flags-update-feature-flag.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.feature-flags.delete-feature-flag
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/feature_flags/{feature_flag_name}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete feature flag {feature_flag_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/feature-flags-delete-feature-flag.http
+        expect: delete
+        resource: "acme/shop"

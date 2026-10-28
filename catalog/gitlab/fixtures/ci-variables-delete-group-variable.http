@@ -1,0 +1,5 @@
+# description: Delete CI/CD variable DATABASE_URL from group acme
+DELETE /api/v4/groups/acme/variables/DATABASE_URL HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

@@ -1,0 +1,7 @@
+# description: Update an application 42
+PUT /api/v4/user/applications/42 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

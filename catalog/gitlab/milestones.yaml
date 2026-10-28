@@ -1,0 +1,100 @@
+# GitLab REST API (gitlab.com/api/v4): Milestones.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.milestones.create-project-milestone
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/milestones" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create a project milestone in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/milestones-create-project-milestone.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.milestones.update-project-milestone
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/milestones/{milestone_id}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update a project milestone {milestone_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/milestones-update-project-milestone.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.milestones.delete-project-milestone
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/milestones/{milestone_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete a project milestone {milestone_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/milestones-delete-project-milestone.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.milestones.promote-project-milestone-to-group-milestone
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/milestones/{milestone_id}/promote" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Promote a project milestone {milestone_id} to a group milestone in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/milestones-promote-project-milestone-to-group-milestone.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.milestones.create-group-milestone
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/milestones" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Create a group milestone in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/milestones-create-group-milestone.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.milestones.update-group-milestone
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/milestones/{milestone_id}" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Update a group milestone {milestone_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/milestones-update-group-milestone.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.milestones.delete-group-milestone
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/milestones/{milestone_id}" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Delete a group milestone {milestone_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/milestones-delete-group-milestone.http
+        expect: delete
+        resource: "acme"

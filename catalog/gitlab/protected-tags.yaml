@@ -1,0 +1,34 @@
+# GitLab REST API (gitlab.com/api/v4): Protected tags.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.protected-tags.protect-repository-tag
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/protected_tags" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Protect a repository tag in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Tag protection decides who can create and move release tags.
+    tests:
+      - fixture: fixtures/protected-tags-protect-repository-tag.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.protected-tags.unprotect-repository-tags
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/protected_tags/{name}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Unprotect repository tags {name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Tag protection decides who can create and move release tags.
+    tests:
+      - fixture: fixtures/protected-tags-unprotect-repository-tags.http
+        expect: access
+        resource: "acme/shop"

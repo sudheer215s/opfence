@@ -1,0 +1,7 @@
+# description: Create or update the Mock Ci integration in group acme
+PUT /api/v4/groups/acme/integrations/mock-ci HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

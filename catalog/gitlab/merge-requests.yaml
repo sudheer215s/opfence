@@ -1,0 +1,240 @@
+# GitLab REST API (gitlab.com/api/v4): Merge requests.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.merge-requests.create-merge-request-dependency
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/blocks" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create merge request !{merge_request_iid} dependency in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/merge-requests-create-merge-request-dependency.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.merge-requests.remove-merge-request-dependency
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/blocks/{block_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Remove merge request !{merge_request_iid} dependency {block_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/merge-requests-remove-merge-request-dependency.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.merge-requests.set-estimated-time-for-merge-request
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/time_estimate" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Set the estimated time for merge request !{merge_request_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/merge-requests-set-estimated-time-for-merge-request.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.merge-requests.reset-estimated-time-for-merge-request
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/reset_time_estimate" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Reset the estimated time for merge request !{merge_request_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/merge-requests-reset-estimated-time-for-merge-request.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.merge-requests.add-spent-time-for-merge-request
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/add_spent_time" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Add spent time for merge request !{merge_request_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/merge-requests-add-spent-time-for-merge-request.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.merge-requests.reset-spent-time-for-merge-request
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/reset_spent_time" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Reset spent time for merge request !{merge_request_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/merge-requests-reset-spent-time-for-merge-request.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.merge-requests.create-merge-request
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Open a merge request from {body.source_branch} to {body.target_branch} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/merge-requests-create-merge-request.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.merge-requests.delete-merge-request
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}" } }
+    class: irreversible
+    resource: { arg: id, kind: project }
+    card: "Delete merge request !{merge_request_iid} of project {id} with its discussion"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      GitLab keeps no deleted merge request, with its discussion.
+    tests:
+      - fixture: fixtures/merge-requests-delete-merge-request.http
+        expect: irreversible
+        resource: "acme/shop"
+
+  - id: gitlab.merge-requests.update-merge-request
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update merge request !{merge_request_iid} of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/merge-requests-update-merge-request.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.merge-requests.create-context-commits-for-merge-request
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/context_commits" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create context commits for merge request !{merge_request_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/merge-requests-create-context-commits-for-merge-request.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.merge-requests.delete-context-commits-from-merge-request
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/context_commits" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete context commits from merge request !{merge_request_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/merge-requests-delete-context-commits-from-merge-request.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.merge-requests.create-merge-request-pipeline
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/pipelines" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create merge request !{merge_request_iid} pipeline in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/merge-requests-create-merge-request-pipeline.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.merge-requests.merge-merge-request
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/merge" } }
+    class: write
+    when:
+      - if: { arg: body.should_remove_source_branch, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: delete
+      - if: { arg: query.should_remove_source_branch, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: delete
+    resource: { arg: id, kind: project }
+    card: "Merge merge request !{merge_request_iid} of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Removing the source branch is delete.
+    tests:
+      - fixture: fixtures/merge-requests-merge-merge-request.http
+        expect: write
+        resource: "acme/shop"
+      - fixture: fixtures/merge-requests-merge-merge-request-should-remove-source-branch.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.merge-requests.cancel-merge-when-pipeline-succeeds
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/cancel_merge_when_pipeline_succeeds" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Cancel merge when pipeline succeeds {merge_request_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      GitLab has deprecated this endpoint.
+    tests:
+      - fixture: fixtures/merge-requests-cancel-merge-when-pipeline-succeeds.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.merge-requests.cancel-auto-merge
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/cancel_auto_merge" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Cancel auto merge {merge_request_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/merge-requests-cancel-auto-merge.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.merge-requests.rebase-merge-request
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/rebase" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Rebase merge request !{merge_request_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/merge-requests-rebase-merge-request.http
+        expect: write
+        resource: "acme/shop"

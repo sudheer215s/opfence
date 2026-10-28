@@ -1,0 +1,7 @@
+# description: Update your user preferences
+PUT /api/v4/user/preferences HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

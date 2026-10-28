@@ -1,0 +1,5 @@
+# description: Delete a registered runner
+DELETE /api/v4/runners HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

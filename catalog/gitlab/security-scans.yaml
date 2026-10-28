@@ -1,0 +1,18 @@
+# GitLab REST API (gitlab.com/api/v4): Security scans.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.security-scans.scan-file-for-vulnerabilities
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/security_scans/sast/{sast_endpoint}" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Scan a file for vulnerabilities {sast_endpoint} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Scans the file sent; nothing is stored.
+    tests:
+      - fixture: fixtures/security-scans-scan-file-for-vulnerabilities.http
+        expect: read
+        resource: "acme/shop"

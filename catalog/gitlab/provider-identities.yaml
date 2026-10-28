@@ -1,0 +1,66 @@
+# GitLab REST API (gitlab.com/api/v4): Provider identities.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.provider-identities.update-extern-uid-field-for-saml-identity
+    match: { rest: { method: PATCH, path: "/api/v4/groups/{id}/saml/{uid}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Update `extern_uid` field for a SAML identity {uid} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      SAML and SCIM identities decide who signs in as which user.
+    tests:
+      - fixture: fixtures/provider-identities-update-extern-uid-field-for-saml-identity.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.provider-identities.delete-saml-identity
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/saml/{uid}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Delete a SAML identity {uid} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      SAML and SCIM identities decide who signs in as which user.
+    tests:
+      - fixture: fixtures/provider-identities-delete-saml-identity.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.provider-identities.update-extern-uid-field-for-scim-identity
+    match: { rest: { method: PATCH, path: "/api/v4/groups/{id}/scim/{uid}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Update `extern_uid` field for a SCIM identity {uid} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      SAML and SCIM identities decide who signs in as which user.
+    tests:
+      - fixture: fixtures/provider-identities-update-extern-uid-field-for-scim-identity.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.provider-identities.delete-scim-identity
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/scim/{uid}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Delete a SCIM identity {uid} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      SAML and SCIM identities decide who signs in as which user.
+    tests:
+      - fixture: fixtures/provider-identities-delete-scim-identity.http
+        expect: access
+        resource: "acme"

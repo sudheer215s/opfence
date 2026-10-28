@@ -1,0 +1,30 @@
+# GitLab REST API (gitlab.com/api/v4): CI minutes.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.ci-minutes.create-compute-minutes-purchase-record-for-namespace
+    match: { rest: { method: POST, path: "/api/v4/namespaces/{id}/minutes" } }
+    class: money
+    card: "Create a compute minutes purchase record for the namespace {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      GitLab.com subscription administration. GitLab has deprecated this endpoint.
+    tests:
+      - fixture: fixtures/ci-minutes-create-compute-minutes-purchase-record-for-namespace.http
+        expect: money
+
+  - id: gitlab.ci-minutes.transfer-purchased-compute-minutes-packs-to-another-namespace
+    match: { rest: { method: PATCH, path: "/api/v4/namespaces/{id}/minutes/move/{target_id}" } }
+    class: money
+    card: "Transfer purchased compute minutes packs to another namespace {target_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      GitLab.com subscription administration. GitLab has deprecated this endpoint.
+    tests:
+      - fixture: fixtures/ci-minutes-transfer-purchased-compute-minutes-packs-to-another-namespace.http
+        expect: money

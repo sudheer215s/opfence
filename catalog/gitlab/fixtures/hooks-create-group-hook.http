@@ -1,0 +1,7 @@
+# description: Add a webhook to … in group acme
+POST /api/v4/groups/acme/hooks HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{"url": "https://hooks.example.com/gitlab", "push_events": true}

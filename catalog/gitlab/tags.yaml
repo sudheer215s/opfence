@@ -1,0 +1,32 @@
+# GitLab REST API (gitlab.com/api/v4): Tags.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.tags.create-tag
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/repository/tags" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create tag {body.tag_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/tags-create-tag.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.tags.delete-tag
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/repository/tags/{tag_name}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete tag {tag_name} of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A tag can be pushed again from any clone.
+    tests:
+      - fixture: fixtures/tags-delete-tag.http
+        expect: delete
+        resource: "acme/shop"

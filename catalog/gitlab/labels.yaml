@@ -1,0 +1,176 @@
+# GitLab REST API (gitlab.com/api/v4): Labels.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.labels.create-project-label
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/labels" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create a project label in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/labels-create-project-label.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.labels.update-label-at-least-one-optional-parameter-is-required
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/labels" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update an existing label. At least one optional parameter is required in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      GitLab has deprecated this endpoint.
+    tests:
+      - fixture: fixtures/labels-update-label-at-least-one-optional-parameter-is-required.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.labels.delete-label
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/labels" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete an existing label in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      GitLab has deprecated this endpoint.
+    tests:
+      - fixture: fixtures/labels-delete-label.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.labels.update-project-label
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/labels/{name}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update a project label {name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/labels-update-project-label.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.labels.delete-project-label
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/labels/{name}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete a project label {name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/labels-delete-project-label.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.labels.promote-label-to-group-label
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/labels/promote" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Promote a label to a group label in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      GitLab has deprecated this endpoint.
+    tests:
+      - fixture: fixtures/labels-promote-label-to-group-label.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.labels.promote-project-label-to-group-label
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/labels/{name}/promote" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Promote a project label {name} to a group label in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/labels-promote-project-label-to-group-label.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.labels.create-group-label
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/labels" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Create a group label in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/labels-create-group-label.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.labels.group-update-group-label-groups-labels
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/labels" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Update a group label in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/labels-group-update-group-label-groups-labels.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.labels.group-delete-group-label-groups-labels
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/labels" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Delete a group label in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/labels-group-delete-group-label-groups-labels.http
+        expect: delete
+        resource: "acme"
+
+  - id: gitlab.labels.group-update-group-label-groups-labels-2
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/labels/{name}" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Update a group label {name} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/labels-group-update-group-label-groups-labels-2.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.labels.group-delete-group-label-groups-labels-2
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/labels/{name}" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Delete a group label {name} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/labels-group-delete-group-label-groups-labels-2.http
+        expect: delete
+        resource: "acme"

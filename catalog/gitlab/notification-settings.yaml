@@ -1,0 +1,42 @@
+# GitLab REST API (gitlab.com/api/v4): Notification settings.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.notification-settings.update-global-notification-settings
+    match: { rest: { method: PUT, path: "/api/v4/notification_settings" } }
+    class: write
+    card: "Update global notification settings"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/notification-settings-update-global-notification-settings.http
+        expect: write
+
+  - id: gitlab.notification-settings.update-notification-settings-for-group
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/notification_settings" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Update notification settings for group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/notification-settings-update-notification-settings-for-group.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.notification-settings.update-notification-settings-for-project
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/notification_settings" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update notification settings for project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/notification-settings-update-notification-settings-for-project.http
+        expect: write
+        resource: "acme/shop"

@@ -1,0 +1,7 @@
+# description: List all recipe upload URLs stable in project acme/shop
+POST /api/v4/projects/acme%2Fshop/packages/conan/v1/conans/shop-ui/1.0.0/acme/stable/upload_urls HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

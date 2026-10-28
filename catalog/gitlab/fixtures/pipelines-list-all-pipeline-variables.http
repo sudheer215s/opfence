@@ -1,0 +1,5 @@
+# description: Read the variables of pipeline 1001 in project acme/shop
+GET /api/v4/projects/acme%2Fshop/pipelines/1001/variables HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

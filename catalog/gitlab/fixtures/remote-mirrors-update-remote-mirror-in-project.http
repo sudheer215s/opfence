@@ -1,0 +1,7 @@
+# description: Update a remote mirror in project acme/shop 7
+PUT /api/v4/projects/acme%2Fshop/remote_mirrors/7 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

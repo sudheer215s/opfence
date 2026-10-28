@@ -1,0 +1,5 @@
+# description: Delete a URL variable DATABASE_URL of webhook 7 in group acme
+DELETE /api/v4/groups/acme/hooks/7/url_variables/DATABASE_URL HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

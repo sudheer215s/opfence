@@ -1,0 +1,7 @@
+# description: Create or update the Youtrack integration in project acme/shop
+PUT /api/v4/projects/acme%2Fshop/services/youtrack HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

@@ -1,0 +1,163 @@
+# GitLab REST API (gitlab.com/api/v4): Terraform.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.terraform.retrieve-terraform-state-version
+    match: { rest: { method: GET, path: "/api/v4/projects/{id}/terraform/state/{name}/versions/{serial}" } }
+    class: credential
+    resource: { arg: id, kind: project }
+    card: "Read version {serial} of Terraform state {name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Terraform state holds resources' attributes in plain text, sensitive ones included.
+    tests:
+      - fixture: fixtures/terraform-retrieve-terraform-state-version.http
+        expect: credential
+        resource: "acme/shop"
+
+  - id: gitlab.terraform.delete-terraform-state-version
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/terraform/state/{name}/versions/{serial}" } }
+    class: irreversible
+    resource: { arg: id, kind: project }
+    card: "Delete Terraform state {name} version {serial} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Terraform state is the record of what Terraform manages; without it the resources are no
+      longer managed.
+    tests:
+      - fixture: fixtures/terraform-delete-terraform-state-version.http
+        expect: irreversible
+        resource: "acme/shop"
+
+  - id: gitlab.terraform.retrieve-terraform-state
+    match: { rest: { method: GET, path: "/api/v4/projects/{id}/terraform/state/{name}" } }
+    class: credential
+    resource: { arg: id, kind: project }
+    card: "Read Terraform state {name} of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Terraform state holds resources' attributes in plain text, sensitive ones included.
+    tests:
+      - fixture: fixtures/terraform-retrieve-terraform-state.http
+        expect: credential
+        resource: "acme/shop"
+
+  - id: gitlab.terraform.create-or-update-terraform-state
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/terraform/state/{name}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create or update Terraform state {name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      GitLab keeps earlier versions of the state.
+    tests:
+      - fixture: fixtures/terraform-create-or-update-terraform-state.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.terraform.delete-terraform-state
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/terraform/state/{name}" } }
+    class: irreversible
+    resource: { arg: id, kind: project }
+    card: "Delete Terraform state {name} of project {id} with every version"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Terraform state is the record of what Terraform manages; without it the resources are no
+      longer managed.
+    tests:
+      - fixture: fixtures/terraform-delete-terraform-state.http
+        expect: irreversible
+        resource: "acme/shop"
+
+  - id: gitlab.terraform.authorize-terraform-state-upload
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/terraform/state/{name}/authorize" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Authorize Terraform state {name} upload in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/terraform-authorize-terraform-state-upload.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.terraform.lock-terraform-state
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/terraform/state/{name}/lock" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Lock Terraform state {name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/terraform-lock-terraform-state.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.terraform.unlock-terraform-state
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/terraform/state/{name}/lock" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Unlock Terraform state {name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Force-unlocking can let two applies run at once.
+    tests:
+      - fixture: fixtures/terraform-unlock-terraform-state.http
+        expect: write
+        resource: "acme/shop"
+      - fixture: fixtures/terraform-unlock-terraform-state-format-suffix.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.terraform.workhorse-authorize-terraform-module-package-file
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/terraform/modules/{module_name}/{module_system}/{module_version}/file/authorize" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Workhorse authorize Terraform Module package file {module_version} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/terraform-workhorse-authorize-terraform-module-package-file.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.terraform.upload-terraform-module-package-file
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/terraform/modules/{module_name}/{module_system}/{module_version}/file" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Upload Terraform Module package file {module_version} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/terraform-upload-terraform-module-package-file.http
+        expect: write
+        resource: "acme/shop"

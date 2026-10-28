@@ -1,0 +1,7 @@
+# description: Retrieve direct connection details for the AI Gateway
+POST /api/v4/code_suggestions/direct_access HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

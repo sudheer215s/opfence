@@ -1,0 +1,34 @@
+# GitLab REST API (gitlab.com/api/v4): Compliance policy settings.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.compliance-policy-settings.set-status-of-external-control
+    match: { rest: { method: PATCH, path: "/api/v4/projects/{id}/compliance_external_controls/{control_id}/status" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Set status of an external control {control_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Compliance controls and security policy settings decide what merge requests and projects must
+      satisfy.
+    tests:
+      - fixture: fixtures/compliance-policy-settings-set-status-of-external-control.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.compliance-policy-settings.update-security-policy-settings
+    match: { rest: { method: PUT, path: "/api/v4/admin/security/compliance_policy_settings" } }
+    class: access
+    card: "Update security policy settings"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Compliance controls and security policy settings decide what merge requests and projects must
+      satisfy.
+    tests:
+      - fixture: fixtures/compliance-policy-settings-update-security-policy-settings.http
+        expect: access

@@ -1,0 +1,5 @@
+# description: Delete job 2002 artifacts in project acme/shop
+DELETE /api/v4/projects/acme%2Fshop/jobs/2002/artifacts HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

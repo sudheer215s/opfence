@@ -1,0 +1,7 @@
+# description: Add an emoji reaction to merge request !12 comment 7 in project acme/shop
+POST /api/v4/projects/acme%2Fshop/merge_requests/12/notes/7/award_emoji HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

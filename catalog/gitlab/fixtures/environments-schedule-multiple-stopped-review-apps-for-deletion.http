@@ -1,0 +1,5 @@
+# description: Schedule multiple stopped review apps for deletion in project acme/shop
+DELETE /api/v4/projects/acme%2Fshop/environments/review_apps HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

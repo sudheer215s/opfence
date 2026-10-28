@@ -1,0 +1,60 @@
+# GitLab REST API (gitlab.com/api/v4): Alert management.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.alert-management.workhorse-authorize-metric-image-file-upload
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/alert_management_alerts/{alert_iid}/metric_images/authorize" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Workhorse authorize metric image file upload {alert_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/alert-management-workhorse-authorize-metric-image-file-upload.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.alert-management.upload-metric-image
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/alert_management_alerts/{alert_iid}/metric_images" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Upload a metric image {alert_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/alert-management-upload-metric-image.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.alert-management.update-metric-image
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/alert_management_alerts/{alert_iid}/metric_images/{metric_image_id}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update a metric image of alert {alert_iid} {metric_image_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/alert-management-update-metric-image.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.alert-management.delete-metric-image
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/alert_management_alerts/{alert_iid}/metric_images/{metric_image_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete a metric image of alert {alert_iid} {metric_image_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/alert-management-delete-metric-image.http
+        expect: delete
+        resource: "acme/shop"

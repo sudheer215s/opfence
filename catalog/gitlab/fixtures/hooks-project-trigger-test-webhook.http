@@ -1,0 +1,7 @@
+# description: Trigger a test webhook 7 push_events in project acme/shop
+POST /api/v4/projects/acme%2Fshop/hooks/7/test/push_events HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

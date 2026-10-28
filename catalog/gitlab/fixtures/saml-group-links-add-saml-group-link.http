@@ -1,0 +1,7 @@
+# description: Add SAML group link in group acme
+POST /api/v4/groups/acme/saml_group_links HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

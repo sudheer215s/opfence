@@ -1,0 +1,7 @@
+# description: Update MR approval settings for group acme
+PUT /api/v4/groups/acme/merge_request_approval_setting HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

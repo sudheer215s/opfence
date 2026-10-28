@@ -1,0 +1,5 @@
+# description: Delete an email address for user 42 7
+DELETE /api/v4/users/42/emails/7 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

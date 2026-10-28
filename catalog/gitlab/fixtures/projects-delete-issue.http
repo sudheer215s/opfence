@@ -1,0 +1,5 @@
+# description: Delete issue #12 of project acme/shop with its discussion
+DELETE /api/v4/projects/acme%2Fshop/issues/12 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

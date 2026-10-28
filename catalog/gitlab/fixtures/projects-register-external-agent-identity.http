@@ -1,0 +1,7 @@
+# description: Register an external agent identity in project acme/shop
+POST /api/v4/projects/acme%2Fshop/ai_agent/identities HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

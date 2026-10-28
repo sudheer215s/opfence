@@ -1,0 +1,5 @@
+# description: Delete every merged branch of project acme/shop (with a .json suffix)
+DELETE /api/v4/projects/acme%2Fshop/repository/merged_branches.json HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

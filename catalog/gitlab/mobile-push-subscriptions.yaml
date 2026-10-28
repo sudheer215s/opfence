@@ -1,0 +1,26 @@
+# GitLab REST API (gitlab.com/api/v4): Mobile push subscriptions.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.mobile-push-subscriptions.register-mobile-device-for-push-notifications
+    match: { rest: { method: POST, path: "/api/v4/user/push_subscriptions" } }
+    class: write
+    card: "Register a mobile device for push notifications"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/mobile-push-subscriptions-register-mobile-device-for-push-notifications.http
+        expect: write
+
+  - id: gitlab.mobile-push-subscriptions.unregister-mobile-device-from-push-notifications
+    match: { rest: { method: DELETE, path: "/api/v4/user/push_subscriptions" } }
+    class: write
+    card: "Unregister a mobile device from push notifications"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/mobile-push-subscriptions-unregister-mobile-device-from-push-notifications.http
+        expect: write

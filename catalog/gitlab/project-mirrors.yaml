@@ -1,0 +1,41 @@
+# GitLab REST API (gitlab.com/api/v4): Project mirrors.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.project-mirrors.start-pull-mirroring-process-for-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/mirror/pull" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Start the pull mirroring process for project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/project-mirrors-start-pull-mirroring-process-for-project.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.project-mirrors.update-project-pull-mirroring-settings
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/mirror/pull" } }
+    class: access
+    when:
+      - if: { arg: body.mirror_overwrites_diverged_branches, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: irreversible
+      - if: { arg: query.mirror_overwrites_diverged_branches, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: irreversible
+    resource: { arg: id, kind: project }
+    card: "Change where project {id} pulls its branches from"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Decides which repository the project's branches are pulled from, protected branches included.
+      Overwriting diverged branches discards their commits, which is irreversible.
+    tests:
+      - fixture: fixtures/project-mirrors-update-project-pull-mirroring-settings.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/project-mirrors-update-project-pull-mirroring-settings-mirror-overwrites-diverged-branches.http
+        expect: irreversible
+        resource: "acme/shop"

@@ -1,0 +1,7 @@
+# description: Track usage data event for the current user
+POST /api/v4/usage_data/increment_unique_users HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

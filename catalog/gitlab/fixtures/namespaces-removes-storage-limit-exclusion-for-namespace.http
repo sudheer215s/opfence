@@ -1,0 +1,5 @@
+# description: Remove a storage limit exclusion for a Namespace 7
+DELETE /api/v4/namespaces/7/storage/limit_exclusion HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

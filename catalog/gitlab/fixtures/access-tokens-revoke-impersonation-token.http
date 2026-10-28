@@ -1,0 +1,5 @@
+# description: Revoke an impersonation token 5 of user 42
+DELETE /api/v4/users/42/impersonation_tokens/5 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

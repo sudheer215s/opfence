@@ -177,3 +177,29 @@ func parseMultipart(contentType string, body []byte) (map[string]any, error) {
 		}
 	}
 }
+
+// StripFormatSuffix returns rawPath with the extension of its last segment
+// removed ("/a/tags.json" gives "/a/tags"), or "" when the last segment has
+// none. Grape and Rails route a last segment "x.<format>" as "x" for any one
+// extension, also when the dot is written %2E, so a server that does reads
+// the request at both paths (Hints.FormatSuffix). Dot segments are resolved
+// first, as servers route them; a segment that is all extension (".json")
+// or ends in a dot has nothing to remove.
+func StripFormatSuffix(rawPath string) string {
+	segs, ok := request.NormalizePath(rawPath)
+	if !ok || len(segs) == 0 {
+		return ""
+	}
+	last, err := url.PathUnescape(segs[len(segs)-1])
+	if err != nil {
+		return ""
+	}
+	i := strings.LastIndexByte(last, '.')
+	if i <= 0 || i == len(last)-1 || last[:i] == "." || last[:i] == ".." {
+		// Nothing before or after the dot, or what is left would be a
+		// dot segment ("..0" is not "..").
+		return ""
+	}
+	segs[len(segs)-1] = url.PathEscape(last[:i])
+	return "/" + strings.Join(segs, "/")
+}
