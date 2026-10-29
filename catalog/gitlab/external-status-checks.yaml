@@ -1,0 +1,84 @@
+# GitLab REST API (gitlab.com/api/v4): External status checks.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.external-status-checks.create-external-status-check-service
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/external_status_checks" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create external status check service in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      External status checks decide whether a merge request can merge; reporting a check as passed
+      bypasses it.
+    tests:
+      - fixture: fixtures/external-status-checks-create-external-status-check-service.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.external-status-checks.update-external-status-check-service
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/external_status_checks/{check_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Update external status check service {check_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      External status checks decide whether a merge request can merge; reporting a check as passed
+      bypasses it.
+    tests:
+      - fixture: fixtures/external-status-checks-update-external-status-check-service.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.external-status-checks.delete-external-status-check-service
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/external_status_checks/{check_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Delete external status check service {check_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      External status checks decide whether a merge request can merge; reporting a check as passed
+      bypasses it.
+    tests:
+      - fixture: fixtures/external-status-checks-delete-external-status-check-service.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.external-status-checks.update-status-of-external-status-check
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/status_check_responses" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Update status of an external status check {merge_request_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      External status checks decide whether a merge request can merge; reporting a check as passed
+      bypasses it.
+    tests:
+      - fixture: fixtures/external-status-checks-update-status-of-external-status-check.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.external-status-checks.retry-failed-status-check-for-merge-request
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/status_checks/{external_status_check_id}/retry" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Retry failed status check for merge request !{merge_request_iid} {external_status_check_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/external-status-checks-retry-failed-status-check-for-merge-request.http
+        expect: write
+        resource: "acme/shop"

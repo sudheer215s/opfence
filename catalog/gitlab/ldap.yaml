@@ -1,0 +1,80 @@
+# GitLab REST API (gitlab.com/api/v4): LDAP.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.ldap.add-ldap-group-link-with-cn-or-filter
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/ldap_group_links" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Add an LDAP group link with CN or filter in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      LDAP group links grant group roles.
+    tests:
+      - fixture: fixtures/ldap-add-ldap-group-link-with-cn-or-filter.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.ldap.delete-ldap-group-link-with-cn-or-filter
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/ldap_group_links" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Delete an LDAP group link with CN or filter in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      LDAP group links grant group roles.
+    tests:
+      - fixture: fixtures/ldap-delete-ldap-group-link-with-cn-or-filter.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.ldap.group-delete-ldap-group-link-groups-ldap-group-links
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/ldap_group_links/{cn}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Delete LDAP group link {cn} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      LDAP group links grant group roles.
+    tests:
+      - fixture: fixtures/ldap-group-delete-ldap-group-link-groups-ldap-group-links.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.ldap.group-delete-ldap-group-link-groups-ldap-group-links-2
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/ldap_group_links/{provider}/{cn}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Delete LDAP group link {cn} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      LDAP group links grant group roles.
+    tests:
+      - fixture: fixtures/ldap-group-delete-ldap-group-link-groups-ldap-group-links-2.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.ldap.sync-group-with-ldap
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/ldap_sync" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Sync group {id} with LDAP"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/ldap-sync-group-with-ldap.http
+        expect: write
+        resource: "acme"

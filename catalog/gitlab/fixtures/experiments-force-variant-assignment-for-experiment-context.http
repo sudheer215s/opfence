@@ -1,0 +1,7 @@
+# description: Force a variant assignment for an experiment context pql_three_cta
+POST /api/v4/experiments/pql_three_cta/assignments HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

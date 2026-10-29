@@ -1,0 +1,7 @@
+# description: Push project acme/shop's repository to mirror …
+POST /api/v4/projects/acme%2Fshop/remote_mirrors HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

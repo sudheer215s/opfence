@@ -1,0 +1,6 @@
+# description: Start a device sign-in (glab auth login)
+POST /oauth/authorize_device HTTP/1.1
+Host: gitlab.com
+Content-Type: application/x-www-form-urlencoded
+
+client_id=41d48f9422ebd655dd9cf2947d6979681dfaddc6d0c56f7628f6ada59559af1e&scope=api+write_repository

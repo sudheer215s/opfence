@@ -68,6 +68,11 @@ type Provider struct {
 	// providers' hosts, and it applies only to hosts none of them match
 	// (stage 27d). It has no rules of its own beyond its defaults.
 	Fallback bool `yaml:"fallback"`
+	// FormatSuffix says the provider's router reads a last path segment
+	// "x.json" (any one extension, also written %2E) as "x" with a response
+	// format, as Grape and Rails do (stage 29): such a request is also
+	// decoded with the extension removed, and the strictest decision wins.
+	FormatSuffix bool `yaml:"format_suffix"`
 	// WebSocket lists the paths where the provider takes WebSocket
 	// upgrades and the protocol their messages speak (stage 28). Upgrades
 	// anywhere else are blocked.
@@ -105,6 +110,9 @@ type HeaderArg struct {
 type lazyRules struct {
 	once sync.Once
 	err  error
+	// toolsOnly loads only the rule files that can hold MCP rules
+	// (Catalog.ToolRulesOnly).
+	toolsOnly bool
 }
 
 // Auth says where a provider's credential travels in a request. Exactly one

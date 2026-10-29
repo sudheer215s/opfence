@@ -1,0 +1,7 @@
+# description: Enable deploy key 7 in project acme/shop
+POST /api/v4/projects/acme%2Fshop/deploy_keys/7/enable HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

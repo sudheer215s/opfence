@@ -1,0 +1,7 @@
+# description: Upload an attachment to a group wiki in group acme
+POST /api/v4/groups/acme/wikis/attachments HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

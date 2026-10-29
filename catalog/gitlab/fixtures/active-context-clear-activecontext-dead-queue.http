@@ -1,0 +1,5 @@
+# description: Clear the ActiveContext dead queue
+DELETE /api/v4/admin/active_context/dead_queue HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

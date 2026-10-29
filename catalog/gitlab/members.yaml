@@ -1,0 +1,170 @@
+# GitLab REST API (gitlab.com/api/v4): Members.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.members.add-member-to-group
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/members" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Add a member to group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/members-add-member-to-group.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.members.update-group-member
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/members/{user_id}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Update a group member {user_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/members-update-group-member.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.members.remove-member-from-group
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/members/{user_id}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Remove member {user_id} from group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/members-remove-member-from-group.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.members.add-member-to-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/members" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Add a member to project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/members-add-member-to-project.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.members.update-project-member
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/members/{user_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Update a project member {user_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/members-update-project-member.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.members.remove-member-from-project
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/members/{user_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Remove member {user_id} from project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/members-remove-member-from-project.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.members.set-override-flag-for-member-of-group
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/members/{user_id}/override" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Set override flag for member {user_id} of group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/members-set-override-flag-for-member-of-group.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.members.remove-ldap-access-level-override
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/members/{user_id}/override" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Remove an LDAP access level override {user_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/members-remove-ldap-access-level-override.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.members.approve-group-member
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/members/{member_id}/approve" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Approve a group member {member_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/members-approve-group-member.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.members.approve-all-pending-group-members
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/members/approve_all" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Approve all pending group members in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/members-approve-all-pending-group-members.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.members.update-group-membership-state-for-user
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/members/{user_id}/state" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Update group membership state for user {user_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/members-update-group-membership-state-for-user.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.members.remove-billable-member-from-group
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/billable_members/{user_id}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Remove a billable member {user_id} from group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/members-remove-billable-member-from-group.http
+        expect: access
+        resource: "acme"

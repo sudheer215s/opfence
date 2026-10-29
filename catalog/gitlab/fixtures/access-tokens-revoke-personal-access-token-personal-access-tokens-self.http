@@ -1,0 +1,5 @@
+# description: Revoke a personal access token
+DELETE /api/v4/personal_access_tokens/self HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

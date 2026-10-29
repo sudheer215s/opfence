@@ -1,0 +1,5 @@
+# description: Remove runner 6 scope 7
+DELETE /api/v4/runner_controllers/7/scopes/runners/6 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

@@ -1,0 +1,102 @@
+# GitLab REST API (gitlab.com/api/v4): Releases.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.releases.create-release-link
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/releases/{tag_name}/assets/links" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create release {tag_name} link in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/releases-create-release-link.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.releases.update-release-link
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/releases/{tag_name}/assets/links/{link_id}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update release {tag_name} link {link_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/releases-update-release-link.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.releases.delete-release-link
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/releases/{tag_name}/assets/links/{link_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete release {tag_name} link {link_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/releases-delete-release-link.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.releases.create-release
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/releases" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create a release in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/releases-create-release.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.releases.update-release
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/releases/{tag_name}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update release {tag_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/releases-update-release.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.releases.delete-release
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/releases/{tag_name}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete release {tag_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Deletes the release; its tag stays.
+    tests:
+      - fixture: fixtures/releases-delete-release.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.releases.generate-release-evidence
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/releases/{tag_name}/evidence" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Generate release {tag_name} evidence in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/releases-generate-release-evidence.http
+        expect: write
+        resource: "acme/shop"

@@ -6,6 +6,7 @@ import (
 	"flag"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -325,6 +326,9 @@ func TestOpenShellNeverLooser(t *testing.T) {
 					continue
 				}
 				for _, ep := range np.Endpoints {
+					if r.Match.Git != nil && !slices.Contains(prov.Git, ep.Host) {
+						continue // git is served on the provider's git hosts only
+					}
 					if allowed(ep, r) && !denied(ep, r) {
 						t.Errorf("%s: %s is %s in %s but the OpenShell export allows it",
 							env, r.ID, Ceiling(p, r, env), ep.Host)

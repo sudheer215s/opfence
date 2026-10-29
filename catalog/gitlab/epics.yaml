@@ -1,0 +1,355 @@
+# GitLab REST API (gitlab.com/api/v4): Epics.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.epics.create-related-epic-link
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/epics/{epic_iid}/related_epics" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Create a related epic &{epic_iid} link in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/epics-create-related-epic-link.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.epics.delete-related-epic-link
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/epics/{epic_iid}/related_epics/{related_epic_link_id}" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Delete a related epic &{epic_iid} link {related_epic_link_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Removes a link; it can be added again.
+    tests:
+      - fixture: fixtures/epics-delete-related-epic-link.http
+        expect: delete
+        resource: "acme"
+
+  - id: gitlab.epics.group-create-epic-groups-epics
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/epics" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Create a new epic in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/epics-group-create-epic-groups-epics.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.epics.group-create-epic-epics-dash
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/-/epics" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Create a new epic in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Grape serves this route with and without /-/; this is the /-/ form.
+    tests:
+      - fixture: fixtures/epics-group-create-epic-epics-dash.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.epics.group-update-epic-groups-epics
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/epics/{epic_iid}" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Update epic &{epic_iid} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/epics-group-update-epic-groups-epics.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.epics.group-update-epic-epics-dash
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/-/epics/{epic_iid}" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Update epic &{epic_iid} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Grape serves this route with and without /-/; this is the /-/ form.
+    tests:
+      - fixture: fixtures/epics-group-update-epic-epics-dash.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.epics.group-destroy-epic-groups-epics
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/epics/{epic_iid}" } }
+    class: irreversible
+    resource: { arg: id, kind: group }
+    card: "Destroy epic &{epic_iid} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      GitLab keeps no deleted epic, with its discussion.
+    tests:
+      - fixture: fixtures/epics-group-destroy-epic-groups-epics.http
+        expect: irreversible
+        resource: "acme"
+
+  - id: gitlab.epics.group-destroy-epic-epics-dash
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/-/epics/{epic_iid}" } }
+    class: irreversible
+    resource: { arg: id, kind: group }
+    card: "Destroy epic &{epic_iid} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      GitLab keeps no deleted epic, with its discussion. Grape serves this route with and without
+      /-/; this is the /-/ form.
+    tests:
+      - fixture: fixtures/epics-group-destroy-epic-epics-dash.http
+        expect: irreversible
+        resource: "acme"
+
+  - id: gitlab.epics.group-create-and-relate-epic-to-parent-epics-epics
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/epics/{epic_iid}/epics" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Create and relate epic &{epic_iid} to a parent in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/epics-group-create-and-relate-epic-to-parent-epics-epics.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.epics.group-create-and-relate-epic-to-parent-epics-epics-dash
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/-/epics/{epic_iid}/epics" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Create and relate epic &{epic_iid} to a parent in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Grape serves this route with and without /-/; this is the /-/ form.
+    tests:
+      - fixture: fixtures/epics-group-create-and-relate-epic-to-parent-epics-epics-dash.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.epics.group-relate-epics-epics-epics
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/epics/{epic_iid}/epics/{child_epic_id}" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Relate epics of epic &{epic_iid} {child_epic_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/epics-group-relate-epics-epics-epics.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.epics.group-relate-epics-epics-epics-dash
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/-/epics/{epic_iid}/epics/{child_epic_id}" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Relate epics of epic &{epic_iid} {child_epic_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Grape serves this route with and without /-/; this is the /-/ form.
+    tests:
+      - fixture: fixtures/epics-group-relate-epics-epics-epics-dash.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.epics.group-remove-epics-relation-epics-epics
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/epics/{epic_iid}/epics/{child_epic_id}" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Remove epics relation of epic &{epic_iid} {child_epic_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Removes a link; it can be added again.
+    tests:
+      - fixture: fixtures/epics-group-remove-epics-relation-epics-epics.http
+        expect: delete
+        resource: "acme"
+
+  - id: gitlab.epics.group-remove-epics-relation-epics-epics-dash
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/-/epics/{epic_iid}/epics/{child_epic_id}" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Remove epics relation of epic &{epic_iid} {child_epic_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Removes a link; it can be added again. Grape serves this route with and without /-/; this is
+      the /-/ form.
+    tests:
+      - fixture: fixtures/epics-group-remove-epics-relation-epics-epics-dash.http
+        expect: delete
+        resource: "acme"
+
+  - id: gitlab.epics.group-reorder-child-epics-epics-epics
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/epics/{epic_iid}/epics/{child_epic_id}" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Reorder child epics of epic &{epic_iid} {child_epic_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/epics-group-reorder-child-epics-epics-epics.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.epics.group-reorder-child-epics-epics-epics-dash
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/-/epics/{epic_iid}/epics/{child_epic_id}" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Reorder child epics of epic &{epic_iid} {child_epic_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Grape serves this route with and without /-/; this is the /-/ form.
+    tests:
+      - fixture: fixtures/epics-group-reorder-child-epics-epics-epics-dash.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.epics.group-update-related-epic-link-epics-issues
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/epics/{epic_iid}/issues/{epic_issue_id}" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Update a related epic &{epic_iid} link {epic_issue_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/epics-group-update-related-epic-link-epics-issues.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.epics.group-update-related-epic-link-epics-issues-dash
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/-/epics/{epic_iid}/issues/{epic_issue_id}" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Update a related epic &{epic_iid} link {epic_issue_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Grape serves this route with and without /-/; this is the /-/ form.
+    tests:
+      - fixture: fixtures/epics-group-update-related-epic-link-epics-issues-dash.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.epics.group-add-issue-to-epic-epics-issues
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/epics/{epic_iid}/issues/{epic_issue_id}" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Add an issue to epic &{epic_iid} {epic_issue_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/epics-group-add-issue-to-epic-epics-issues.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.epics.group-add-issue-to-epic-epics-issues-dash
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/-/epics/{epic_iid}/issues/{epic_issue_id}" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Add an issue to epic &{epic_iid} {epic_issue_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Grape serves this route with and without /-/; this is the /-/ form.
+    tests:
+      - fixture: fixtures/epics-group-add-issue-to-epic-epics-issues-dash.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.epics.group-remove-issue-from-epic-epics-issues
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/epics/{epic_iid}/issues/{epic_issue_id}" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Remove an issue from epic &{epic_iid} {epic_issue_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Removes a link; it can be added again.
+    tests:
+      - fixture: fixtures/epics-group-remove-issue-from-epic-epics-issues.http
+        expect: delete
+        resource: "acme"
+
+  - id: gitlab.epics.group-remove-issue-from-epic-epics-issues-dash
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/-/epics/{epic_iid}/issues/{epic_issue_id}" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Remove an issue from epic &{epic_iid} {epic_issue_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Removes a link; it can be added again. Grape serves this route with and without /-/; this is
+      the /-/ form.
+    tests:
+      - fixture: fixtures/epics-group-remove-issue-from-epic-epics-issues-dash.http
+        expect: delete
+        resource: "acme"
+
+  - id: gitlab.epics.create-to-do-item-for-epic
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/epics/{epic_iid}/todo" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Create a to-do item for epic &{epic_iid} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/epics-create-to-do-item-for-epic.http
+        expect: write
+        resource: "acme"

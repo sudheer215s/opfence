@@ -1,0 +1,5 @@
+# description: Delete a custom attribute for user 42 DATABASE_URL
+DELETE /api/v4/users/42/custom_attributes/DATABASE_URL HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

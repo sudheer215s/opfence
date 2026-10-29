@@ -1,0 +1,7 @@
+# description: Set status of an external control 7 in project acme/shop
+PATCH /api/v4/projects/acme%2Fshop/compliance_external_controls/7/status HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

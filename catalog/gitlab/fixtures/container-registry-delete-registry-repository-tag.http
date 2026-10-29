@@ -1,0 +1,5 @@
+# description: Delete a registry tag v1.2.0 of container repository 7 in project acme/shop
+DELETE /api/v4/projects/acme%2Fshop/registry/repositories/7/tags/v1.2.0 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

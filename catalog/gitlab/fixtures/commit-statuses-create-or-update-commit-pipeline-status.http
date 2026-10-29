@@ -1,0 +1,7 @@
+# description: Create or update commit 6104942438c14ec7bd21c6cd5bd995272b3faff6 pipeline status in project acme/shop
+POST /api/v4/projects/acme%2Fshop/statuses/6104942438c14ec7bd21c6cd5bd995272b3faff6 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

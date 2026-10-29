@@ -1,0 +1,8 @@
+# description: Attach security scan profile gid://gitlab/Security::ScanProfile/1
+POST /api/v4/mcp HTTP/1.1
+Host: gitlab.com
+Authorization: Bearer opf_gitlab_EXAMPLE
+Content-Type: application/json
+Accept: application/json, text/event-stream
+
+{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "attach_scan_profile", "arguments": {"security_scan_profile_id": "gid://gitlab/Security::ScanProfile/1", "project_ids": ["gid://gitlab/Project/9"]}}}

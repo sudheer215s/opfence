@@ -37,19 +37,52 @@ const maxPktLine = 65520
 
 // isGitPath reports whether a request path is git's smart HTTP protocol or
 // the Git LFS API under a repository: /{owner}/{repo}/info/refs,
-// /git-upload-pack, /git-receive-pack or /info/lfs/...
+// /git-upload-pack, /git-receive-pack or /info/lfs/..., where the owner may
+// be several segments (GitLab's nested groups: /group/sub/project.git/...).
 func isGitPath(rawPath string) bool {
+	_, _, ok := gitSplit(rawPath)
+	return ok
+}
+
+// gitSplit splits a git request path, unescaped, into the repository's
+// segments (the owner, possibly nested, and the repository) and the git part
+// after them. The git part is the path's end for the smart HTTP protocol;
+// for Git LFS it starts at info/lfs, and a path with two such places is
+// ambiguous and not git.
+//
+// A repository two segments deep (GitHub's /owner/repo) may leave out .git.
+// A deeper one (GitLab's /group/sub/project.git) must end in .git, as
+// GitLab requires (it redirects the path without it): gitlab.com serves its
+// API on the same host, and POST /api/v4/projects/1/repository/files/
+// git-upload-pack is a REST call that creates a file, not a fetch.
+func gitSplit(rawPath string) (repo, rest []string, ok bool) {
 	segs, ok := gitSegments(rawPath)
-	if !ok || len(segs) < 3 {
-		return false
+	if !ok {
+		return nil, nil, false
 	}
-	switch segs[2] {
-	case "git-upload-pack", "git-receive-pack":
-		return len(segs) == 3
-	case "info":
-		return len(segs) == 4 && segs[3] == "refs" || len(segs) >= 4 && segs[3] == "lfs"
+	n := len(segs)
+	valid := func(repo []string) bool {
+		return len(repo) == 2 || len(repo) > 2 && strings.HasSuffix(repo[len(repo)-1], ".git")
 	}
-	return false
+	switch {
+	case n >= 3 && (segs[n-1] == "git-upload-pack" || segs[n-1] == "git-receive-pack"):
+		return segs[:n-1], segs[n-1:], valid(segs[:n-1])
+	case n >= 4 && segs[n-2] == "info" && segs[n-1] == "refs":
+		return segs[:n-2], segs[n-2:], valid(segs[:n-2])
+	}
+	k := -1
+	for i := 2; i+1 < n; i++ {
+		if segs[i] == "info" && segs[i+1] == "lfs" {
+			if k >= 0 {
+				return nil, nil, false
+			}
+			k = i
+		}
+	}
+	if k < 0 {
+		return nil, nil, false
+	}
+	return segs[:k], segs[k:], valid(segs[:k])
 }
 
 // gitSegments returns the path's segments, unescaped.
@@ -69,16 +102,20 @@ func gitSegments(rawPath string) ([]string, bool) {
 }
 
 func decodeGit(r *request.Request) []Operation {
-	segs, _ := gitSegments(r.Path)
-	repo := strings.TrimSuffix(segs[1], ".git")
-	op := Operation{Protocol: Git, Method: r.Method, Path: r.Path, Args: map[string]any{"owner": segs[0], "repo": repo}}
+	repoSegs, segs, _ := gitSplit(r.Path)
+	owner := strings.Join(repoSegs[:len(repoSegs)-1], "/")
+	repo := strings.TrimSuffix(repoSegs[len(repoSegs)-1], ".git")
+	repoArgs := func() map[string]any {
+		return map[string]any{"owner": owner, "repo": repo, "repository": owner + "/" + repo}
+	}
+	op := Operation{Protocol: Git, Method: r.Method, Path: r.Path, Args: repoArgs()}
 	fail := func(msg string) []Operation {
 		op.Error = msg
 		return []Operation{op}
 	}
 	readOnly := r.Method == "GET" || r.Method == "HEAD"
 	switch {
-	case segs[2] == "info" && segs[3] == "refs":
+	case segs[0] == "info" && segs[1] == "refs":
 		if !readOnly {
 			return fail("git ref advertisement must be a GET")
 		}
@@ -92,14 +129,14 @@ func decodeGit(r *request.Request) []Operation {
 			return fail("unknown git service " + strconv.Quote(r.Query.Get("service")))
 		}
 		return []Operation{op}
-	case segs[2] == "git-upload-pack":
+	case segs[0] == "git-upload-pack":
 		if r.Method != "POST" {
 			return fail("git-upload-pack must be a POST")
 		}
 		// Every upload-pack request, in any protocol version, only reads.
 		op.Service, op.Action = GitUploadPack, GitFetch
 		return []Operation{op}
-	case segs[2] == "git-receive-pack":
+	case segs[0] == "git-receive-pack":
 		if r.Method != "POST" {
 			return fail("git-receive-pack must be a POST")
 		}
@@ -127,14 +164,15 @@ func decodeGit(r *request.Request) []Operation {
 		for _, c := range cmds {
 			o := op
 			o.Action = c.action
-			o.Args = map[string]any{"owner": segs[0], "repo": repo, "ref": c.ref, "old": c.old, "new": c.new}
+			o.Args = repoArgs()
+			o.Args["ref"], o.Args["old"], o.Args["new"] = c.ref, c.old, c.new
 			ops = append(ops, o)
 		}
 		return ops
 	}
 	// Git LFS: /{owner}/{repo}/info/lfs/...
 	op.Service = GitLFS
-	lfs := segs[4:]
+	lfs := segs[2:]
 	switch {
 	case len(lfs) == 2 && lfs[0] == "objects" && lfs[1] == "batch" && r.Method == "POST":
 		var batch struct {

@@ -1,0 +1,7 @@
+# description: Evaluate code review
+POST /api/v4/duo_code_review/evaluations HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

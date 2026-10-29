@@ -1,0 +1,5 @@
+# description: Delete a custom header of webhook 7 DATABASE_URL in project acme/shop
+DELETE /api/v4/projects/acme%2Fshop/hooks/7/custom_headers/DATABASE_URL HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

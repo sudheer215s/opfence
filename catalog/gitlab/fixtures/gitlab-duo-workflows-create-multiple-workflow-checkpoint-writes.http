@@ -1,0 +1,7 @@
+# description: Create multiple workflow checkpoint writes 7
+POST /api/v4/ai/duo_workflows/workflows/7/checkpoint_writes_batch HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

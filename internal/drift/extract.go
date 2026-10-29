@@ -149,10 +149,10 @@ func extractOpenAPI(sc catalog.SchemaSource, hosts []string, data []byte) ([]Op,
 	base = strings.TrimSuffix(base, "/")
 	paths, _ := doc["paths"].(map[string]any)
 	var ops []Op
-	for _, p := range sortedKeys(paths) {
-		item, _ := paths[p].(map[string]any)
+	for _, key := range sortedKeys(paths) {
+		item, _ := paths[key].(map[string]any)
 		if ref, _ := item["$ref"].(string); ref != "" && !strings.HasPrefix(ref, "#") {
-			return nil, fmt.Errorf("path %s is a $ref to another file; list the bundled schema", p)
+			return nil, fmt.Errorf("path %s is a $ref to another file; list the bundled schema", key)
 		}
 		itemServers, _ := item["servers"].([]any)
 		for _, m := range httpMethods {
@@ -160,26 +160,59 @@ func extractOpenAPI(sc catalog.SchemaSource, hosts []string, data []byte) ([]Op,
 			if !ok {
 				continue
 			}
-			op := Op{Kind: "rest", Method: strings.ToUpper(m), Path: base + p}
-			opDoc, _ := raw.(map[string]any)
-			servers, _ := opDoc["servers"].([]any)
-			if servers == nil {
-				servers = itemServers
+			for _, p := range optionalSegments(key) {
+				op := Op{Kind: "rest", Method: strings.ToUpper(m), Path: base + p}
+				opDoc, _ := raw.(map[string]any)
+				servers, _ := opDoc["servers"].([]any)
+				if servers == nil {
+					servers = itemServers
+				}
+				if servers != nil {
+					// The operation is served elsewhere: its own server's path
+					// replaces the document's base, and a server on another
+					// host takes it out of the provider's view.
+					b, ok := serverBase(servers, hosts)
+					op.Path, op.Foreign = strings.TrimSuffix(b, "/")+p, !ok
+				}
+				if ref, _ := opDoc["$ref"].(string); ref != "" && !strings.HasPrefix(ref, "#") {
+					op.Ref = resolveRef(sc.URL, ref)
+				}
+				ops = append(ops, op)
 			}
-			if servers != nil {
-				// The operation is served elsewhere: its own server's path
-				// replaces the document's base, and a server on another
-				// host takes it out of the provider's view.
-				b, ok := serverBase(servers, hosts)
-				op.Path, op.Foreign = strings.TrimSuffix(b, "/")+p, !ok
-			}
-			if ref, _ := opDoc["$ref"].(string); ref != "" && !strings.HasPrefix(ref, "#") {
-				op.Ref = resolveRef(sc.URL, ref)
-			}
-			ops = append(ops, op)
 		}
 	}
 	return ops, nil
+}
+
+// grapeOptional is an optional path segment in a route Grape generated:
+// GitLab's /groups/{id}/(-/)epics serves /groups/{id}/epics and
+// /groups/{id}/-/epics. Only groups ending in a slash are read this way, so
+// OData segments such as Packages(Id='{id}') and FindPackagesById() stay as
+// they are.
+var grapeOptional = regexp.MustCompile(`\(([^()/]*/)\)`)
+
+// optionalSegments returns the paths a schema path stands for: itself, or
+// every combination of its optional segments with and without them.
+func optionalSegments(p string) []string {
+	locs := grapeOptional.FindAllStringSubmatchIndex(p, -1)
+	if len(locs) == 0 || len(locs) > 4 {
+		return []string{p}
+	}
+	out := make([]string, 0, 1<<len(locs))
+	for mask := 0; mask < 1<<len(locs); mask++ {
+		var b strings.Builder
+		last := 0
+		for i, l := range locs {
+			b.WriteString(p[last:l[0]])
+			if mask&(1<<i) != 0 {
+				b.WriteString(p[l[2]:l[3]])
+			}
+			last = l[1]
+		}
+		b.WriteString(p[last:])
+		out = append(out, b.String())
+	}
+	return out
 }
 
 // serverBase returns the path of the first server on one of hosts (any

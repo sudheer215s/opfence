@@ -1,0 +1,7 @@
+# description: Transfer project acme/shop to namespace …
+PUT /api/v4/projects/acme%2Fshop/transfer HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{"namespace": "acme-archive"}

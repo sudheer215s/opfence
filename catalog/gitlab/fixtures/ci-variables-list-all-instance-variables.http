@@ -1,0 +1,5 @@
+# description: Read the instance's CI/CD variables with their values
+GET /api/v4/admin/ci/variables HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

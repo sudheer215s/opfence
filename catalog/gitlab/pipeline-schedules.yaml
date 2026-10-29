@@ -1,0 +1,175 @@
+# GitLab REST API (gitlab.com/api/v4): Pipeline schedules.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.pipeline-schedules.create-pipeline-schedule
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/pipeline_schedules" } }
+    class: credential
+    response:
+      redact: ["variables.value"]
+      class: write
+    resource: { arg: id, kind: project }
+    card: "Create a pipeline schedule in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the schedule with its variables' values; under opfence run the proxy redacts them.
+    tests:
+      - fixture: fixtures/pipeline-schedules-create-pipeline-schedule.http
+        expect: credential
+        response: fixtures/pipeline-schedules-create-pipeline-schedule-response.json
+        resource: "acme/shop"
+
+  - id: gitlab.pipeline-schedules.retrieve-pipeline-schedule
+    match: { rest: { method: GET, path: "/api/v4/projects/{id}/pipeline_schedules/{pipeline_schedule_id}" } }
+    class: credential
+    response:
+      redact: ["variables.value"]
+      class: read
+    resource: { arg: id, kind: project }
+    card: "Read pipeline schedule {pipeline_schedule_id} of project {id} with its variables"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Returns the schedule's variables with their values; under opfence run the proxy redacts the
+      values.
+    tests:
+      - fixture: fixtures/pipeline-schedules-retrieve-pipeline-schedule.http
+        expect: credential
+        response: fixtures/pipeline-schedules-retrieve-pipeline-schedule-response.json
+        resource: "acme/shop"
+
+  - id: gitlab.pipeline-schedules.update-pipeline-schedule
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/pipeline_schedules/{pipeline_schedule_id}" } }
+    class: credential
+    response:
+      redact: ["variables.value"]
+      class: write
+    resource: { arg: id, kind: project }
+    card: "Update pipeline schedule {pipeline_schedule_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the schedule with its variables' values; under opfence run the proxy redacts them.
+    tests:
+      - fixture: fixtures/pipeline-schedules-update-pipeline-schedule.http
+        expect: credential
+        response: fixtures/pipeline-schedules-update-pipeline-schedule-response.json
+        resource: "acme/shop"
+
+  - id: gitlab.pipeline-schedules.delete-pipeline-schedule
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/pipeline_schedules/{pipeline_schedule_id}" } }
+    class: irreversible
+    resource: { arg: id, kind: project }
+    card: "Delete pipeline schedule {pipeline_schedule_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Deletes the schedule's variables, whose values GitLab keeps nowhere else.
+    tests:
+      - fixture: fixtures/pipeline-schedules-delete-pipeline-schedule.http
+        expect: irreversible
+        resource: "acme/shop"
+
+  - id: gitlab.pipeline-schedules.create-or-update-ownership-of-pipeline-schedule
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/pipeline_schedules/{pipeline_schedule_id}/take_ownership" } }
+    class: credential
+    response:
+      redact: ["variables.value"]
+      class: write
+    resource: { arg: id, kind: project }
+    card: "Create or update ownership of pipeline schedule {pipeline_schedule_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      The schedule's pipelines run as the new owner. Returns the schedule with its variables'
+      values; under opfence run the proxy redacts them.
+    tests:
+      - fixture: fixtures/pipeline-schedules-create-or-update-ownership-of-pipeline-schedule.http
+        expect: credential
+        response: fixtures/pipeline-schedules-create-or-update-ownership-of-pipeline-schedule-response.json
+        resource: "acme/shop"
+
+  - id: gitlab.pipeline-schedules.run-pipeline-schedule
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/pipeline_schedules/{pipeline_schedule_id}/play" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Run pipeline schedule {pipeline_schedule_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/pipeline-schedules-run-pipeline-schedule.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.pipeline-schedules.create-variable-for-pipeline-schedule
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/pipeline_schedules/{pipeline_schedule_id}/variables" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create a variable for pipeline schedule {pipeline_schedule_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/pipeline-schedules-create-variable-for-pipeline-schedule.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.pipeline-schedules.retrieve-variable-for-pipeline-schedule
+    match: { rest: { method: GET, path: "/api/v4/projects/{id}/pipeline_schedules/{pipeline_schedule_id}/variables/{key}" } }
+    class: credential
+    resource: { arg: id, kind: project }
+    card: "Read variable {key} of pipeline schedule {pipeline_schedule_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the variable's value.
+    tests:
+      - fixture: fixtures/pipeline-schedules-retrieve-variable-for-pipeline-schedule.http
+        expect: credential
+        resource: "acme/shop"
+
+  - id: gitlab.pipeline-schedules.update-variable-for-pipeline-schedule
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/pipeline_schedules/{pipeline_schedule_id}/variables/{key}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update variable {key} for pipeline schedule {pipeline_schedule_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/pipeline-schedules-update-variable-for-pipeline-schedule.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.pipeline-schedules.delete-variable-for-pipeline-schedule
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/pipeline_schedules/{pipeline_schedule_id}/variables/{key}" } }
+    class: irreversible
+    resource: { arg: id, kind: project }
+    card: "Delete variable {key} for pipeline schedule {pipeline_schedule_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Deletes the schedule's variables, whose values GitLab keeps nowhere else.
+    tests:
+      - fixture: fixtures/pipeline-schedules-delete-variable-for-pipeline-schedule.http
+        expect: irreversible
+        resource: "acme/shop"

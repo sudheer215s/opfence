@@ -1,0 +1,7 @@
+# description: Approve access to user 42
+POST /api/v4/users/42/approve HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

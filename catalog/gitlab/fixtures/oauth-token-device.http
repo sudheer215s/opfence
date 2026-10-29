@@ -1,0 +1,6 @@
+# description: Finish a device sign-in (glab auth login)
+POST /oauth/token.json HTTP/1.1
+Host: gitlab.com
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Adevice_code&device_code=EXAMPLEdevicecode&client_id=41d48f9422ebd655dd9cf2947d6979681dfaddc6d0c56f7628f6ada59559af1e

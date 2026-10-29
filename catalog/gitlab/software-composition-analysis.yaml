@@ -1,0 +1,40 @@
+# GitLab REST API (gitlab.com/api/v4): Software composition analysis.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.software-composition-analysis.authorize-sbom-file-upload
+    match: { rest: { method: POST, path: "/api/v4/jobs/{id}/sbom_scans/authorize" } }
+    class: read
+    card: "Authorize SBOM file upload {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/software-composition-analysis-authorize-sbom-file-upload.http
+        expect: read
+
+  - id: gitlab.software-composition-analysis.upload-sbom-file
+    match: { rest: { method: POST, path: "/api/v4/jobs/{id}/sbom_scans" } }
+    class: write
+    card: "Upload an SBOM file {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/software-composition-analysis-upload-sbom-file.http
+        expect: write
+
+  - id: gitlab.software-composition-analysis.reuse-sbom-scan-results
+    match: { rest: { method: POST, path: "/api/v4/jobs/{id}/sbom_scans/{sbom_digest}" } }
+    class: write
+    card: "Reuse SBOM scan results {sbom_digest}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/software-composition-analysis-reuse-sbom-scan-results.http
+        expect: write

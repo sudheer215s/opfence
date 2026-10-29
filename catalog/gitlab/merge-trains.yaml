@@ -1,0 +1,18 @@
+# GitLab REST API (gitlab.com/api/v4): Merge trains.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.merge-trains.add-merge-request-to-merge-train
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_trains/merge_requests/{merge_request_iid}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Add merge request !{merge_request_iid} to a merge train in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      The merge request merges when its pipeline passes.
+    tests:
+      - fixture: fixtures/merge-trains-add-merge-request-to-merge-train.http
+        expect: write
+        resource: "acme/shop"

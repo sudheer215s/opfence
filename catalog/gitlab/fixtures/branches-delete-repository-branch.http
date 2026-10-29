@@ -1,0 +1,5 @@
+# description: Delete branch feature/login of project acme/shop
+DELETE /api/v4/projects/acme%2Fshop/repository/branches/feature%2Flogin HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

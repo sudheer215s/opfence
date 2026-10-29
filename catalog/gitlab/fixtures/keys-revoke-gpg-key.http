@@ -1,0 +1,7 @@
+# description: Revoke GPG key 7
+POST /api/v4/user/gpg_keys/7/revoke HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

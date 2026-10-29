@@ -1,0 +1,17 @@
+# GitLab REST API (gitlab.com/api/v4): Token exchange.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.token-exchange.issue-short-lived-jwt-for-modular-service-audience
+    match: { rest: { method: POST, path: "/api/v4/token_exchange" } }
+    class: read
+    card: "Issue a short-lived JWT for a single modular-service audience"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns a short-lived token for the same user, as exchanging a credential the caller already
+      holds is (ARCHITECTURE §4.5).
+    tests:
+      - fixture: fixtures/token-exchange-issue-short-lived-jwt-for-modular-service-audience.http
+        expect: read

@@ -1,0 +1,5 @@
+# description: Remove a billable member 42 from group acme
+DELETE /api/v4/groups/acme/billable_members/42 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

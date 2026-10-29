@@ -1,0 +1,64 @@
+# GitLab REST API (gitlab.com/api/v4): Remote mirrors.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.remote-mirrors.create-push-mirror
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/remote_mirrors" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Push project {id}'s repository to mirror {body.url}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A push mirror pushes the repository to the URL given, on every change.
+    tests:
+      - fixture: fixtures/remote-mirrors-create-push-mirror.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.remote-mirrors.update-remote-mirror-in-project
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/remote_mirrors/{mirror_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Update a remote mirror in project {id} {mirror_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A push mirror pushes the repository to the URL given, on every change.
+    tests:
+      - fixture: fixtures/remote-mirrors-update-remote-mirror-in-project.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.remote-mirrors.delete-remote-mirror-from-project
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/remote_mirrors/{mirror_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete a remote mirror from project {id} {mirror_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/remote-mirrors-delete-remote-mirror-from-project.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.remote-mirrors.force-push-mirror-update
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/remote_mirrors/{mirror_id}/sync" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Force push mirror update {mirror_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Pushes to a mirror already configured.
+    tests:
+      - fixture: fixtures/remote-mirrors-force-push-mirror-update.http
+        expect: write
+        resource: "acme/shop"

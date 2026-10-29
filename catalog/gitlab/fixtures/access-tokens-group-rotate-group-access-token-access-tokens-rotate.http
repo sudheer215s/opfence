@@ -1,0 +1,7 @@
+# description: Rotate access token 5 in group acme
+POST /api/v4/groups/acme/access_tokens/5/rotate HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

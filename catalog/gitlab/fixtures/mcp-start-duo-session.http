@@ -1,0 +1,8 @@
+# description: Start a GitLab Duo session in project acme/shop with goal Fix the failing checkout test
+POST /api/v4/mcp HTTP/1.1
+Host: gitlab.com
+Authorization: Bearer opf_gitlab_EXAMPLE
+Content-Type: application/json
+Accept: application/json, text/event-stream
+
+{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "start_duo_session", "arguments": {"project_id": "acme/shop", "goal": "Fix the failing checkout test"}}}

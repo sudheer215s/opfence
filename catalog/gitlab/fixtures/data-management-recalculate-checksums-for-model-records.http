@@ -1,0 +1,7 @@
+# description: Recalculate checksums for model records ci_builds
+PUT /api/v4/admin/data_management/ci_builds/checksum HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

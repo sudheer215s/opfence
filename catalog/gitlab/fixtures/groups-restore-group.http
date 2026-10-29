@@ -1,0 +1,7 @@
+# description: Restore group acme, which is marked for deletion
+POST /api/v4/groups/acme/restore HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

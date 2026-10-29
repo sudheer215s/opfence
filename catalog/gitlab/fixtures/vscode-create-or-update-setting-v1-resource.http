@@ -1,0 +1,7 @@
+# description: Create or update a specific setting settings
+POST /api/v4/vscode/settings_sync/v1/resource/settings HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

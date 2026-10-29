@@ -1,0 +1,30 @@
+# GitLab REST API (gitlab.com/api/v4): Knowledge graph.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.knowledge-graph.enable-namespace-for-knowledge-graph
+    match: { rest: { method: PUT, path: "/api/v4/admin/knowledge_graph/namespaces/{id}" } }
+    class: write
+    card: "Enable a namespace for Knowledge Graph {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/knowledge-graph-enable-namespace-for-knowledge-graph.http
+        expect: write
+
+  - id: gitlab.knowledge-graph.disable-namespace-for-knowledge-graph
+    match: { rest: { method: DELETE, path: "/api/v4/admin/knowledge_graph/namespaces/{id}" } }
+    class: write
+    card: "Disable a namespace for Knowledge Graph {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/knowledge-graph-disable-namespace-for-knowledge-graph.http
+        expect: write

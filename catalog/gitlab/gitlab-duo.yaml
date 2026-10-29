@@ -1,0 +1,59 @@
+# GitLab REST API (gitlab.com/api/v4): GitLab Duo.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.gitlab-duo.evaluate-code-review
+    match: { rest: { method: POST, path: "/api/v4/duo_code_review/evaluations" } }
+    class: read
+    card: "Evaluate code review"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Asks the model; nothing is changed.
+    tests:
+      - fixture: fixtures/gitlab-duo-evaluate-code-review.http
+        expect: read
+
+  - id: gitlab.gitlab-duo.generate-chat-response
+    match: { rest: { method: POST, path: "/api/v4/chat/completions" } }
+    class: read
+    card: "Generate a Chat response"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Asks the model; nothing is changed.
+    tests:
+      - fixture: fixtures/gitlab-duo-generate-chat-response.http
+        expect: read
+
+  - id: gitlab.gitlab-duo.get-connection-details-for-third-party-agents
+    match: { rest: { method: POST, path: "/api/v4/ai/third_party_agents/direct_access" } }
+    class: read
+    card: "Get connection details for third party agents"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns a short-lived token for the same user, as exchanging a credential the caller already
+      holds is (ARCHITECTURE §4.5).
+    tests:
+      - fixture: fixtures/gitlab-duo-get-connection-details-for-third-party-agents.http
+        expect: read
+
+  - id: gitlab.gitlab-duo.generate-git-commands-from-natural-text
+    match: { rest: { method: POST, path: "/api/v4/ai/llm/git_command" } }
+    class: read
+    card: "Generate Git commands from natural text"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Asks the model; nothing is changed.
+    tests:
+      - fixture: fixtures/gitlab-duo-generate-git-commands-from-natural-text.http
+        expect: read

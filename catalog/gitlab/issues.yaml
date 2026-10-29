@@ -1,0 +1,86 @@
+# GitLab REST API (gitlab.com/api/v4): Issues.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.issues.set-estimated-time-for-issue
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/issues/{issue_iid}/time_estimate" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Set the estimated time for issue #{issue_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/issues-set-estimated-time-for-issue.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.issues.reset-estimated-time-for-issue
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/issues/{issue_iid}/reset_time_estimate" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Reset the estimated time for issue #{issue_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/issues-reset-estimated-time-for-issue.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.issues.add-spent-time-for-issue
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/issues/{issue_iid}/add_spent_time" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Add spent time for issue #{issue_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/issues-add-spent-time-for-issue.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.issues.reset-spent-time-for-issue
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/issues/{issue_iid}/reset_spent_time" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Reset spent time for issue #{issue_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/issues-reset-spent-time-for-issue.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.issues.create-issue-link
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/issues/{issue_iid}/links" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create issue #{issue_iid} link in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/issues-create-issue-link.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.issues.delete-issue-link
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/issues/{issue_iid}/links/{issue_link_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete issue #{issue_iid} link {issue_link_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/issues-delete-issue-link.http
+        expect: delete
+        resource: "acme/shop"

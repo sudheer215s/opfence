@@ -1,0 +1,18 @@
+# GitLab REST API (gitlab.com/api/v4): CI lint.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.ci-lint.validate-ci-cd-configuration
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/ci/lint" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Validate a CI/CD configuration in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Validates CI/CD configuration; a dry run simulates creating a pipeline without creating one.
+    tests:
+      - fixture: fixtures/ci-lint-validate-ci-cd-configuration.http
+        expect: read
+        resource: "acme/shop"

@@ -1,0 +1,207 @@
+# GitLab REST API (gitlab.com/api/v4): Deploy resources.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.deploy-resources.create-deployment
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/deployments" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create a deployment in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/deploy-resources-create-deployment.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.deploy-resources.update-deployment
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/deployments/{deployment_id}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update deployment {deployment_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/deploy-resources-update-deployment.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.deploy-resources.delete-deployment
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/deployments/{deployment_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete deployment {deployment_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/deploy-resources-delete-deployment.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.deploy-resources.approve-or-reject-deployment
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/deployments/{deployment_id}/approval" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Approve or reject deployment {deployment_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Approving lets a deployment to a protected environment run.
+    tests:
+      - fixture: fixtures/deploy-resources-approve-or-reject-deployment.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.deploy-resources.create-project-deploy-token
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/deploy_tokens" } }
+    class: credential
+    resource: { arg: id, kind: project }
+    card: "Create deploy token {body.name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the deploy token.
+    tests:
+      - fixture: fixtures/deploy-resources-create-project-deploy-token.http
+        expect: credential
+        resource: "acme/shop"
+
+  - id: gitlab.deploy-resources.delete-project-deploy-token
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/deploy_tokens/{token_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Delete deploy token {token_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Whoever uses the deploy token can no longer read or push.
+    tests:
+      - fixture: fixtures/deploy-resources-delete-project-deploy-token.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.deploy-resources.create-group-deploy-token
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/deploy_tokens" } }
+    class: credential
+    resource: { arg: id, kind: group }
+    card: "Create a group deploy token in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the deploy token.
+    tests:
+      - fixture: fixtures/deploy-resources-create-group-deploy-token.http
+        expect: credential
+        resource: "acme"
+
+  - id: gitlab.deploy-resources.delete-group-deploy-token
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/deploy_tokens/{token_id}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Delete deploy token {token_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Whoever uses the deploy token can no longer read or push.
+    tests:
+      - fixture: fixtures/deploy-resources-delete-group-deploy-token.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.deploy-resources.create-deploy-key
+    match: { rest: { method: POST, path: "/api/v4/deploy_keys" } }
+    class: access
+    card: "Create a deploy key"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A deploy key with write access can push to the repository; GitHub's deploy keys are access
+      too.
+    tests:
+      - fixture: fixtures/deploy-resources-create-deploy-key.http
+        expect: access
+
+  - id: gitlab.deploy-resources.add-deploy-key-for-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/deploy_keys" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Add deploy key {body.title} to project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A deploy key with write access can push to the repository; GitHub's deploy keys are access
+      too.
+    tests:
+      - fixture: fixtures/deploy-resources-add-deploy-key-for-project.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.deploy-resources.update-deploy-key
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/deploy_keys/{key_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Update deploy key {key_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A deploy key with write access can push to the repository; GitHub's deploy keys are access
+      too.
+    tests:
+      - fixture: fixtures/deploy-resources-update-deploy-key.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.deploy-resources.delete-deploy-key
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/deploy_keys/{key_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Delete deploy key {key_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A deploy key with write access can push to the repository; GitHub's deploy keys are access
+      too.
+    tests:
+      - fixture: fixtures/deploy-resources-delete-deploy-key.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.deploy-resources.enable-deploy-key
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/deploy_keys/{key_id}/enable" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Enable deploy key {key_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A deploy key with write access can push to the repository; GitHub's deploy keys are access
+      too.
+    tests:
+      - fixture: fixtures/deploy-resources-enable-deploy-key.http
+        expect: access
+        resource: "acme/shop"

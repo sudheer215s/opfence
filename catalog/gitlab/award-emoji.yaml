@@ -1,0 +1,226 @@
+# GitLab REST API (gitlab.com/api/v4): Award emoji.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.award-emoji.add-emoji-reaction-to-issue
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/issues/{issue_iid}/award_emoji" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Add an emoji reaction to issue #{issue_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/award-emoji-add-emoji-reaction-to-issue.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.award-emoji.delete-emoji-reaction-from-issue
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/issues/{issue_iid}/award_emoji/{award_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete an emoji reaction from issue #{issue_iid} {award_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/award-emoji-delete-emoji-reaction-from-issue.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.award-emoji.add-emoji-reaction-to-issue-comment
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/issues/{issue_iid}/notes/{note_id}/award_emoji" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Add an emoji reaction to issue #{issue_iid} comment {note_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/award-emoji-add-emoji-reaction-to-issue-comment.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.award-emoji.delete-emoji-reaction-from-issue-comment
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/issues/{issue_iid}/notes/{note_id}/award_emoji/{award_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete an emoji reaction from issue #{issue_iid} comment {note_id} {award_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/award-emoji-delete-emoji-reaction-from-issue-comment.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.award-emoji.add-emoji-reaction-to-merge-request
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/award_emoji" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Add an emoji reaction to merge request !{merge_request_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/award-emoji-add-emoji-reaction-to-merge-request.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.award-emoji.delete-emoji-reaction-from-merge-request
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/award_emoji/{award_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete an emoji reaction from merge request !{merge_request_iid} {award_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/award-emoji-delete-emoji-reaction-from-merge-request.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.award-emoji.add-emoji-reaction-to-merge-request-comment
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/notes/{note_id}/award_emoji" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Add an emoji reaction to merge request !{merge_request_iid} comment {note_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/award-emoji-add-emoji-reaction-to-merge-request-comment.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.award-emoji.delete-emoji-reaction-from-merge-request-comment
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/notes/{note_id}/award_emoji/{award_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete an emoji reaction from merge request !{merge_request_iid} comment {note_id} {award_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/award-emoji-delete-emoji-reaction-from-merge-request-comment.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.award-emoji.add-emoji-reaction-to-snippet
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/snippets/{snippet_id}/award_emoji" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Add an emoji reaction to snippet {snippet_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/award-emoji-add-emoji-reaction-to-snippet.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.award-emoji.delete-emoji-reaction-from-snippet
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/snippets/{snippet_id}/award_emoji/{award_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete an emoji reaction from snippet {snippet_id} {award_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/award-emoji-delete-emoji-reaction-from-snippet.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.award-emoji.add-emoji-reaction-to-snippet-comment
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/snippets/{snippet_id}/notes/{note_id}/award_emoji" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Add an emoji reaction to snippet {snippet_id} comment {note_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/award-emoji-add-emoji-reaction-to-snippet-comment.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.award-emoji.delete-emoji-reaction-from-snippet-comment
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/snippets/{snippet_id}/notes/{note_id}/award_emoji/{award_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete an emoji reaction from snippet {snippet_id} comment {note_id} {award_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/award-emoji-delete-emoji-reaction-from-snippet-comment.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.award-emoji.add-emoji-reaction-to-epic
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/epics/{epic_iid}/award_emoji" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Add an emoji reaction to epic &{epic_iid} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/award-emoji-add-emoji-reaction-to-epic.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.award-emoji.delete-emoji-reaction-from-epic
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/epics/{epic_iid}/award_emoji/{award_id}" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Delete an emoji reaction from epic &{epic_iid} {award_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/award-emoji-delete-emoji-reaction-from-epic.http
+        expect: delete
+        resource: "acme"
+
+  - id: gitlab.award-emoji.add-emoji-reaction-to-epic-comment
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/epics/{epic_iid}/notes/{note_id}/award_emoji" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Add an emoji reaction to epic &{epic_iid} comment {note_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/award-emoji-add-emoji-reaction-to-epic-comment.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.award-emoji.delete-emoji-reaction-from-epic-comment
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/epics/{epic_iid}/notes/{note_id}/award_emoji/{award_id}" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Delete an emoji reaction from epic &{epic_iid} comment {note_id} {award_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/award-emoji-delete-emoji-reaction-from-epic-comment.http
+        expect: delete
+        resource: "acme"

@@ -1,0 +1,7 @@
+# description: Create Pages domain in project acme/shop (key)
+POST /api/v4/projects/acme%2Fshop/pages/domains HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{"domain": "docs.example.com", "auto_ssl_enabled": true, "key": "example"}

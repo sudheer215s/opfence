@@ -1,0 +1,7 @@
+# description: Update a draft note of merge request !12 7 in project acme/shop
+PUT /api/v4/projects/acme%2Fshop/merge_requests/12/draft_notes/7 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

@@ -1,0 +1,6 @@
+# description: Revoke an OAuth token
+POST /oauth/revoke HTTP/1.1
+Host: gitlab.com
+Content-Type: application/x-www-form-urlencoded
+
+token=opf_gitlab_EXAMPLE&client_id=abc

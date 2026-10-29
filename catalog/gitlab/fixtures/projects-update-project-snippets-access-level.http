@@ -1,0 +1,7 @@
+# description: Change the settings of project acme/shop (snippets_access_level)
+PUT /api/v4/projects/acme%2Fshop HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{"description": "Online shop", "snippets_access_level": "enabled"}

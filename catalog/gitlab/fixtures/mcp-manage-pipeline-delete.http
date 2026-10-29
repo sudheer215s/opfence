@@ -1,0 +1,8 @@
+# description: Rename or delete pipeline 1001 of project acme/shop (delete)
+POST /api/v4/mcp HTTP/1.1
+Host: gitlab.com
+Authorization: Bearer opf_gitlab_EXAMPLE
+Content-Type: application/json
+Accept: application/json, text/event-stream
+
+{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "manage_pipeline", "arguments": {"id": "acme/shop", "pipeline_id": 1001}}}

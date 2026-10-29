@@ -1,0 +1,5 @@
+# description: Delete wiki page home for group acme
+DELETE /api/v4/groups/acme/wikis/home HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

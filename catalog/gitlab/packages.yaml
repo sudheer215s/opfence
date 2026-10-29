@@ -1,0 +1,130 @@
+# GitLab REST API (gitlab.com/api/v4): Packages.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.packages.delete-project-package
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/packages/{package_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete a project package {package_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A package can be published again from its source.
+    tests:
+      - fixture: fixtures/packages-delete-project-package.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.packages.delete-package-file
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/packages/{package_id}/package_files/{package_file_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete package {package_id} file {package_file_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A package can be published again from its source.
+    tests:
+      - fixture: fixtures/packages-delete-package-file.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.packages.upload-maven-package-file
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/maven/{path}/{file_name}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Upload the maven package file {file_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Publishing a package is a write.
+    tests:
+      - fixture: fixtures/packages-upload-maven-package-file.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.packages.workhorse-authorize-maven-package-file-upload
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/maven/{path}/{file_name}/authorize" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Workhorse authorize the maven package file upload {file_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/packages-workhorse-authorize-maven-package-file-upload.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.packages.project-workhorse-authorize-generic-package-file-generic-authorize
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/generic/{package_name}/{package_version}/{file_name}/authorize" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Workhorse authorize generic package file {file_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/packages-project-workhorse-authorize-generic-package-file-generic-authorize.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.packages.project-workhorse-authorize-generic-package-file-generic-authorize-2
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/generic/{package_name}/{package_version}/{path}/{file_name}/authorize" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Workhorse authorize generic package file {file_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/packages-project-workhorse-authorize-generic-package-file-generic-authorize-2.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.packages.project-upload-package-file-packages-generic
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/generic/{package_name}/{package_version}/{file_name}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Upload package file {file_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Publishing a package is a write.
+    tests:
+      - fixture: fixtures/packages-project-upload-package-file-packages-generic.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.packages.project-upload-package-file-packages-generic-2
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/generic/{package_name}/{package_version}/{path}/{file_name}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Upload package file {file_name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Publishing a package is a write.
+    tests:
+      - fixture: fixtures/packages-project-upload-package-file-packages-generic-2.http
+        expect: write
+        resource: "acme/shop"

@@ -1,0 +1,7 @@
+# description: Update a URL variable DATABASE_URL of webhook 7 in project acme/shop
+PUT /api/v4/projects/acme%2Fshop/hooks/7/url_variables/DATABASE_URL HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

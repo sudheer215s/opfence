@@ -1,0 +1,86 @@
+# GitLab REST API (gitlab.com/api/v4): Applications.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.applications.user-create-application
+    match: { rest: { method: POST, path: "/api/v4/user/applications" } }
+    class: credential
+    card: "Create an application"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the application's secret.
+    tests:
+      - fixture: fixtures/applications-user-create-application.http
+        expect: credential
+
+  - id: gitlab.applications.user-delete-application
+    match: { rest: { method: DELETE, path: "/api/v4/user/applications/{id}" } }
+    class: access
+    card: "Delete an application {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Every token issued to the application stops working.
+    tests:
+      - fixture: fixtures/applications-user-delete-application.http
+        expect: access
+
+  - id: gitlab.applications.update-application
+    match: { rest: { method: PUT, path: "/api/v4/user/applications/{id}" } }
+    class: access
+    card: "Update an application {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Redirect URIs and scopes decide what the application's users grant it.
+    tests:
+      - fixture: fixtures/applications-update-application.http
+        expect: access
+
+  - id: gitlab.applications.create-application
+    match: { rest: { method: POST, path: "/api/v4/applications" } }
+    class: credential
+    card: "Create a new application"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the application's secret.
+    tests:
+      - fixture: fixtures/applications-create-application.http
+        expect: credential
+
+  - id: gitlab.applications.delete-application
+    match: { rest: { method: DELETE, path: "/api/v4/applications/{id}" } }
+    class: access
+    card: "Delete an application {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Every token issued to the application stops working.
+    tests:
+      - fixture: fixtures/applications-delete-application.http
+        expect: access
+
+  - id: gitlab.applications.renew-application-secret
+    match: { rest: { method: POST, path: "/api/v4/applications/{id}/renew-secret" } }
+    class: credential
+    card: "Renew an application secret {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the application's secret.
+    tests:
+      - fixture: fixtures/applications-renew-application-secret.http
+        expect: credential

@@ -1,0 +1,86 @@
+# GitLab REST API (gitlab.com/api/v4): Active context.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.active-context.activate-activecontext-connection
+    match: { rest: { method: PUT, path: "/api/v4/admin/active_context/connections/activate" } }
+    class: write
+    card: "Activate an ActiveContext connection"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/active-context-activate-activecontext-connection.http
+        expect: write
+
+  - id: gitlab.active-context.deactivate-activecontext-connection
+    match: { rest: { method: PUT, path: "/api/v4/admin/active_context/connections/deactivate" } }
+    class: write
+    card: "Deactivate an ActiveContext connection"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/active-context-deactivate-activecontext-connection.http
+        expect: write
+
+  - id: gitlab.active-context.update-collection-options
+    match: { rest: { method: PUT, path: "/api/v4/admin/active_context/collections/{id}" } }
+    class: write
+    card: "Update collection options {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/active-context-update-collection-options.http
+        expect: write
+
+  - id: gitlab.active-context.clear-activecontext-dead-queue
+    match: { rest: { method: DELETE, path: "/api/v4/admin/active_context/dead_queue" } }
+    class: delete
+    card: "Clear the ActiveContext dead queue"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Discards indexing items that failed; the index can be rebuilt.
+    tests:
+      - fixture: fixtures/active-context-clear-activecontext-dead-queue.http
+        expect: delete
+
+  - id: gitlab.active-context.replay-items-from-dead-queue-into-another-queue
+    match: { rest: { method: POST, path: "/api/v4/admin/active_context/dead_queue/replay" } }
+    class: write
+    card: "Replay items from the dead queue into another queue"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/active-context-replay-items-from-dead-queue-into-another-queue.http
+        expect: write
+
+  - id: gitlab.active-context.update-enabled-namespace-state
+    match: { rest: { method: PUT, path: "/api/v4/admin/active_context/code/enabled_namespaces" } }
+    class: write
+    card: "Update enabled namespace state"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/active-context-update-enabled-namespace-state.http
+        expect: write

@@ -1,0 +1,5 @@
+# description: Delete recipe revision 0 in project acme/shop
+DELETE /api/v4/projects/acme%2Fshop/packages/conan/v2/conans/shop-ui/1.0.0/acme/stable/revisions/0 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

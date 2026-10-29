@@ -1,0 +1,5 @@
+# description: Delete instance cluster 7
+DELETE /api/v4/admin/clusters/7 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

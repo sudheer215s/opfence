@@ -1,0 +1,7 @@
+# description: Approve a group member 7 in group acme
+PUT /api/v4/groups/acme/members/7/approve HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

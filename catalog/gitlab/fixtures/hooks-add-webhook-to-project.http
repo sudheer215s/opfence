@@ -1,0 +1,7 @@
+# description: Add a webhook to … in project acme/shop
+POST /api/v4/projects/acme%2Fshop/hooks HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{"url": "https://hooks.example.com/gitlab", "push_events": true}

@@ -1,0 +1,7 @@
+# description: Change instance CI/CD variable DATABASE_URL
+PUT /api/v4/admin/ci/variables/DATABASE_URL HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{"value": "debug"}

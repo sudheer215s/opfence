@@ -1,0 +1,98 @@
+# GitLab REST API (gitlab.com/api/v4): Protected branches.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.protected-branches.protect-repository-branch
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/protected_branches" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Protect a repository branch in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Branch protection decides who can push and merge; GitHub's is access too.
+    tests:
+      - fixture: fixtures/protected-branches-protect-repository-branch.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.protected-branches.group-update-protected-branch
+    match: { rest: { method: PATCH, path: "/api/v4/groups/{id}/protected_branches/{name}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Update a protected branch {name} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Branch protection decides who can push and merge; GitHub's is access too.
+    tests:
+      - fixture: fixtures/protected-branches-group-update-protected-branch.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.protected-branches.group-unprotect-repository-branches
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/protected_branches/{name}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Unprotect repository branches {name} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Branch protection decides who can push and merge; GitHub's is access too.
+    tests:
+      - fixture: fixtures/protected-branches-group-unprotect-repository-branches.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.protected-branches.protect-repository-branches
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/protected_branches" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Protect branch {body.name} of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Branch protection decides who can push and merge; GitHub's is access too.
+    tests:
+      - fixture: fixtures/protected-branches-protect-repository-branches.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.protected-branches.project-update-protected-branch
+    match: { rest: { method: PATCH, path: "/api/v4/projects/{id}/protected_branches/{name}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Update a protected branch {name} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Branch protection decides who can push and merge; GitHub's is access too.
+    tests:
+      - fixture: fixtures/protected-branches-project-update-protected-branch.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.protected-branches.project-unprotect-repository-branches
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/protected_branches/{name}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Unprotect branch {name} of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Branch protection decides who can push and merge; GitHub's is access too.
+    tests:
+      - fixture: fixtures/protected-branches-project-unprotect-repository-branches.http
+        expect: access
+        resource: "acme/shop"

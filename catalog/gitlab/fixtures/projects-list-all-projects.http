@@ -1,0 +1,5 @@
+# description: List GitLab projects
+GET /api/v4/projects HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

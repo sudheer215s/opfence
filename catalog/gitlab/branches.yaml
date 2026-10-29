@@ -1,0 +1,83 @@
+# GitLab REST API (gitlab.com/api/v4): Branches.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.branches.create-repository-branch
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/repository/branches" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create branch {body.branch} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/branches-create-repository-branch.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.branches.delete-repository-branch
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/repository/branches/{branch}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete branch {branch} of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A branch can be pushed again from any clone, as for GitHub's branches.
+    tests:
+      - fixture: fixtures/branches-delete-repository-branch.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.branches.protect-branch
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/repository/branches/{branch}/protect" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Protect a single branch {branch} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Branch protection decides who can push and merge.
+    tests:
+      - fixture: fixtures/branches-protect-branch.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.branches.unprotect-branch
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/repository/branches/{branch}/unprotect" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Unprotect a single branch {branch} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Branch protection decides who can push and merge.
+    tests:
+      - fixture: fixtures/branches-unprotect-branch.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.branches.delete-all-merged-branches
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/repository/merged_branches" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete every merged branch of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Deletes every branch already merged into the default branch; their commits are in it.
+    tests:
+      - fixture: fixtures/branches-delete-all-merged-branches.http
+        expect: delete
+        resource: "acme/shop"
+      - fixture: fixtures/branches-delete-all-merged-branches-format-suffix.http
+        expect: delete
+        resource: "acme/shop"

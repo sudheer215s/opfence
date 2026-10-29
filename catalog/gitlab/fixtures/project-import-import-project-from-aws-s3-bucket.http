@@ -1,0 +1,7 @@
+# description: Import a project from an AWS S3 bucket
+POST /api/v4/projects/remote-import-s3 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

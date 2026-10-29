@@ -148,7 +148,7 @@ func CheckProvider(ctx context.Context, p *catalog.Provider, fetch Fetcher) Prov
 		}
 	}
 	for i, o := range ops {
-		if covered[i] || readOnly(p, o) {
+		if covered[i] || readOnly(p, o) || underMCPPath(p, o) {
 			continue
 		}
 		note := ""
@@ -301,6 +301,23 @@ func (x *index) overlaps(r *catalog.Rule, i int, o Op, cover bool) bool {
 			return o.Action == m.AWS.Action
 		}
 		return o.Method == m.AWS.Method && x.paths[i] != nil && pathsOverlap(m.AWS.Template, x.paths[i], cover)
+	}
+	return false
+}
+
+// underMCPPath reports whether a REST operation is at or under one of the
+// provider's mcp.paths. Requests there are read as MCP and decided by the
+// provider's tool rules, which the check does not compare (GitLab's server
+// is POST /api/v4/mcp on the host of its REST API).
+func underMCPPath(p *catalog.Provider, o Op) bool {
+	if o.Kind != "rest" || p.MCP == nil {
+		return false
+	}
+	for _, mp := range p.MCP.Paths {
+		mp = strings.TrimSuffix(mp, "/")
+		if o.Path == mp || strings.HasPrefix(o.Path, mp+"/") {
+			return true
+		}
 	}
 	return false
 }

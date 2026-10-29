@@ -1,0 +1,7 @@
+# description: Restore a soft-deleted organization 7
+POST /api/v4/organizations/7/restore HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

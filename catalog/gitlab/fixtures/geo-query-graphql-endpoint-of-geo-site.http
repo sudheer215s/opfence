@@ -1,0 +1,7 @@
+# description: Query the GraphQL endpoint of an existing Geo site 7
+POST /api/v4/geo/node_proxy/7/graphql HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

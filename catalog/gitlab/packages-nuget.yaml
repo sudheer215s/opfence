@@ -1,0 +1,114 @@
+# GitLab REST API (gitlab.com/api/v4): Packages: NuGet.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.packages-nuget.upload-nuget-v2-package-file-for-project
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/nuget/v2" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Upload a NuGet v2 package file for project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Publishing a package is a write.
+    tests:
+      - fixture: fixtures/packages-nuget-upload-nuget-v2-package-file-for-project.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.packages-nuget.upload-nuget-v3-package-file-for-project
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/nuget" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Upload a NuGet v3 package file for project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Publishing a package is a write.
+    tests:
+      - fixture: fixtures/packages-nuget-upload-nuget-v3-package-file-for-project.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.packages-nuget.nuget-package-authorize-endpoint
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/nuget/authorize" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "The NuGet Package Authorize endpoint in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/packages-nuget-nuget-package-authorize-endpoint.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.packages-nuget.upload-nuget-symbol-package-file
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/nuget/symbolpackage" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Upload a NuGet symbol package file in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Publishing a package is a write.
+    tests:
+      - fixture: fixtures/packages-nuget-upload-nuget-symbol-package-file.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.packages-nuget.nuget-symbol-package-authorize-endpoint
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/nuget/symbolpackage/authorize" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "The NuGet Symbol Package Authorize endpoint in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/packages-nuget-nuget-symbol-package-authorize-endpoint.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.packages-nuget.nuget-package-delete-endpoint
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/packages/nuget/{package_name}/{package_version}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "The NuGet Package Delete endpoint {package_version} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A package can be published again from its source.
+    tests:
+      - fixture: fixtures/packages-nuget-nuget-package-delete-endpoint.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.packages-nuget.nuget-v2-feed-package-authorize-endpoint
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/packages/nuget/v2/authorize" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "The NuGet V2 Feed Package Authorize endpoint in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/packages-nuget-nuget-v2-feed-package-authorize-endpoint.http
+        expect: read
+        resource: "acme/shop"

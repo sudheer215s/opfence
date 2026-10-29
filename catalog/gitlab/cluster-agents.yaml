@@ -1,0 +1,96 @@
+# GitLab REST API (gitlab.com/api/v4): Cluster agents.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.cluster-agents.create-agent-url-configuration
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/cluster_agents/{agent_id}/url_configurations" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create an agent URL configuration {agent_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Decides where GitLab connects to reach the agent, and with which certificate.
+    tests:
+      - fixture: fixtures/cluster-agents-create-agent-url-configuration.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.cluster-agents.delete-agent-url-configuration
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/cluster_agents/{agent_id}/url_configurations/{url_configuration_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete an agent URL configuration of agent {agent_id} {url_configuration_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      The agent's configuration lives in the repository; it can be registered again.
+    tests:
+      - fixture: fixtures/cluster-agents-delete-agent-url-configuration.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.cluster-agents.create-agent
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/cluster_agents" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create an agent in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/cluster-agents-create-agent.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.cluster-agents.delete-agent
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/cluster_agents/{agent_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete an agent {agent_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      The agent's configuration lives in the repository; it can be registered again.
+    tests:
+      - fixture: fixtures/cluster-agents-delete-agent.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.cluster-agents.create-agent-token
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/cluster_agents/{agent_id}/tokens" } }
+    class: credential
+    resource: { arg: id, kind: project }
+    card: "Create an agent token {agent_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the agent token.
+    tests:
+      - fixture: fixtures/cluster-agents-create-agent-token.http
+        expect: credential
+        resource: "acme/shop"
+
+  - id: gitlab.cluster-agents.revoke-agent-token
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/cluster_agents/{agent_id}/tokens/{token_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Revoke an agent token of agent {agent_id} {token_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Whoever uses the agent token can no longer connect.
+    tests:
+      - fixture: fixtures/cluster-agents-revoke-agent-token.http
+        expect: access
+        resource: "acme/shop"

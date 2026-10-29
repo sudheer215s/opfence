@@ -1,0 +1,7 @@
+# description: Create or updates a custom attribute for project acme/shop DATABASE_URL
+PUT /api/v4/projects/acme%2Fshop/custom_attributes/DATABASE_URL HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

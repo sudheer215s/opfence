@@ -1,0 +1,30 @@
+# GitLab REST API (gitlab.com/api/v4): Data management.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.data-management.recalculate-checksum-of-model-record
+    match: { rest: { method: PUT, path: "/api/v4/admin/data_management/{model_name}/{record_identifier}/checksum" } }
+    class: write
+    card: "Recalculate the checksum of a model record {record_identifier}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/data-management-recalculate-checksum-of-model-record.http
+        expect: write
+
+  - id: gitlab.data-management.recalculate-checksums-for-model-records
+    match: { rest: { method: PUT, path: "/api/v4/admin/data_management/{model_name}/checksum" } }
+    class: write
+    card: "Recalculate checksums for model records {model_name}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/data-management-recalculate-checksums-for-model-records.http
+        expect: write

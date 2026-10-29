@@ -1,0 +1,7 @@
+# description: Workhorse authorization for the reassignment CSV file in group acme
+POST /api/v4/groups/acme/placeholder_reassignments/authorize HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

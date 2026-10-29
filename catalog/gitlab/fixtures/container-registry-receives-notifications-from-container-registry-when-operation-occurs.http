@@ -1,0 +1,7 @@
+# description: Receive notifications from the container registry when an operation occurs
+POST /api/v4/container_registry_event/events HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

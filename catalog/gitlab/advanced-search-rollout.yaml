@@ -1,0 +1,30 @@
+# GitLab REST API (gitlab.com/api/v4): Advanced search rollout.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.advanced-search-rollout.rollout-namespaces-to-be-indexed-up-to-n
+    match: { rest: { method: PUT, path: "/api/v4/elasticsearch_indexed_namespaces/rollout" } }
+    class: write
+    card: "Rollout namespaces to be indexed up to n%"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/advanced-search-rollout-rollout-namespaces-to-be-indexed-up-to-n.http
+        expect: write
+
+  - id: gitlab.advanced-search-rollout.rollback-namespaces-to-be-indexed-down-to-n
+    match: { rest: { method: PUT, path: "/api/v4/elasticsearch_indexed_namespaces/rollback" } }
+    class: write
+    card: "Rollback namespaces to be indexed down to n%"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/advanced-search-rollout-rollback-namespaces-to-be-indexed-down-to-n.http
+        expect: write

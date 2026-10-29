@@ -1,0 +1,5 @@
+# description: Remove a shared project from group acme 9
+DELETE /api/v4/groups/acme/shared_projects/9 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

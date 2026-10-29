@@ -1,0 +1,28 @@
+# GitLab REST API (gitlab.com/api/v4): Offline transfers.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.offline-transfers.start-offline-transfer-export
+    match: { rest: { method: POST, path: "/api/v4/offline_exports" } }
+    class: access
+    card: "Start a new offline transfer export"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Exports groups and projects to the object storage named in the request.
+    tests:
+      - fixture: fixtures/offline-transfers-start-offline-transfer-export.http
+        expect: access
+
+  - id: gitlab.offline-transfers.start-offline-transfer-import
+    match: { rest: { method: POST, path: "/api/v4/offline_imports" } }
+    class: write
+    card: "Start a new offline transfer import"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/offline-transfers-start-offline-transfer-import.http
+        expect: write

@@ -1,0 +1,7 @@
+# description: Proxy a git-receive-pack request to the primary site
+POST /api/v4/geo/proxy_git_ssh/receive_pack HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

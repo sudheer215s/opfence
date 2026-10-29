@@ -1,0 +1,5 @@
+# description: Stop sharing group acme with group 8
+DELETE /api/v4/groups/acme/share/8 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

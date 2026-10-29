@@ -1,0 +1,7 @@
+# description: Register the GitLab for Jira (Forge) system token for direct dev-info sync
+POST /api/v4/integrations/jira_forge/installation/forge_token HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

@@ -1,0 +1,41 @@
+provider: gitlab
+title: GitLab
+docs: https://docs.gitlab.com/api/rest/
+# gitlab.com serves the REST API (/api/v4), the GraphQL API (/api/graphql),
+# git over HTTPS and Git LFS (/<group>/<subgroup>/<project>.git/...), OAuth
+# (/oauth/token) and GitLab's own MCP server (/api/v4/mcp) on one host. glab,
+# the GitLab CLI, calls the REST API with a personal access token or an OAuth
+# token from its config, GITLAB_TOKEN or GITLAB_ACCESS_TOKEN.
+# Self-managed and Dedicated instances are on their own hosts, which this
+# provider does not claim (docs/LIMITS.md).
+hosts: [gitlab.com]
+git: [gitlab.com]
+# GraphQL is read, but no rules classify it yet: every query and mutation is
+# unknown, which asks (a query can select CI/CD variable values).
+graphql: [/api/graphql]
+# Grape and Rails route /x.json, /x.xml or /x.anything as /x, so requests
+# are also decoded without the extension (stage 29).
+format_suffix: true
+auth:
+  - header: PRIVATE-TOKEN          # personal, project, group and service account tokens
+  - header: Authorization          # "Bearer <token>": OAuth tokens and access tokens
+    scheme: Bearer
+  - header: JOB-TOKEN              # CI/CD job tokens
+  - query: private_token
+  - query: job_token
+  - basic: password                # git over HTTPS: any user name (oauth2, gitlab-ci-token), the token as password
+  - form: refresh_token            # glab's OAuth refresh at /oauth/token, with a refresh token minted there
+# GitLab's MCP server is part of GitLab: POST /api/v4/mcp (streamable HTTP,
+# with an OAuth token or an access token). Its tool rules are in mcp.yaml;
+# every other path is read as REST.
+mcp:
+  names: [gitlab, GitLab, gitlab-mcp]
+  paths: [/api/v4/mcp]
+detect:
+  env: [GITLAB_TOKEN, GITLAB_ACCESS_TOKEN, GITLAB_PRIVATE_TOKEN]
+  prefixes: [glpat-, gldt-]        # access tokens; deploy tokens (git and the registry, by Basic auth)
+defaults:
+  rest_safe_methods: read          # the GETs that return secrets have credential rules
+schemas:
+  - kind: openapi
+    url: https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml

@@ -1,0 +1,7 @@
+# description: Disable two-factor authentication for an enterprise user 42 in group acme
+PATCH /api/v4/groups/acme/enterprise_users/42/disable_two_factor HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

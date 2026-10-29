@@ -1,0 +1,7 @@
+# description: Submit risk assessment results for a merge request
+POST /api/v4/ai/duo_workflows/tools/risk_classification/results HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

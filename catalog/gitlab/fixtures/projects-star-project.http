@@ -1,0 +1,7 @@
+# description: Star project acme/shop
+POST /api/v4/projects/acme%2Fshop/star HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

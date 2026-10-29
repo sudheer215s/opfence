@@ -1,0 +1,7 @@
+# description: Generate Git commands from natural text
+POST /api/v4/ai/llm/git_command HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

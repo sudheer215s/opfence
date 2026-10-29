@@ -1,0 +1,7 @@
+# description: Complete or fail an external agent session 7 in project acme/shop
+PATCH /api/v4/projects/acme%2Fshop/ai_agent/sessions/7 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

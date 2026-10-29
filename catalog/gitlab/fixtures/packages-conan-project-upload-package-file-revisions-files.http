@@ -1,0 +1,7 @@
+# description: Upload a package file shop-ui-1.0.0.tgz in project acme/shop
+PUT /api/v4/projects/acme%2Fshop/packages/conan/v2/conans/shop-ui/1.0.0/acme/stable/revisions/0/packages/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/revisions/0/files/shop-ui-1.0.0.tgz HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

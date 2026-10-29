@@ -1,0 +1,56 @@
+# GitLab REST API (gitlab.com/api/v4): Project topics.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.project-topics.create-project-topic
+    match: { rest: { method: POST, path: "/api/v4/topics" } }
+    class: write
+    card: "Create a project topic"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/project-topics-create-project-topic.http
+        expect: write
+
+  - id: gitlab.project-topics.update-project-topic
+    match: { rest: { method: PUT, path: "/api/v4/topics/{id}" } }
+    class: write
+    card: "Update a project topic {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/project-topics-update-project-topic.http
+        expect: write
+
+  - id: gitlab.project-topics.delete-project-topic
+    match: { rest: { method: DELETE, path: "/api/v4/topics/{id}" } }
+    class: delete
+    card: "Delete a project topic {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/project-topics-delete-project-topic.http
+        expect: delete
+
+  - id: gitlab.project-topics.merge-topics
+    match: { rest: { method: POST, path: "/api/v4/topics/merge" } }
+    class: write
+    card: "Merge topics"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/project-topics-merge-topics.http
+        expect: write

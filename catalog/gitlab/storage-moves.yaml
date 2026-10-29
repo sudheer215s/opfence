@@ -1,0 +1,90 @@
+# GitLab REST API (gitlab.com/api/v4): Storage moves.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.storage-moves.create-group-repository-storage-moves-for-storage-shard
+    match: { rest: { method: POST, path: "/api/v4/group_repository_storage_moves" } }
+    class: write
+    card: "Create group repository storage moves for a storage shard"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/storage-moves-create-group-repository-storage-moves-for-storage-shard.http
+        expect: write
+
+  - id: gitlab.storage-moves.create-group-repository-storage-move
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/repository_storage_moves" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Create a group repository storage move in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/storage-moves-create-group-repository-storage-move.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.storage-moves.schedule-repository-storage-moves-for-all-snippets-on-storage-shard
+    match: { rest: { method: POST, path: "/api/v4/snippet_repository_storage_moves" } }
+    class: write
+    card: "Schedule repository storage moves for all snippets on a storage shard"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/storage-moves-schedule-repository-storage-moves-for-all-snippets-on-storage-shard.http
+        expect: write
+
+  - id: gitlab.storage-moves.schedule-repository-storage-move-for-snippet
+    match: { rest: { method: POST, path: "/api/v4/snippets/{id}/repository_storage_moves" } }
+    class: write
+    card: "Schedule a repository storage move for a snippet {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/storage-moves-schedule-repository-storage-move-for-snippet.http
+        expect: write
+
+  - id: gitlab.storage-moves.create-repository-storage-moves-for-all-projects-on-storage-shard
+    match: { rest: { method: POST, path: "/api/v4/project_repository_storage_moves" } }
+    class: write
+    card: "Create repository storage moves for all projects on a storage shard"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/storage-moves-create-repository-storage-moves-for-all-projects-on-storage-shard.http
+        expect: write
+
+  - id: gitlab.storage-moves.create-repository-storage-move-for-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/repository_storage_moves" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create a repository storage move for project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/storage-moves-create-repository-storage-move-for-project.http
+        expect: write
+        resource: "acme/shop"

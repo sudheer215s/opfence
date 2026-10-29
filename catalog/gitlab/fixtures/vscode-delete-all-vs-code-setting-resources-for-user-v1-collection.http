@@ -1,0 +1,5 @@
+# description: Delete all VS Code setting resources for a user
+DELETE /api/v4/vscode/settings_sync/v1/collection HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

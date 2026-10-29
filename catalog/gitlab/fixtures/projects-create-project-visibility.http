@@ -1,0 +1,7 @@
+# description: Create GitLab project … (visibility)
+POST /api/v4/projects HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{"name": "shop", "namespace_id": 8, "visibility": "public"}

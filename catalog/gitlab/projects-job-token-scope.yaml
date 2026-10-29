@@ -1,0 +1,82 @@
+# GitLab REST API (gitlab.com/api/v4): Projects job token scope.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.projects-job-token-scope.update-ci-cd-job-token-access-settings-for-project
+    match: { rest: { method: PATCH, path: "/api/v4/projects/{id}/job_token_scope" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Update the CI/CD job token access settings for project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Decides which projects' CI/CD job tokens can reach this project.
+    tests:
+      - fixture: fixtures/projects-job-token-scope-update-ci-cd-job-token-access-settings-for-project.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.projects-job-token-scope.add-project-to-ci-cd-job-token-allowlist
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/job_token_scope/allowlist" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Add project {id} to a CI/CD job token allowlist"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Decides which projects' CI/CD job tokens can reach this project.
+    tests:
+      - fixture: fixtures/projects-job-token-scope-add-project-to-ci-cd-job-token-allowlist.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.projects-job-token-scope.add-group-to-ci-cd-job-token-allowlist
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/job_token_scope/groups_allowlist" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Add a group to a CI/CD job token allowlist in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Decides which projects' CI/CD job tokens can reach this project.
+    tests:
+      - fixture: fixtures/projects-job-token-scope-add-group-to-ci-cd-job-token-allowlist.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.projects-job-token-scope.delete-group-from-ci-cd-job-token-allowlist
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/job_token_scope/groups_allowlist/{target_group_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Delete a group from a CI/CD job token allowlist {target_group_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Decides which projects' CI/CD job tokens can reach this project.
+    tests:
+      - fixture: fixtures/projects-job-token-scope-delete-group-from-ci-cd-job-token-allowlist.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.projects-job-token-scope.delete-project-from-ci-cd-job-token-allowlist
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/job_token_scope/allowlist/{target_project_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Delete project {id} from a CI/CD job token allowlist {target_project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Decides which projects' CI/CD job tokens can reach this project.
+    tests:
+      - fixture: fixtures/projects-job-token-scope-delete-project-from-ci-cd-job-token-allowlist.http
+        expect: access
+        resource: "acme/shop"

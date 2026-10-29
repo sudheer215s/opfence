@@ -1,0 +1,192 @@
+# GitLab REST API (gitlab.com/api/v4): Project import.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.project-import.workhorse-authorize-project-import-upload
+    match: { rest: { method: POST, path: "/api/v4/projects/import/authorize" } }
+    class: read
+    card: "Workhorse authorize the project import upload"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/project-import-workhorse-authorize-project-import-upload.http
+        expect: read
+
+  - id: gitlab.project-import.import-project-from-local-archive
+    match: { rest: { method: POST, path: "/api/v4/projects/import" } }
+    class: write
+    card: "Import a project from a local archive"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/project-import-import-project-from-local-archive.http
+        expect: write
+
+  - id: gitlab.project-import.import-project-from-git-url
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/import/git" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Import project {id} from a Git URL"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/project-import-import-project-from-git-url.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.project-import.import-project-from-remote-archive
+    match: { rest: { method: POST, path: "/api/v4/projects/remote-import" } }
+    class: write
+    card: "Import a project from a remote archive"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/project-import-import-project-from-remote-archive.http
+        expect: write
+
+  - id: gitlab.project-import.authorize-project-relation-import
+    match: { rest: { method: POST, path: "/api/v4/projects/import-relation/authorize" } }
+    class: read
+    card: "Authorize project relation import"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Workhorse's pre-check before an upload; nothing is stored.
+    tests:
+      - fixture: fixtures/project-import-authorize-project-relation-import.http
+        expect: read
+
+  - id: gitlab.project-import.import-project-resources
+    match: { rest: { method: POST, path: "/api/v4/projects/import-relation" } }
+    class: write
+    card: "Import project resources"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/project-import-import-project-resources.http
+        expect: write
+
+  - id: gitlab.project-import.import-project-from-aws-s3-bucket
+    match: { rest: { method: POST, path: "/api/v4/projects/remote-import-s3" } }
+    class: write
+    card: "Import a project from an AWS S3 bucket"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/project-import-import-project-from-aws-s3-bucket.http
+        expect: write
+
+  - id: gitlab.project-import.export-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/export" } }
+    class: write
+    when:
+      - if: { arg: body.upload, present: true }
+        class: access
+      - if: { arg: query.upload, present: true }
+        class: access
+    resource: { arg: id, kind: project }
+    card: "Export project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      With upload, the export is sent to the URL given, which is access.
+    tests:
+      - fixture: fixtures/project-import-export-project.http
+        expect: write
+        resource: "acme/shop"
+      - fixture: fixtures/project-import-export-project-upload.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.project-import.schedule-relations-export-for-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/export_relations" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Schedule a relations export for project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/project-import-schedule-relations-export-for-project.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.project-import.receive-github-webhook-delivery-for-oauth-connected-repository
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/github/webhooks" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Receive a GitHub webhook delivery for an OAuth-connected repository in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/project-import-receive-github-webhook-delivery-for-oauth-connected-repository.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.project-import.import-repository-from-github
+    match: { rest: { method: POST, path: "/api/v4/import/github" } }
+    class: write
+    card: "Import a repository from GitHub"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/project-import-import-repository-from-github.http
+        expect: write
+
+  - id: gitlab.project-import.cancel-github-project-import
+    match: { rest: { method: POST, path: "/api/v4/import/github/cancel" } }
+    class: write
+    card: "Cancel a GitHub project import"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/project-import-cancel-github-project-import.http
+        expect: write
+
+  - id: gitlab.project-import.import-repository-from-bitbucket-server
+    match: { rest: { method: POST, path: "/api/v4/import/bitbucket_server" } }
+    class: write
+    card: "Import repository from Bitbucket Server"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/project-import-import-repository-from-bitbucket-server.http
+        expect: write
+
+  - id: gitlab.project-import.import-repository-from-bitbucket-cloud
+    match: { rest: { method: POST, path: "/api/v4/import/bitbucket" } }
+    class: write
+    card: "Import repository from Bitbucket Cloud"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/project-import-import-repository-from-bitbucket-cloud.http
+        expect: write

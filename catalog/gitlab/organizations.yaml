@@ -1,0 +1,88 @@
+# GitLab REST API (gitlab.com/api/v4): Organizations.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.organizations.start-maintenance-on-organization
+    match: { rest: { method: POST, path: "/api/v4/internal/org_mover/start_maintenance" } }
+    class: write
+    card: "Start maintenance on an organization (active -> maintenance_initialization)"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/organizations-start-maintenance-on-organization.http
+        expect: write
+
+  - id: gitlab.organizations.confirm-maintenance-on-organization
+    match: { rest: { method: POST, path: "/api/v4/internal/org_mover/confirm_maintenance" } }
+    class: write
+    card: "Confirm maintenance on an organization (maintenance_initialization -> maintenance)"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/organizations-confirm-maintenance-on-organization.http
+        expect: write
+
+  - id: gitlab.organizations.cancel-maintenance-on-organization
+    match: { rest: { method: POST, path: "/api/v4/internal/org_mover/cancel_maintenance" } }
+    class: write
+    card: "Cancel maintenance on an organization (maintenance_initialization -> active)"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/organizations-cancel-maintenance-on-organization.http
+        expect: write
+
+  - id: gitlab.organizations.exit-maintenance-on-organization
+    match: { rest: { method: POST, path: "/api/v4/internal/org_mover/exit_maintenance" } }
+    class: write
+    card: "Exit maintenance on an organization (maintenance -> active)"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/organizations-exit-maintenance-on-organization.http
+        expect: write
+
+  - id: gitlab.organizations.create-organization
+    match: { rest: { method: POST, path: "/api/v4/organizations" } }
+    class: write
+    card: "Create an organization"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/organizations-create-organization.http
+        expect: write
+
+  - id: gitlab.organizations.soft-delete-organization
+    match: { rest: { method: DELETE, path: "/api/v4/organizations/{id}" } }
+    class: delete
+    card: "Soft-delete an organization {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A soft-deleted organization can be restored.
+    tests:
+      - fixture: fixtures/organizations-soft-delete-organization.http
+        expect: delete
+
+  - id: gitlab.organizations.restore-soft-deleted-organization
+    match: { rest: { method: POST, path: "/api/v4/organizations/{id}/restore" } }
+    class: write
+    card: "Restore a soft-deleted organization {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/organizations-restore-soft-deleted-organization.http
+        expect: write

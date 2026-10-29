@@ -1,0 +1,7 @@
+# description: Enable a namespace for Knowledge Graph 7
+PUT /api/v4/admin/knowledge_graph/namespaces/7 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

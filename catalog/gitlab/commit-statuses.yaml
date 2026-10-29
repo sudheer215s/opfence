@@ -1,0 +1,16 @@
+# GitLab REST API (gitlab.com/api/v4): Commit statuses.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.commit-statuses.create-or-update-commit-pipeline-status
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/statuses/{sha}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create or update commit {sha} pipeline status in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/commit-statuses-create-or-update-commit-pipeline-status.http
+        expect: write
+        resource: "acme/shop"

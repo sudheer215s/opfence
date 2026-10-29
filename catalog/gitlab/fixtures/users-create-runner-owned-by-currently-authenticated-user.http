@@ -1,0 +1,7 @@
+# description: Create a runner owned by currently authenticated user
+POST /api/v4/user/runners HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

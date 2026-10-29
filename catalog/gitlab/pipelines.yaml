@@ -1,0 +1,94 @@
+# GitLab REST API (gitlab.com/api/v4): Pipelines.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.pipelines.create-pipeline
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/pipeline" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Run a pipeline on {body.ref} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/pipelines-create-pipeline.http
+        expect: write
+        resource: "acme/shop"
+      - fixture: fixtures/pipelines-create-pipeline-format-suffix.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.pipelines.delete-pipeline
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/pipelines/{pipeline_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete pipeline {pipeline_id} of project {id} with its logs and artifacts"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Deletes the pipeline with its jobs' logs and artifacts; the commit can be run again, as for
+      GitHub's workflow runs.
+    tests:
+      - fixture: fixtures/pipelines-delete-pipeline.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.pipelines.list-all-pipeline-variables
+    match: { rest: { method: GET, path: "/api/v4/projects/{id}/pipelines/{pipeline_id}/variables" } }
+    class: credential
+    resource: { arg: id, kind: project }
+    card: "Read the variables of pipeline {pipeline_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the variables the pipeline ran with, values included.
+    tests:
+      - fixture: fixtures/pipelines-list-all-pipeline-variables.http
+        expect: credential
+        resource: "acme/shop"
+
+  - id: gitlab.pipelines.update-pipeline-metadata
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/pipelines/{pipeline_id}/metadata" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update pipeline {pipeline_id} metadata in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/pipelines-update-pipeline-metadata.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.pipelines.retry-jobs-in-pipeline
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/pipelines/{pipeline_id}/retry" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Retry jobs in pipeline {pipeline_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/pipelines-retry-jobs-in-pipeline.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.pipelines.cancel-all-jobs-for-pipeline
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/pipelines/{pipeline_id}/cancel" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Cancel all jobs for pipeline {pipeline_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/pipelines-cancel-all-jobs-for-pipeline.http
+        expect: write
+        resource: "acme/shop"

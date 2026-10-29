@@ -1,0 +1,334 @@
+# GitLab REST API (gitlab.com/api/v4): Discussions.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.discussions.create-issue-discussion
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/issues/{noteable_id}/discussions" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create issue #{noteable_id} discussion in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/discussions-create-issue-discussion.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.discussions.resolve-or-unresolve-issue-discussion
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/issues/{noteable_id}/discussions/{discussion_id}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Resolve or unresolve issue #{noteable_id} discussion {discussion_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/discussions-resolve-or-unresolve-issue-discussion.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.discussions.add-comment-to-issue-discussion
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/issues/{noteable_id}/discussions/{discussion_id}/notes" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Add a comment to issue #{noteable_id} discussion {discussion_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/discussions-add-comment-to-issue-discussion.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.discussions.update-comment-in-issue-discussion
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/issues/{noteable_id}/discussions/{discussion_id}/notes/{note_id}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update comment {note_id} in issue #{noteable_id} discussion {discussion_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/discussions-update-comment-in-issue-discussion.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.discussions.delete-comment-from-issue-discussion
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/issues/{noteable_id}/discussions/{discussion_id}/notes/{note_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete comment {note_id} from issue #{noteable_id} discussion {discussion_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      As for GitHub's comments.
+    tests:
+      - fixture: fixtures/discussions-delete-comment-from-issue-discussion.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.discussions.create-snippet-discussion
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/snippets/{noteable_id}/discussions" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create snippet {noteable_id} discussion in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/discussions-create-snippet-discussion.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.discussions.add-comment-to-snippet-discussion
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/snippets/{noteable_id}/discussions/{discussion_id}/notes" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Add a comment to snippet {noteable_id} discussion {discussion_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/discussions-add-comment-to-snippet-discussion.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.discussions.update-comment-in-snippet-discussion
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/snippets/{noteable_id}/discussions/{discussion_id}/notes/{note_id}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update comment {note_id} in snippet {noteable_id} discussion {discussion_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/discussions-update-comment-in-snippet-discussion.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.discussions.delete-comment-from-snippet-discussion
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/snippets/{noteable_id}/discussions/{discussion_id}/notes/{note_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete comment {note_id} from snippet {noteable_id} discussion {discussion_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      As for GitHub's comments.
+    tests:
+      - fixture: fixtures/discussions-delete-comment-from-snippet-discussion.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.discussions.create-merge-request-discussion
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{noteable_id}/discussions" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create merge request !{noteable_id} discussion in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/discussions-create-merge-request-discussion.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.discussions.resolve-or-unresolve-merge-request-discussion
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/merge_requests/{noteable_id}/discussions/{discussion_id}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Resolve or unresolve merge request !{noteable_id} discussion {discussion_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/discussions-resolve-or-unresolve-merge-request-discussion.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.discussions.add-comment-to-merge-request-discussion
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{noteable_id}/discussions/{discussion_id}/notes" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Add a comment to merge request !{noteable_id} discussion {discussion_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/discussions-add-comment-to-merge-request-discussion.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.discussions.update-comment-in-merge-request-discussion
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/merge_requests/{noteable_id}/discussions/{discussion_id}/notes/{note_id}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update comment {note_id} in merge request !{noteable_id} discussion {discussion_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/discussions-update-comment-in-merge-request-discussion.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.discussions.delete-comment-from-merge-request-discussion
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/merge_requests/{noteable_id}/discussions/{discussion_id}/notes/{note_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete comment {note_id} from merge request !{noteable_id} discussion {discussion_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      As for GitHub's comments.
+    tests:
+      - fixture: fixtures/discussions-delete-comment-from-merge-request-discussion.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.discussions.create-commit-discussion
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/repository/commits/{noteable_id}/discussions" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create commit {noteable_id} discussion in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/discussions-create-commit-discussion.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.discussions.add-comment-to-commit-discussion
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/repository/commits/{noteable_id}/discussions/{discussion_id}/notes" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Add a comment to commit {noteable_id} discussion {discussion_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/discussions-add-comment-to-commit-discussion.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.discussions.update-comment-in-commit-discussion
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/repository/commits/{noteable_id}/discussions/{discussion_id}/notes/{note_id}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update comment {note_id} in commit {noteable_id} discussion {discussion_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/discussions-update-comment-in-commit-discussion.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.discussions.delete-comment-from-commit-discussion
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/repository/commits/{noteable_id}/discussions/{discussion_id}/notes/{note_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete comment {note_id} from commit {noteable_id} discussion {discussion_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      As for GitHub's comments.
+    tests:
+      - fixture: fixtures/discussions-delete-comment-from-commit-discussion.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.discussions.create-epic-discussion
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/epics/{noteable_id}/discussions" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Create epic &{noteable_id} discussion in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/discussions-create-epic-discussion.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.discussions.resolve-or-unresolve-epic-discussion
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/epics/{noteable_id}/discussions/{discussion_id}" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Resolve or unresolve epic &{noteable_id} discussion {discussion_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/discussions-resolve-or-unresolve-epic-discussion.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.discussions.add-comment-to-epic-discussion
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/epics/{noteable_id}/discussions/{discussion_id}/notes" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Add a comment to epic &{noteable_id} discussion {discussion_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/discussions-add-comment-to-epic-discussion.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.discussions.update-comment-in-epic-discussion
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/epics/{noteable_id}/discussions/{discussion_id}/notes/{note_id}" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Update comment {note_id} in epic &{noteable_id} discussion {discussion_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/discussions-update-comment-in-epic-discussion.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.discussions.delete-comment-from-epic-discussion
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/epics/{noteable_id}/discussions/{discussion_id}/notes/{note_id}" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Delete comment {note_id} from epic &{noteable_id} discussion {discussion_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      As for GitHub's comments.
+    tests:
+      - fixture: fixtures/discussions-delete-comment-from-epic-discussion.http
+        expect: delete
+        resource: "acme"

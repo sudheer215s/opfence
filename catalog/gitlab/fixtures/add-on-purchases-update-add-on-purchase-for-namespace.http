@@ -1,0 +1,7 @@
+# description: Update the add-on purchase for the namespace duo_pro
+PUT /api/v4/namespaces/7/subscription_add_on_purchase/duo_pro HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

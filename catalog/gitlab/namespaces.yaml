@@ -1,0 +1,44 @@
+# GitLab REST API (gitlab.com/api/v4): Namespaces.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.namespaces.update-namespace
+    match: { rest: { method: PUT, path: "/api/v4/namespaces/{id}" } }
+    class: money
+    card: "Update a namespace {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      GitLab.com plan, storage and compute administration.
+    tests:
+      - fixture: fixtures/namespaces-update-namespace.http
+        expect: money
+
+  - id: gitlab.namespaces.creates-storage-limit-exclusion-for-namespace
+    match: { rest: { method: POST, path: "/api/v4/namespaces/{id}/storage/limit_exclusion" } }
+    class: money
+    card: "Create a storage limit exclusion for a Namespace {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      GitLab.com plan, storage and compute administration.
+    tests:
+      - fixture: fixtures/namespaces-creates-storage-limit-exclusion-for-namespace.http
+        expect: money
+
+  - id: gitlab.namespaces.removes-storage-limit-exclusion-for-namespace
+    match: { rest: { method: DELETE, path: "/api/v4/namespaces/{id}/storage/limit_exclusion" } }
+    class: money
+    card: "Remove a storage limit exclusion for a Namespace {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      GitLab.com plan, storage and compute administration.
+    tests:
+      - fixture: fixtures/namespaces-removes-storage-limit-exclusion-for-namespace.http
+        expect: money

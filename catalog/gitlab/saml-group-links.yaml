@@ -1,0 +1,34 @@
+# GitLab REST API (gitlab.com/api/v4): SAML group links.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.saml-group-links.add-saml-group-link
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/saml_group_links" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Add SAML group link in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      SAML group links grant group roles.
+    tests:
+      - fixture: fixtures/saml-group-links-add-saml-group-link.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.saml-group-links.delete-saml-group-link
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/saml_group_links/{saml_group_name}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Delete SAML group link {saml_group_name} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      SAML group links grant group roles.
+    tests:
+      - fixture: fixtures/saml-group-links-delete-saml-group-link.http
+        expect: access
+        resource: "acme"

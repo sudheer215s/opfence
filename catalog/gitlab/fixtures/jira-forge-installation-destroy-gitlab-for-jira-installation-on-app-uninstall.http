@@ -1,0 +1,5 @@
+# description: Destroy the GitLab for Jira (Forge) installation on app uninstall
+DELETE /api/v4/integrations/jira_forge/installation HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

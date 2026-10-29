@@ -1,0 +1,116 @@
+# GitLab REST API (gitlab.com/api/v4): GitLab Pages.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.gitlab-pages.create-pages-domain
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/pages/domains" } }
+    class: access
+    when:
+      - if: { arg: body.key, present: true }
+        class: credential
+      - if: { arg: query.key, present: true }
+        class: credential
+      - if: { arg: body.user_provided_key, present: true }
+        class: credential
+      - if: { arg: query.user_provided_key, present: true }
+        class: credential
+    resource: { arg: id, kind: project }
+    card: "Create Pages domain in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A public domain serves the site. Uploading a certificate's private key is credential.
+    tests:
+      - fixture: fixtures/gitlab-pages-create-pages-domain.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/gitlab-pages-create-pages-domain-key.http
+        expect: credential
+        resource: "acme/shop"
+
+  - id: gitlab.gitlab-pages.update-pages-domain
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/pages/domains/{domain}" } }
+    class: access
+    when:
+      - if: { arg: body.key, present: true }
+        class: credential
+      - if: { arg: query.key, present: true }
+        class: credential
+      - if: { arg: body.user_provided_key, present: true }
+        class: credential
+      - if: { arg: query.user_provided_key, present: true }
+        class: credential
+    resource: { arg: id, kind: project }
+    card: "Update Pages domain {domain} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A public domain serves the site. Uploading a certificate's private key is credential.
+    tests:
+      - fixture: fixtures/gitlab-pages-update-pages-domain.http
+        expect: access
+        resource: "acme/shop"
+      - fixture: fixtures/gitlab-pages-update-pages-domain-key.http
+        expect: credential
+        resource: "acme/shop"
+
+  - id: gitlab.gitlab-pages.delete-pages-domain
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/pages/domains/{domain}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete Pages domain {domain} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/gitlab-pages-delete-pages-domain.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.gitlab-pages.verify-pages-domain
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/pages/domains/{domain}/verify" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Verify Pages domain {domain} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/gitlab-pages-verify-pages-domain.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.gitlab-pages.unpublish-pages
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/pages" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Unpublish Pages in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Pages can be deployed again from the pipeline.
+    tests:
+      - fixture: fixtures/gitlab-pages-unpublish-pages.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.gitlab-pages.update-pages-settings-for-project
+    match: { rest: { method: PATCH, path: "/api/v4/projects/{id}/pages" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update Pages settings for project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/gitlab-pages-update-pages-settings-for-project.http
+        expect: write
+        resource: "acme/shop"

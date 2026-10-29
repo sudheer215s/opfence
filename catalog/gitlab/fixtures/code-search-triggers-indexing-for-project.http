@@ -1,0 +1,7 @@
+# description: Trigger indexing for the specified project 9
+PUT /api/v4/admin/zoekt/projects/9/index HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

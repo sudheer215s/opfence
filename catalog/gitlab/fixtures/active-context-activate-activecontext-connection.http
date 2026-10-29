@@ -1,0 +1,7 @@
+# description: Activate an ActiveContext connection
+PUT /api/v4/admin/active_context/connections/activate HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

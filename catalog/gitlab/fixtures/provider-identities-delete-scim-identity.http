@@ -1,0 +1,5 @@
+# description: Delete a SCIM identity jdoe in group acme
+DELETE /api/v4/groups/acme/scim/jdoe HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

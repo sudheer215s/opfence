@@ -1,0 +1,7 @@
+# description: Repair authentication of the Geo node 7
+POST /api/v4/geo_nodes/7/repair HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

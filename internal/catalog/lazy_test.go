@@ -217,3 +217,94 @@ func TestLoadRulesOnFullCatalog(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+// A tools-only load (ToolRulesOnly, for hooks) gives every provider exactly
+// the MCP rules of a full load, in the same order, and nothing it skips
+// could have held one.
+func TestToolRulesOnlyMatchesFull(t *testing.T) {
+	full, err := Load(catalogdata.FS)
+	if err != nil {
+		t.Fatal(err)
+	}
+	lazy, err := LoadLazy(catalogdata.FS)
+	if err != nil {
+		t.Fatal(err)
+	}
+	skipped := 0
+	for i, fp := range full.Providers {
+		lp := lazy.Providers[i]
+		lazy.ToolRulesOnly(lp)
+		if err := lazy.LoadRules(lp); err != nil {
+			t.Fatalf("%s: %v", lp.ID, err)
+		}
+		var want []*Rule
+		for _, r := range fp.Rules {
+			if r.Match.MCP != nil {
+				want = append(want, r)
+			}
+		}
+		var got []*Rule
+		for _, r := range lp.Rules {
+			if r.Match.MCP != nil {
+				got = append(got, r)
+			} else {
+				skipped-- // loaded only because it shares a file with MCP rules
+			}
+		}
+		skipped += len(fp.Rules) - len(want)
+		if len(got) != len(want) {
+			t.Fatalf("%s: %d MCP rules in a tools-only load, %d in full", fp.ID, len(got), len(want))
+		}
+		for j := range want {
+			if !reflect.DeepEqual(ruleValue(want[j]), ruleValue(got[j])) {
+				t.Fatalf("%s: rule differs between a tools-only and a full load", want[j].ID)
+			}
+		}
+	}
+	if skipped == 0 {
+		t.Fatal("a tools-only load skipped no rules")
+	}
+}
+
+// ToolRulesOnly after a provider's rules are loaded, or on a catalog loaded
+// whole, changes nothing.
+func TestToolRulesOnlyAfterLoad(t *testing.T) {
+	lazy, err := LoadLazy(catalogdata.FS)
+	if err != nil {
+		t.Fatal(err)
+	}
+	p := lazy.Provider("gitlab")
+	if err := lazy.LoadRules(p); err != nil {
+		t.Fatal(err)
+	}
+	n := len(p.Rules)
+	lazy.ToolRulesOnly(p)
+	if err := lazy.LoadRules(p); err != nil || len(p.Rules) != n {
+		t.Fatalf("rules changed after ToolRulesOnly: %d, want %d (%v)", len(p.Rules), n, err)
+	}
+	full, err := Load(catalogdata.FS)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fp := full.Provider("gitlab")
+	full.ToolRulesOnly(fp)
+	if err := full.LoadRules(fp); err != nil || len(fp.Rules) != n {
+		t.Fatalf("full catalog: %d rules, want %d (%v)", len(fp.Rules), n, err)
+	}
+}
+
+func TestMCPMatcherRe(t *testing.T) {
+	for s, want := range map[string]bool{
+		"    match: { mcp: { tool: x } }":         true,
+		"    match:\n      mcp:\n        tool: x": true,
+		"    match: {\"mcp\": {tool: x}}":         true,
+		"    match: {'mcp' : {tool: x}}":          true,
+		"    match: { rest: { method: GET } }":    false,
+		"    notes: the mcp server":               false,
+		"    notes: see /api/v4/mcp.":             false,
+	} {
+		if got := mcpMatcherRe.MatchString(s); got != want {
+			t.Errorf("%q: %v, want %v", s, got, want)
+		}
+	}
+}

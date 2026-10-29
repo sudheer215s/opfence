@@ -1,0 +1,130 @@
+# GitLab REST API (gitlab.com/api/v4): Approval rules.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.approval-rules.create-approval-rule
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/approval_settings/rules" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create new approval rule in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Approval rules decide who must approve a merge request before it can merge.
+    tests:
+      - fixture: fixtures/approval-rules-create-approval-rule.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.approval-rules.update-approval-rule
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/approval_settings/rules/{approval_rule_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Update approval rule {approval_rule_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Approval rules decide who must approve a merge request before it can merge.
+    tests:
+      - fixture: fixtures/approval-rules-update-approval-rule.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.approval-rules.delete-approval-rule
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/approval_settings/rules/{approval_rule_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Delete an approval rule {approval_rule_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Approval rules decide who must approve a merge request before it can merge.
+    tests:
+      - fixture: fixtures/approval-rules-delete-approval-rule.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.approval-rules.create-approval-rule-for-group
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/approval_rules" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Create an approval rule for group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Approval rules decide who must approve a merge request before it can merge.
+    tests:
+      - fixture: fixtures/approval-rules-create-approval-rule-for-group.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.approval-rules.update-group-approval-rule
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/approval_rules/{approval_rule_id}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Update group approval rule {approval_rule_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Approval rules decide who must approve a merge request before it can merge.
+    tests:
+      - fixture: fixtures/approval-rules-update-group-approval-rule.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.approval-rules.create-approval-rule-for-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/approval_rules" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create an approval rule for project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Approval rules decide who must approve a merge request before it can merge.
+    tests:
+      - fixture: fixtures/approval-rules-create-approval-rule-for-project.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.approval-rules.update-approval-rule-for-project
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/approval_rules/{approval_rule_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Update an approval rule for project {id} {approval_rule_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Approval rules decide who must approve a merge request before it can merge.
+    tests:
+      - fixture: fixtures/approval-rules-update-approval-rule-for-project.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.approval-rules.delete-approval-rule-for-project
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/approval_rules/{approval_rule_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Delete an approval rule for project {id} {approval_rule_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Approval rules decide who must approve a merge request before it can merge.
+    tests:
+      - fixture: fixtures/approval-rules-delete-approval-rule-for-project.http
+        expect: access
+        resource: "acme/shop"

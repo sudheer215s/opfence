@@ -1,0 +1,7 @@
+# description: Transfer purchased compute minutes packs to another namespace 8
+PATCH /api/v4/namespaces/7/minutes/move/8 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

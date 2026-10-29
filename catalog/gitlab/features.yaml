@@ -1,0 +1,30 @@
+# GitLab REST API (gitlab.com/api/v4): Features.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.features.create-or-update-feature-flag
+    match: { rest: { method: POST, path: "/api/v4/features/{name}" } }
+    class: write
+    card: "Create or update a feature flag {name}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration: GitLab's own feature flags.
+    tests:
+      - fixture: fixtures/features-create-or-update-feature-flag.http
+        expect: write
+
+  - id: gitlab.features.delete-feature
+    match: { rest: { method: DELETE, path: "/api/v4/features/{name}" } }
+    class: write
+    card: "Delete a feature {name}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration: GitLab's own feature flags.
+    tests:
+      - fixture: fixtures/features-delete-feature.http
+        expect: write

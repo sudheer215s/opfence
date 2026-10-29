@@ -1,0 +1,16 @@
+# GitLab REST API (gitlab.com/api/v4): Sidekiq.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.sidekiq.delete-jobs-from-sidekiq-queue
+    match: { rest: { method: DELETE, path: "/api/v4/admin/sidekiq/queues/{queue_name}" } }
+    class: irreversible
+    card: "Delete jobs from a Sidekiq queue {queue_name}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Drops queued background jobs.
+    tests:
+      - fixture: fixtures/sidekiq-delete-jobs-from-sidekiq-queue.http
+        expect: irreversible

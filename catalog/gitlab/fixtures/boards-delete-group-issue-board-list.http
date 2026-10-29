@@ -1,0 +1,5 @@
+# description: Delete a group board 7 list 7 in group acme
+DELETE /api/v4/groups/acme/boards/7/lists/7 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

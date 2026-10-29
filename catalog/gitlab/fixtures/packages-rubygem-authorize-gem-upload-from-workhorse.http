@@ -1,0 +1,7 @@
+# description: Authorize a gem upload from workhorse in project acme/shop
+POST /api/v4/projects/acme%2Fshop/packages/rubygems/api/v1/gems/authorize HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

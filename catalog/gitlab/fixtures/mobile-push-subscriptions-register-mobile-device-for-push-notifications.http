@@ -1,0 +1,7 @@
+# description: Register a mobile device for push notifications
+POST /api/v4/user/push_subscriptions HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

@@ -1,0 +1,7 @@
+# description: Protect an environment for project acme/shop
+POST /api/v4/projects/acme%2Fshop/protected_environments HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

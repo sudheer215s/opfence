@@ -1,0 +1,5 @@
+# description: Delete package 7 file 7 in project acme/shop
+DELETE /api/v4/projects/acme%2Fshop/packages/7/package_files/7 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

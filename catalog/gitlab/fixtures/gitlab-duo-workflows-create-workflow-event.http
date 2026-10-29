@@ -1,0 +1,7 @@
+# description: Create workflow event 7
+POST /api/v4/ai/duo_workflows/workflows/7/events HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

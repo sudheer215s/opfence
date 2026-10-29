@@ -1,0 +1,7 @@
+# description: Create a group board 7 list in group acme
+POST /api/v4/groups/acme/boards/7/lists HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

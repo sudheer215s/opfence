@@ -1,0 +1,42 @@
+# GitLab REST API (gitlab.com/api/v4): Runner controller tokens.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.runner-controller-tokens.create-runner-controller-token
+    match: { rest: { method: POST, path: "/api/v4/runner_controllers/{runner_controller_id}/tokens" } }
+    class: credential
+    card: "Create a runner controller token {runner_controller_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the token.
+    tests:
+      - fixture: fixtures/runner-controller-tokens-create-runner-controller-token.http
+        expect: credential
+
+  - id: gitlab.runner-controller-tokens.revoke-runner-controller-token
+    match: { rest: { method: DELETE, path: "/api/v4/runner_controllers/{runner_controller_id}/tokens/{id}" } }
+    class: access
+    card: "Revoke a runner controller token of runner controller {runner_controller_id} {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/runner-controller-tokens-revoke-runner-controller-token.http
+        expect: access
+
+  - id: gitlab.runner-controller-tokens.rotate-runner-controller-token
+    match: { rest: { method: POST, path: "/api/v4/runner_controllers/{runner_controller_id}/tokens/{id}/rotate" } }
+    class: credential
+    card: "Rotate a runner controller token of runner controller {runner_controller_id} {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the token.
+    tests:
+      - fixture: fixtures/runner-controller-tokens-rotate-runner-controller-token.http
+        expect: credential

@@ -1,0 +1,14 @@
+{
+  "id": 8,
+  "full_path": "acme",
+  "runners_token": "GR1348941EXAMPLEgroup",
+  "projects": [
+    {
+      "id": 9,
+      "path_with_namespace": "acme/shop",
+      "visibility": "private",
+      "runners_token": "GR1348941EXAMPLEtoken"
+    }
+  ],
+  "shared_projects": []
+}

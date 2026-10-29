@@ -1,0 +1,170 @@
+# GitLab REST API (gitlab.com/api/v4): Boards.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.boards.create-group-issue-board
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/boards" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Create a group issue board in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/boards-create-group-issue-board.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.boards.delete-group-issue-board
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/boards/{board_id}" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Delete a group board {board_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/boards-delete-group-issue-board.http
+        expect: delete
+        resource: "acme"
+
+  - id: gitlab.boards.update-group-issue-board
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/boards/{board_id}" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Update a group board {board_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/boards-update-group-issue-board.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.boards.create-group-issue-board-list
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/boards/{board_id}/lists" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Create a group board {board_id} list in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/boards-create-group-issue-board-list.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.boards.update-group-issue-board-list
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/boards/{board_id}/lists/{list_id}" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Update a group board {board_id} list {list_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/boards-update-group-issue-board-list.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.boards.delete-group-issue-board-list
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/boards/{board_id}/lists/{list_id}" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Delete a group board {board_id} list {list_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/boards-delete-group-issue-board-list.http
+        expect: delete
+        resource: "acme"
+
+  - id: gitlab.boards.create-issue-board
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/boards" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create an issue board in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/boards-create-issue-board.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.boards.update-issue-board
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/boards/{board_id}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update an board {board_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/boards-update-issue-board.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.boards.delete-issue-board
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/boards/{board_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete an board {board_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/boards-delete-issue-board.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.boards.create-issue-board-list
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/boards/{board_id}/lists" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create an board {board_id} list in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/boards-create-issue-board-list.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.boards.update-position-of-board-list
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/boards/{board_id}/lists/{list_id}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update position of board {board_id} list {list_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/boards-update-position-of-board-list.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.boards.delete-list-from-issue-board
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/boards/{board_id}/lists/{list_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete a list from an board {board_id} {list_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/boards-delete-list-from-issue-board.http
+        expect: delete
+        resource: "acme/shop"

@@ -1,0 +1,65 @@
+# GitLab REST API (gitlab.com/api/v4): CI jobs.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.ci-jobs.cancel-job
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/jobs/{job_id}/cancel" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Cancel job {job_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/ci-jobs-cancel-job.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.ci-jobs.retry-job
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/jobs/{job_id}/retry" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Retry job {job_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/ci-jobs-retry-job.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.ci-jobs.erase-job
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/jobs/{job_id}/erase" } }
+    class: irreversible
+    resource: { arg: id, kind: project }
+    card: "Erase job {job_id}'s log and artifacts in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Erases the job's log and artifacts.
+    tests:
+      - fixture: fixtures/ci-jobs-erase-job.http
+        expect: irreversible
+        resource: "acme/shop"
+      - fixture: fixtures/ci-jobs-erase-job-format-suffix.http
+        expect: irreversible
+        resource: "acme/shop"
+
+  - id: gitlab.ci-jobs.run-job
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/jobs/{job_id}/play" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Run manual job {job_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Runs a manual job, often a deployment gate; dispatching a GitHub workflow is a write too.
+    tests:
+      - fixture: fixtures/ci-jobs-run-job.http
+        expect: write
+        resource: "acme/shop"

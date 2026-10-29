@@ -1,0 +1,7 @@
+# description: Add push rules to group acme
+POST /api/v4/groups/acme/push_rule HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

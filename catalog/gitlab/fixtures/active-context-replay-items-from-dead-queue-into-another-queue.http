@@ -1,0 +1,7 @@
+# description: Replay items from the dead queue into another queue
+POST /api/v4/admin/active_context/dead_queue/replay HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

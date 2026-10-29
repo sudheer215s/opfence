@@ -1,0 +1,7 @@
+# description: Add a comment to epic &12 discussion 7 in group acme
+POST /api/v4/groups/acme/epics/12/discussions/7/notes HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

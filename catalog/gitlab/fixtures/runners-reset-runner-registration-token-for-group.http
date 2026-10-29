@@ -1,0 +1,7 @@
+# description: Reset the runner registration token for group acme
+POST /api/v4/groups/acme/runners/reset_registration_token HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

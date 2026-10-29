@@ -1,0 +1,7 @@
+# description: Update the subscription for the namespace 7
+PUT /api/v4/namespaces/7/gitlab_subscription HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

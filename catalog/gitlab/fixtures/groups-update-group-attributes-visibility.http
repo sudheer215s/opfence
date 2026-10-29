@@ -1,0 +1,7 @@
+# description: Change the settings of group acme (visibility)
+PUT /api/v4/groups/acme HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{"description": "Acme Inc.", "visibility": "public"}

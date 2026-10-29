@@ -1,0 +1,114 @@
+# GitLab REST API (gitlab.com/api/v4): Resource subscriptions.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.resource-subscriptions.subscribe-to-merge-request
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{subscribable_id}/subscribe" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Subscribe to merge request !{subscribable_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/resource-subscriptions-subscribe-to-merge-request.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.resource-subscriptions.unsubscribe-to-merge-request
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{subscribable_id}/unsubscribe" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Unsubscribe to merge request !{subscribable_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/resource-subscriptions-unsubscribe-to-merge-request.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.resource-subscriptions.subscribe-to-issue
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/issues/{subscribable_id}/subscribe" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Subscribe to issue #{subscribable_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/resource-subscriptions-subscribe-to-issue.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.resource-subscriptions.unsubscribe-to-issue
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/issues/{subscribable_id}/unsubscribe" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Unsubscribe to issue #{subscribable_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/resource-subscriptions-unsubscribe-to-issue.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.resource-subscriptions.subscribe-to-project-label
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/labels/{subscribable_id}/subscribe" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Subscribe to a project label {subscribable_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/resource-subscriptions-subscribe-to-project-label.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.resource-subscriptions.unsubscribe-to-project-label
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/labels/{subscribable_id}/unsubscribe" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Unsubscribe to a project label {subscribable_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/resource-subscriptions-unsubscribe-to-project-label.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.resource-subscriptions.subscribe-to-group-label
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/labels/{subscribable_id}/subscribe" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Subscribe to a group label {subscribable_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/resource-subscriptions-subscribe-to-group-label.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.resource-subscriptions.unsubscribe-to-group-label
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/labels/{subscribable_id}/unsubscribe" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Unsubscribe to a group label {subscribable_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/resource-subscriptions-unsubscribe-to-group-label.http
+        expect: write
+        resource: "acme"

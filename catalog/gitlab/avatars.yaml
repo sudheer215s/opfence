@@ -1,0 +1,14 @@
+# GitLab REST API (gitlab.com/api/v4): Avatars.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.avatars.upload-avatar
+    match: { rest: { method: PUT, path: "/api/v4/user/avatar" } }
+    class: write
+    card: "Upload an avatar"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/avatars-upload-avatar.http
+        expect: write

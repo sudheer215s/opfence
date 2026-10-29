@@ -1,0 +1,40 @@
+# GitLab REST API (gitlab.com/api/v4): Jira forge installation.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.jira-forge-installation.update-gitlab-for-jira-installation-instance-url
+    match: { rest: { method: PUT, path: "/api/v4/integrations/jira_forge/installation" } }
+    class: access
+    card: "Update the GitLab for Jira (Forge) installation instance URL"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/jira-forge-installation-update-gitlab-for-jira-installation-instance-url.http
+        expect: access
+
+  - id: gitlab.jira-forge-installation.destroy-gitlab-for-jira-installation-on-app-uninstall
+    match: { rest: { method: DELETE, path: "/api/v4/integrations/jira_forge/installation" } }
+    class: delete
+    card: "Destroy the GitLab for Jira (Forge) installation on app uninstall"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/jira-forge-installation-destroy-gitlab-for-jira-installation-on-app-uninstall.http
+        expect: delete
+
+  - id: gitlab.jira-forge-installation.register-gitlab-for-jira-system-token-for-direct-dev-info-sync
+    match: { rest: { method: POST, path: "/api/v4/integrations/jira_forge/installation/forge_token" } }
+    class: credential
+    card: "Register the GitLab for Jira (Forge) system token for direct dev-info sync"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Registers a token GitLab uses to call Jira.
+    tests:
+      - fixture: fixtures/jira-forge-installation-register-gitlab-for-jira-system-token-for-direct-dev-info-sync.http
+        expect: credential

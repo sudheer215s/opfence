@@ -1,0 +1,9 @@
+# description: Remove Git LFS lock 7 in acme/platform/shop
+POST /acme/platform/shop.git/info/lfs/locks/7/unlock HTTP/1.1
+Host: gitlab.com
+Authorization: Basic b2F1dGgyOm9wZl9naXRsYWJfRVhBTVBMRQ==
+User-Agent: git/2.47.0
+Accept: application/vnd.git-lfs+json
+Content-Type: application/vnd.git-lfs+json
+
+{"force": false}

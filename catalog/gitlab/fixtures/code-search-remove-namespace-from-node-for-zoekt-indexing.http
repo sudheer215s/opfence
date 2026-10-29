@@ -1,0 +1,5 @@
+# description: Remove a namespace from a node for Zoekt indexing 8
+DELETE /api/v4/admin/zoekt/shards/3/indexed_namespaces/8 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

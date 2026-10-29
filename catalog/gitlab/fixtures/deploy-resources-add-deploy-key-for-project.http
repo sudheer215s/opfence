@@ -1,0 +1,7 @@
+# description: Add deploy key … to project acme/shop
+POST /api/v4/projects/acme%2Fshop/deploy_keys HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{"title": "ci", "key": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIExample ci", "can_push": false}

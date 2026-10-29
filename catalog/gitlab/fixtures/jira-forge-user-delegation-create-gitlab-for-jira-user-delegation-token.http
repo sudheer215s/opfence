@@ -1,0 +1,7 @@
+# description: Create a GitLab for Jira (Forge) user delegation token
+POST /api/v4/integrations/jira_forge/user_delegation HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

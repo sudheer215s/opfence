@@ -1,0 +1,7 @@
+# description: Rollout namespaces to be indexed up to n%
+PUT /api/v4/elasticsearch_indexed_namespaces/rollout HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

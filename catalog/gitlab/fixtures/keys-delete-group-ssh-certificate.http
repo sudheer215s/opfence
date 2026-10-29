@@ -1,0 +1,5 @@
+# description: Delete a group SSH certificate 7 in group acme
+DELETE /api/v4/groups/acme/ssh_certificates/7 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

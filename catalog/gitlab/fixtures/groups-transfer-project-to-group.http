@@ -1,0 +1,7 @@
+# description: Move project 9 into group acme
+POST /api/v4/groups/acme/projects/9 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

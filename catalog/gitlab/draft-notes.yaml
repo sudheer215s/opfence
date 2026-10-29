@@ -1,0 +1,72 @@
+# GitLab REST API (gitlab.com/api/v4): Draft notes.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.draft-notes.create-draft-note
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/draft_notes" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create a draft note {merge_request_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/draft-notes-create-draft-note.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.draft-notes.update-draft-note
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/draft_notes/{draft_note_id}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update a draft note of merge request !{merge_request_iid} {draft_note_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/draft-notes-update-draft-note.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.draft-notes.delete-draft-note
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/draft_notes/{draft_note_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete a draft note of merge request !{merge_request_iid} {draft_note_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/draft-notes-delete-draft-note.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.draft-notes.publish-draft-note
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/draft_notes/{draft_note_id}/publish" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Publish a draft note of merge request !{merge_request_iid} {draft_note_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/draft-notes-publish-draft-note.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.draft-notes.publish-all-pending-draft-notes
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/draft_notes/bulk_publish" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Publish all pending draft notes {merge_request_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/draft-notes-publish-all-pending-draft-notes.http
+        expect: write
+        resource: "acme/shop"

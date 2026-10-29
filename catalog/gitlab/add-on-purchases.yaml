@@ -1,0 +1,30 @@
+# GitLab REST API (gitlab.com/api/v4): Add on purchases.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.add-on-purchases.create-add-on-purchase-for-namespace
+    match: { rest: { method: POST, path: "/api/v4/namespaces/{id}/subscription_add_on_purchase/{add_on_name}" } }
+    class: money
+    card: "Create an add-on purchase for the namespace {add_on_name}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      GitLab.com subscription administration. GitLab has deprecated this endpoint.
+    tests:
+      - fixture: fixtures/add-on-purchases-create-add-on-purchase-for-namespace.http
+        expect: money
+
+  - id: gitlab.add-on-purchases.update-add-on-purchase-for-namespace
+    match: { rest: { method: PUT, path: "/api/v4/namespaces/{id}/subscription_add_on_purchase/{add_on_name}" } }
+    class: money
+    card: "Update the add-on purchase for the namespace {add_on_name}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      GitLab.com subscription administration. GitLab has deprecated this endpoint.
+    tests:
+      - fixture: fixtures/add-on-purchases-update-add-on-purchase-for-namespace.http
+        expect: money

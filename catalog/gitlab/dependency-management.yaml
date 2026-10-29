@@ -1,0 +1,48 @@
+# GitLab REST API (gitlab.com/api/v4): Dependency management.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.dependency-management.project-create-dependency-list-export
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/dependency_list_exports" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create a dependency list export in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Creates an export to download later.
+    tests:
+      - fixture: fixtures/dependency-management-project-create-dependency-list-export.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.dependency-management.group-create-dependency-list-export
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/dependency_list_exports" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Create a dependency list export in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Creates an export to download later.
+    tests:
+      - fixture: fixtures/dependency-management-group-create-dependency-list-export.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.dependency-management.create-dependency-list-export
+    match: { rest: { method: POST, path: "/api/v4/pipelines/{id}/dependency_list_exports" } }
+    class: write
+    card: "Create a dependency list export {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Creates an export to download later.
+    tests:
+      - fixture: fixtures/dependency-management-create-dependency-list-export.http
+        expect: write

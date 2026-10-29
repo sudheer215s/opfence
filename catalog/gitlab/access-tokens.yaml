@@ -1,0 +1,344 @@
+# GitLab REST API (gitlab.com/api/v4): Access tokens.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.access-tokens.create-impersonation-token
+    match: { rest: { method: POST, path: "/api/v4/users/{user_id}/impersonation_tokens" } }
+    class: credential
+    resource: { arg: user_id, kind: user }
+    card: "Create an impersonation token of user {user_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the new token.
+    tests:
+      - fixture: fixtures/access-tokens-create-impersonation-token.http
+        expect: credential
+        resource: "42"
+
+  - id: gitlab.access-tokens.revoke-impersonation-token
+    match: { rest: { method: DELETE, path: "/api/v4/users/{user_id}/impersonation_tokens/{impersonation_token_id}" } }
+    class: access
+    resource: { arg: user_id, kind: user }
+    card: "Revoke an impersonation token {impersonation_token_id} of user {user_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Apps and scripts that use the token stop working.
+    tests:
+      - fixture: fixtures/access-tokens-revoke-impersonation-token.http
+        expect: access
+        resource: "42"
+
+  - id: gitlab.access-tokens.create-personal-access-token-for-user
+    match: { rest: { method: POST, path: "/api/v4/users/{user_id}/personal_access_tokens" } }
+    class: credential
+    resource: { arg: user_id, kind: user }
+    card: "Create a personal access token for user {user_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the new token.
+    tests:
+      - fixture: fixtures/access-tokens-create-personal-access-token-for-user.http
+        expect: credential
+        resource: "42"
+
+  - id: gitlab.access-tokens.create-personal-access-token
+    match: { rest: { method: POST, path: "/api/v4/user/personal_access_tokens" } }
+    class: credential
+    card: "Create personal access token {body.name}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the new token.
+    tests:
+      - fixture: fixtures/access-tokens-create-personal-access-token.http
+        expect: credential
+
+  - id: gitlab.access-tokens.create-personal-access-token-for-project-service-account
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/service_accounts/{user_id}/personal_access_tokens" } }
+    class: credential
+    resource: { arg: id, kind: project }
+    card: "Create a personal access token for a project service account {user_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the new token.
+    tests:
+      - fixture: fixtures/access-tokens-create-personal-access-token-for-project-service-account.http
+        expect: credential
+        resource: "acme/shop"
+
+  - id: gitlab.access-tokens.revoke-personal-access-token-for-project-service-account
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/service_accounts/{user_id}/personal_access_tokens/{token_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Revoke a personal access token {token_id} for a project service account {user_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Apps and scripts that use the token stop working.
+    tests:
+      - fixture: fixtures/access-tokens-revoke-personal-access-token-for-project-service-account.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.access-tokens.rotate-personal-access-token-for-project-service-account
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/service_accounts/{user_id}/personal_access_tokens/{token_id}/rotate" } }
+    class: credential
+    resource: { arg: id, kind: project }
+    card: "Rotate a personal access token {token_id} for a project service account {user_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the new token; the old one stops working.
+    tests:
+      - fixture: fixtures/access-tokens-rotate-personal-access-token-for-project-service-account.http
+        expect: credential
+        resource: "acme/shop"
+
+  - id: gitlab.access-tokens.create-personal-access-token-for-group-service-account
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/service_accounts/{user_id}/personal_access_tokens" } }
+    class: credential
+    resource: { arg: id, kind: group }
+    card: "Create a personal access token for a group service account {user_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the new token.
+    tests:
+      - fixture: fixtures/access-tokens-create-personal-access-token-for-group-service-account.http
+        expect: credential
+        resource: "acme"
+
+  - id: gitlab.access-tokens.revoke-personal-access-token-for-group-service-account
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/service_accounts/{user_id}/personal_access_tokens/{token_id}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Revoke a personal access token {token_id} for a group service account {user_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Apps and scripts that use the token stop working.
+    tests:
+      - fixture: fixtures/access-tokens-revoke-personal-access-token-for-group-service-account.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.access-tokens.rotate-personal-access-token-for-group-service-account
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/service_accounts/{user_id}/personal_access_tokens/{token_id}/rotate" } }
+    class: credential
+    resource: { arg: id, kind: group }
+    card: "Rotate a personal access token {token_id} for a group service account {user_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the new token; the old one stops working.
+    tests:
+      - fixture: fixtures/access-tokens-rotate-personal-access-token-for-group-service-account.http
+        expect: credential
+        resource: "acme"
+
+  - id: gitlab.access-tokens.project-rotate-project-access-token-self-rotate
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/access_tokens/self/rotate" } }
+    class: credential
+    resource: { arg: id, kind: project }
+    card: "Rotate a project access token in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the new token; the old one stops working.
+    tests:
+      - fixture: fixtures/access-tokens-project-rotate-project-access-token-self-rotate.http
+        expect: credential
+        resource: "acme/shop"
+
+  - id: gitlab.access-tokens.group-rotate-group-access-token-self-rotate
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/access_tokens/self/rotate" } }
+    class: credential
+    resource: { arg: id, kind: group }
+    card: "Rotate a group access token in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the new token; the old one stops working.
+    tests:
+      - fixture: fixtures/access-tokens-group-rotate-group-access-token-self-rotate.http
+        expect: credential
+        resource: "acme"
+
+  - id: gitlab.access-tokens.create-project-access-token
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/access_tokens" } }
+    class: credential
+    resource: { arg: id, kind: project }
+    card: "Create access token {body.name} for project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the new token.
+    tests:
+      - fixture: fixtures/access-tokens-create-project-access-token.http
+        expect: credential
+        resource: "acme/shop"
+
+  - id: gitlab.access-tokens.revoke-project-access-token
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/access_tokens/{token_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Revoke access token {token_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Apps and scripts that use the token stop working.
+    tests:
+      - fixture: fixtures/access-tokens-revoke-project-access-token.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.access-tokens.project-rotate-project-access-token-access-tokens-rotate
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/access_tokens/{token_id}/rotate" } }
+    class: credential
+    resource: { arg: id, kind: project }
+    card: "Rotate access token {token_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the new token; the old one stops working.
+    tests:
+      - fixture: fixtures/access-tokens-project-rotate-project-access-token-access-tokens-rotate.http
+        expect: credential
+        resource: "acme/shop"
+
+  - id: gitlab.access-tokens.create-group-access-token
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/access_tokens" } }
+    class: credential
+    resource: { arg: id, kind: group }
+    card: "Create access token {body.name} for group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the new token.
+    tests:
+      - fixture: fixtures/access-tokens-create-group-access-token.http
+        expect: credential
+        resource: "acme"
+
+  - id: gitlab.access-tokens.revoke-group-access-token
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/access_tokens/{token_id}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Revoke access token {token_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Apps and scripts that use the token stop working.
+    tests:
+      - fixture: fixtures/access-tokens-revoke-group-access-token.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.access-tokens.group-rotate-group-access-token-access-tokens-rotate
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/access_tokens/{token_id}/rotate" } }
+    class: credential
+    resource: { arg: id, kind: group }
+    card: "Rotate access token {token_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the new token; the old one stops working.
+    tests:
+      - fixture: fixtures/access-tokens-group-rotate-group-access-token-access-tokens-rotate.http
+        expect: credential
+        resource: "acme"
+
+  - id: gitlab.access-tokens.rotate-personal-access-token-self-rotate
+    match: { rest: { method: POST, path: "/api/v4/personal_access_tokens/self/rotate" } }
+    class: credential
+    card: "Rotate a personal access token"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the new token; the old one stops working.
+    tests:
+      - fixture: fixtures/access-tokens-rotate-personal-access-token-self-rotate.http
+        expect: credential
+
+  - id: gitlab.access-tokens.revoke-personal-access-token-personal-access-tokens-self
+    match: { rest: { method: DELETE, path: "/api/v4/personal_access_tokens/self" } }
+    class: access
+    card: "Revoke a personal access token"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Apps and scripts that use the token stop working.
+    tests:
+      - fixture: fixtures/access-tokens-revoke-personal-access-token-personal-access-tokens-self.http
+        expect: access
+
+  - id: gitlab.access-tokens.revoke-personal-access-token-personal-access-tokens
+    match: { rest: { method: DELETE, path: "/api/v4/personal_access_tokens/{id}" } }
+    class: access
+    card: "Revoke a personal access token {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Apps and scripts that use the token stop working.
+    tests:
+      - fixture: fixtures/access-tokens-revoke-personal-access-token-personal-access-tokens.http
+        expect: access
+
+  - id: gitlab.access-tokens.rotate-personal-access-token-personal-access-tokens-rotate
+    match: { rest: { method: POST, path: "/api/v4/personal_access_tokens/{id}/rotate" } }
+    class: credential
+    card: "Rotate a personal access token {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the new token; the old one stops working.
+    tests:
+      - fixture: fixtures/access-tokens-rotate-personal-access-token-personal-access-tokens-rotate.http
+        expect: credential

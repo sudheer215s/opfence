@@ -1,0 +1,5 @@
+# description: Deny an access request 42 in project acme/shop
+DELETE /api/v4/projects/acme%2Fshop/access_requests/42 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

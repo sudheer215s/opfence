@@ -1,0 +1,7 @@
+# description: Erase job 2002's log and artifacts in project acme/shop (with a .json suffix)
+POST /api/v4/projects/acme%2Fshop/jobs/2002/erase.json HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

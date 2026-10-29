@@ -1,0 +1,14 @@
+# GitLab REST API (gitlab.com/api/v4): Rollouts.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.rollouts.ingest-rollout-workflow-event
+    match: { rest: { method: POST, path: "/api/v4/rollouts/{id}" } }
+    class: write
+    card: "Ingest a rollout workflow event {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/rollouts-ingest-rollout-workflow-event.http
+        expect: write

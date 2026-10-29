@@ -1,0 +1,16 @@
+# GitLab REST API (gitlab.com/api/v4): Jira forge user delegation.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.jira-forge-user-delegation.create-gitlab-for-jira-user-delegation-token
+    match: { rest: { method: POST, path: "/api/v4/integrations/jira_forge/user_delegation" } }
+    class: credential
+    card: "Create a GitLab for Jira (Forge) user delegation token"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Creates a delegation token.
+    tests:
+      - fixture: fixtures/jira-forge-user-delegation-create-gitlab-for-jira-user-delegation-token.http
+        expect: credential

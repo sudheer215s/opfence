@@ -1,0 +1,129 @@
+# GitLab REST API (gitlab.com/api/v4): CI triggers.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.ci-triggers.project-trigger-pipeline-with-token-trigger-pipeline
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/trigger/pipeline" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Trigger a pipeline with a token in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Runs a pipeline with a trigger token, as creating one does.
+    tests:
+      - fixture: fixtures/ci-triggers-project-trigger-pipeline-with-token-trigger-pipeline.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.ci-triggers.project-trigger-pipeline-with-token-trigger-pipeline-2
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/ref/{ref}/trigger/pipeline" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Trigger a pipeline with a token {ref} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Runs a pipeline with a trigger token, as creating one does.
+    tests:
+      - fixture: fixtures/ci-triggers-project-trigger-pipeline-with-token-trigger-pipeline-2.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.ci-triggers.list-all-project-trigger-tokens
+    match: { rest: { method: GET, path: "/api/v4/projects/{id}/triggers" } }
+    class: credential
+    response:
+      redact: ["token"]
+      class: read
+    resource: { arg: id, kind: project }
+    card: "Read project {id}'s pipeline trigger tokens"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Returns the trigger tokens, which run pipelines with any variables; under opfence run the
+      proxy redacts them.
+    tests:
+      - fixture: fixtures/ci-triggers-list-all-project-trigger-tokens.http
+        expect: credential
+        response: fixtures/ci-triggers-list-all-project-trigger-tokens-response.json
+        resource: "acme/shop"
+
+  - id: gitlab.ci-triggers.create-trigger-token
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/triggers" } }
+    class: credential
+    resource: { arg: id, kind: project }
+    card: "Create a pipeline trigger token in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the trigger token, which runs pipelines with any variables.
+    tests:
+      - fixture: fixtures/ci-triggers-create-trigger-token.http
+        expect: credential
+        resource: "acme/shop"
+
+  - id: gitlab.ci-triggers.retrieve-trigger-token-details
+    match: { rest: { method: GET, path: "/api/v4/projects/{id}/triggers/{trigger_id}" } }
+    class: credential
+    response:
+      redact: ["token"]
+      class: read
+    resource: { arg: id, kind: project }
+    card: "Read pipeline trigger token {trigger_id} of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/entities
+    notes: >-
+      Returns the trigger token; under opfence run the proxy redacts it.
+    tests:
+      - fixture: fixtures/ci-triggers-retrieve-trigger-token-details.http
+        expect: credential
+        response: fixtures/ci-triggers-retrieve-trigger-token-details-response.json
+        resource: "acme/shop"
+
+  - id: gitlab.ci-triggers.update-pipeline-trigger-token
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/triggers/{trigger_id}" } }
+    class: credential
+    response:
+      redact: ["token"]
+      class: credential
+    resource: { arg: id, kind: project }
+    card: "Update a pipeline trigger token {trigger_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the trigger token. Returns the trigger token; under opfence run the proxy redacts it.
+    tests:
+      - fixture: fixtures/ci-triggers-update-pipeline-trigger-token.http
+        expect: credential
+        response: fixtures/ci-triggers-update-pipeline-trigger-token-response.json
+        resource: "acme/shop"
+
+  - id: gitlab.ci-triggers.delete-pipeline-trigger-token
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/triggers/{trigger_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Delete a pipeline trigger token {trigger_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Whoever uses the trigger token can no longer run pipelines.
+    tests:
+      - fixture: fixtures/ci-triggers-delete-pipeline-trigger-token.http
+        expect: access
+        resource: "acme/shop"

@@ -1,0 +1,28 @@
+# GitLab REST API (gitlab.com/api/v4): Project alias.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.project-alias.create-project-alias
+    match: { rest: { method: POST, path: "/api/v4/project_aliases" } }
+    class: write
+    card: "Create a project alias"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/project-alias-create-project-alias.http
+        expect: write
+
+  - id: gitlab.project-alias.delete-project-alias
+    match: { rest: { method: DELETE, path: "/api/v4/project_aliases/{name}" } }
+    class: delete
+    card: "Delete a project alias {name}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/project-alias-delete-project-alias.http
+        expect: delete

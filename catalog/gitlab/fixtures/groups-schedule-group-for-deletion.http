@@ -1,0 +1,5 @@
+# description: Delete GitLab group acme with its subgroups and projects
+DELETE /api/v4/groups/acme HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

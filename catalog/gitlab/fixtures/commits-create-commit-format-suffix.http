@@ -1,0 +1,7 @@
+# description: Commit to branch … of project acme/shop (with a .json suffix)
+POST /api/v4/projects/acme%2Fshop/repository/commits.json HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{"branch": "main", "commit_message": "Update deploy config", "actions": [{"action": "update", "file_path": "config/deploy.yml", "content": "replicas: 3\n"}]}

@@ -1,0 +1,1358 @@
+# GitLab's MCP server (POST gitlab.com/api/v4/mcp, built into GitLab): a rule for every tool
+# Mcp::Tools::Manager registers, with their aliases. Written by gitlabmcp.py from GitLab's source.
+operations:
+  - id: gitlab.mcp.get-artifact-file
+    match: { mcp: { tool: get_artifact_file } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "Read {artifact_path} from job {job_id}'s artifacts in project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/jobs/get_artifact_file_service.rb
+    notes: >-
+      Artifacts are read as GitHub's are; CI/CD masks variables in job output, not in files a job
+      writes.
+    tests:
+      - fixture: fixtures/mcp-get-artifact-file.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.get-job
+    match: { mcp: { tool: get_job } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Show job {job_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/jobs/get_job_service.rb
+    notes: >-
+      With include: log, the job's log, in which CI/CD masks variables.
+    tests:
+      - fixture: fixtures/mcp-get-job.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.get-mcp-server-version
+    match: { mcp: { tool: get_mcp_server_version } }
+    class: read
+    card: "Show the GitLab MCP server's version"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/get_server_version_service.rb
+    tests:
+      - fixture: fixtures/mcp-get-mcp-server-version.http
+        expect: read
+
+  - id: gitlab.mcp.get-merge-request-conflicts
+    match: { mcp: { tool: get_merge_request_conflicts } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "Show the merge conflicts of merge request !{merge_request_iid} in project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/merge_requests/get_merge_request_conflicts_service.rb
+    notes: >-
+      Unlisted, but callable by name.
+    tests:
+      - fixture: fixtures/mcp-get-merge-request-conflicts.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.get-pages-content
+    match: { mcp: { tool: get_pages_content } }
+    class: read
+    resource: { arg: url, kind: url }
+    card: "Read the GitLab Pages site at {url}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/pages/get_pages_content_service.rb
+    notes: >-
+      Reads private Pages sites the user can see, as reading the repository does.
+    tests:
+      - fixture: fixtures/mcp-get-pages-content.http
+        expect: read
+        resource: "https://acme.gitlab.io/shop/"
+
+  - id: gitlab.mcp.list-releases
+    match: { mcp: { tool: list_releases } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "List releases of project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/releases/list_releases_service.rb
+    tests:
+      - fixture: fixtures/mcp-list-releases.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.list-tags
+    match: { mcp: { tool: list_tags } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "List tags of project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/repositories/tags/list_tags_service.rb
+    tests:
+      - fixture: fixtures/mcp-list-tags.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.accept-merge-request
+    match: { mcp: { tool: accept_merge_request } }
+    class: write
+    when:
+      - if: { arg: should_remove_source_branch, in: ["true", "1", "t", "y", "yes", "on"] }
+        class: delete
+    resource: { arg: project_id, kind: project }
+    card: "Merge merge request !{merge_request_iid} of project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/merge_requests/accept_merge_request_service.rb
+    notes: >-
+      Merging is a write, as GitHub's merge_pull_request is; removing the source branch is delete.
+    tests:
+      - fixture: fixtures/mcp-accept-merge-request.http
+        expect: write
+        resource: "acme/shop"
+      - fixture: fixtures/mcp-accept-merge-request-remove-source-branch.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.add-branch
+    match: { mcp: { tool: add_branch } }
+    class: write
+    resource: { arg: project_id, kind: project }
+    card: "Create branch {branch} from {ref} in project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/repositories/branches/add_branch_service.rb
+    tests:
+      - fixture: fixtures/mcp-add-branch.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.create-branch
+    match: { mcp: { tool: create_branch } }
+    class: write
+    resource: { arg: project_id, kind: project }
+    card: "Create branch {branch} from {ref} in project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/repositories/branches/add_branch_service.rb
+    notes: >-
+      An alias of add_branch, which GitLab resolves to it.
+    tests:
+      - fixture: fixtures/mcp-create-branch.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.add-commit
+    match: { mcp: { tool: add_commit } }
+    class: write
+    when:
+      - if: { arg: actions.action, equals: "delete" }
+        class: delete
+    resource: { arg: project_id, kind: project }
+    card: "Commit to branch {branch} of project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/repositories/add_commit_service.rb
+    notes: >-
+      Committing is a write, as GitHub's push_files is; a delete action removes a file, which is
+      delete, as GitHub's delete_file is (the file stays in the history).
+    tests:
+      - fixture: fixtures/mcp-add-commit.http
+        expect: write
+        resource: "acme/shop"
+      - fixture: fixtures/mcp-add-commit-delete-file.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.create-commit
+    match: { mcp: { tool: create_commit } }
+    class: write
+    when:
+      - if: { arg: actions.action, equals: "delete" }
+        class: delete
+    resource: { arg: project_id, kind: project }
+    card: "Commit to branch {branch} of project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/repositories/add_commit_service.rb
+    notes: >-
+      An alias of add_commit, which GitLab resolves to it. Committing is a write, as GitHub's
+      push_files is; a delete action removes a file, which is delete, as GitHub's delete_file is
+      (the file stays in the history).
+    tests:
+      - fixture: fixtures/mcp-create-commit.http
+        expect: write
+        resource: "acme/shop"
+      - fixture: fixtures/mcp-create-commit-delete-file.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.get-commit
+    match: { mcp: { tool: get_commit } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "Show commit {commit_sha} of project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/commits/get_commit_service.rb
+    tests:
+      - fixture: fixtures/mcp-get-commit.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.get-merge-request
+    match: { mcp: { tool: get_merge_request } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "Show merge request !{merge_request_iid} of project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/merge_requests/get_merge_request_service.rb
+    tests:
+      - fixture: fixtures/mcp-get-merge-request.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.get-merge-request-notes
+    match: { mcp: { tool: get_merge_request_notes } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "Show the comments on merge request !{merge_request_iid} of project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/merge_requests/get_merge_request_notes_service.rb
+    notes: >-
+      Unlisted, but callable by name.
+    tests:
+      - fixture: fixtures/mcp-get-merge-request-notes.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.list-all-merge-request-notes
+    match: { mcp: { tool: list_all_merge_request_notes } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "Show the comments on merge request !{merge_request_iid} of project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/merge_requests/get_merge_request_notes_service.rb
+    notes: >-
+      An alias of get_merge_request_notes, which GitLab resolves to it. Unlisted, but callable by
+      name.
+    tests:
+      - fixture: fixtures/mcp-list-all-merge-request-notes.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.get-repository-file
+    match: { mcp: { tool: get_repository_file } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "Read {file_path} at {ref} in project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/repositories/get_repository_file_service.rb
+    tests:
+      - fixture: fixtures/mcp-get-repository-file.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.get-pipeline
+    match: { mcp: { tool: get_pipeline } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Show pipeline {pipeline_id} of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/pipelines/get_pipeline_service.rb
+    tests:
+      - fixture: fixtures/mcp-get-pipeline.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.get-project
+    match: { mcp: { tool: get_project } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "Show project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/projects/get_project_service.rb
+    tests:
+      - fixture: fixtures/mcp-get-project.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.get-saved-view-work-items
+    match: { mcp: { tool: get_saved_view_work_items } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "List the work items of saved view {saved_view_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/work_items/get_saved_view_work_items_service.rb
+    tests:
+      - fixture: fixtures/mcp-get-saved-view-work-items.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.get-user
+    match: { mcp: { tool: get_user } }
+    class: read
+    card: "Show GitLab user {username}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/users/get_user_service.rb
+    tests:
+      - fixture: fixtures/mcp-get-user.http
+        expect: read
+
+  - id: gitlab.mcp.get-work-item
+    match: { mcp: { tool: get_work_item } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "Show work item #{work_item_iid} of project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/work_items/get_work_item_service.rb
+    tests:
+      - fixture: fixtures/mcp-get-work-item.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.get-workitem-notes
+    match: { mcp: { tool: get_workitem_notes } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "Show the comments on work item #{work_item_iid} of project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/work_items/get_work_item_notes_service.rb
+    notes: >-
+      Unlisted, but callable by name.
+    tests:
+      - fixture: fixtures/mcp-get-workitem-notes.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.get-work-item-notes
+    match: { mcp: { tool: get_work_item_notes } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "Show the comments on work item #{work_item_iid} of project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/work_items/get_work_item_notes_service.rb
+    notes: >-
+      An alias of get_workitem_notes, which GitLab resolves to it. Unlisted, but callable by name.
+    tests:
+      - fixture: fixtures/mcp-get-work-item-notes.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.get-work-item-types
+    match: { mcp: { tool: get_work_item_types } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "List work item types of project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/work_items/get_work_item_types_service.rb
+    tests:
+      - fixture: fixtures/mcp-get-work-item-types.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.link-work-items
+    match: { mcp: { tool: link_work_items } }
+    class: write
+    resource: { arg: project_id, kind: project }
+    card: "Link work items to #{work_item_iid} in project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/work_items/link_work_items_service.rb
+    tests:
+      - fixture: fixtures/mcp-link-work-items.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.list-commits
+    match: { mcp: { tool: list_commits } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "List commits of project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/commits/list_commits_service.rb
+    tests:
+      - fixture: fixtures/mcp-list-commits.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.list-groups
+    match: { mcp: { tool: list_groups } }
+    class: read
+    card: "List GitLab groups"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/groups/list_groups_service.rb
+    tests:
+      - fixture: fixtures/mcp-list-groups.http
+        expect: read
+
+  - id: gitlab.mcp.list-merge-requests
+    match: { mcp: { tool: list_merge_requests } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "List merge requests of project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/merge_requests/list_merge_requests_service.rb
+    tests:
+      - fixture: fixtures/mcp-list-merge-requests.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.gitlab-merge-request-search
+    match: { mcp: { tool: gitlab_merge_request_search } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "List merge requests of project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/merge_requests/list_merge_requests_service.rb
+    notes: >-
+      An alias of list_merge_requests, which GitLab resolves to it.
+    tests:
+      - fixture: fixtures/mcp-gitlab-merge-request-search.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.list-projects
+    match: { mcp: { tool: list_projects } }
+    class: read
+    card: "List GitLab projects"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/projects/list_projects_service.rb
+    tests:
+      - fixture: fixtures/mcp-list-projects.http
+        expect: read
+
+  - id: gitlab.mcp.list-repository-tree
+    match: { mcp: { tool: list_repository_tree } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "List files of project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/repositories/list_repository_tree_service.rb
+    tests:
+      - fixture: fixtures/mcp-list-repository-tree.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.list-project-members
+    match: { mcp: { tool: list_project_members } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "List members of project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/projects/list_project_members_service.rb
+    tests:
+      - fixture: fixtures/mcp-list-project-members.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.list-todos
+    match: { mcp: { tool: list_todos } }
+    class: read
+    card: "List your GitLab to-do items"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/todos/list_todos_service.rb
+    tests:
+      - fixture: fixtures/mcp-list-todos.http
+        expect: read
+
+  - id: gitlab.mcp.list-wiki-pages
+    match: { mcp: { tool: list_wiki_pages } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "List wiki pages of project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/wikis/list_wiki_pages_service.rb
+    tests:
+      - fixture: fixtures/mcp-list-wiki-pages.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.list-work-items
+    match: { mcp: { tool: list_work_items } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "List work items of project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/work_items/list_work_items_service.rb
+    tests:
+      - fixture: fixtures/mcp-list-work-items.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.save-merge-request-review
+    match: { mcp: { tool: save_merge_request_review } }
+    class: write
+    resource: { arg: project_id, kind: project }
+    card: "Review merge request !{merge_request_iid} of project {project_id} ({method})"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/merge_requests/save_merge_request_review_service.rb
+    notes: >-
+      Comments, review threads and approvals are the reviewer's part, as GitHub's
+      pull_request_review_write is a write.
+    tests:
+      - fixture: fixtures/mcp-save-merge-request-review.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.save-note
+    match: { mcp: { tool: save_note } }
+    class: write
+    resource: { arg: project_id, kind: project }
+    card: "Comment on project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/notes/save_note_service.rb
+    tests:
+      - fixture: fixtures/mcp-save-note.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.create-merge-request-note
+    match: { mcp: { tool: create_merge_request_note } }
+    class: write
+    resource: { arg: project_id, kind: project }
+    card: "Comment on project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/notes/save_note_service.rb
+    notes: >-
+      An alias of save_note, which GitLab resolves to it.
+    tests:
+      - fixture: fixtures/mcp-create-merge-request-note.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.create-workitem-note
+    match: { mcp: { tool: create_workitem_note } }
+    class: write
+    resource: { arg: project_id, kind: project }
+    card: "Comment on project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/notes/save_note_service.rb
+    notes: >-
+      An alias of save_note, which GitLab resolves to it.
+    tests:
+      - fixture: fixtures/mcp-create-workitem-note.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.create-work-item-note
+    match: { mcp: { tool: create_work_item_note } }
+    class: write
+    resource: { arg: project_id, kind: project }
+    card: "Comment on project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/notes/save_note_service.rb
+    notes: >-
+      An alias of save_note, which GitLab resolves to it.
+    tests:
+      - fixture: fixtures/mcp-create-work-item-note.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.save-pipeline
+    match: { mcp: { tool: save_pipeline } }
+    class: write
+    resource: { arg: project_id, kind: project }
+    card: "Run, retry, cancel or rename a pipeline in project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/pipelines/save_pipeline_service.rb
+    notes: >-
+      Running a pipeline is a write, as dispatching a GitHub workflow is.
+    tests:
+      - fixture: fixtures/mcp-save-pipeline.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.save-work-item
+    match: { mcp: { tool: save_work_item } }
+    class: write
+    when:
+      - if: { arg: confidential, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+    resource: { arg: project_id, kind: project }
+    card: "Create or update a work item in project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/work_items/save_work_item_service.rb
+    notes: >-
+      Making a confidential work item visible is access.
+    tests:
+      - fixture: fixtures/mcp-save-work-item.http
+        expect: write
+        resource: "acme/shop"
+      - fixture: fixtures/mcp-save-work-item-not-confidential.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.create-work-item
+    match: { mcp: { tool: create_work_item } }
+    class: write
+    when:
+      - if: { arg: confidential, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+    resource: { arg: project_id, kind: project }
+    card: "Create or update a work item in project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/work_items/save_work_item_service.rb
+    notes: >-
+      An alias of save_work_item, which GitLab resolves to it. Making a confidential work item
+      visible is access.
+    tests:
+      - fixture: fixtures/mcp-create-work-item.http
+        expect: write
+        resource: "acme/shop"
+      - fixture: fixtures/mcp-create-work-item-not-confidential.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.update-work-item
+    match: { mcp: { tool: update_work_item } }
+    class: write
+    when:
+      - if: { arg: confidential, in: ["false", "0", "f", "n", "no", "off"] }
+        class: access
+    resource: { arg: project_id, kind: project }
+    card: "Create or update a work item in project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/work_items/save_work_item_service.rb
+    notes: >-
+      An alias of save_work_item, which GitLab resolves to it. Making a confidential work item
+      visible is access.
+    tests:
+      - fixture: fixtures/mcp-update-work-item.http
+        expect: write
+        resource: "acme/shop"
+      - fixture: fixtures/mcp-update-work-item-not-confidential.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.search-labels
+    match: { mcp: { tool: search_labels } }
+    class: read
+    resource: { arg: full_path, kind: project }
+    card: "Search labels of {full_path}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/labels/search_service.rb
+    tests:
+      - fixture: fixtures/mcp-search-labels.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.attach-scan-profile
+    match: { mcp: { tool: attach_scan_profile } }
+    class: write
+    card: "Attach security scan profile {security_scan_profile_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/ee/app/services/mcp/tools/security/attach_scan_profile_service.rb
+    notes: >-
+      Turns scanners on for the projects and groups named.
+    tests:
+      - fixture: fixtures/mcp-attach-scan-profile.http
+        expect: write
+
+  - id: gitlab.mcp.get-duo-session
+    match: { mcp: { tool: get_duo_session } }
+    class: read
+    card: "Show GitLab Duo session {workflow_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/ee/app/services/mcp/tools/duo_workflows/get_duo_session_service.rb
+    tests:
+      - fixture: fixtures/mcp-get-duo-session.http
+        expect: read
+
+  - id: gitlab.mcp.get-duo-workflow-status
+    match: { mcp: { tool: get_duo_workflow_status } }
+    class: read
+    card: "Show GitLab Duo session {workflow_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/ee/app/services/mcp/tools/duo_workflows/get_duo_session_service.rb
+    notes: >-
+      An alias of get_duo_session, which GitLab resolves to it.
+    tests:
+      - fixture: fixtures/mcp-get-duo-workflow-status.http
+        expect: read
+
+  - id: gitlab.mcp.get-vulnerability
+    match: { mcp: { tool: get_vulnerability } }
+    class: read
+    card: "Show vulnerability {vulnerability_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/ee/app/services/mcp/tools/security/get_vulnerability_service.rb
+    tests:
+      - fixture: fixtures/mcp-get-vulnerability.http
+        expect: read
+
+  - id: gitlab.mcp.list-duo-agents-and-flows
+    match: { mcp: { tool: list_duo_agents_and_flows } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "List GitLab Duo agents and flows of project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/ee/app/services/mcp/tools/duo_workflows/list_duo_agents_and_flows_service.rb
+    tests:
+      - fixture: fixtures/mcp-list-duo-agents-and-flows.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.list-duo-sessions
+    match: { mcp: { tool: list_duo_sessions } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "List your GitLab Duo sessions"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/ee/app/services/mcp/tools/duo_workflows/list_duo_sessions_service.rb
+    tests:
+      - fixture: fixtures/mcp-list-duo-sessions.http
+        expect: read
+
+  - id: gitlab.mcp.list-vulnerabilities
+    match: { mcp: { tool: list_vulnerabilities } }
+    class: read
+    resource: { arg: project_full_path, kind: project }
+    card: "List vulnerabilities of project {project_full_path}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/ee/app/services/mcp/tools/security/list_vulnerabilities_service.rb
+    tests:
+      - fixture: fixtures/mcp-list-vulnerabilities.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.save-vulnerability
+    match: { mcp: { tool: save_vulnerability } }
+    class: write
+    when:
+      - if: { arg: action, equals: "dismiss" }
+        class: access
+    card: "Change vulnerability {vulnerability_id} ({action})"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/ee/app/services/mcp/tools/security/save_vulnerability_service.rb
+    notes: >-
+      Dismissed vulnerabilities no longer block merge requests under security policies, so
+      dismissing is access, as in the REST rules.
+    tests:
+      - fixture: fixtures/mcp-save-vulnerability.http
+        expect: write
+      - fixture: fixtures/mcp-save-vulnerability-dismiss.http
+        expect: access
+
+  - id: gitlab.mcp.dismiss-vulnerability
+    match: { mcp: { tool: dismiss_vulnerability } }
+    class: write
+    when:
+      - if: { arg: action, equals: "dismiss" }
+        class: access
+    card: "Change vulnerability {vulnerability_id} ({action})"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/ee/app/services/mcp/tools/security/save_vulnerability_service.rb
+    notes: >-
+      An alias of save_vulnerability, which GitLab resolves to it. Dismissed vulnerabilities no
+      longer block merge requests under security policies, so dismissing is access, as in the REST
+      rules.
+    tests:
+      - fixture: fixtures/mcp-dismiss-vulnerability.http
+        expect: write
+      - fixture: fixtures/mcp-dismiss-vulnerability-dismiss.http
+        expect: access
+
+  - id: gitlab.mcp.confirm-vulnerability
+    match: { mcp: { tool: confirm_vulnerability } }
+    class: write
+    when:
+      - if: { arg: action, equals: "dismiss" }
+        class: access
+    card: "Change vulnerability {vulnerability_id} ({action})"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/ee/app/services/mcp/tools/security/save_vulnerability_service.rb
+    notes: >-
+      An alias of save_vulnerability, which GitLab resolves to it. Dismissed vulnerabilities no
+      longer block merge requests under security policies, so dismissing is access, as in the REST
+      rules.
+    tests:
+      - fixture: fixtures/mcp-confirm-vulnerability.http
+        expect: write
+      - fixture: fixtures/mcp-confirm-vulnerability-dismiss.http
+        expect: access
+
+  - id: gitlab.mcp.revert-to-detected-vulnerability
+    match: { mcp: { tool: revert_to_detected_vulnerability } }
+    class: write
+    when:
+      - if: { arg: action, equals: "dismiss" }
+        class: access
+    card: "Change vulnerability {vulnerability_id} ({action})"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/ee/app/services/mcp/tools/security/save_vulnerability_service.rb
+    notes: >-
+      An alias of save_vulnerability, which GitLab resolves to it. Dismissed vulnerabilities no
+      longer block merge requests under security policies, so dismissing is access, as in the REST
+      rules.
+    tests:
+      - fixture: fixtures/mcp-revert-to-detected-vulnerability.http
+        expect: write
+      - fixture: fixtures/mcp-revert-to-detected-vulnerability-dismiss.http
+        expect: access
+
+  - id: gitlab.mcp.update-vulnerability-severity
+    match: { mcp: { tool: update_vulnerability_severity } }
+    class: write
+    when:
+      - if: { arg: action, equals: "dismiss" }
+        class: access
+    card: "Change vulnerability {vulnerability_id} ({action})"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/ee/app/services/mcp/tools/security/save_vulnerability_service.rb
+    notes: >-
+      An alias of save_vulnerability, which GitLab resolves to it. Dismissed vulnerabilities no
+      longer block merge requests under security policies, so dismissing is access, as in the REST
+      rules.
+    tests:
+      - fixture: fixtures/mcp-update-vulnerability-severity.http
+        expect: write
+      - fixture: fixtures/mcp-update-vulnerability-severity-dismiss.http
+        expect: access
+
+  - id: gitlab.mcp.create-vulnerability-issue
+    match: { mcp: { tool: create_vulnerability_issue } }
+    class: write
+    when:
+      - if: { arg: action, equals: "dismiss" }
+        class: access
+    card: "Change vulnerability {vulnerability_id} ({action})"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/ee/app/services/mcp/tools/security/save_vulnerability_service.rb
+    notes: >-
+      An alias of save_vulnerability, which GitLab resolves to it. Dismissed vulnerabilities no
+      longer block merge requests under security policies, so dismissing is access, as in the REST
+      rules.
+    tests:
+      - fixture: fixtures/mcp-create-vulnerability-issue.http
+        expect: write
+      - fixture: fixtures/mcp-create-vulnerability-issue-dismiss.http
+        expect: access
+
+  - id: gitlab.mcp.fork-repository
+    match: { mcp: { tool: fork_repository } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Fork project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/projects.rb
+    notes: >-
+      Forking is a write, as GitHub's fork_repository is; GitLab does not let a fork be more visible
+      than its source.
+    tests:
+      - fixture: fixtures/mcp-fork-repository.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.list-pipelines
+    match: { mcp: { tool: list_pipelines } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "List pipelines of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/ci/pipelines.rb
+    tests:
+      - fixture: fixtures/mcp-list-pipelines.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.get-pipeline-jobs
+    match: { mcp: { tool: get_pipeline_jobs } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "List the jobs of pipeline {pipeline_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/ci/pipelines.rb
+    notes: >-
+      Unlisted, but callable by name.
+    tests:
+      - fixture: fixtures/mcp-get-pipeline-jobs.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.list-branches
+    match: { mcp: { tool: list_branches } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "List branches of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/branches.rb
+    tests:
+      - fixture: fixtures/mcp-list-branches.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.get-issue
+    match: { mcp: { tool: get_issue } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Show issue #{issue_iid} of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/issues.rb
+    notes: >-
+      Unlisted, but callable by name.
+    tests:
+      - fixture: fixtures/mcp-get-issue.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.create-issue
+    match: { mcp: { tool: create_issue } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Open issue {title} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/issues.rb
+    notes: >-
+      Unlisted, but callable by name.
+    tests:
+      - fixture: fixtures/mcp-create-issue.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.get-merge-request-commits
+    match: { mcp: { tool: get_merge_request_commits } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "List the commits of merge request !{merge_request_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/merge_requests.rb
+    notes: >-
+      Unlisted, but callable by name.
+    tests:
+      - fixture: fixtures/mcp-get-merge-request-commits.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.get-merge-request-diffs
+    match: { mcp: { tool: get_merge_request_diffs } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Show the diffs of merge request !{merge_request_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/merge_requests.rb
+    notes: >-
+      Unlisted, but callable by name.
+    tests:
+      - fixture: fixtures/mcp-get-merge-request-diffs.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.list-merge-request-diffs
+    match: { mcp: { tool: list_merge_request_diffs } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Show the diffs of merge request !{merge_request_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/merge_requests.rb
+    notes: >-
+      An alias of get_merge_request_diffs, which GitLab resolves to it. Unlisted, but callable by
+      name.
+    tests:
+      - fixture: fixtures/mcp-list-merge-request-diffs.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.get-merge-request-pipelines
+    match: { mcp: { tool: get_merge_request_pipelines } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "List the pipelines of merge request !{merge_request_iid} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/lib/api/merge_requests.rb
+    notes: >-
+      Unlisted, but callable by name.
+    tests:
+      - fixture: fixtures/mcp-get-merge-request-pipelines.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.search
+    match: { mcp: { tool: search } }
+    class: read
+    card: "Search GitLab for {search}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/search/search_service.rb
+    notes: >-
+      Dispatches to the instance, group or project search route by its arguments.
+    tests:
+      - fixture: fixtures/mcp-search.http
+        expect: read
+
+  - id: gitlab.mcp.gitlab-search
+    match: { mcp: { tool: gitlab_search } }
+    class: read
+    card: "Search GitLab for {search}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/search/search_service.rb
+    notes: >-
+      An alias of search, which GitLab resolves to it. Dispatches to the instance, group or project
+      search route by its arguments.
+    tests:
+      - fixture: fixtures/mcp-gitlab-search.http
+        expect: read
+
+  - id: gitlab.mcp.manage-pipeline
+    match: { mcp: { tool: manage_pipeline } }
+    class: write
+    when:
+      - if: { arg: name, empty: true }
+        class: delete
+      - if: { arg: name, matches: '^\s*$' }
+        class: delete
+    resource: { arg: id, kind: project }
+    card: "Rename or delete pipeline {pipeline_id} of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/pipelines/pipeline_service.rb
+    notes: >-
+      Unlisted, but callable by name. Without a name it deletes the pipeline (GitLab checks
+      name.present?, which is false for blank text), which is delete, as in the REST rules.
+    tests:
+      - fixture: fixtures/mcp-manage-pipeline.http
+        expect: write
+        resource: "acme/shop"
+      - fixture: fixtures/mcp-manage-pipeline-delete.http
+        expect: delete
+        resource: "acme/shop"
+      - fixture: fixtures/mcp-manage-pipeline-delete-blank-name.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.save-merge-request
+    match: { mcp: { tool: save_merge_request } }
+    class: write
+    resource: { arg: project_id, kind: project }
+    card: "Create or update a merge request in project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/merge_requests/save_merge_request_service.rb
+    tests:
+      - fixture: fixtures/mcp-save-merge-request.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.create-merge-request
+    match: { mcp: { tool: create_merge_request } }
+    class: write
+    resource: { arg: project_id, kind: project }
+    card: "Create or update a merge request in project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/merge_requests/save_merge_request_service.rb
+    notes: >-
+      An alias of save_merge_request, which GitLab resolves to it.
+    tests:
+      - fixture: fixtures/mcp-create-merge-request.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.update-merge-request
+    match: { mcp: { tool: update_merge_request } }
+    class: write
+    resource: { arg: project_id, kind: project }
+    card: "Create or update a merge request in project {project_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/merge_requests/save_merge_request_service.rb
+    notes: >-
+      An alias of save_merge_request, which GitLab resolves to it.
+    tests:
+      - fixture: fixtures/mcp-update-merge-request.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.start-duo-session
+    match: { mcp: { tool: start_duo_session } }
+    class: irreversible
+    resource: { arg: project_id, kind: project }
+    card: "Start a GitLab Duo session in project {project_id} with goal {goal}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/ee/app/services/mcp/tools/duo_workflows/start_duo_session_service.rb
+    notes: >-
+      Hands a free-form goal to an agent that acts in the project with the user's access; tools that
+      hand a task to another agent are irreversible.
+    tests:
+      - fixture: fixtures/mcp-start-duo-session.http
+        expect: irreversible
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.send-duo-session-input
+    match: { mcp: { tool: send_duo_session_input } }
+    class: irreversible
+    card: "Answer GitLab Duo session {workflow_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/ee/app/services/mcp/tools/duo_workflows/send_duo_session_input_service.rb
+    notes: >-
+      Approves or rejects a plan or tool call an agent is waiting on, or redirects it with a
+      message: the agent then acts in the project.
+    tests:
+      - fixture: fixtures/mcp-send-duo-session-input.http
+        expect: irreversible
+
+  - id: gitlab.mcp.semantic-search
+    match: { mcp: { tool: semantic_search } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "Search the code of project {project_id} for {q}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/ee/app/services/mcp/tools/semantic_search/semantic_search_service.rb
+    tests:
+      - fixture: fixtures/mcp-semantic-search.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.semantic-code-search
+    match: { mcp: { tool: semantic_code_search } }
+    class: read
+    resource: { arg: project_id, kind: project }
+    card: "Search the code of project {project_id} for {q}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/ee/app/services/mcp/tools/semantic_search/semantic_search_service.rb
+    notes: >-
+      An alias of semantic_search, which GitLab resolves to it.
+    tests:
+      - fixture: fixtures/mcp-semantic-code-search.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.mcp.query-graph
+    match: { mcp: { tool: query_graph } }
+    class: read
+    card: "Query the GitLab knowledge graph"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/app/services/mcp/tools/manager.rb
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/ee/app/services/mcp/tools/orbit/command_catalog.rb
+    notes: >-
+      Orbit's commands are read-only queries of the knowledge graph; commands other than query_graph
+      are named by the Orbit server at run time and stay unknown.
+    tests:
+      - fixture: fixtures/mcp-query-graph.http
+        expect: read

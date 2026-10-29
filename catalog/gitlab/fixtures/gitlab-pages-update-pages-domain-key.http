@@ -1,0 +1,7 @@
+# description: Update Pages domain docs.example.com in project acme/shop (key)
+PUT /api/v4/projects/acme%2Fshop/pages/domains/docs.example.com HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{"auto_ssl_enabled": true, "key": "example"}

@@ -1,0 +1,7 @@
+# description: Subscribe a namespace to a JiraConnectInstallation
+POST /api/v4/integrations/jira_connect/subscriptions HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

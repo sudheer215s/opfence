@@ -1,0 +1,5 @@
+# description: Delete a registered runner manager
+DELETE /api/v4/runners/managers HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

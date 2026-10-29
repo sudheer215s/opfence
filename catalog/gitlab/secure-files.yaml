@@ -1,0 +1,50 @@
+# GitLab REST API (gitlab.com/api/v4): Secure files.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.secure-files.create-secure-file
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/secure_files" } }
+    class: credential
+    resource: { arg: id, kind: project }
+    card: "Upload secure file {body.name} to project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Secure files are a store for secrets.
+    tests:
+      - fixture: fixtures/secure-files-create-secure-file.http
+        expect: credential
+        resource: "acme/shop"
+
+  - id: gitlab.secure-files.delete-secure-file
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/secure_files/{secure_file_id}" } }
+    class: irreversible
+    resource: { arg: id, kind: project }
+    card: "Delete secure file {secure_file_id} of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Secure files hold signing keys and other secrets GitLab keeps nowhere else.
+    tests:
+      - fixture: fixtures/secure-files-delete-secure-file.http
+        expect: irreversible
+        resource: "acme/shop"
+
+  - id: gitlab.secure-files.download-secure-file
+    match: { rest: { method: GET, path: "/api/v4/projects/{id}/secure_files/{secure_file_id}/download" } }
+    class: credential
+    resource: { arg: id, kind: project }
+    card: "Download secure file {secure_file_id} of project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Secure files hold signing keys and other secrets.
+    tests:
+      - fixture: fixtures/secure-files-download-secure-file.http
+        expect: credential
+        resource: "acme/shop"

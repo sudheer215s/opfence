@@ -1,0 +1,5 @@
+# description: Read pipeline schedule 3 of project acme/shop with its variables
+GET /api/v4/projects/acme%2Fshop/pipeline_schedules/3 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

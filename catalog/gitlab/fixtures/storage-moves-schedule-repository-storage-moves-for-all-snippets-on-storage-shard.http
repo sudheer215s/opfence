@@ -1,0 +1,7 @@
+# description: Schedule repository storage moves for all snippets on a storage shard
+POST /api/v4/snippet_repository_storage_moves HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

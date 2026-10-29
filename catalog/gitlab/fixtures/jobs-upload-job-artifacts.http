@@ -1,0 +1,7 @@
+# description: Upload job artifacts 7
+POST /api/v4/jobs/7/artifacts HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

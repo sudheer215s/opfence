@@ -1,0 +1,7 @@
+# description: Stop a batched background operation 7
+PUT /api/v4/admin/batched_background_operations/7/stop HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

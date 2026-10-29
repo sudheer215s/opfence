@@ -1,0 +1,7 @@
+# description: Workhorse authorize the group import upload
+POST /api/v4/groups/import/authorize HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

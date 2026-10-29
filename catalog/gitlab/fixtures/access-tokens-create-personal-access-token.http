@@ -1,0 +1,7 @@
+# description: Create personal access token …
+POST /api/v4/user/personal_access_tokens HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{"name": "cli", "scopes": ["read_api"], "expires_at": "2027-01-01"}

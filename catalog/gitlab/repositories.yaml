@@ -1,0 +1,32 @@
+# GitLab REST API (gitlab.com/api/v4): Repositories.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.repositories.get-contents-of-multiple-files-in-request
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/repository/blobs/batch" } }
+    class: read
+    resource: { arg: id, kind: project }
+    card: "Get contents of multiple files in a single request in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Reads several files.
+    tests:
+      - fixture: fixtures/repositories-get-contents-of-multiple-files-in-request.http
+        expect: read
+        resource: "acme/shop"
+
+  - id: gitlab.repositories.add-changelog-data-to-file
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/repository/changelog" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Add changelog data to file in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/repositories-add-changelog-data-to-file.http
+        expect: write
+        resource: "acme/shop"

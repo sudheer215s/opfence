@@ -1,0 +1,7 @@
+# description: Update a group label main in group acme
+PUT /api/v4/groups/acme/labels/main HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

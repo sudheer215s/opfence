@@ -1,0 +1,51 @@
+# GitLab REST API (gitlab.com/api/v4): Job artifacts.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.job-artifacts.delete-job-artifacts
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/jobs/{job_id}/artifacts" } }
+    class: irreversible
+    resource: { arg: id, kind: project }
+    card: "Delete job {job_id} artifacts in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Artifacts cannot be produced again without running the job again.
+    tests:
+      - fixture: fixtures/job-artifacts-delete-job-artifacts.http
+        expect: irreversible
+        resource: "acme/shop"
+
+  - id: gitlab.job-artifacts.retain-job-artifacts
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/jobs/{job_id}/artifacts/keep" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Retain job {job_id} artifacts in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/job-artifacts-retain-job-artifacts.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.job-artifacts.delete-all-job-artifacts-in-project
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/artifacts" } }
+    class: irreversible
+    resource: { arg: id, kind: project }
+    card: "Delete every job artifact in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Deletes every job's artifacts in the project.
+    tests:
+      - fixture: fixtures/job-artifacts-delete-all-job-artifacts-in-project.http
+        expect: irreversible
+        resource: "acme/shop"
+      - fixture: fixtures/job-artifacts-delete-all-job-artifacts-in-project-format-suffix.http
+        expect: irreversible
+        resource: "acme/shop"

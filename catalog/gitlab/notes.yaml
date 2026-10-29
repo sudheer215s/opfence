@@ -1,0 +1,310 @@
+# GitLab REST API (gitlab.com/api/v4): Notes.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.notes.create-issue-note
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/issues/{noteable_id}/notes" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create issue #{noteable_id} note in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/notes-create-issue-note.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.notes.update-issue-note
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/issues/{noteable_id}/notes/{note_id}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update issue #{noteable_id} comment {note_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/notes-update-issue-note.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.notes.delete-issue-note
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/issues/{noteable_id}/notes/{note_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete issue #{noteable_id} comment {note_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      As for GitHub's comments.
+    tests:
+      - fixture: fixtures/notes-delete-issue-note.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.notes.create-merge-request-note
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/merge_requests/{noteable_id}/notes" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create merge request !{noteable_id} note in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/notes-create-merge-request-note.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.notes.update-merge-request-note
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/merge_requests/{noteable_id}/notes/{note_id}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update merge request !{noteable_id} comment {note_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/notes-update-merge-request-note.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.notes.delete-merge-request-note
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/merge_requests/{noteable_id}/notes/{note_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete merge request !{noteable_id} comment {note_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      As for GitHub's comments.
+    tests:
+      - fixture: fixtures/notes-delete-merge-request-note.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.notes.create-snippet-note
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/snippets/{noteable_id}/notes" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create snippet {noteable_id} note in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/notes-create-snippet-note.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.notes.update-snippet-note
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/snippets/{noteable_id}/notes/{note_id}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update snippet {noteable_id} comment {note_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/notes-update-snippet-note.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.notes.delete-snippet-note
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/snippets/{noteable_id}/notes/{note_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete snippet {noteable_id} comment {note_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      As for GitHub's comments.
+    tests:
+      - fixture: fixtures/notes-delete-snippet-note.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.notes.project-create-wiki-page-meta-note
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/wiki_pages/{noteable_id}/notes" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create a wiki page meta note {noteable_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/notes-project-create-wiki-page-meta-note.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.notes.project-update-wiki-page-meta-note
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/wiki_pages/{noteable_id}/notes/{note_id}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update a wiki page meta comment {note_id} {noteable_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/notes-project-update-wiki-page-meta-note.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.notes.project-delete-wiki-page-meta-note
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/wiki_pages/{noteable_id}/notes/{note_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete a wiki page meta comment {note_id} {noteable_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      As for GitHub's comments.
+    tests:
+      - fixture: fixtures/notes-project-delete-wiki-page-meta-note.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.notes.create-epic-note
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/epics/{noteable_id}/notes" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Create epic &{noteable_id} note in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/notes-create-epic-note.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.notes.update-epic-note
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/epics/{noteable_id}/notes/{note_id}" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Update epic &{noteable_id} comment {note_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/notes-update-epic-note.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.notes.delete-epic-note
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/epics/{noteable_id}/notes/{note_id}" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Delete epic &{noteable_id} comment {note_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      As for GitHub's comments.
+    tests:
+      - fixture: fixtures/notes-delete-epic-note.http
+        expect: delete
+        resource: "acme"
+
+  - id: gitlab.notes.create-vulnerability-note
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/vulnerabilities/{noteable_id}/notes" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Create a vulnerability note {noteable_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/notes-create-vulnerability-note.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.notes.update-vulnerability-note
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/vulnerabilities/{noteable_id}/notes/{note_id}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Update a vulnerability comment {note_id} {noteable_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/notes-update-vulnerability-note.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.notes.delete-vulnerability-note
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/vulnerabilities/{noteable_id}/notes/{note_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete a vulnerability comment {note_id} {noteable_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      As for GitHub's comments.
+    tests:
+      - fixture: fixtures/notes-delete-vulnerability-note.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.notes.group-create-wiki-page-meta-note
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/wiki_pages/{noteable_id}/notes" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Create a wiki page meta note {noteable_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/notes-group-create-wiki-page-meta-note.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.notes.group-update-wiki-page-meta-note
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/wiki_pages/{noteable_id}/notes/{note_id}" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Update a wiki page meta comment {note_id} {noteable_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/notes-group-update-wiki-page-meta-note.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.notes.group-delete-wiki-page-meta-note
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/wiki_pages/{noteable_id}/notes/{note_id}" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Delete a wiki page meta comment {note_id} {noteable_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      As for GitHub's comments.
+    tests:
+      - fixture: fixtures/notes-group-delete-wiki-page-meta-note.http
+        expect: delete
+        resource: "acme"

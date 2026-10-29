@@ -1,0 +1,7 @@
+# description: Cancel a GitHub project import
+POST /api/v4/import/github/cancel HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

@@ -1,0 +1,18 @@
+# GitLab REST API (gitlab.com/api/v4): Project approvals.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.project-approvals.create-or-update-approval-configuration-for-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/approvals" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Create or update approval configuration for project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Approval settings decide who must approve a merge request before it can merge.
+    tests:
+      - fixture: fixtures/project-approvals-create-or-update-approval-configuration-for-project.http
+        expect: access
+        resource: "acme/shop"

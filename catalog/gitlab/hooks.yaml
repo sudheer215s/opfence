@@ -1,0 +1,394 @@
+# GitLab REST API (gitlab.com/api/v4): Hooks.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.hooks.create-group-hook
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/hooks" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Add a webhook to {body.url} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Webhooks send events, with their content, to the URL; GitHub's are access too.
+    tests:
+      - fixture: fixtures/hooks-create-group-hook.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.hooks.update-group-hook
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/hooks/{hook_id}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Update webhook {hook_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Webhooks send events, with their content, to the URL; GitHub's are access too.
+    tests:
+      - fixture: fixtures/hooks-update-group-hook.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.hooks.delete-group-hook
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/hooks/{hook_id}" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Delete webhook {hook_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      As for GitHub's webhooks.
+    tests:
+      - fixture: fixtures/hooks-delete-group-hook.http
+        expect: delete
+        resource: "acme"
+
+  - id: gitlab.hooks.group-update-url-variable
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/hooks/{hook_id}/url_variables/{key}" } }
+    class: credential
+    resource: { arg: id, kind: group }
+    card: "Update a URL variable {key} of webhook {hook_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Custom header and URL variable values are write-only secrets.
+    tests:
+      - fixture: fixtures/hooks-group-update-url-variable.http
+        expect: credential
+        resource: "acme"
+
+  - id: gitlab.hooks.group-delete-url-variable
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/hooks/{hook_id}/url_variables/{key}" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Delete a URL variable {key} of webhook {hook_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      As for GitHub's webhooks.
+    tests:
+      - fixture: fixtures/hooks-group-delete-url-variable.http
+        expect: delete
+        resource: "acme"
+
+  - id: gitlab.hooks.group-update-custom-header
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/hooks/{hook_id}/custom_headers/{key}" } }
+    class: credential
+    resource: { arg: id, kind: group }
+    card: "Update a custom header of webhook {hook_id} {key} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Custom header and URL variable values are write-only secrets.
+    tests:
+      - fixture: fixtures/hooks-group-update-custom-header.http
+        expect: credential
+        resource: "acme"
+
+  - id: gitlab.hooks.group-delete-custom-header
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/hooks/{hook_id}/custom_headers/{key}" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Delete a custom header of webhook {hook_id} {key} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      As for GitHub's webhooks.
+    tests:
+      - fixture: fixtures/hooks-group-delete-custom-header.http
+        expect: delete
+        resource: "acme"
+
+  - id: gitlab.hooks.group-trigger-test-webhook
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/hooks/{hook_id}/test/{trigger}" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Trigger a test webhook {hook_id} {trigger} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/hooks-group-trigger-test-webhook.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.hooks.group-resend-webhook-event
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/hooks/{hook_id}/events/{hook_log_id}/resend" } }
+    class: write
+    resource: { arg: id, kind: group }
+    card: "Resend webhook {hook_id} event {hook_log_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/hooks-group-resend-webhook-event.http
+        expect: write
+        resource: "acme"
+
+  - id: gitlab.hooks.update-url-variable
+    match: { rest: { method: PUT, path: "/api/v4/hooks/{hook_id}/url_variables/{key}" } }
+    class: credential
+    card: "Update a URL variable {key} of webhook {hook_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Custom header and URL variable values are write-only secrets.
+    tests:
+      - fixture: fixtures/hooks-update-url-variable.http
+        expect: credential
+
+  - id: gitlab.hooks.delete-url-variable
+    match: { rest: { method: DELETE, path: "/api/v4/hooks/{hook_id}/url_variables/{key}" } }
+    class: delete
+    card: "Delete a URL variable {key} of webhook {hook_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      As for GitHub's webhooks.
+    tests:
+      - fixture: fixtures/hooks-delete-url-variable.http
+        expect: delete
+
+  - id: gitlab.hooks.update-custom-header
+    match: { rest: { method: PUT, path: "/api/v4/hooks/{hook_id}/custom_headers/{key}" } }
+    class: credential
+    card: "Update a custom header of webhook {hook_id} {key}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Custom header and URL variable values are write-only secrets.
+    tests:
+      - fixture: fixtures/hooks-update-custom-header.http
+        expect: credential
+
+  - id: gitlab.hooks.delete-custom-header
+    match: { rest: { method: DELETE, path: "/api/v4/hooks/{hook_id}/custom_headers/{key}" } }
+    class: delete
+    card: "Delete a custom header of webhook {hook_id} {key}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      As for GitHub's webhooks.
+    tests:
+      - fixture: fixtures/hooks-delete-custom-header.http
+        expect: delete
+
+  - id: gitlab.hooks.create-system-hook
+    match: { rest: { method: POST, path: "/api/v4/hooks" } }
+    class: access
+    card: "Create a system hook"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Webhooks send events, with their content, to the URL; GitHub's are access too.
+    tests:
+      - fixture: fixtures/hooks-create-system-hook.http
+        expect: access
+
+  - id: gitlab.hooks.update-system-hook
+    match: { rest: { method: PUT, path: "/api/v4/hooks/{hook_id}" } }
+    class: access
+    card: "Update a system webhook {hook_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Webhooks send events, with their content, to the URL; GitHub's are access too.
+    tests:
+      - fixture: fixtures/hooks-update-system-hook.http
+        expect: access
+
+  - id: gitlab.hooks.create-test-run
+    match: { rest: { method: POST, path: "/api/v4/hooks/{hook_id}" } }
+    class: write
+    card: "Create a test run {hook_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Sends a test event.
+    tests:
+      - fixture: fixtures/hooks-create-test-run.http
+        expect: write
+
+  - id: gitlab.hooks.delete-system-hook
+    match: { rest: { method: DELETE, path: "/api/v4/hooks/{hook_id}" } }
+    class: delete
+    card: "Delete a system webhook {hook_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      As for GitHub's webhooks.
+    tests:
+      - fixture: fixtures/hooks-delete-system-hook.http
+        expect: delete
+
+  - id: gitlab.hooks.project-update-url-variable
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/hooks/{hook_id}/url_variables/{key}" } }
+    class: credential
+    resource: { arg: id, kind: project }
+    card: "Update a URL variable {key} of webhook {hook_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Custom header and URL variable values are write-only secrets.
+    tests:
+      - fixture: fixtures/hooks-project-update-url-variable.http
+        expect: credential
+        resource: "acme/shop"
+
+  - id: gitlab.hooks.project-delete-url-variable
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/hooks/{hook_id}/url_variables/{key}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete a URL variable {key} of webhook {hook_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      As for GitHub's webhooks.
+    tests:
+      - fixture: fixtures/hooks-project-delete-url-variable.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.hooks.project-update-custom-header
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/hooks/{hook_id}/custom_headers/{key}" } }
+    class: credential
+    resource: { arg: id, kind: project }
+    card: "Update a custom header of webhook {hook_id} {key} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Custom header and URL variable values are write-only secrets.
+    tests:
+      - fixture: fixtures/hooks-project-update-custom-header.http
+        expect: credential
+        resource: "acme/shop"
+
+  - id: gitlab.hooks.project-delete-custom-header
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/hooks/{hook_id}/custom_headers/{key}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete a custom header of webhook {hook_id} {key} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      As for GitHub's webhooks.
+    tests:
+      - fixture: fixtures/hooks-project-delete-custom-header.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.hooks.add-webhook-to-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/hooks" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Add a webhook to {body.url} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Webhooks send events, with their content, to the URL; GitHub's are access too.
+    tests:
+      - fixture: fixtures/hooks-add-webhook-to-project.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.hooks.update-project-webhook
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/hooks/{hook_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Update webhook {hook_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Webhooks send events, with their content, to the URL; GitHub's are access too.
+    tests:
+      - fixture: fixtures/hooks-update-project-webhook.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.hooks.delete-project-webhook
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/hooks/{hook_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete webhook {hook_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      As for GitHub's webhooks.
+    tests:
+      - fixture: fixtures/hooks-delete-project-webhook.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.hooks.project-trigger-test-webhook
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/hooks/{hook_id}/test/{trigger}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Trigger a test webhook {hook_id} {trigger} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/hooks-project-trigger-test-webhook.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.hooks.project-resend-webhook-event
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/hooks/{hook_id}/events/{hook_log_id}/resend" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Resend webhook {hook_id} event {hook_log_id} in project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/hooks-project-resend-webhook-event.http
+        expect: write
+        resource: "acme/shop"

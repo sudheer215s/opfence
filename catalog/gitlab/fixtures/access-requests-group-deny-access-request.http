@@ -1,0 +1,5 @@
+# description: Deny an access request 42 in group acme
+DELETE /api/v4/groups/acme/access_requests/42 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

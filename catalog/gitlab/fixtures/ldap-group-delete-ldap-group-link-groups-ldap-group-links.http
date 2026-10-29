@@ -1,0 +1,5 @@
+# description: Delete LDAP group link engineers in group acme
+DELETE /api/v4/groups/acme/ldap_group_links/engineers HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

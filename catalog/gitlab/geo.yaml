@@ -1,0 +1,212 @@
+# GitLab REST API (gitlab.com/api/v4): Geo.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.geo.create-geo-site
+    match: { rest: { method: POST, path: "/api/v4/geo_sites" } }
+    class: write
+    card: "Create a Geo site"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/geo-create-geo-site.http
+        expect: write
+
+  - id: gitlab.geo.update-geo-site
+    match: { rest: { method: PUT, path: "/api/v4/geo_sites/{id}" } }
+    class: write
+    card: "Update a Geo site {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/geo-update-geo-site.http
+        expect: write
+
+  - id: gitlab.geo.delete-geo-site
+    match: { rest: { method: DELETE, path: "/api/v4/geo_sites/{id}" } }
+    class: delete
+    card: "Delete a Geo site {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A secondary site can be added and synced again.
+    tests:
+      - fixture: fixtures/geo-delete-geo-site.http
+        expect: delete
+
+  - id: gitlab.geo.repair-geo-site
+    match: { rest: { method: POST, path: "/api/v4/geo_sites/{id}/repair" } }
+    class: write
+    card: "Repair a Geo site {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/geo-repair-geo-site.http
+        expect: write
+
+  - id: gitlab.geo.create-geo-node
+    match: { rest: { method: POST, path: "/api/v4/geo_nodes" } }
+    class: write
+    card: "Create a Geo node"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/geo-create-geo-node.http
+        expect: write
+
+  - id: gitlab.geo.update-geo-node
+    match: { rest: { method: PUT, path: "/api/v4/geo_nodes/{id}" } }
+    class: write
+    card: "Update a Geo node {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/geo-update-geo-node.http
+        expect: write
+
+  - id: gitlab.geo.delete-geo-node
+    match: { rest: { method: DELETE, path: "/api/v4/geo_nodes/{id}" } }
+    class: delete
+    card: "Delete a Geo node {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A secondary site can be added and synced again.
+    tests:
+      - fixture: fixtures/geo-delete-geo-node.http
+        expect: delete
+
+  - id: gitlab.geo.repair-authentication-of-geo-node
+    match: { rest: { method: POST, path: "/api/v4/geo_nodes/{id}/repair" } }
+    class: write
+    card: "Repair authentication of the Geo node {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/geo-repair-authentication-of-geo-node.http
+        expect: write
+
+  - id: gitlab.geo.create-status-for-secondary-site
+    match: { rest: { method: POST, path: "/api/v4/geo/status" } }
+    class: write
+    card: "Create a status for a secondary site"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/geo-create-status-for-secondary-site.http
+        expect: write
+
+  - id: gitlab.geo.create-report-of-persistent-verification-failures
+    match: { rest: { method: POST, path: "/api/v4/geo/failures" } }
+    class: write
+    card: "Create a report of persistent verification failures"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/geo-create-report-of-persistent-verification-failures.http
+        expect: write
+
+  - id: gitlab.geo.proxy-git-upload-pack-info-refs-request-to-primary-site
+    match: { rest: { method: POST, path: "/api/v4/geo/proxy_git_ssh/info_refs_upload_pack" } }
+    class: read
+    card: "Proxy a git-upload-pack info/refs request to the primary site"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Reads refs or fetches for gitlab-shell.
+    tests:
+      - fixture: fixtures/geo-proxy-git-upload-pack-info-refs-request-to-primary-site.http
+        expect: read
+
+  - id: gitlab.geo.proxy-git-upload-pack-request-to-primary-site
+    match: { rest: { method: POST, path: "/api/v4/geo/proxy_git_ssh/upload_pack" } }
+    class: read
+    card: "Proxy a git-upload-pack request to the primary site"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Reads refs or fetches for gitlab-shell.
+    tests:
+      - fixture: fixtures/geo-proxy-git-upload-pack-request-to-primary-site.http
+        expect: read
+
+  - id: gitlab.geo.proxy-git-receive-pack-info-refs-request-to-primary-site
+    match: { rest: { method: POST, path: "/api/v4/geo/proxy_git_ssh/info_refs_receive_pack" } }
+    class: read
+    card: "Proxy a git-receive-pack info/refs request to the primary site"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Reads refs or fetches for gitlab-shell.
+    tests:
+      - fixture: fixtures/geo-proxy-git-receive-pack-info-refs-request-to-primary-site.http
+        expect: read
+
+  - id: gitlab.geo.proxy-git-receive-pack-request-to-primary-site
+    match: { rest: { method: POST, path: "/api/v4/geo/proxy_git_ssh/receive_pack" } }
+    class: unknown
+    card: "Proxy a git-receive-pack request to the primary site"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Carries a push for gitlab-shell, which Opfence does not read.
+    tests:
+      - fixture: fixtures/geo-proxy-git-receive-pack-request-to-primary-site.http
+        expect: unknown
+
+  - id: gitlab.geo.query-graphql-endpoint-of-geo-site
+    match: { rest: { method: POST, path: "/api/v4/geo/node_proxy/{id}/graphql" } }
+    class: unknown
+    card: "Query the GraphQL endpoint of an existing Geo site {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Passes a GraphQL request, which can be a mutation, to another site.
+    tests:
+      - fixture: fixtures/geo-query-graphql-endpoint-of-geo-site.http
+        expect: unknown

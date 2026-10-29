@@ -1,0 +1,98 @@
+# GitLab REST API (gitlab.com/api/v4): Invitations.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.invitations.add-member-to-group
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/invitations" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Add a member to group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Invitations decide who joins with which role.
+    tests:
+      - fixture: fixtures/invitations-add-member-to-group.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.invitations.update-invitation-to-group
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/invitations/{email}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Update an invitation to group {id} {email}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Invitations decide who joins with which role.
+    tests:
+      - fixture: fixtures/invitations-update-invitation-to-group.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.invitations.delete-invitation-to-group
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/invitations/{email}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Delete an invitation to group {id} {email}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Invitations decide who joins with which role.
+    tests:
+      - fixture: fixtures/invitations-delete-invitation-to-group.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.invitations.add-member-to-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/invitations" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Add a member to project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Invitations decide who joins with which role.
+    tests:
+      - fixture: fixtures/invitations-add-member-to-project.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.invitations.update-invitation-to-project
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/invitations/{email}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Update an invitation to project {id} {email}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Invitations decide who joins with which role.
+    tests:
+      - fixture: fixtures/invitations-update-invitation-to-project.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.invitations.delete-invitation-to-project
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/invitations/{email}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Delete an invitation to project {id} {email}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Invitations decide who joins with which role.
+    tests:
+      - fixture: fixtures/invitations-delete-invitation-to-project.http
+        expect: access
+        resource: "acme/shop"

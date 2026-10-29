@@ -1,0 +1,7 @@
+# description: Create access token … for group acme
+POST /api/v4/groups/acme/access_tokens HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{"name": "release-bot", "scopes": ["api"], "access_level": 30, "expires_at": "2027-01-01"}

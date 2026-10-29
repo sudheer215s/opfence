@@ -1,0 +1,5 @@
+# description: Delete an emoji reaction from epic &5 comment 7 7 in group acme
+DELETE /api/v4/groups/acme/epics/5/notes/7/award_emoji/7 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

@@ -1,0 +1,7 @@
+# description: Share group acme with group …
+POST /api/v4/groups/acme/share HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

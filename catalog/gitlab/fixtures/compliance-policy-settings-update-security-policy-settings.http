@@ -1,0 +1,7 @@
+# description: Update security policy settings
+PUT /api/v4/admin/security/compliance_policy_settings HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

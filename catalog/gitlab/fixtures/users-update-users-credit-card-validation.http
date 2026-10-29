@@ -1,0 +1,7 @@
+# description: Update user 42's credit_card_validation
+PUT /api/v4/user/42/credit_card_validation HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

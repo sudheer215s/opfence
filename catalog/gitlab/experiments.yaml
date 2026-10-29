@@ -1,0 +1,38 @@
+# GitLab REST API (gitlab.com/api/v4): Experiments.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.experiments.delete-cached-assignments-for-experiment
+    match: { rest: { method: DELETE, path: "/api/v4/experiments/{name}/cache" } }
+    class: delete
+    card: "Delete cached assignments for an experiment {name}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/experiments-delete-cached-assignments-for-experiment.http
+        expect: delete
+
+  - id: gitlab.experiments.force-variant-assignment-for-experiment-context
+    match: { rest: { method: POST, path: "/api/v4/experiments/{experiment_name}/assignments" } }
+    class: write
+    card: "Force a variant assignment for an experiment context {experiment_name}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/experiments-force-variant-assignment-for-experiment-context.http
+        expect: write
+
+  - id: gitlab.experiments.clear-variant-assignment-for-experiment-context
+    match: { rest: { method: DELETE, path: "/api/v4/experiments/{experiment_name}/assignments" } }
+    class: delete
+    card: "Clear a variant assignment for an experiment context {experiment_name}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    tests:
+      - fixture: fixtures/experiments-clear-variant-assignment-for-experiment-context.http
+        expect: delete

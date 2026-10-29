@@ -1,0 +1,16 @@
+# GitLab REST API (gitlab.com/api/v4): Plan limits.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.plan-limits.change-plan-limits
+    match: { rest: { method: PUT, path: "/api/v4/application/plan_limits" } }
+    class: write
+    card: "Change plan limits"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Instance administration.
+    tests:
+      - fixture: fixtures/plan-limits-change-plan-limits.http
+        expect: write

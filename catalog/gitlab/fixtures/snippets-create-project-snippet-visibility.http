@@ -1,0 +1,7 @@
+# description: Create a project snippet in project acme/shop (visibility)
+POST /api/v4/projects/acme%2Fshop/snippets HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{"title": "notes", "files": [{"file_path": "notes.md", "content": "x"}], "visibility": "public"}

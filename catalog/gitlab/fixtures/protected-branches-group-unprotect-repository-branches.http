@@ -1,0 +1,5 @@
+# description: Unprotect repository branches main in group acme
+DELETE /api/v4/groups/acme/protected_branches/main HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+

@@ -1,0 +1,158 @@
+# GitLab REST API (gitlab.com/api/v4): Clusters.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.clusters.update-cluster-in-project
+    match: { rest: { method: PUT, path: "/api/v4/projects/{id}/clusters/{cluster_id}" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Update a cluster in project {id} {cluster_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Gives GitLab, and the pipelines that deploy to it, a service token for the Kubernetes cluster.
+    tests:
+      - fixture: fixtures/clusters-update-cluster-in-project.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.clusters.delete-cluster-from-project
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/clusters/{cluster_id}" } }
+    class: delete
+    resource: { arg: id, kind: project }
+    card: "Delete cluster from project {id} {cluster_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Removes the integration; the cluster itself stays.
+    tests:
+      - fixture: fixtures/clusters-delete-cluster-from-project.http
+        expect: delete
+        resource: "acme/shop"
+
+  - id: gitlab.clusters.add-cluster-to-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/clusters/user" } }
+    class: access
+    when:
+      - if: { arg: body.platform_kubernetes_attributes.token, present: true }
+        class: credential
+      - if: { arg: query.platform_kubernetes_attributes.token, present: true }
+        class: credential
+    resource: { arg: id, kind: project }
+    card: "Add a cluster to project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Gives GitLab, and the pipelines that deploy to it, a service token for the Kubernetes cluster.
+      Storing the cluster's service token is credential.
+    tests:
+      - fixture: fixtures/clusters-add-cluster-to-project.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.clusters.update-group-cluster
+    match: { rest: { method: PUT, path: "/api/v4/groups/{id}/clusters/{cluster_id}" } }
+    class: access
+    resource: { arg: id, kind: group }
+    card: "Update a group cluster {cluster_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Gives GitLab, and the pipelines that deploy to it, a service token for the Kubernetes cluster.
+    tests:
+      - fixture: fixtures/clusters-update-group-cluster.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.clusters.delete-group-cluster
+    match: { rest: { method: DELETE, path: "/api/v4/groups/{id}/clusters/{cluster_id}" } }
+    class: delete
+    resource: { arg: id, kind: group }
+    card: "Delete a group cluster {cluster_id} in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Removes the integration; the cluster itself stays.
+    tests:
+      - fixture: fixtures/clusters-delete-group-cluster.http
+        expect: delete
+        resource: "acme"
+
+  - id: gitlab.clusters.create-group-cluster
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/clusters/user" } }
+    class: access
+    when:
+      - if: { arg: body.platform_kubernetes_attributes.token, present: true }
+        class: credential
+      - if: { arg: query.platform_kubernetes_attributes.token, present: true }
+        class: credential
+    resource: { arg: id, kind: group }
+    card: "Create a group cluster in group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Gives GitLab, and the pipelines that deploy to it, a service token for the Kubernetes cluster.
+      Storing the cluster's service token is credential.
+    tests:
+      - fixture: fixtures/clusters-create-group-cluster.http
+        expect: access
+        resource: "acme"
+
+  - id: gitlab.clusters.update-instance-cluster
+    match: { rest: { method: PUT, path: "/api/v4/admin/clusters/{cluster_id}" } }
+    class: access
+    card: "Update an instance cluster {cluster_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Gives GitLab, and the pipelines that deploy to it, a service token for the Kubernetes cluster.
+    tests:
+      - fixture: fixtures/clusters-update-instance-cluster.http
+        expect: access
+
+  - id: gitlab.clusters.delete-instance-cluster
+    match: { rest: { method: DELETE, path: "/api/v4/admin/clusters/{cluster_id}" } }
+    class: delete
+    card: "Delete instance cluster {cluster_id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Removes the integration; the cluster itself stays.
+    tests:
+      - fixture: fixtures/clusters-delete-instance-cluster.http
+        expect: delete
+
+  - id: gitlab.clusters.create-instance-cluster
+    match: { rest: { method: POST, path: "/api/v4/admin/clusters/add" } }
+    class: access
+    when:
+      - if: { arg: body.platform_kubernetes_attributes.token, present: true }
+        class: credential
+      - if: { arg: query.platform_kubernetes_attributes.token, present: true }
+        class: credential
+    card: "Create an instance cluster"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Gives GitLab, and the pipelines that deploy to it, a service token for the Kubernetes cluster.
+      Storing the cluster's service token is credential.
+    tests:
+      - fixture: fixtures/clusters-create-instance-cluster.http
+        expect: access

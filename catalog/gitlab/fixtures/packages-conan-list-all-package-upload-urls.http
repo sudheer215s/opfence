@@ -1,0 +1,7 @@
+# description: List all package upload URLs 5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9
+POST /api/v4/packages/conan/v1/conans/shop-ui/1.0.0/acme/stable/packages/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/upload_urls HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

@@ -1,0 +1,7 @@
+# description: Reset the estimated time for issue #12 in project acme/shop
+POST /api/v4/projects/acme%2Fshop/issues/12/reset_time_estimate HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

@@ -1,0 +1,7 @@
+# description: Update webhook 7 in group acme
+PUT /api/v4/groups/acme/hooks/7 HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

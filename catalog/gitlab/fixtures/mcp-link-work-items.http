@@ -1,0 +1,8 @@
+# description: Link work items to #12 in project acme/shop
+POST /api/v4/mcp HTTP/1.1
+Host: gitlab.com
+Authorization: Bearer opf_gitlab_EXAMPLE
+Content-Type: application/json
+Accept: application/json, text/event-stream
+
+{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "link_work_items", "arguments": {"project_id": "acme/shop", "work_item_iid": 12, "work_items_ids": ["gid://gitlab/WorkItem/9"]}}}

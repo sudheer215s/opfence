@@ -1,0 +1,7 @@
+# description: Import a repository from GitHub
+POST /api/v4/import/github HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

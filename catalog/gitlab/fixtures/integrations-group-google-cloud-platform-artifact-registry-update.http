@@ -1,0 +1,7 @@
+# description: Create or update the Google Cloud Platform Artifact Registry integration in group acme
+PUT /api/v4/groups/acme/integrations/google-cloud-platform-artifact-registry HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

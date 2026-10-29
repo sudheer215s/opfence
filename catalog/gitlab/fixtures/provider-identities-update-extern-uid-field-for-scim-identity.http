@@ -1,0 +1,7 @@
+# description: Update `extern_uid` field for a SCIM identity jdoe in group acme
+PATCH /api/v4/groups/acme/scim/jdoe HTTP/1.1
+Host: gitlab.com
+PRIVATE-TOKEN: opf_gitlab_EXAMPLE
+Content-Type: application/json
+
+{}

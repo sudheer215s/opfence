@@ -1,0 +1,130 @@
+# GitLab REST API (gitlab.com/api/v4): Runners.
+# Generated from GitLab's OpenAPI description (see provider.yaml); classes reviewed by hand.
+operations:
+  - id: gitlab.runners.update-runner
+    match: { rest: { method: PUT, path: "/api/v4/runners/{id}" } }
+    class: access
+    resource: { arg: id, kind: runner }
+    card: "Change runner {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Which runners take a project's jobs decides where its CI/CD variables, secrets included, are
+      sent.
+    tests:
+      - fixture: fixtures/runners-update-runner.http
+        expect: access
+        resource: "7"
+
+  - id: gitlab.runners.delete-runner
+    match: { rest: { method: DELETE, path: "/api/v4/runners/{id}" } }
+    class: delete
+    resource: { arg: id, kind: runner }
+    card: "Delete a runner {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      A runner can be registered again.
+    tests:
+      - fixture: fixtures/runners-delete-runner.http
+        expect: delete
+        resource: "7"
+
+  - id: gitlab.runners.reset-authentication-token-for-runner
+    match: { rest: { method: POST, path: "/api/v4/runners/{id}/reset_authentication_token" } }
+    class: credential
+    resource: { arg: id, kind: runner }
+    card: "Reset an authentication token for a runner {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the new token.
+    tests:
+      - fixture: fixtures/runners-reset-authentication-token-for-runner.http
+        expect: credential
+        resource: "7"
+
+  - id: gitlab.runners.assign-runner-to-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/runners" } }
+    class: access
+    resource: { arg: id, kind: project }
+    card: "Assign runner {body.runner_id} to project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Which runners take a project's jobs decides where its CI/CD variables, secrets included, are
+      sent.
+    tests:
+      - fixture: fixtures/runners-assign-runner-to-project.http
+        expect: access
+        resource: "acme/shop"
+
+  - id: gitlab.runners.unassign-runner-from-project
+    match: { rest: { method: DELETE, path: "/api/v4/projects/{id}/runners/{runner_id}" } }
+    class: write
+    resource: { arg: id, kind: project }
+    card: "Unassign runner {runner_id} from project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Unassigns the runner; it stays.
+    tests:
+      - fixture: fixtures/runners-unassign-runner-from-project.http
+        expect: write
+        resource: "acme/shop"
+
+  - id: gitlab.runners.reset-runner-registration-token-for-instance
+    match: { rest: { method: POST, path: "/api/v4/runners/reset_registration_token" } }
+    class: credential
+    card: "Reset the runner registration token for the instance"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the new token.
+    tests:
+      - fixture: fixtures/runners-reset-runner-registration-token-for-instance.http
+        expect: credential
+
+  - id: gitlab.runners.reset-runner-registration-token-for-project
+    match: { rest: { method: POST, path: "/api/v4/projects/{id}/runners/reset_registration_token" } }
+    class: credential
+    resource: { arg: id, kind: project }
+    card: "Reset the runner registration token for project {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the new token.
+    tests:
+      - fixture: fixtures/runners-reset-runner-registration-token-for-project.http
+        expect: credential
+        resource: "acme/shop"
+
+  - id: gitlab.runners.reset-runner-registration-token-for-group
+    match: { rest: { method: POST, path: "/api/v4/groups/{id}/runners/reset_registration_token" } }
+    class: credential
+    resource: { arg: id, kind: group }
+    card: "Reset the runner registration token for group {id}"
+    status: verified
+    verified: 2026-10-28
+    sources:
+      - https://gitlab.com/gitlab-org/gitlab/-/blob/4addde3db6991438aa04abeb14368a466eb046c0/doc/api/openapi/openapi_v3.yaml
+    notes: >-
+      Returns the new token.
+    tests:
+      - fixture: fixtures/runners-reset-runner-registration-token-for-group.http
+        expect: credential
+        resource: "acme"
