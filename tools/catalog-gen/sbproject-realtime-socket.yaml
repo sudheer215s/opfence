@@ -1,0 +1,78 @@
+  - id: supabase-project.realtime.connect
+    match: { websocket: { path: /realtime/v1/websocket, message: connect } }
+    class: read
+    resource: { arg: ref, kind: project }
+    card: "Open a realtime socket to project {ref}"
+    status: verified
+    verified: 2026-10-25
+    sources:
+      - https://github.com/supabase/realtime-js/blob/master/src/RealtimeClient.ts
+      - https://supabase.com/docs/guides/realtime/protocol
+    notes: >-
+      supabase-js opens /realtime/v1/websocket with the project's key in the apikey parameter
+      and vsn=2.0.0 (JSON arrays, binary frames for broadcasts) or 1.0.0 (JSON objects).
+      Opening the socket does nothing by itself; joins, broadcasts and presence are decided one
+      by one. The key and each join's access_token are swapped in like the HTTP APIs' keys.
+    tests:
+      - fixture: fixtures/realtime-socket-connect.http
+        expect: read
+        resource: "abcdefghijklmnopqrst"
+
+  - id: supabase-project.realtime.join
+    match: { websocket: { path: /realtime/v1/websocket, message: join } }
+    class: read
+    resource: { arg: ref, kind: project }
+    card: "Join realtime channel {topic} in project {ref}"
+    status: verified
+    verified: 2026-10-25
+    sources:
+      - https://github.com/supabase/realtime-js/blob/master/src/RealtimeChannel.ts
+      - https://supabase.com/docs/guides/realtime/protocol
+    notes: >-
+      Subscribing to a channel receives its broadcasts and presence, and with postgres_changes
+      the rows of the tables it names as they change: reads. What the channel may see is up to
+      row level security (private channels) and the token the join carries.
+    tests:
+      - fixture: fixtures/realtime-socket-join.ws
+        expect: read
+        resource: "abcdefghijklmnopqrst"
+      - fixture: fixtures/realtime-socket-join-v1.ws
+        expect: read
+        resource: "abcdefghijklmnopqrst"
+
+  - id: supabase-project.realtime.broadcast-socket
+    match: { websocket: { path: /realtime/v1/websocket, message: broadcast } }
+    class: write
+    resource: { arg: ref, kind: project }
+    card: "Send realtime message {event} on {topic} in project {ref}"
+    status: verified
+    verified: 2026-10-25
+    sources:
+      - https://github.com/supabase/realtime-js/blob/master/src/lib/serializer.ts
+      - https://supabase.com/docs/guides/realtime/broadcast
+    notes: >-
+      A broadcast reaches every client subscribed to the channel, which may act on it, so it is a
+      write, as the HTTP broadcast endpoint is. Serializer 2.0.0 sends it as a binary frame (a
+      header with the refs, topic, event and metadata, then the payload); 1.0.0 as JSON.
+    tests:
+      - fixture: fixtures/realtime-socket-broadcast.ws
+        expect: write
+        resource: "abcdefghijklmnopqrst"
+      - fixture: fixtures/realtime-socket-broadcast-json.ws
+        expect: write
+        resource: "abcdefghijklmnopqrst"
+
+  - id: supabase-project.realtime.presence
+    match: { websocket: { path: /realtime/v1/websocket, message: presence } }
+    class: write
+    resource: { arg: ref, kind: project }
+    card: "Change presence ({event}) on {topic} in project {ref}"
+    status: verified
+    verified: 2026-10-25
+    sources:
+      - https://github.com/supabase/realtime-js/blob/master/src/RealtimeChannel.ts
+      - https://supabase.com/docs/guides/realtime/presence
+    tests:
+      - fixture: fixtures/realtime-socket-presence.ws
+        expect: write
+        resource: "abcdefghijklmnopqrst"

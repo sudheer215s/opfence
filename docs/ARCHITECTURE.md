@@ -65,6 +65,8 @@ internal/launch/        Claude Code --settings and srt settings, CA files, child
 internal/trust/         CA install/uninstall in the OS trust store, with a manifest
 catalog/                provider folders: rules + fixtures (embedded with go:embed)
 schema/                 JSON Schema for catalog files and opfence.yaml
+tools/                  catalog-gen (the generated providers), redisgen, awscligen, brewformula, sitegen (the docs site, its own module)
+Formula/                Homebrew formula; the repository is its own tap
 docs/
 ```
 
@@ -252,6 +254,8 @@ catalog/
 ```
 
 One provider per folder. Rule files and fixtures sit side by side so a contributor's PR touches one folder.
+
+The large providers are generated from the provider's own description (Google's discovery documents, OpenAPI files, an MCP server's source) by the scripts in `tools/catalog-gen`, which hold the reviewed class of every operation. A change to a generated provider goes into its script, which is run again, so the next description can be compared with the catalog by reading `git diff`; the folder's README names each script's inputs.
 
 ### 4.2 Provider file
 
@@ -832,6 +836,7 @@ Codex is not covered: its hooks need a trusted hash recorded in its own config, 
 | Cursor's and Gemini CLI's hooks live in the user's settings, added by `opfence setup` | A per-session hook from `opfence run`, as for Claude Code and Codex | Neither takes one from its command line, Gemini skips system settings root does not own, and editing a user's file for each session and putting it back would race other sessions and survive a crash |
 | Gemini's hook denies what it would ask about when Gemini is headless | Ask anyway | Gemini CLI 0.66.0 waits forever on a hook's ask when nobody can answer |
 | `opfence setup` refuses a Gemini settings file with comments | Rewrite it without them | The user wrote them; the entry to add is printed instead |
+| A Homebrew formula that builds from source, in this repository as its own tap | GoReleaser publishing a formula or cask to a separate tap repository | No second repository or token for CI to push with; a source build is what Homebrew's own Go formulae do, and `tools/brewformula` adds each tag's archive and hash |
 | A separate, open agent listener for Claude Code itself and its MCP servers | Leave them unproxied; or send them through the strict sandbox listener | Unproxied, MCP keys could never become placeholders; strict would break them while buying nothing, since they run outside the sandbox and can connect directly |
 | Keys in the environment become session placeholders, held in memory | Deny the variables in the sandbox; or store them in the keychain | Denying breaks the tools; writing to the keychain unasked is surprising; a session placeholder keeps tools working and the agent never sees the key |
 | AWS keys become placeholders and the proxy re-signs requests made with them | Keep AWS keys real (stages 7 to 9) | A real AWS key in the agent's environment is the most damaging key it can hold; re-signing with the official signer, over only what is forwarded, keeps the decision and the signature on the same bytes |

@@ -4,7 +4,14 @@ From install to the first blocked call. Opfence is in early development: try it 
 
 ## 1. Install
 
-Download a release for macOS, Linux or Windows from the [releases page](https://github.com/rakeshnitb23/opfence/releases), or build it with Go 1.26.9 or newer:
+With Homebrew on macOS or Linux:
+
+```sh
+brew tap sudheer215s/opfence https://github.com/sudheer215s/opfence
+brew install --HEAD opfence
+```
+
+Or download a release for macOS, Linux or Windows from the [releases page](https://github.com/rakeshnitb23/opfence/releases), or build it with Go 1.26.9 or newer:
 
 ```sh
 go install github.com/rakeshnitb23/opfence/cmd/opfence@latest

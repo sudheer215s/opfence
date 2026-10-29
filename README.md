@@ -64,6 +64,13 @@ For NVIDIA OpenShell, `opfence export --target openshell --environment productio
 
 ## Install
 
+With Homebrew (macOS or Linux), from this repository's own tap:
+
+```sh
+brew tap sudheer215s/opfence https://github.com/sudheer215s/opfence
+brew install --HEAD opfence    # builds master; after the first release, brew install opfence
+```
+
 Release builds for macOS, Linux and Windows are attached to each [GitHub release](https://github.com/rakeshnitb23/opfence/releases), with a `checksums.txt` and signed build provenance (`gh attestation verify opfence_*.tar.gz --repo rakeshnitb23/opfence`).
 
 ## Build from source

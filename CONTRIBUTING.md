@@ -14,12 +14,19 @@ Thanks for helping. The most valuable contribution is a catalog rule: one tested
 
 A rule can be `status: verified` only when it has a fixture, a source and a `verified` date; otherwise use `community` or `draft`.
 
+Some providers are generated: Google Cloud, Supabase, GitLab, Terraform's MCP server and others, listed in [tools/catalog-gen](tools/catalog-gen/README.md). For those, change the script, run it, and commit both; an edit made only to a generated file is lost the next time the script runs.
+
 ## Code
 
 - Go, formatted with `gofmt -s`. Run `make check` (format, vet, race tests) before opening a PR, and `make lint` for staticcheck.
 - New dependencies need a reason in [docs/ARCHITECTURE.md §2](docs/ARCHITECTURE.md#dependencies). Fewer is better in a security tool.
 - Decoders must fail closed: when unsure, emit an `unknown` operation, never `read`.
 - Every behaviour change comes with a test.
+
+## Releasing
+
+1. Push a tag such as `v0.1.0`. The release workflow tests the tag, builds the binaries with GoReleaser and drafts a release with checksums and build provenance; publish the draft.
+2. Run `go run ./tools/brewformula -tag v0.1.0`. It hashes the tag's source archive and gives `Formula/opfence.rb` its `url` and `sha256`, so `brew install opfence` builds the release. Open a PR with the change.
 
 ## Reporting security issues
 
