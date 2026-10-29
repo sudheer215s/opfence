@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/rakeshnitb23/opfence/internal/engine"
 	"github.com/rakeshnitb23/opfence/internal/export"
 	"github.com/rakeshnitb23/opfence/internal/hook"
+	"github.com/rakeshnitb23/opfence/internal/launch"
 	"github.com/rakeshnitb23/opfence/internal/policy"
 )
 
@@ -97,8 +99,8 @@ func newHookCmd(g *globalOptions) *cobra.Command {
 		Long: `Reads a Claude Code PreToolUse event on standard input and, for MCP servers in
 the catalog, prints Claude Code's allow, ask or deny decision. Other tools get
 no output. Any error exits with status 2, which makes Claude Code block the
-call rather than let it through. Install it with
-"opfence export --target claude-code".`,
+call rather than let it through. Install it with "opfence setup claude-code";
+"opfence run -- claude" adds it for the session.`,
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if err := hook.ClaudeCode(cmd.InOrStdin(), cmd.OutOrStdout(), g.hookEngine); err != nil {
@@ -123,7 +125,63 @@ status 2, which Codex takes as a deny. "opfence run --srt -- codex" installs it.
 			return nil
 		},
 	})
+	var geminiFlags hook.GeminiFlags
+	gemini := &cobra.Command{
+		Use:   "gemini",
+		Short: "Gemini CLI BeforeTool hook for MCP tool calls",
+		Long: `Reads a Gemini CLI BeforeTool event on standard input and, for MCP servers in
+the catalog, prints Gemini's decision: a deny where Opfence denies, an ask
+where Opfence asks or needs confirmation (Gemini then shows its confirmation
+even in YOLO mode; a deny when Gemini runs with nobody to ask), and nothing
+where Opfence allows, which leaves Gemini's own approval. Under
+"opfence run --srt" it leaves servers Gemini reaches over the network to the
+proxy. Any error exits with status 2, which Gemini takes as a block. Install
+it with "opfence setup gemini".`,
+		Args: cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			geminiFlags.Getenv = os.Getenv
+			geminiFlags.Proxied = inSrtSession(os.Getenv)
+			if err := hook.Gemini(cmd.InOrStdin(), cmd.OutOrStdout(), g.hookEngine, geminiFlags); err != nil {
+				return hookError{err}
+			}
+			return nil
+		},
+	}
+	gemini.Flags().BoolVar(&geminiFlags.Headless, "headless", false, "deny what Opfence would ask about, for a Gemini that runs with nobody to ask")
+	cmd.AddCommand(gemini)
+	cmd.AddCommand(&cobra.Command{
+		Use:   "cursor",
+		Short: "Cursor beforeMCPExecution hook for MCP tool calls",
+		Long: `Reads a Cursor beforeMCPExecution event on standard input and, for MCP servers
+in the catalog, prints Cursor's allow, ask or deny; for anything else it prints
+{}, which leaves Cursor's own approval. Any error exits with status 2, which
+Cursor takes as a deny. Install it with "opfence setup cursor".`,
+		Args: cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			if err := hook.Cursor(cmd.InOrStdin(), cmd.OutOrStdout(), g.hookEngine); err != nil {
+				return hookError{err}
+			}
+			return nil
+		},
+	})
 	return cmd
+}
+
+// inSrtSession reports whether a hook runs inside an opfence run --srt
+// session: OPFENCE_SESSION names a session whose srt settings file is in
+// the CA folder. A project's .env file can set the variable, which Gemini
+// CLI loads, but cannot create the file, and the session id is random.
+func inSrtSession(getenv func(string) string) bool {
+	id := getenv(envSession)
+	if len(id) != 12 || strings.Trim(id, "0123456789abcdef") != "" {
+		return false
+	}
+	dir, err := launch.CertDir()
+	if err != nil {
+		return false
+	}
+	st, err := os.Stat(filepath.Join(dir, "srt-"+id+".json"))
+	return err == nil && st.Mode().IsRegular()
 }
 
 // hookEngine builds the engine for a hook call made in project folder cwd.

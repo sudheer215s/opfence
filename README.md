@@ -25,6 +25,7 @@ Coding agents run with real cloud credentials. In April 2026 one deleted a start
 | `opfence phone setup / test / off` (approve from your phone with the ntfy app) | available (preview) |
 | `opfence run -- claude` (Claude Code in its sandbox behind Opfence), `opfence run --srt -- codex / cursor-agent / gemini`, `opfence run --srt / --weak -- <command>`, `opfence trust [--uninstall]`, `opfence doctor` | available (preview) |
 | `opfence hook codex` (Codex's PreToolUse and PermissionRequest hook, installed by `opfence run`) | available (preview) |
+| `opfence setup claude-code / cursor / gemini [--project] [--undo]` (Opfence's MCP hook in the agent's own settings), `opfence hook gemini / cursor` | available (preview) |
 
 ## Catalog
 
@@ -33,10 +34,10 @@ Coding agents run with real cloud credentials. In April 2026 one deleted a start
 ## Use with Claude Code
 
 ```sh
-opfence export --target claude-code -o opfence-settings.json
+opfence setup claude-code
 ```
 
-Merge the result into `.claude/settings.json`. It installs a PreToolUse hook that decides every MCP tool call from the catalog, with its arguments (a `SELECT` through Supabase's `execute_sql` or Cloudflare's `d1_database_query` is allowed, a `DROP TABLE` needs confirmation; SQL is read as Postgres, MySQL or SQLite, whichever the server speaks, Redis commands through Upstash's MCP server one by one, and AWS CLI commands through the AWS API MCP server by the AWS rules they reach), and adds ask rules for tools that are risky whatever their arguments. Map your development and staging ids in your user config (`~/.config/opfence/config.yaml`) so the hook knows which is which; until then everything counts as production. A repository's `opfence.yaml` can only make decisions stricter, so it can mark ids as production but not as development.
+This adds a PreToolUse hook to `~/.claude/settings.json` (everything else in the file stays as it was; `--undo` takes it out again, `--project` writes the project's `.claude/settings.json` instead), then checks that the hook decides a sample call. The hook decides every MCP tool call from the catalog, with its arguments (a `SELECT` through Supabase's `execute_sql` or Cloudflare's `d1_database_query` is allowed, a `DROP TABLE` needs confirmation; SQL is read as Postgres, MySQL or SQLite, whichever the server speaks, Redis commands through Upstash's MCP server one by one, and AWS CLI commands through the AWS API MCP server by the AWS rules they reach). `opfence export --target claude-code` writes the same hook, with ask rules for tools that are risky whatever their arguments, to merge by hand. Map your development and staging ids in your user config (`~/.config/opfence/config.yaml`) so the hook knows which is which; until then everything counts as production. A repository's `opfence.yaml` can only make decisions stricter, so it can mark ids as production but not as development.
 
 ## Use with Codex, Cursor or Gemini CLI
 
@@ -46,7 +47,14 @@ opfence run --srt -- cursor-agent
 opfence run --srt -- gemini
 ```
 
-Each runs inside Anthropic's sandbox runtime (`npm install -g @anthropic-ai/sandbox-runtime`) behind Opfence, with your keys as placeholders and its own sandbox turned off, since srt is the sandbox. gcloud and Google's client libraries sign in with placeholder refresh tokens there too, as they do under `opfence run -- claude`: the agent never holds a Google token that works outside Opfence. Its model backend is tunnelled; everything else it or its tools reach goes through the catalog. For Codex, Opfence also installs its hook for this session only, so each local MCP tool call is decided with its arguments like in Claude Code, and passes the proxy settings to Codex's MCP servers. Nothing in `~/.codex` changes.
+Each runs inside Anthropic's sandbox runtime (`npm install -g @anthropic-ai/sandbox-runtime`) behind Opfence, with your keys as placeholders and its own sandbox turned off, since srt is the sandbox. gcloud and Google's client libraries sign in with placeholder refresh tokens there too, as they do under `opfence run -- claude`: the agent never holds a Google token that works outside Opfence. Its model backend is tunnelled; everything else it or its tools reach goes through the catalog. For Codex, Opfence also installs its hook for this session only, so each local MCP tool call is decided with its arguments like in Claude Code, and passes the proxy settings to Codex's MCP servers. Nothing in `~/.codex` changes. Cursor and Gemini CLI take hooks only from their settings files, so add Opfence's once:
+
+```sh
+opfence setup cursor    # ~/.cursor/hooks.json
+opfence setup gemini    # ~/.gemini/settings.json
+```
+
+Their MCP tool calls are then decided with their arguments whether or not they run under Opfence; `opfence run --srt` says when the hook is missing.
 
 For NVIDIA OpenShell, `opfence export --target openshell --environment production` writes network policies to merge into your sandbox policy.
 

@@ -79,7 +79,12 @@ var agents = map[string]*Agent{
 	"gemini": {
 		Name:  "Gemini CLI",
 		Hosts: []string{"generativelanguage.googleapis.com", "cloudcode-pa.googleapis.com", "play.googleapis.com", "oauth2.googleapis.com"},
-		stateDir: func(home string, _ func(string) string) string {
+		// GEMINI_CLI_HOME replaces the home folder Gemini CLI keeps .gemini
+		// in (homedir in packages/core/src/utils/paths.ts).
+		stateDir: func(home string, getenv func(string) string) string {
+			if d := getenv("GEMINI_CLI_HOME"); d != "" {
+				home = d
+			}
 			return filepath.Join(home, ".gemini")
 		},
 		// settings.json holds hooks and MCP servers.
@@ -200,3 +205,9 @@ func hasFlag(args, flags []string) bool {
 	}
 	return false
 }
+
+// IsGemini reports whether a is Gemini CLI's preset.
+func (a *Agent) IsGemini() bool { return a == agents["gemini"] }
+
+// IsCursor reports whether a is Cursor's preset.
+func (a *Agent) IsCursor() bool { return a == agents["cursor"] }
