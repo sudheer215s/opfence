@@ -95,6 +95,7 @@ cd ~/opfence-check && opfence run --srt -- cursor-agent
 - [ ] It starts and answers a simple prompt ("say hi"). Its model traffic is tunnelled, so this shows the preset's backend hosts are right. **Send back** any error, and any warning `opfence run` prints when the session ends.
 - [ ] Ask it to run `sh railway.sh delete`: the dialog appears, as with Claude Code. Deny it.
 - [ ] Ask it to run `opfence doctor --probe --json`. **Send back** the JSON.
+- [ ] Quit it and run `opfence setup cursor`. It ends with `Checked: the hook decides a DROP TABLE through Supabase's execute_sql: ask.` Start `opfence run --srt -- cursor-agent` again: the banner no longer has a note about Cursor's hook. **Send back** what setup printed. If you use the Cursor editor with an MCP server Opfence knows, a call Opfence asks about should show Cursor's own prompt with Opfence's reason. `opfence setup cursor --undo` takes the hook out.
 
 ## 5. Gemini CLI
 
@@ -106,6 +107,7 @@ cd ~/opfence-check && opfence run --srt -- gemini
 
 - [ ] It starts and answers a prompt. Note it if it complains about `~/.gemini/settings.json`. Gemini treats an empty settings file as a fatal error, and Opfence is meant to avoid creating one.
 - [ ] `sh railway.sh delete` held, then denied. `opfence doctor --probe --json` inside it: **send back** the JSON.
+- [ ] Quit it and run `opfence setup gemini`; it ends with the same `Checked:` line. **Send back** what it printed, and `opfence setup gemini --undo` when you are done.
 - [ ] Optional: Codex has only been checked on Linux. If you use it, run `opfence run --srt -- codex` and repeat the two checks.
 
 ## 6. Phone approvals with ntfy.sh

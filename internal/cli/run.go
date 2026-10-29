@@ -19,8 +19,10 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/rakeshnitb23/opfence/internal/audit"
+	"github.com/rakeshnitb23/opfence/internal/hook"
 	"github.com/rakeshnitb23/opfence/internal/launch"
 	"github.com/rakeshnitb23/opfence/internal/policy"
+	"github.com/rakeshnitb23/opfence/internal/setup"
 )
 
 // exitCodeError makes Main exit with a child's exit code, silently.
@@ -100,6 +102,7 @@ asked in a desktop dialog or with "opfence approve" in another terminal.`,
 			vars[envSession] = s.id
 			var argv []string
 			var cleanup func()
+			var notes []string
 			var denyRead []string
 			if runtime.GOOS == "linux" {
 				denyRead = launch.LinuxSecretSockets(os.Getenv)
@@ -191,9 +194,24 @@ asked in a desktop dialog or with "opfence approve" in another terminal.`,
 							vars[k] = v
 						}
 						var extra []string
-						if agent.IsCodex() {
+						switch {
+						case agent.IsCodex():
 							extra = codexArgs(cmd.Context(), stderr, logf, args, launch.SetEnv(env, vars, false), cwd, codexEnvVars(vars, changes),
 								launch.AgentHookCommand(paths.Executable, g.hookArgs(paths.ConfigFile), "codex"))
+						case agent.IsGemini():
+							gemini := setup.Agents["gemini"]
+							files := launch.GeminiSettingsFiles(runtime.GOOS, home, cwd, os.Getenv)
+							if !gemini.Installed(files...) {
+								notes = append(notes, `Gemini CLI's MCP tool calls are not decided one by one, only the requests they send through Opfence; "opfence setup gemini" adds the hook that decides them`)
+							}
+							notes = append(notes, gemini.Off(files...)...)
+							if launch.GeminiHeadless(args[1:], isTerminal(os.Stdin) && isTerminal(os.Stdout), os.Getenv) {
+								vars[hook.EnvGeminiHeadless] = "1"
+							}
+						case agent.IsCursor():
+							if !setup.Agents["cursor"].Installed(setup.CursorHookFiles(runtime.GOOS, home, cwd)...) {
+								notes = append(notes, `Cursor's MCP tool calls are not decided one by one, only the requests they send through Opfence; "opfence setup cursor" adds the hook that decides them`)
+							}
 						}
 						childArgs = agent.Args(args[1:], extra)
 					}
@@ -231,6 +249,9 @@ asked in a desktop dialog or with "opfence approve" in another terminal.`,
 				effMode = s.eng.Policy.Mode
 			}
 			printRunBanner(stderr, s, kind, effMode, agent, changes, logFile.Name())
+			for _, n := range notes {
+				fmt.Fprintf(stderr, "  Note: %s\n", n)
+			}
 			if google != nil {
 				for _, n := range google.Notes {
 					fmt.Fprintf(stderr, "  Google: %s\n", n)
@@ -435,4 +456,10 @@ func runChild(ctx context.Context, argv []string, env []string) (int, error) {
 		return ee.ExitCode(), nil
 	}
 	return 0, err
+}
+
+// isTerminal reports whether f is a terminal (a character device).
+func isTerminal(f *os.File) bool {
+	st, err := f.Stat()
+	return err == nil && st.Mode()&os.ModeCharDevice != 0
 }

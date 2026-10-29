@@ -44,10 +44,10 @@ delete-volume.http
 The lightest setup: a hook decides each MCP tool call Claude Code makes, with its arguments.
 
 ```sh
-opfence export --target claude-code -o opfence-settings.json
+opfence setup claude-code
 ```
 
-Merge the result into `.claude/settings.json`. A `SELECT` through Supabase's `execute_sql` is allowed; a `DROP TABLE` needs confirming. The hook only sees tool calls: for everything else an agent does (its own `curl`, the CLIs it runs), use step 4.
+It adds the hook to `~/.claude/settings.json`, leaving everything else in the file as it was, and checks that it decides a sample call. A `SELECT` through Supabase's `execute_sql` is allowed; a `DROP TABLE` needs confirming. `--dry-run` shows the change first, `--undo` removes it, and `opfence setup cursor` or `opfence setup gemini` does the same for Cursor and Gemini CLI. The hook only sees tool calls: for everything else an agent does (its own `curl`, the CLIs it runs), use step 4.
 
 ## 4. Run an agent behind the proxy
 
