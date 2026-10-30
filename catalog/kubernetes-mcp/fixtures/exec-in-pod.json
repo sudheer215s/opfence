@@ -1,0 +1,13 @@
+{
+  "description": "Run env in Pod web-0",
+  "tool": "exec_in_pod",
+  "arguments": {
+    "name": "web-0",
+    "namespace": "shop",
+    "command": [
+      "sh",
+      "-c",
+      "env"
+    ]
+  }
+}

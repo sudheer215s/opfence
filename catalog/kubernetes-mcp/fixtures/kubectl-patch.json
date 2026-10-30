@@ -1,0 +1,16 @@
+{
+  "description": "Label Deployment web",
+  "tool": "kubectl_patch",
+  "arguments": {
+    "resourceType": "deployment",
+    "name": "web",
+    "namespace": "shop",
+    "patchData": {
+      "metadata": {
+        "labels": {
+          "team": "shop"
+        }
+      }
+    }
+  }
+}

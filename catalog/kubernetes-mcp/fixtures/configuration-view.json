@@ -1,0 +1,7 @@
+{
+  "description": "Read the kubeconfig",
+  "tool": "configuration_view",
+  "arguments": {
+    "minified": true
+  }
+}

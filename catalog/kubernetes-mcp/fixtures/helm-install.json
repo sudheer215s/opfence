@@ -1,0 +1,9 @@
+{
+  "description": "Install chart oci://ghcr.io/acme/web",
+  "tool": "helm_install",
+  "arguments": {
+    "chart": "oci://ghcr.io/acme/web",
+    "name": "web",
+    "namespace": "shop"
+  }
+}

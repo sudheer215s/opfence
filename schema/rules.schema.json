@@ -11,6 +11,7 @@
   "$defs": {
     "class": { "enum": ["read", "write", "delete", "irreversible", "money", "credential", "access", "unknown"] },
     "sqlDialect": { "enum": ["postgres", "mysql", "sqlite", "googlesql"] },
+    "kubeAction": { "enum": ["get", "list", "create", "replace", "apply", "patch", "delete", "scale", "exec", "attach", "logs", "portforward", "run", "label", "restart", "undo", "pause", "resume", "cordon", "uncordon", "drain", "unknown", "read", "describe"] },
     "argPath": { "type": "string", "pattern": "^[A-Za-z_$][A-Za-z0-9_$-]*(\\.[A-Za-z_$][A-Za-z0-9_$-]*)*$" },
     "responsePath": { "type": "string", "pattern": "^(\\*\\*\\.)*[A-Za-z_$][A-Za-z0-9_$-]*(\\.(\\*\\*\\.)*[A-Za-z_$][A-Za-z0-9_$-]*)*$", "description": "A dotted path; a ** step stands for any number of keys" },
     "ruleId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*(\\.[a-z0-9][a-z0-9-]*)+$" },
@@ -36,10 +37,11 @@
           "type": "object",
           "additionalProperties": false,
           "oneOf": [
-            { "required": ["sql"], "not": { "anyOf": [{ "required": ["redis"] }, { "required": ["aws_cli"] }, { "required": ["provider"] }, { "required": ["postgrest"] }] } },
-            { "required": ["redis"], "not": { "anyOf": [{ "required": ["sql"] }, { "required": ["aws_cli"] }, { "required": ["provider"] }, { "required": ["dialect"] }, { "required": ["format"] }, { "required": ["postgrest"] }] } },
-            { "required": ["aws_cli", "provider"], "not": { "anyOf": [{ "required": ["sql"] }, { "required": ["redis"] }, { "required": ["dialect"] }, { "required": ["format"] }, { "required": ["postgrest"] }] } },
-            { "required": ["postgrest"], "not": { "anyOf": [{ "required": ["sql"] }, { "required": ["redis"] }, { "required": ["aws_cli"] }, { "required": ["provider"] }, { "required": ["dialect"] }, { "required": ["format"] }] } }
+            { "required": ["sql"], "not": { "anyOf": [{ "required": ["redis"] }, { "required": ["aws_cli"] }, { "required": ["provider"] }, { "required": ["postgrest"] }, { "required": ["kubernetes"] }] } },
+            { "required": ["redis"], "not": { "anyOf": [{ "required": ["sql"] }, { "required": ["aws_cli"] }, { "required": ["provider"] }, { "required": ["dialect"] }, { "required": ["format"] }, { "required": ["postgrest"] }, { "required": ["kubernetes"] }] } },
+            { "required": ["aws_cli", "provider"], "not": { "anyOf": [{ "required": ["sql"] }, { "required": ["redis"] }, { "required": ["dialect"] }, { "required": ["format"] }, { "required": ["postgrest"] }, { "required": ["kubernetes"] }] } },
+            { "required": ["postgrest"], "not": { "anyOf": [{ "required": ["sql"] }, { "required": ["redis"] }, { "required": ["aws_cli"] }, { "required": ["provider"] }, { "required": ["dialect"] }, { "required": ["format"] }, { "required": ["kubernetes"] }] } },
+            { "required": ["kubernetes", "provider"], "not": { "anyOf": [{ "required": ["sql"] }, { "required": ["redis"] }, { "required": ["aws_cli"] }, { "required": ["dialect"] }, { "required": ["format"] }, { "required": ["postgrest"] }] } }
           ],
           "properties": {
             "sql": {
@@ -60,6 +62,25 @@
             "postgrest": { "$ref": "#/$defs/argPath", "description": "Argument holding a PostgREST request's query parameters (query): the rule's class when a filter limits the rows a PATCH or DELETE changes, irreversible when none does" },
             "aws_cli": { "$ref": "#/$defs/argPath", "description": "Argument holding AWS CLI command lines (one or a list); provider names the SigV4 provider whose rules decide them" },
             "provider": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+            "kubernetes": {
+              "type": "object",
+              "additionalProperties": false,
+              "description": "A Kubernetes MCP tool: its action and the arguments that name its object; the API requests it makes are decided by provider's rules (stage 31b)",
+              "properties": {
+                "action": { "$ref": "#/$defs/kubeAction" },
+                "action_arg": { "$ref": "#/$defs/argPath" },
+                "actions": { "type": "object", "additionalProperties": { "$ref": "#/$defs/kubeAction" }, "description": "The action argument's values, as actions" },
+                "resource_default": { "type": "string", "minLength": 1, "description": "The resource type when the call gives none" },
+                "namespace_default": { "type": "string", "minLength": 1, "description": "The namespace when the call gives none" },
+                "api_version": { "$ref": "#/$defs/argPath" }, "kind": { "$ref": "#/$defs/argPath" }, "resource": { "$ref": "#/$defs/argPath" },
+                "name": { "$ref": "#/$defs/argPath" }, "namespace": { "$ref": "#/$defs/argPath" }, "all_namespaces": { "$ref": "#/$defs/argPath" },
+                "label_selector": { "$ref": "#/$defs/argPath" }, "manifest": { "$ref": "#/$defs/argPath" }, "object": { "$ref": "#/$defs/argPath" },
+                "patch": { "$ref": "#/$defs/argPath" }, "patch_type": { "$ref": "#/$defs/argPath" }, "replicas": { "$ref": "#/$defs/argPath" },
+                "command": { "$ref": "#/$defs/argPath" }, "container": { "$ref": "#/$defs/argPath" }, "ports": { "$ref": "#/$defs/argPath" },
+                "image": { "$ref": "#/$defs/argPath" }, "context": { "$ref": "#/$defs/argPath" }, "service_type": { "$ref": "#/$defs/argPath" },
+                "dry_run": { "$ref": "#/$defs/argPath" }
+              }
+            },
             "redis": {
               "description": "Arguments holding Redis commands: a list of commands (each a list of words) or one command",
               "oneOf": [

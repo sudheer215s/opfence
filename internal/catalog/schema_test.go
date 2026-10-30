@@ -2,9 +2,11 @@ package catalog
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io/fs"
 	"path"
+	"slices"
 	"strconv"
 	"strings"
 	"testing"
@@ -13,6 +15,7 @@ import (
 	"go.yaml.in/yaml/v3"
 
 	catalogdata "github.com/rakeshnitb23/opfence/catalog"
+	"github.com/rakeshnitb23/opfence/internal/decode"
 	schemafs "github.com/rakeshnitb23/opfence/schema"
 )
 
@@ -161,6 +164,9 @@ func TestSchemaRejects(t *testing.T) {
 		{rs, "classify sql and redis", strings.Replace(goodRules, "class: delete\n", "class: delete\n    classify: { sql: q, redis: c }\n", 1)},
 		{rs, "classify aws_cli without provider", strings.Replace(goodRules, "class: delete\n", "class: delete\n    classify: { aws_cli: c }\n", 1)},
 		{rs, "classify redis with a dialect", strings.Replace(goodRules, "class: delete\n", "class: delete\n    classify: { redis: c, dialect: mysql }\n", 1)},
+		{rs, "classify kubernetes without provider", strings.Replace(goodRules, "class: delete\n", "class: delete\n    classify: { kubernetes: { action: get } }\n", 1)},
+		{rs, "classify kubernetes bad action", strings.Replace(goodRules, "class: delete\n", "class: delete\n    classify: { kubernetes: { action: frob }, provider: kubernetes }\n", 1)},
+		{rs, "classify kubernetes unknown field", strings.Replace(goodRules, "class: delete\n", "class: delete\n    classify: { kubernetes: { action: get, verb: x }, provider: kubernetes }\n", 1)},
 	}
 	good := []string{
 		"classify: { sql: q }",
@@ -169,6 +175,7 @@ func TestSchemaRejects(t *testing.T) {
 		"classify: { sql: body, format: libsql }",
 		"classify: { redis: commands }",
 		"classify: { aws_cli: cli_command, provider: aws }",
+		"classify: { kubernetes: { action_arg: op, actions: { read: get }, kind: kind, name: name }, provider: kubernetes }",
 	}
 	for _, g := range good {
 		doc := strings.Replace(goodRules, "class: delete\n", "class: delete\n    "+g+"\n", 1)
@@ -180,5 +187,24 @@ func TestSchemaRejects(t *testing.T) {
 		if err := validateYAML(t, b.s, b.name, []byte(b.doc)); err == nil {
 			t.Errorf("%s: schema accepted it", b.name)
 		}
+	}
+}
+
+// The schema's kubeAction enum is the decoder's list of actions.
+func TestSchemaKubeActions(t *testing.T) {
+	data, err := fs.ReadFile(schemafs.FS, "rules.schema.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var doc struct {
+		Defs map[string]struct {
+			Enum []string `json:"enum"`
+		} `json:"$defs"`
+	}
+	if err := json.Unmarshal(data, &doc); err != nil {
+		t.Fatal(err)
+	}
+	if got := doc.Defs["kubeAction"].Enum; !slices.Equal(got, decode.KubeActions) {
+		t.Errorf("schema kubeAction %v, decode.KubeActions %v", got, decode.KubeActions)
 	}
 }

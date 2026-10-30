@@ -1,0 +1,13 @@
+{
+  "description": "Create LoadBalancer Service web",
+  "tool": "kubectl_create",
+  "arguments": {
+    "resourceType": "service",
+    "serviceType": "loadbalancer",
+    "name": "web",
+    "namespace": "shop",
+    "tcpPort": [
+      "443:8443"
+    ]
+  }
+}

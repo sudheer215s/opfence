@@ -1,0 +1,9 @@
+{
+  "description": "Run busybox in shop",
+  "tool": "pods_run",
+  "arguments": {
+    "namespace": "shop",
+    "name": "tmp",
+    "image": "busybox:1.36"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "description": "Read every Pod's resource use",
+  "tool": "pods_top",
+  "arguments": {
+    "all_namespaces": true
+  }
+}

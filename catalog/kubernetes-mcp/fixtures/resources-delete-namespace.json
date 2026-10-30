@@ -1,0 +1,9 @@
+{
+  "description": "Delete Namespace shop",
+  "tool": "resources_delete",
+  "arguments": {
+    "apiVersion": "v1",
+    "kind": "Namespace",
+    "name": "shop"
+  }
+}

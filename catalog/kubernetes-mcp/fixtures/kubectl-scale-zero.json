@@ -1,0 +1,10 @@
+{
+  "description": "Scale StatefulSet postgres to 0",
+  "tool": "kubectl_scale",
+  "arguments": {
+    "resourceType": "statefulset",
+    "name": "postgres",
+    "namespace": "shop",
+    "replicas": 0
+  }
+}

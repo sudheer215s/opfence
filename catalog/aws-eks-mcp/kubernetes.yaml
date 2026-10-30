@@ -3,39 +3,34 @@ operations:
   - id: aws-eks-mcp.k8s-resource.manage
     match: { mcp: { tool: manage_k8s_resource } }
     class: irreversible
-    when:
-      - if: { arg: operation, equals: "read" }
-        class: read
-      - if: { arg: operation, in: ["create", "replace", "patch"] }
-        class: write
-      - if: { arg: operation, equals: "delete" }
-        class: irreversible
-      - if: { arg: kind, matches: "(?i)^secrets?$" }
-        class: credential
-      - if: { arg: kind, matches: "(?i)^(cluster)?roles?(bindings?)?$" }
-        class: access
-      - if: { arg: kind, matches: "(?i)^ingress(es)?$" }
-        class: access
-      - if: { arg: body.spec.type, in: ["LoadBalancer", "NodePort"] }
-        class: access
+    classify:
+      provider: kubernetes
+      kubernetes:
+        action_arg: operation
+        actions: { read: get, create: create, replace: replace, patch: patch, delete: delete }
+        api_version: api_version
+        kind: kind
+        name: name
+        namespace: namespace
+        object: body
+        patch: body
+        context: cluster_name
     resource: { arg: name, kind: k8s-resource }
     card: "{operation} {kind} {name} in namespace {namespace} of EKS cluster {cluster_name}"
     status: verified
-    verified: 2026-10-19
+    verified: 2026-10-30
     sources:
       - https://github.com/awslabs/mcp/blob/main/src/eks-mcp-server/awslabs/eks_mcp_server/k8s_handler.py
       - https://github.com/awslabs/mcp/blob/main/src/eks-mcp-server/awslabs/eks_mcp_server/k8s_apis.py
       - https://github.com/awslabs/mcp/blob/main/src/eks-mcp-server/awslabs/eks_mcp_server/models.py
     notes: >-
-      One tool for create, replace, patch, delete and read of any kind. Delete is irreversible:
-      Kubernetes keeps no copy of a deleted object, and deleting a Namespace, PersistentVolumeClaim
-      or CRD takes its data and dependents with it (Opfence cannot combine operation and kind to
-      spare a Deployment). Reading a Secret returns its data and creating or patching one sets
-      it, so kind Secret is credential for every operation. Roles, ClusterRoles and their
-      bindings grant access, and an Ingress or a LoadBalancer or NodePort Service exposes the
-      workload; because conditions cannot be combined, reading those kinds is access too
-      (stricter than needed). Any other operation value is rejected by the server; the rule's
-      own class covers it.
+      One tool for create, replace, patch, delete and read of any kind, decided since stage 31b
+      as the API request it makes (catalog/kubernetes), with the body completed by the kind,
+      apiVersion, name and namespace the call gives: deleting a Deployment is delete, deleting a
+      Namespace or PersistentVolumeClaim irreversible, reading or setting a Secret credential, a
+      role binding access, a privileged pod spec access and a LoadBalancer Service access and
+      money. A custom resource's kind, and any other operation value (the server rejects it),
+      keep this rule's class. The cluster name stands for the cluster in environments.
     tests:
       - fixture: fixtures/manage-k8s-resource-read.json
         expect: read
@@ -46,6 +41,9 @@ operations:
       - fixture: fixtures/manage-k8s-resource-delete.json
         expect: irreversible
         resource: shop-data
+      - fixture: fixtures/manage-k8s-resource-delete-deployment.json
+        expect: delete
+        resource: shop-api
       - fixture: fixtures/manage-k8s-resource-secret.json
         expect: credential
         resource: shop-db-credentials
@@ -53,7 +51,13 @@ operations:
         expect: access
         resource: agent-admin
       - fixture: fixtures/manage-k8s-resource-loadbalancer.json
+        expect: money
+        resource: shop-api
+      - fixture: fixtures/manage-k8s-resource-privileged.json
         expect: access
+        resource: shop-api
+      - fixture: fixtures/manage-k8s-resource-custom.json
+        expect: irreversible
         resource: shop-api
 
   - id: aws-eks-mcp.k8s-resource.apply-yaml

@@ -1,0 +1,8 @@
+{
+  "description": "Cordon node ip-10-0-1-23",
+  "tool": "node_management",
+  "arguments": {
+    "operation": "cordon",
+    "nodeName": "ip-10-0-1-23"
+  }
+}

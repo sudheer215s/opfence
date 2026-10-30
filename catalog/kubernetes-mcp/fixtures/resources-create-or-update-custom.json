@@ -1,0 +1,7 @@
+{
+  "description": "Apply a cert-manager Certificate",
+  "tool": "resources_create_or_update",
+  "arguments": {
+    "resource": "apiVersion: cert-manager.io/v1\nkind: Certificate\nmetadata:\n  name: web\n  namespace: shop\nspec:\n  secretName: web-tls\n"
+  }
+}

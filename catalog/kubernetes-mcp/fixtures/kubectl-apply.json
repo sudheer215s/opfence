@@ -1,0 +1,7 @@
+{
+  "description": "Apply Deployment web",
+  "tool": "kubectl_apply",
+  "arguments": {
+    "manifest": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: web\n  namespace: shop\nspec:\n  replicas: 3\n  selector:\n    matchLabels: {app: web}\n  template:\n    metadata:\n      labels: {app: web}\n    spec:\n      containers:\n      - name: web\n        image: ghcr.io/acme/web:1.4.2\n"
+  }
+}

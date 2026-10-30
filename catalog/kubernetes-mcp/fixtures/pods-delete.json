@@ -1,0 +1,8 @@
+{
+  "description": "Delete Pod web-0",
+  "tool": "pods_delete",
+  "arguments": {
+    "namespace": "shop",
+    "name": "web-0"
+  }
+}

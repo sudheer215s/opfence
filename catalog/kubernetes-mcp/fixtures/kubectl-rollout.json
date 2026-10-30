@@ -1,0 +1,10 @@
+{
+  "description": "Restart Deployment web",
+  "tool": "kubectl_rollout",
+  "arguments": {
+    "subCommand": "restart",
+    "resourceType": "deployment",
+    "name": "web",
+    "namespace": "shop"
+  }
+}

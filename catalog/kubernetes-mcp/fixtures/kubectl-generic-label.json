@@ -1,0 +1,13 @@
+{
+  "description": "kubectl label pod web-0 team=shop",
+  "tool": "kubectl_generic",
+  "arguments": {
+    "command": "label",
+    "resourceType": "pod",
+    "name": "web-0",
+    "namespace": "shop",
+    "args": [
+      "team=shop"
+    ]
+  }
+}

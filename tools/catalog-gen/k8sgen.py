@@ -1,5 +1,5 @@
-# Writes catalog/kubernetes (rules and fixtures) from Kubernetes' OpenAPI
-# description. Run from the repo root:
+# Writes catalog/kubernetes (rules and fixtures) and the resource table
+# internal/decode/kubeapi.json from Kubernetes' OpenAPI description. Run from the repo root:
 #   python3 -I tools/catalog-gen/k8sgen.py <swagger.json> <kubernetes tag>
 # where swagger.json is api/openapi-spec/swagger.json at that tag.
 #
@@ -580,6 +580,53 @@ for short, rs in rules.items():
 
 if PB_TESTS:
     sys.exit(f"protobuf fixtures for rules the description does not have: {sorted(PB_TESTS)}")
+
+# ---------------------------------------------------------------------------
+# The resource table tool calls are read with (internal/decode/kubeapi.json):
+# each resource's group, kind, plural, singular and short names, the versions
+# it is served in (preferred first), whether it is namespaced and its
+# subresources. Short names are not in the description; these are the API
+# server's discovery documents' at the same tag.
+SHORT_NAMES = {
+    ("", "componentstatuses"): ["cs"], ("", "configmaps"): ["cm"], ("", "endpoints"): ["ep"], ("", "events"): ["ev"],
+    ("", "limitranges"): ["limits"], ("", "namespaces"): ["ns"], ("", "nodes"): ["no"],
+    ("", "persistentvolumeclaims"): ["pvc"], ("", "persistentvolumes"): ["pv"], ("", "pods"): ["po"],
+    ("", "replicationcontrollers"): ["rc"], ("", "resourcequotas"): ["quota"], ("", "serviceaccounts"): ["sa"],
+    ("", "services"): ["svc"], ("apps", "daemonsets"): ["ds"], ("apps", "deployments"): ["deploy"],
+    ("apps", "replicasets"): ["rs"], ("apps", "statefulsets"): ["sts"], ("autoscaling", "horizontalpodautoscalers"): ["hpa"],
+    ("batch", "cronjobs"): ["cj"], ("certificates.k8s.io", "certificatesigningrequests"): ["csr"],
+    ("events.k8s.io", "events"): ["ev"], ("networking.k8s.io", "ingresses"): ["ing"], ("networking.k8s.io", "ipaddresses"): ["ip"],
+    ("networking.k8s.io", "networkpolicies"): ["netpol"], ("policy", "poddisruptionbudgets"): ["pdb"],
+    ("storage.k8s.io", "storageclasses"): ["sc"], ("storage.k8s.io", "volumeattributesclasses"): ["vac"],
+    ("apiextensions.k8s.io", "customresourcedefinitions"): ["crd", "crds"], ("scheduling.k8s.io", "priorityclasses"): ["pc"],
+}
+
+def version_key(v):
+    m = re.match(r"^v(\d+)(?:(alpha|beta)(\d+))?$", v)
+    major, stage, minor = int(m.group(1)), m.group(2), int(m.group(3) or 0)
+    return (-{None: 2, "beta": 1, "alpha": 0}[stage], -major, -minor)
+
+table = {}
+for key, versions in ops.items():
+    group, plural, sub, ns, name, method, pathp, watch, action = key
+    e = table.setdefault((group, plural), {"group": group, "kind": kinds.get((group, plural), ""), "plural": plural,
+                                           "versions": set(), "namespaced": False, "subresources": set()})
+    e["versions"] |= versions
+    e["namespaced"] |= ns
+    if sub:
+        e["subresources"].add(sub)
+missing = set(SHORT_NAMES) - set(table)
+if missing:
+    sys.exit(f"short names for resources the description does not have: {sorted(missing)}")
+rows = []
+for k in sorted(table):
+    e = table[k]
+    if not e["kind"]:
+        sys.exit(f"no kind for {k}")
+    rows.append(json.dumps({"group": e["group"], "kind": e["kind"], "plural": e["plural"], "singular": e["kind"].lower(),
+                            "short": SHORT_NAMES.get(k, []), "versions": sorted(e["versions"], key=version_key),
+                            "namespaced": e["namespaced"], "subresources": sorted(e["subresources"])}, separators=(",", ":")))
+open("internal/decode/kubeapi.json", "w").write('{"kubernetes":"' + TAG + '","resources":[\n' + ",\n".join(rows) + "\n]}\n")
 
 os.makedirs(D + "fixtures", exist_ok=True)
 for f in os.listdir(D + "fixtures"):

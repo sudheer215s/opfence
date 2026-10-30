@@ -1,0 +1,7 @@
+{
+  "description": "List contexts",
+  "tool": "kubectl_context",
+  "arguments": {
+    "operation": "list"
+  }
+}

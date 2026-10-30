@@ -1,0 +1,5 @@
+{
+  "description": "List clusters",
+  "tool": "targets_list",
+  "arguments": {}
+}

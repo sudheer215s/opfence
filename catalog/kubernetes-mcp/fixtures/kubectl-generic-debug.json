@@ -1,0 +1,13 @@
+{
+  "description": "kubectl debug pod web-0",
+  "tool": "kubectl_generic",
+  "arguments": {
+    "command": "debug",
+    "resourceType": "pod",
+    "name": "web-0",
+    "namespace": "shop",
+    "flags": {
+      "image": "busybox"
+    }
+  }
+}

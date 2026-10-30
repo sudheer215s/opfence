@@ -1,0 +1,10 @@
+{
+  "description": "Create Deployment web",
+  "tool": "kubectl_create",
+  "arguments": {
+    "resourceType": "deployment",
+    "name": "web",
+    "namespace": "shop",
+    "image": "nginx:1.29"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "description": "Upgrade chart bitnami/postgresql",
+  "tool": "upgrade_helm_chart",
+  "arguments": {
+    "name": "db",
+    "chart": "bitnami/postgresql",
+    "namespace": "shop",
+    "repo": "https://charts.bitnami.com/bitnami"
+  }
+}

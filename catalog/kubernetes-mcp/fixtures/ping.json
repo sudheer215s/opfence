@@ -1,0 +1,5 @@
+{
+  "description": "Check the server",
+  "tool": "ping",
+  "arguments": {}
+}

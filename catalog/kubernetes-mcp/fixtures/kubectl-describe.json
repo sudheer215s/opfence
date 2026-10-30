@@ -1,0 +1,9 @@
+{
+  "description": "Describe Pod web-0",
+  "tool": "kubectl_describe",
+  "arguments": {
+    "resourceType": "pod",
+    "name": "web-0",
+    "namespace": "shop"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "description": "Scale Deployment web to 3",
+  "tool": "resources_scale",
+  "arguments": {
+    "apiVersion": "apps/v1",
+    "kind": "Deployment",
+    "namespace": "shop",
+    "name": "web",
+    "scale": 3
+  }
+}

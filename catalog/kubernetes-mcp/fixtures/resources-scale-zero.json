@@ -1,0 +1,11 @@
+{
+  "description": "Scale StatefulSet postgres to 0",
+  "tool": "resources_scale",
+  "arguments": {
+    "apiVersion": "apps/v1",
+    "kind": "StatefulSet",
+    "namespace": "shop",
+    "name": "postgres",
+    "scale": 0
+  }
+}

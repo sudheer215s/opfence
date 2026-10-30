@@ -1,0 +1,5 @@
+{
+  "description": "List OpenShift projects",
+  "tool": "projects_list",
+  "arguments": {}
+}

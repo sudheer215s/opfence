@@ -1,0 +1,8 @@
+{
+  "description": "Read node ip-10-0-1-23's logs",
+  "tool": "nodes_log",
+  "arguments": {
+    "name": "ip-10-0-1-23",
+    "query": "kubelet"
+  }
+}

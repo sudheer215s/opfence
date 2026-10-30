@@ -1,0 +1,11 @@
+{
+  "description": "Forward Service db's port 5432",
+  "tool": "port_forward",
+  "arguments": {
+    "resourceType": "service",
+    "resourceName": "db",
+    "localPort": 15432,
+    "targetPort": 5432,
+    "namespace": "shop"
+  }
+}

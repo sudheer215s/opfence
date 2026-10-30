@@ -1,0 +1,8 @@
+{
+  "description": "Switch to context prod",
+  "tool": "kubectl_context",
+  "arguments": {
+    "operation": "set",
+    "name": "prod"
+  }
+}

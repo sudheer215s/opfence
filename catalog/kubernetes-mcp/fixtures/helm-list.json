@@ -1,0 +1,7 @@
+{
+  "description": "List Helm releases",
+  "tool": "helm_list",
+  "arguments": {
+    "namespace": "shop"
+  }
+}

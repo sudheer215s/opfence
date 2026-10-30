@@ -1,0 +1,10 @@
+{
+  "description": "Drain node ip-10-0-1-23",
+  "tool": "node_management",
+  "arguments": {
+    "operation": "drain",
+    "nodeName": "ip-10-0-1-23",
+    "ignoreDaemonsets": true,
+    "confirmDrain": true
+  }
+}

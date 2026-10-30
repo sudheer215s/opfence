@@ -1,0 +1,8 @@
+{
+  "description": "Read Pod web-0",
+  "tool": "pods_get",
+  "arguments": {
+    "namespace": "shop",
+    "name": "web-0"
+  }
+}
