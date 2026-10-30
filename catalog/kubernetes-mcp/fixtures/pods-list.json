@@ -1,0 +1,7 @@
+{
+  "description": "List every Pod",
+  "tool": "pods_list",
+  "arguments": {
+    "labelSelector": "app=web"
+  }
+}

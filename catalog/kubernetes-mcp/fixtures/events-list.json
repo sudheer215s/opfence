@@ -1,0 +1,7 @@
+{
+  "description": "List events in namespace shop",
+  "tool": "events_list",
+  "arguments": {
+    "namespace": "shop"
+  }
+}

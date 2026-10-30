@@ -1,0 +1,9 @@
+{
+  "description": "Scale Deployment web to 3",
+  "tool": "kubectl_scale",
+  "arguments": {
+    "name": "web",
+    "namespace": "shop",
+    "replicas": 3
+  }
+}

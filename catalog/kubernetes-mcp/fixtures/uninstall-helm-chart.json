@@ -1,0 +1,8 @@
+{
+  "description": "Uninstall release db",
+  "tool": "uninstall_helm_chart",
+  "arguments": {
+    "name": "db",
+    "namespace": "shop"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "description": "kubectl scale deployment web --replicas=0",
+  "tool": "kubectl_generic",
+  "arguments": {
+    "command": "scale",
+    "resourceType": "deployment",
+    "name": "web",
+    "namespace": "shop",
+    "flags": {
+      "replicas": 0
+    }
+  }
+}

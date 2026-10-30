@@ -1,0 +1,9 @@
+{
+  "description": "Delete the Pods labelled app=web",
+  "tool": "kubectl_delete",
+  "arguments": {
+    "resourceType": "pods",
+    "namespace": "shop",
+    "labelSelector": "app=web"
+  }
+}

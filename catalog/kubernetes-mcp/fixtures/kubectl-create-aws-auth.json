@@ -1,0 +1,12 @@
+{
+  "description": "Create ConfigMap aws-auth",
+  "tool": "kubectl_create",
+  "arguments": {
+    "resourceType": "configmap",
+    "name": "aws-auth",
+    "namespace": "kube-system",
+    "fromLiteral": [
+      "mapRoles=- rolearn: arn:aws:iam::111122223333:role/agent"
+    ]
+  }
+}

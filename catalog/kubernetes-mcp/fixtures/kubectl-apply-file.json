@@ -1,0 +1,7 @@
+{
+  "description": "Apply a file",
+  "tool": "kubectl_apply",
+  "arguments": {
+    "filename": "/srv/deploy/web.yaml"
+  }
+}

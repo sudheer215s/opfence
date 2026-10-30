@@ -1,0 +1,5 @@
+{
+  "description": "List API resources",
+  "tool": "list_api_resources",
+  "arguments": {}
+}

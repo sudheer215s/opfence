@@ -1,0 +1,9 @@
+{
+  "description": "Read Pod web-0's log",
+  "tool": "pods_log",
+  "arguments": {
+    "namespace": "shop",
+    "name": "web-0",
+    "tail": 100
+  }
+}

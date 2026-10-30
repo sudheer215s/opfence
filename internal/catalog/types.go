@@ -360,11 +360,65 @@ type Classify struct {
 	// operations they run. The engine evaluates them (engine.awsCLI).
 	AWSCLI   string `yaml:"aws_cli"`
 	Provider string `yaml:"provider"`
+	// Kubernetes reads a Kubernetes MCP tool's arguments (stage 31b): the
+	// engine builds the API requests the tool makes and decides them with
+	// Provider's REST rules (engine.kubernetesTool).
+	Kubernetes *KubernetesTool `yaml:"kubernetes"`
 	// PostgREST names the argument holding a PostgREST request's query
 	// parameters (query). The rule's class holds when a filter limits the
 	// rows a PATCH or DELETE changes; when none does, the class is
 	// irreversible (decode.PostgRESTLimitsRows).
 	PostgREST string `yaml:"postgrest"`
+}
+
+// KubernetesTool says what a Kubernetes MCP tool call does: its action
+// (decode.KubeActions), fixed or named by an argument, and the arguments
+// that name the object it acts on. Each field but the action names an
+// argument; any may be left out.
+type KubernetesTool struct {
+	Action    string `yaml:"action"`     // the tool's action, or the default for action_arg
+	ActionArg string `yaml:"action_arg"` // the argument naming the action
+	// Actions maps the action argument's values to actions; without it
+	// the values are actions themselves.
+	Actions    map[string]string `yaml:"actions"`
+	APIVersion string            `yaml:"api_version"`
+	Kind       string            `yaml:"kind"`
+	Resource   string            `yaml:"resource"` // a kubectl resource type: pods, deploy, deployments.apps
+	// ResourceDefault is the resource type when the call gives none (a
+	// value, not an argument): the server's own default.
+	ResourceDefault string `yaml:"resource_default"`
+	Name            string `yaml:"name"`
+	Namespace       string `yaml:"namespace"`
+	// NamespaceDefault is the namespace when the call gives none (a value):
+	// the server's own default. Without it, the kubeconfig's.
+	NamespaceDefault string `yaml:"namespace_default"`
+	AllNamespaces    string `yaml:"all_namespaces"`
+	LabelSelector    string `yaml:"label_selector"`
+	Manifest         string `yaml:"manifest"` // YAML or JSON text with one or more objects
+	Object           string `yaml:"object"`   // an object, parsed or as text
+	Patch            string `yaml:"patch"`
+	PatchType        string `yaml:"patch_type"`
+	Replicas         string `yaml:"replicas"`
+	Command          string `yaml:"command"`
+	Container        string `yaml:"container"`
+	Ports            string `yaml:"ports"`
+	Image            string `yaml:"image"`
+	Context          string `yaml:"context"`      // the kubeconfig context, which stands for the cluster
+	ServiceType      string `yaml:"service_type"` // a Service's type, for kubectl create service
+	DryRun           string `yaml:"dry_run"`      // true: the server only checks the request
+}
+
+// args lists the arguments the block reads.
+func (k *KubernetesTool) args() []string {
+	var out []string
+	for _, a := range []string{k.ActionArg, k.APIVersion, k.Kind, k.Resource, k.Name, k.Namespace, k.AllNamespaces,
+		k.LabelSelector, k.Manifest, k.Object, k.Patch, k.PatchType, k.Replicas, k.Command, k.Container, k.Ports, k.Image, k.Context,
+		k.ServiceType, k.DryRun} {
+		if a != "" && !slices.Contains(out, a) {
+			out = append(out, a)
+		}
+	}
+	return out
 }
 
 // Active reports whether the block classifies SQL or Redis commands.
@@ -378,6 +432,9 @@ func (c *Classify) Paths() []string {
 	}
 	if c.PostgREST != "" {
 		out = append(out, c.PostgREST)
+	}
+	if c.Kubernetes != nil {
+		out = append(out, c.Kubernetes.args()...)
 	}
 	return out
 }
@@ -410,6 +467,9 @@ func (c *Classify) String() string {
 	}
 	if c.AWSCLI != "" {
 		return c.AWSCLI + " (AWS CLI, " + c.Provider + " rules)"
+	}
+	if c.Kubernetes != nil {
+		return "the tool's Kubernetes API requests (" + c.Provider + " rules)"
 	}
 	if len(c.Redis) > 0 {
 		return strings.Join(c.Redis, ", ") + " (redis)"
@@ -588,8 +648,8 @@ func (r *Rule) PossibleClasses() []classes.Class {
 	if r.Classify != nil && r.Classify.PostgREST != "" {
 		add(classes.Irreversible) // no filter: every row
 	}
-	if r.Classify != nil && r.Classify.AWSCLI != "" {
-		// Any AWS operation: every class there is.
+	if r.Classify != nil && (r.Classify.AWSCLI != "" || r.Classify.Kubernetes != nil) {
+		// Any AWS or Kubernetes operation: every class there is.
 		for _, c := range classes.All {
 			add(c)
 		}

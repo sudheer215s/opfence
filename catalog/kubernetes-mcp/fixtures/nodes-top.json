@@ -1,0 +1,7 @@
+{
+  "description": "Read nodes' CPU and memory use",
+  "tool": "nodes_top",
+  "arguments": {
+    "name": "ip-10-0-1-23"
+  }
+}

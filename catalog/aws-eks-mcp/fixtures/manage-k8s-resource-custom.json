@@ -1,0 +1,20 @@
+{
+  "description": "Create cert-manager Certificate shop-api in namespace shop",
+  "tool": "manage_k8s_resource",
+  "arguments": {
+    "cluster_name": "shop-prod",
+    "operation": "create",
+    "kind": "Certificate",
+    "api_version": "cert-manager.io/v1",
+    "name": "shop-api",
+    "namespace": "shop",
+    "body": {
+      "spec": {
+        "secretName": "shop-api-tls",
+        "issuerRef": {
+          "name": "letsencrypt"
+        }
+      }
+    }
+  }
+}

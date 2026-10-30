@@ -1,0 +1,8 @@
+{
+  "description": "Run a shell command in Pod web-0",
+  "tool": "exec_in_pod",
+  "arguments": {
+    "name": "web-0",
+    "command": "rm -rf /data"
+  }
+}

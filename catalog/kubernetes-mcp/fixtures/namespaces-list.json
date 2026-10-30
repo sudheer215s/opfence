@@ -1,0 +1,5 @@
+{
+  "description": "List namespaces",
+  "tool": "namespaces_list",
+  "arguments": {}
+}

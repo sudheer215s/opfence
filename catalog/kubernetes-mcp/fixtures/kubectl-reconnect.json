@@ -1,0 +1,5 @@
+{
+  "description": "Reconnect to the cluster",
+  "tool": "kubectl_reconnect",
+  "arguments": {}
+}

@@ -1,0 +1,9 @@
+{
+  "description": "List cert-manager Certificates",
+  "tool": "resources_list",
+  "arguments": {
+    "apiVersion": "cert-manager.io/v1",
+    "kind": "Certificate",
+    "namespace": "shop"
+  }
+}

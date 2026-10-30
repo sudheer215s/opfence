@@ -1,0 +1,7 @@
+{
+  "description": "List the Pods in shop",
+  "tool": "pods_list_in_namespace",
+  "arguments": {
+    "namespace": "shop"
+  }
+}

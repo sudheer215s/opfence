@@ -1,0 +1,8 @@
+{
+  "description": "Get the Deployments in shop",
+  "tool": "kubectl_get",
+  "arguments": {
+    "resourceType": "deployments",
+    "namespace": "shop"
+  }
+}

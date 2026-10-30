@@ -1,0 +1,9 @@
+{
+  "description": "Read Pod web-0's logs",
+  "tool": "kubectl_logs",
+  "arguments": {
+    "resourceType": "pod",
+    "name": "web-0",
+    "namespace": "shop"
+  }
+}

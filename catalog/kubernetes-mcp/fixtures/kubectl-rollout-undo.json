@@ -1,0 +1,10 @@
+{
+  "description": "Undo Deployment web's rollout",
+  "tool": "kubectl_rollout",
+  "arguments": {
+    "subCommand": "undo",
+    "resourceType": "deployment",
+    "name": "web",
+    "namespace": "shop"
+  }
+}

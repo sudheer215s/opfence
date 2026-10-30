@@ -1,0 +1,7 @@
+{
+  "description": "Stop port forward pf-1",
+  "tool": "stop_port_forward",
+  "arguments": {
+    "id": "pf-1"
+  }
+}

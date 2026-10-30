@@ -1,0 +1,7 @@
+{
+  "description": "Delete the objects of a manifest",
+  "tool": "kubectl_delete",
+  "arguments": {
+    "manifest": "apiVersion: v1\nkind: Service\nmetadata:\n  name: web\n  namespace: shop\nspec:\n  type: LoadBalancer\n  ports:\n  - port: 443\n"
+  }
+}

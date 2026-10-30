@@ -231,6 +231,9 @@ func (e *Engine) evaluate(p *catalog.Provider, host string, op decode.Operation)
 	if ev.Rule != nil && ev.Rule.Classify != nil && ev.Rule.Classify.AWSCLI != "" && op.Protocol != decode.AWS {
 		e.awsCLI(&ev)
 	}
+	if ev.Rule != nil && ev.Rule.Classify != nil && ev.Rule.Classify.Kubernetes != nil && op.Protocol == decode.MCP {
+		e.kubernetesTool(&ev)
+	}
 
 	if ev.Rule != nil && ev.Rule.Resource != nil {
 		if s, ok := lookup(ev.Rule.Resource.Arg); ok {
@@ -399,6 +402,118 @@ func hashEvaluations(host string, evs []Evaluation) [32]byte {
 		b = []byte(fmt.Sprintf("unhashable %p", &evs))
 	}
 	return sha256.Sum256(b)
+}
+
+// kubernetesTool decides a Kubernetes MCP tool call (classify.kubernetes):
+// the API requests the tool makes are evaluated against the named
+// provider's REST rules as the proxy would evaluate them, with that
+// provider's environments and rule overrides, and the call gets the
+// strictest result. What cannot be read (a custom resource's kind, a
+// manifest that does not parse, an action Opfence does not know) is
+// unknown, and the rule's own class counts too, as for aws_cli.
+func (e *Engine) kubernetesTool(ev *Evaluation) {
+	r := ev.Rule
+	k := r.Classify.Kubernetes
+	get := func(arg string) any {
+		if arg == "" {
+			return nil
+		}
+		v, _ := catalog.Lookup(ev.Args, arg)
+		return v
+	}
+	call := decode.KubeCall{Action: k.Action, APIVersion: get(k.APIVersion), Kind: get(k.Kind), Resource: get(k.Resource),
+		Name: get(k.Name), Namespace: get(k.Namespace), AllNamespaces: get(k.AllNamespaces), Selector: get(k.LabelSelector),
+		Manifest: get(k.Manifest), Object: get(k.Object), Patch: get(k.Patch), PatchType: get(k.PatchType),
+		Replicas: get(k.Replicas), Command: get(k.Command), Container: get(k.Container), Ports: get(k.Ports),
+		Image: get(k.Image), Context: get(k.Context), ServiceType: get(k.ServiceType), DryRun: get(k.DryRun)}
+	if call.Resource == nil && call.Kind == nil && k.ResourceDefault != "" {
+		call.Resource = k.ResourceDefault
+	}
+	if s, _ := call.Namespace.(string); s == "" && k.NamespaceDefault != "" {
+		call.Namespace = k.NamespaceDefault
+	}
+	if v, ok := get(k.ActionArg).(string); ok && k.ActionArg != "" {
+		call.Action = v
+		if len(k.Actions) > 0 {
+			call.Action = k.Actions[v] // "" when the value is not listed: unknown
+		}
+		if !slices.Contains(decode.KubeActions, call.Action) {
+			call.Action = decode.KubeUnknown
+		}
+	} else if k.ActionArg != "" && k.Action == "" {
+		call.Action = decode.KubeUnknown
+	}
+	prov := e.Catalog.Provider(r.Classify.Provider)
+	var steps []decode.KubeStep
+	if call.Action == decode.KubeUnknown {
+		steps = []decode.KubeStep{{Reason: "an action Opfence does not read"}}
+	} else {
+		steps = decode.KubeToolOps(call)
+	}
+	type part struct {
+		class                    classes.Class
+		decision                 classes.Decision
+		decisionSrc, env, envSrc string
+		resource, label          string
+	}
+	var parts []part
+	unknown := false
+	all := map[classes.Class]bool{}
+	for _, st := range steps {
+		if st.Op == nil || prov == nil {
+			d, src := e.Policy.Decide(r.ID, classes.Unknown, ev.Environment)
+			parts = append(parts, part{class: classes.Unknown, decision: d, decisionSrc: src, env: ev.Environment, envSrc: ev.EnvSource,
+				label: "unknown (" + Sanitize(st.Reason, 120) + ")"})
+			unknown = true
+			continue
+		}
+		sub := e.evaluate(prov, "", *st.Op)
+		label := st.Op.Method + " " + st.Op.Path + " (" + sub.ClassSource + ")"
+		if sub.Rule != nil {
+			label = sub.Rule.ID
+		}
+		for _, c := range sub.Classes {
+			all[c] = true
+			unknown = unknown || c == classes.Unknown
+		}
+		parts = append(parts, part{class: sub.Class, decision: sub.Decision, decisionSrc: sub.DecisionSource,
+			env: sub.Environment, envSrc: sub.EnvSource, resource: sub.Resource, label: label + " " + string(sub.Class)})
+	}
+	if unknown && !slices.ContainsFunc(parts, func(p part) bool { return p.class == r.Class }) {
+		d, src := e.Policy.Decide(r.ID, r.Class, ev.Environment)
+		parts = append(parts, part{class: r.Class, decision: d, decisionSrc: src, env: ev.Environment, envSrc: ev.EnvSource,
+			label: "rule class, for what Opfence cannot read"})
+	}
+	// The strictest decision; between equal ones, the class that says
+	// more (draining a node asks as a delete, not as the cordon's write).
+	rank := func(c classes.Class) int {
+		if c == classes.Unknown {
+			return -1
+		}
+		return slices.Index(classes.All, c)
+	}
+	best := parts[0]
+	var labels []string
+	for _, p := range parts {
+		all[p.class] = true
+		labels = append(labels, p.label)
+		if p.decision > best.decision || (p.decision == best.decision && rank(p.class) > rank(best.class)) {
+			best = p
+		}
+	}
+	ev.Classes = ev.Classes[:0]
+	for _, c := range classes.All {
+		if all[c] {
+			ev.Classes = append(ev.Classes, c)
+		}
+	}
+	ev.ClassSource = "Kubernetes: " + strings.Join(labels, "; ")
+	ev.Class, ev.Decision, ev.DecisionSource = best.class, best.decision, best.decisionSrc
+	ev.Environment, ev.EnvSource = best.env, best.envSrc
+	// A namespace the call left to the kubeconfig is no resource to check.
+	if best.resource != "" && !strings.HasPrefix(best.resource, "@") {
+		ev.Resource = best.resource
+	}
 }
 
 // awsCLI decides a tool call that runs AWS CLI commands (classify.aws_cli):

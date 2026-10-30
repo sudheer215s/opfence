@@ -1,0 +1,17 @@
+{
+  "description": "JSON Patch Deployment web",
+  "tool": "kubectl_patch",
+  "arguments": {
+    "resourceType": "deployment",
+    "name": "web",
+    "namespace": "shop",
+    "patchType": "json",
+    "patchData": [
+      {
+        "op": "add",
+        "path": "/spec/template/spec/hostNetwork",
+        "value": true
+      }
+    ]
+  }
+}

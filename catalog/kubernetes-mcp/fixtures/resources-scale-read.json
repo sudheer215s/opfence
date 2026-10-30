@@ -1,0 +1,10 @@
+{
+  "description": "Read Deployment web's scale",
+  "tool": "resources_scale",
+  "arguments": {
+    "apiVersion": "apps/v1",
+    "kind": "Deployment",
+    "namespace": "shop",
+    "name": "web"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "description": "Make Deployment web privileged",
+  "tool": "kubectl_patch",
+  "arguments": {
+    "resourceType": "deployment",
+    "name": "web",
+    "namespace": "shop",
+    "patchData": {
+      "spec": {
+        "template": {
+          "spec": {
+            "containers": [
+              {
+                "name": "web",
+                "securityContext": {
+                  "privileged": true
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

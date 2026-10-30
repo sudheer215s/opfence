@@ -1,0 +1,7 @@
+{
+  "description": "Apply a privileged Deployment",
+  "tool": "kubectl_apply",
+  "arguments": {
+    "manifest": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: node-shell\n  namespace: shop\nspec:\n  selector:\n    matchLabels: {app: node-shell}\n  template:\n    metadata:\n      labels: {app: node-shell}\n    spec:\n      hostNetwork: true\n      containers:\n      - name: shell\n        image: busybox:1.36\n        securityContext:\n          privileged: true\n"
+  }
+}

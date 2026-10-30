@@ -1,0 +1,10 @@
+{
+  "description": "Run nginx in shop with port 80",
+  "tool": "pods_run",
+  "arguments": {
+    "namespace": "shop",
+    "name": "web",
+    "image": "nginx:1.29",
+    "port": 80
+  }
+}

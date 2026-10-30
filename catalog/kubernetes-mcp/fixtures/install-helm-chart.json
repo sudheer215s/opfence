@@ -1,0 +1,10 @@
+{
+  "description": "Install chart bitnami/postgresql",
+  "tool": "install_helm_chart",
+  "arguments": {
+    "name": "db",
+    "chart": "bitnami/postgresql",
+    "namespace": "shop",
+    "repo": "https://charts.bitnami.com/bitnami"
+  }
+}

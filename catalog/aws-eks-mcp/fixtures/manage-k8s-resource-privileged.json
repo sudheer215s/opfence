@@ -1,0 +1,28 @@
+{
+  "description": "Make Deployment shop-api's containers privileged",
+  "tool": "manage_k8s_resource",
+  "arguments": {
+    "cluster_name": "shop-prod",
+    "operation": "patch",
+    "kind": "Deployment",
+    "api_version": "apps/v1",
+    "name": "shop-api",
+    "namespace": "shop",
+    "body": {
+      "spec": {
+        "template": {
+          "spec": {
+            "containers": [
+              {
+                "name": "shop-api",
+                "securityContext": {
+                  "privileged": true
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

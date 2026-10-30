@@ -1,0 +1,9 @@
+{
+  "description": "kubectl get pods",
+  "tool": "kubectl_generic",
+  "arguments": {
+    "command": "get",
+    "resourceType": "pods",
+    "namespace": "shop"
+  }
+}

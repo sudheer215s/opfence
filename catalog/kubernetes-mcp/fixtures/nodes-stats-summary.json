@@ -1,0 +1,7 @@
+{
+  "description": "Read node ip-10-0-1-23's resource use",
+  "tool": "nodes_stats_summary",
+  "arguments": {
+    "name": "ip-10-0-1-23"
+  }
+}

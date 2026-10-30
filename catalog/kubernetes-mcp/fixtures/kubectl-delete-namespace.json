@@ -1,0 +1,8 @@
+{
+  "description": "Delete Namespace shop",
+  "tool": "kubectl_delete",
+  "arguments": {
+    "resourceType": "namespace",
+    "name": "shop"
+  }
+}

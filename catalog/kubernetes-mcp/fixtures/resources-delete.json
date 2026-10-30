@@ -1,0 +1,10 @@
+{
+  "description": "Delete Deployment web",
+  "tool": "resources_delete",
+  "arguments": {
+    "apiVersion": "apps/v1",
+    "kind": "Deployment",
+    "namespace": "shop",
+    "name": "web"
+  }
+}

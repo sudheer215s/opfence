@@ -1,0 +1,9 @@
+{
+  "description": "Delete Deployment web",
+  "tool": "kubectl_delete",
+  "arguments": {
+    "resourceType": "deployment",
+    "name": "web",
+    "namespace": "shop"
+  }
+}

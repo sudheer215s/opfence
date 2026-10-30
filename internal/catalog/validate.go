@@ -53,11 +53,15 @@ func (l *loader) validate(c *Catalog) {
 	}
 	for _, p := range c.Providers {
 		for _, r := range p.Rules {
-			if r.Classify == nil || r.Classify.AWSCLI == "" || r.Classify.Provider == "" {
+			if r.Classify == nil || r.Classify.Provider == "" {
 				continue
 			}
-			if t := c.Provider(r.Classify.Provider); t == nil || !t.SigV4 {
+			t := c.Provider(r.Classify.Provider)
+			switch {
+			case r.Classify.AWSCLI != "" && (t == nil || !t.SigV4):
 				l.addf(r.File, r.Line, "%s: classify.provider %q is not a sigv4 provider in the catalog", r.ID, r.Classify.Provider)
+			case r.Classify.Kubernetes != nil && (t == nil || t.SigV4 || t.MCP != nil || t.Fallback):
+				l.addf(r.File, r.Line, "%s: classify.provider %q is not a REST provider in the catalog", r.ID, r.Classify.Provider)
 			}
 		}
 	}
@@ -549,16 +553,16 @@ func (l *loader) validateRule(r *Rule) {
 	}
 	if c := r.Classify; c != nil {
 		kinds := 0
-		for _, set := range []bool{len(c.SQL) > 0, len(c.Redis) > 0, c.AWSCLI != "", c.PostgREST != ""} {
+		for _, set := range []bool{len(c.SQL) > 0, len(c.Redis) > 0, c.AWSCLI != "", c.PostgREST != "", c.Kubernetes != nil} {
 			if set {
 				kinds++
 			}
 		}
 		switch {
 		case kinds == 0:
-			l.addf(f, ln, "%s: classify needs sql: <argument>, redis: <argument>, aws_cli: <argument> or postgrest: <argument>", r.ID)
+			l.addf(f, ln, "%s: classify needs sql: <argument>, redis: <argument>, aws_cli: <argument>, postgrest: <argument> or kubernetes: {...}", r.ID)
 		case kinds > 1:
-			l.addf(f, ln, "%s: classify takes one of sql, redis, aws_cli and postgrest", r.ID)
+			l.addf(f, ln, "%s: classify takes one of sql, redis, aws_cli, postgrest and kubernetes", r.ID)
 		case c.PostgREST != "" && !argPathRe.MatchString(c.PostgREST):
 			l.addf(f, ln, "%s: classify.postgrest %q is not an argument path", r.ID, c.PostgREST)
 		case c.PostgREST != "" && (len(c.Dialect) > 0 || c.Format != "" || c.Provider != ""):
@@ -569,12 +573,45 @@ func (l *loader) validateRule(r *Rule) {
 			l.addf(f, ln, "%s: classify.aws_cli %q is not an argument path", r.ID, c.AWSCLI)
 		case c.AWSCLI != "" && c.Provider == "":
 			l.addf(f, ln, "%s: classify.aws_cli needs provider: the SigV4 provider whose rules decide", r.ID)
-		case c.AWSCLI == "" && c.Provider != "":
-			l.addf(f, ln, "%s: classify.provider is for aws_cli", r.ID)
+		case c.AWSCLI == "" && c.Kubernetes == nil && c.Provider != "":
+			l.addf(f, ln, "%s: classify.provider is for aws_cli and kubernetes", r.ID)
+		case c.Kubernetes != nil && c.Provider == "":
+			l.addf(f, ln, "%s: classify.kubernetes needs provider: the provider whose rules decide", r.ID)
+		case c.Kubernetes != nil && (len(c.Dialect) > 0 || c.Format != ""):
+			l.addf(f, ln, "%s: classify.dialect and classify.format are for sql", r.ID)
+		case c.Kubernetes != nil && r.Match.MCP == nil:
+			l.addf(f, ln, "%s: classify.kubernetes is for MCP tools", r.ID)
+		case c.Kubernetes != nil && len(r.When) > 0:
+			l.addf(f, ln, "%s: a rule with classify.kubernetes takes no when: the requests decide", r.ID)
 		case c.AWSCLI != "" && (len(c.Dialect) > 0 || c.Format != ""):
 			l.addf(f, ln, "%s: classify.dialect and classify.format are for sql", r.ID)
 		case len(c.Redis) > 0 && (len(c.Dialect) > 0 || c.Format != ""):
 			l.addf(f, ln, "%s: classify.dialect and classify.format are for sql", r.ID)
+		}
+		if k := c.Kubernetes; k != nil {
+			switch {
+			case k.Action == "" && k.ActionArg == "":
+				l.addf(f, ln, "%s: classify.kubernetes needs action or action_arg", r.ID)
+			case k.Action != "" && !slices.Contains(decode.KubeActions, k.Action):
+				l.addf(f, ln, "%s: classify.kubernetes action %q is not one of %s", r.ID, k.Action, strings.Join(decode.KubeActions, ", "))
+			case len(k.Actions) > 0 && k.ActionArg == "":
+				l.addf(f, ln, "%s: classify.kubernetes actions map action_arg's values", r.ID)
+			}
+			if k.ResourceDefault != "" {
+				if rs, _ := decode.KubeResourcesByName(k.ResourceDefault); len(rs) == 0 {
+					l.addf(f, ln, "%s: classify.kubernetes resource_default %q is not a built-in resource type", r.ID, k.ResourceDefault)
+				}
+			}
+			for v, a := range k.Actions {
+				if !slices.Contains(decode.KubeActions, a) {
+					l.addf(f, ln, "%s: classify.kubernetes actions: %q maps to %q, which is not one of %s", r.ID, v, a, strings.Join(decode.KubeActions, ", "))
+				}
+			}
+			for _, p := range k.args() {
+				if !argPathRe.MatchString(p) {
+					l.addf(f, ln, "%s: classify.kubernetes argument %q is not an argument path", r.ID, p)
+				}
+			}
 		}
 		for i, p := range c.Redis {
 			if !argPathRe.MatchString(p) {

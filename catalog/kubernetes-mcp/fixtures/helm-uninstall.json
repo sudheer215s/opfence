@@ -1,0 +1,8 @@
+{
+  "description": "Uninstall release web",
+  "tool": "helm_uninstall",
+  "arguments": {
+    "name": "web",
+    "namespace": "shop"
+  }
+}

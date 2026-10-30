@@ -1,0 +1,8 @@
+{
+  "description": "Delete every Pod in shop",
+  "tool": "kubectl_delete",
+  "arguments": {
+    "resourceType": "pods",
+    "namespace": "shop"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "description": "Read Deployment web's rollout status",
+  "tool": "kubectl_rollout",
+  "arguments": {
+    "subCommand": "status",
+    "resourceType": "deployment",
+    "name": "web",
+    "namespace": "shop"
+  }
+}
