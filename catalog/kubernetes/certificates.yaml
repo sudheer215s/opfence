@@ -1,0 +1,389 @@
+# Kubernetes API: certificates (/apis/certificates.k8s.io).
+# Generated from Kubernetes' OpenAPI description by tools/catalog-gen/k8sgen.py; classes reviewed by hand.
+operations:
+  - id: kubernetes.certificates.certificatesigningrequests.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/certificates.k8s.io/{version}/certificatesigningrequests" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the certificatesigningrequests matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/certificates-certificatesigningrequests-delete-collection.http
+        expect: delete
+        resource: "gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog"
+      - fixture: fixtures/certificates-certificatesigningrequests-delete-collection-every.http
+        expect: irreversible
+        resource: "gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog"
+
+  - id: kubernetes.certificates.certificatesigningrequests.create
+    match: { rest: { method: POST, path: "/apis/certificates.k8s.io/{version}/certificatesigningrequests" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: certificate-signing-request }
+    card: "Create CertificateSigningRequest {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/certificates-certificatesigningrequests-create.http
+        expect: write
+        resource: "agent-client"
+
+  - id: kubernetes.certificates.certificatesigningrequests.delete
+    match: { rest: { method: DELETE, path: "/apis/certificates.k8s.io/{version}/certificatesigningrequests/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: certificate-signing-request }
+    card: "Delete CertificateSigningRequest {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/certificates-certificatesigningrequests-delete.http
+        expect: delete
+        resource: "agent-client"
+
+  - id: kubernetes.certificates.certificatesigningrequests.patch
+    match: { rest: { method: PATCH, path: "/apis/certificates.k8s.io/{version}/certificatesigningrequests/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: certificate-signing-request }
+    card: "Change CertificateSigningRequest {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/certificates-certificatesigningrequests-patch.http
+        expect: write
+        resource: "agent-client"
+
+  - id: kubernetes.certificates.certificatesigningrequests.replace
+    match: { rest: { method: PUT, path: "/apis/certificates.k8s.io/{version}/certificatesigningrequests/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: certificate-signing-request }
+    card: "Replace CertificateSigningRequest {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/certificates-certificatesigningrequests-replace.http
+        expect: write
+        resource: "agent-client"
+
+  - id: kubernetes.certificates.certificatesigningrequests.approval.patch
+    match: { rest: { method: PATCH, path: "/apis/certificates.k8s.io/{version}/certificatesigningrequests/{name}/approval" } }
+    class: credential
+    resource: { arg: name, kind: certificate-signing-request }
+    card: "Approve or deny CertificateSigningRequest {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Approving a request lets its signer issue a certificate that authenticates as the requested
+      identity.
+    tests:
+      - fixture: fixtures/certificates-certificatesigningrequests-approval-patch.http
+        expect: credential
+        resource: "agent-client"
+
+  - id: kubernetes.certificates.certificatesigningrequests.approval.replace
+    match: { rest: { method: PUT, path: "/apis/certificates.k8s.io/{version}/certificatesigningrequests/{name}/approval" } }
+    class: credential
+    resource: { arg: name, kind: certificate-signing-request }
+    card: "Approve or deny CertificateSigningRequest {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Approving a request lets its signer issue a certificate that authenticates as the requested
+      identity.
+    tests:
+      - fixture: fixtures/certificates-certificatesigningrequests-approval-replace.http
+        expect: credential
+        resource: "agent-client"
+
+  - id: kubernetes.certificates.certificatesigningrequests.status.patch
+    match: { rest: { method: PATCH, path: "/apis/certificates.k8s.io/{version}/certificatesigningrequests/{name}/status" } }
+    class: credential
+    resource: { arg: name, kind: certificate-signing-request }
+    card: "Change the status of CertificateSigningRequest {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The status carries the issued certificate; only a signer writes it.
+    tests:
+      - fixture: fixtures/certificates-certificatesigningrequests-status-patch.http
+        expect: credential
+        resource: "agent-client"
+
+  - id: kubernetes.certificates.certificatesigningrequests.status.replace
+    match: { rest: { method: PUT, path: "/apis/certificates.k8s.io/{version}/certificatesigningrequests/{name}/status" } }
+    class: credential
+    resource: { arg: name, kind: certificate-signing-request }
+    card: "Change the status of CertificateSigningRequest {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The status carries the issued certificate; only a signer writes it.
+    tests:
+      - fixture: fixtures/certificates-certificatesigningrequests-status-replace.http
+        expect: credential
+        resource: "agent-client"
+
+  - id: kubernetes.certificates.clustertrustbundles.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/certificates.k8s.io/{version}/clustertrustbundles" } }
+    class: access
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the clustertrustbundles matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Trust bundles decide which certificate authorities workloads trust. Without a label selector
+      every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/certificates-clustertrustbundles-delete-collection.http
+        expect: access
+        resource: "shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io"
+      - fixture: fixtures/certificates-clustertrustbundles-delete-collection-every.http
+        expect: irreversible
+        resource: "shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io"
+
+  - id: kubernetes.certificates.clustertrustbundles.create
+    match: { rest: { method: POST, path: "/apis/certificates.k8s.io/{version}/clustertrustbundles" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: cluster-trust-bundle }
+    card: "Create ClusterTrustBundle {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Trust bundles decide which certificate authorities workloads trust.
+    tests:
+      - fixture: fixtures/certificates-clustertrustbundles-create.http
+        expect: access
+        resource: "clustertrustbundle"
+
+  - id: kubernetes.certificates.clustertrustbundles.delete
+    match: { rest: { method: DELETE, path: "/apis/certificates.k8s.io/{version}/clustertrustbundles/{name}" } }
+    class: access
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: cluster-trust-bundle }
+    card: "Delete ClusterTrustBundle {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Trust bundles decide which certificate authorities workloads trust.
+    tests:
+      - fixture: fixtures/certificates-clustertrustbundles-delete.http
+        expect: access
+        resource: "clustertrustbundle"
+
+  - id: kubernetes.certificates.clustertrustbundles.patch
+    match: { rest: { method: PATCH, path: "/apis/certificates.k8s.io/{version}/clustertrustbundles/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: cluster-trust-bundle }
+    card: "Change ClusterTrustBundle {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Trust bundles decide which certificate authorities workloads trust.
+    tests:
+      - fixture: fixtures/certificates-clustertrustbundles-patch.http
+        expect: access
+        resource: "clustertrustbundle"
+
+  - id: kubernetes.certificates.clustertrustbundles.replace
+    match: { rest: { method: PUT, path: "/apis/certificates.k8s.io/{version}/clustertrustbundles/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: cluster-trust-bundle }
+    card: "Replace ClusterTrustBundle {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Trust bundles decide which certificate authorities workloads trust.
+    tests:
+      - fixture: fixtures/certificates-clustertrustbundles-replace.http
+        expect: access
+        resource: "clustertrustbundle"
+
+  - id: kubernetes.certificates.podcertificaterequests.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/certificates.k8s.io/{version}/namespaces/{namespace}/podcertificaterequests" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the podcertificaterequests matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/certificates-podcertificaterequests-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/certificates-podcertificaterequests-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.certificates.podcertificaterequests.create
+    match: { rest: { method: POST, path: "/apis/certificates.k8s.io/{version}/namespaces/{namespace}/podcertificaterequests" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create PodCertificateRequest {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/certificates-podcertificaterequests-create.http
+        expect: write
+        resource: "shop"
+
+  - id: kubernetes.certificates.podcertificaterequests.delete
+    match: { rest: { method: DELETE, path: "/apis/certificates.k8s.io/{version}/namespaces/{namespace}/podcertificaterequests/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod-certificate-request }
+    card: "Delete PodCertificateRequest {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/certificates-podcertificaterequests-delete.http
+        expect: delete
+        resource: "podcertificaterequest"
+
+  - id: kubernetes.certificates.podcertificaterequests.patch
+    match: { rest: { method: PATCH, path: "/apis/certificates.k8s.io/{version}/namespaces/{namespace}/podcertificaterequests/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod-certificate-request }
+    card: "Change PodCertificateRequest {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/certificates-podcertificaterequests-patch.http
+        expect: write
+        resource: "podcertificaterequest"
+
+  - id: kubernetes.certificates.podcertificaterequests.replace
+    match: { rest: { method: PUT, path: "/apis/certificates.k8s.io/{version}/namespaces/{namespace}/podcertificaterequests/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod-certificate-request }
+    card: "Replace PodCertificateRequest {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/certificates-podcertificaterequests-replace.http
+        expect: write
+        resource: "podcertificaterequest"
+
+  - id: kubernetes.certificates.podcertificaterequests.status.patch
+    match: { rest: { method: PATCH, path: "/apis/certificates.k8s.io/{version}/namespaces/{namespace}/podcertificaterequests/{name}/status" } }
+    class: credential
+    resource: { arg: name, kind: pod-certificate-request }
+    card: "Change the status of PodCertificateRequest {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The status carries the issued certificate; only a signer writes it.
+    tests:
+      - fixture: fixtures/certificates-podcertificaterequests-status-patch.http
+        expect: credential
+        resource: "podcertificaterequest"
+
+  - id: kubernetes.certificates.podcertificaterequests.status.replace
+    match: { rest: { method: PUT, path: "/apis/certificates.k8s.io/{version}/namespaces/{namespace}/podcertificaterequests/{name}/status" } }
+    class: credential
+    resource: { arg: name, kind: pod-certificate-request }
+    card: "Change the status of PodCertificateRequest {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The status carries the issued certificate; only a signer writes it.
+    tests:
+      - fixture: fixtures/certificates-podcertificaterequests-status-replace.http
+        expect: credential
+        resource: "podcertificaterequest"

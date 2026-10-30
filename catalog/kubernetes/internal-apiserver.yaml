@@ -1,0 +1,130 @@
+# Kubernetes API: internal-apiserver (/apis/internal.apiserver.k8s.io).
+# Generated from Kubernetes' OpenAPI description by tools/catalog-gen/k8sgen.py; classes reviewed by hand.
+operations:
+  - id: kubernetes.internal-apiserver.storageversions.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/internal.apiserver.k8s.io/{version}/storageversions" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the storageversions matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/internal-apiserver-storageversions-delete-collection.http
+        expect: delete
+        resource: "gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog"
+      - fixture: fixtures/internal-apiserver-storageversions-delete-collection-every.http
+        expect: irreversible
+        resource: "gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog"
+
+  - id: kubernetes.internal-apiserver.storageversions.create
+    match: { rest: { method: POST, path: "/apis/internal.apiserver.k8s.io/{version}/storageversions" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: storage-version }
+    card: "Create StorageVersion {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/internal-apiserver-storageversions-create.http
+        expect: write
+        resource: "storageversion"
+
+  - id: kubernetes.internal-apiserver.storageversions.delete
+    match: { rest: { method: DELETE, path: "/apis/internal.apiserver.k8s.io/{version}/storageversions/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: storage-version }
+    card: "Delete StorageVersion {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/internal-apiserver-storageversions-delete.http
+        expect: delete
+        resource: "storageversion"
+
+  - id: kubernetes.internal-apiserver.storageversions.patch
+    match: { rest: { method: PATCH, path: "/apis/internal.apiserver.k8s.io/{version}/storageversions/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: storage-version }
+    card: "Change StorageVersion {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/internal-apiserver-storageversions-patch.http
+        expect: write
+        resource: "storageversion"
+
+  - id: kubernetes.internal-apiserver.storageversions.replace
+    match: { rest: { method: PUT, path: "/apis/internal.apiserver.k8s.io/{version}/storageversions/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: storage-version }
+    card: "Replace StorageVersion {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/internal-apiserver-storageversions-replace.http
+        expect: write
+        resource: "storageversion"
+
+  - id: kubernetes.internal-apiserver.storageversions.status.patch
+    match: { rest: { method: PATCH, path: "/apis/internal.apiserver.k8s.io/{version}/storageversions/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: storage-version }
+    card: "Change the status of StorageVersion {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/internal-apiserver-storageversions-status-patch.http
+        expect: write
+        resource: "storageversion"
+
+  - id: kubernetes.internal-apiserver.storageversions.status.replace
+    match: { rest: { method: PUT, path: "/apis/internal.apiserver.k8s.io/{version}/storageversions/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: storage-version }
+    card: "Change the status of StorageVersion {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/internal-apiserver-storageversions-status-replace.http
+        expect: write
+        resource: "storageversion"

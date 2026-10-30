@@ -1,0 +1,8 @@
+# description: Create PodTemplate podtemplate in namespace shop on cluster gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog, privileged
+POST /api/v1/namespaces/shop/podtemplates HTTP/1.1
+Host: gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/json
+
+{"apiVersion":"v1","kind":"PodTemplate","metadata":{"name":"podtemplate","namespace":"shop"},"template":{"spec":{"containers":[{"name":"debug","image":"busybox:1.36","securityContext":{"privileged":true}}]}}}

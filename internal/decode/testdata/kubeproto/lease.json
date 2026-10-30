@@ -1,0 +1,1 @@
+{"kind":"Lease","apiVersion":"coordination.k8s.io/v1","metadata":{"name":"leader","namespace":"kube-system"},"spec":{"holderIdentity":"node-1","leaseDurationSeconds":15,"acquireTime":"2026-10-30T01:00:00.000000Z","renewTime":"2026-10-30T01:02:03.456789Z"}}

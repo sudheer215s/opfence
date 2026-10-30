@@ -3,6 +3,7 @@ package request
 import (
 	"bufio"
 	"bytes"
+	"encoding/base64"
 	"fmt"
 	"io"
 	"net/http"
@@ -16,7 +17,9 @@ type Meta map[string]string
 // ParseFixture parses a .http fixture: optional "# key: value" comment
 // lines, then an HTTP/1.1 request as it appears on the wire. The body is
 // everything after the blank line that ends the headers, minus one trailing
-// newline; Content-Length is ignored so fixtures can be edited by hand.
+// newline; Content-Length is ignored so fixtures can be edited by hand. With
+// "# body: base64" the body is written in base64 (line breaks allowed), for
+// binary bodies such as Kubernetes' protobuf.
 func ParseFixture(data []byte) (*Request, Meta, error) {
 	meta := Meta{}
 	rest := data
@@ -50,6 +53,17 @@ func ParseFixture(data []byte) (*Request, Meta, error) {
 	}
 	body = bytes.TrimSuffix(body, []byte("\n"))
 	body = bytes.TrimSuffix(body, []byte("\r"))
+	switch meta["body"] {
+	case "":
+	case "base64":
+		b, err := base64.StdEncoding.DecodeString(strings.Join(strings.Fields(string(body)), ""))
+		if err != nil {
+			return nil, nil, fmt.Errorf("fixture body: %w", err)
+		}
+		body = b
+	default:
+		return nil, nil, fmt.Errorf("fixture body: unknown encoding %q", meta["body"])
+	}
 	if len(body) > MaxBody {
 		r.BodyErr, r.Prefix = ErrBodyTooLarge, body[:MaxBody]
 	} else if b, err := Decode(body, r.Header.Get("Content-Encoding")); err != nil {

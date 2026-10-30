@@ -1,0 +1,8 @@
+# description: Create PriorityLevelConfiguration prioritylevelconfiguration on cluster shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+POST /apis/flowcontrol.apiserver.k8s.io/v1/prioritylevelconfigurations HTTP/1.1
+Host: shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/json
+
+{"apiVersion":"flowcontrol.apiserver.k8s.io/v1","kind":"PriorityLevelConfiguration","metadata":{"name":"prioritylevelconfiguration"}}

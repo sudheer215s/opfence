@@ -1,0 +1,8 @@
+# description: Resize the containers of Pod web-7c9d8b6f5-x2k4p in namespace shop on cluster 3f2a7c1e-5b9d-4e8a-9c1f-2d7e6b5a4c3d.k8s.ondigitalocean.com
+PUT /api/v1/namespaces/shop/pods/web-7c9d8b6f5-x2k4p/resize HTTP/1.1
+Host: 3f2a7c1e-5b9d-4e8a-9c1f-2d7e6b5a4c3d.k8s.ondigitalocean.com
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/json
+
+{"spec":{"containers":[{"name":"web","resources":{"limits":{"memory":"512Mi"}}}]}}

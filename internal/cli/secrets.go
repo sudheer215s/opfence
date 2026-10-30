@@ -14,6 +14,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/rakeshnitb23/opfence/internal/ca"
+	"github.com/rakeshnitb23/opfence/internal/catalog"
 	"github.com/rakeshnitb23/opfence/internal/engine"
 	"github.com/rakeshnitb23/opfence/internal/secrets"
 )
@@ -225,11 +226,7 @@ func loadSecrets(w io.Writer) (*secrets.Set, *secrets.Vault) {
 // loadCA returns the keychain's CA when it covers every catalog host,
 // otherwise a new one, stored when the keychain is available.
 func loadCA(w io.Writer, eng *engine.Engine, v *secrets.Vault) (authority *ca.CA, persistent bool, err error) {
-	var hosts []string
-	for _, p := range eng.Catalog.Providers {
-		hosts = append(hosts, p.Hosts...)
-	}
-	permitted := ca.PermittedDomains(hosts)
+	permitted := ca.PermittedDomains(caHosts(eng.Catalog))
 	if v != nil {
 		certPEM, keyPEM, err := v.CA()
 		switch {
@@ -257,6 +254,19 @@ func loadCA(w io.Writer, eng *engine.Engine, v *secrets.Vault) (authority *ca.CA
 		return authority, false, nil
 	}
 	return authority, true, nil
+}
+
+// caHosts are the hosts Opfence's CA must cover: every catalog host but
+// those of providers whose hosts serve their own CA (a Kubernetes cluster),
+// which clients trust from their own configuration, not the system's.
+func caHosts(c *catalog.Catalog) []string {
+	var hosts []string
+	for _, p := range c.Providers {
+		if !p.OwnCA {
+			hosts = append(hosts, p.Hosts...)
+		}
+	}
+	return hosts
 }
 
 func covers(c *ca.CA, permitted []string) bool {

@@ -52,8 +52,9 @@ func decodeREST(r *request.Request) []Operation {
 
 // decodeRESTBody puts the body's fields in op.Args["body"]. A body that
 // looks like JSON is parsed as JSON whatever its Content-Type, because many
-// APIs (GitHub's among them) parse it anyway. A body that is neither JSON
-// nor a form sets BodyErr, so rules that read body fields fail closed.
+// APIs (GitHub's among them) parse it anyway; a Kubernetes protobuf body is
+// read as the JSON object it stands for. A body that is none of these sets
+// BodyErr, so rules that read body fields fail closed.
 func decodeRESTBody(r *request.Request, op *Operation) {
 	if r.BodyErr != nil {
 		op.BodyErr = r.BodyErr.Error()
@@ -65,6 +66,15 @@ func decodeRESTBody(r *request.Request, op *Operation) {
 	}
 	ct := r.ContentType()
 	switch {
+	case ct == KubeProtobuf:
+		// kubectl's built-in objects (kubectl create deployment); the
+		// API server reads such a body only as protobuf.
+		v, err := ParseKubeProtobuf(r.Body)
+		if err != nil {
+			op.BodyErr = err.Error()
+			return
+		}
+		op.Args["body"] = v
 	case body[0] == '{' || body[0] == '[' || ct == "application/json" || strings.HasSuffix(ct, "+json"):
 		v, err := parseJSON(r.Body)
 		if err != nil {

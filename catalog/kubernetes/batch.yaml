@@ -1,0 +1,432 @@
+# Kubernetes API: batch (/apis/batch).
+# Generated from Kubernetes' OpenAPI description by tools/catalog-gen/k8sgen.py; classes reviewed by hand.
+operations:
+  - id: kubernetes.batch.cronjobs.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/batch/{version}/namespaces/{namespace}/cronjobs" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the cronjobs matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/batch-cronjobs-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/batch-cronjobs-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.batch.cronjobs.create
+    match: { rest: { method: POST, path: "/apis/batch/{version}/namespaces/{namespace}/cronjobs" } }
+    class: write
+    when:
+      - if: { arg: body.spec.jobTemplate.spec.template.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.jobTemplate.spec.template.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.jobTemplate.spec.template.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.jobTemplate.spec.template.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.jobTemplate.spec.template.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.jobTemplate.spec.template.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.jobTemplate.spec.template.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.jobTemplate.spec.template.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create CronJob {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/batch-cronjobs-create.http
+        expect: write
+        resource: "shop"
+      - fixture: fixtures/batch-cronjobs-create-privileged.http
+        expect: access
+        resource: "shop"
+      - fixture: fixtures/batch-cronjobs-create-host.http
+        expect: access
+        resource: "shop"
+      - fixture: fixtures/batch-cronjobs-create-protobuf.http
+        expect: write
+        resource: "shop"
+      - fixture: fixtures/batch-cronjobs-create-privileged-protobuf.http
+        expect: access
+        resource: "shop"
+
+  - id: kubernetes.batch.cronjobs.delete
+    match: { rest: { method: DELETE, path: "/apis/batch/{version}/namespaces/{namespace}/cronjobs/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: cron-job }
+    card: "Delete CronJob {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/batch-cronjobs-delete.http
+        expect: delete
+        resource: "cronjob"
+
+  - id: kubernetes.batch.cronjobs.patch
+    match: { rest: { method: PATCH, path: "/apis/batch/{version}/namespaces/{namespace}/cronjobs/{name}" } }
+    class: write
+    when:
+      - if: { arg: body.spec.jobTemplate.spec.template.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.jobTemplate.spec.template.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.jobTemplate.spec.template.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.jobTemplate.spec.template.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.jobTemplate.spec.template.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.jobTemplate.spec.template.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.jobTemplate.spec.template.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.jobTemplate.spec.template.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: cron-job }
+    card: "Change CronJob {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/batch-cronjobs-patch.http
+        expect: write
+        resource: "cronjob"
+      - fixture: fixtures/batch-cronjobs-patch-privileged.http
+        expect: access
+        resource: "cronjob"
+      - fixture: fixtures/batch-cronjobs-patch-json-patch.http
+        expect: access
+        resource: "cronjob"
+
+  - id: kubernetes.batch.cronjobs.replace
+    match: { rest: { method: PUT, path: "/apis/batch/{version}/namespaces/{namespace}/cronjobs/{name}" } }
+    class: write
+    when:
+      - if: { arg: body.spec.jobTemplate.spec.template.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.jobTemplate.spec.template.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.jobTemplate.spec.template.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.jobTemplate.spec.template.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.jobTemplate.spec.template.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.jobTemplate.spec.template.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.jobTemplate.spec.template.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.jobTemplate.spec.template.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: cron-job }
+    card: "Replace CronJob {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/batch-cronjobs-replace.http
+        expect: write
+        resource: "cronjob"
+      - fixture: fixtures/batch-cronjobs-replace-privileged.http
+        expect: access
+        resource: "cronjob"
+      - fixture: fixtures/batch-cronjobs-replace-host.http
+        expect: access
+        resource: "cronjob"
+
+  - id: kubernetes.batch.cronjobs.status.patch
+    match: { rest: { method: PATCH, path: "/apis/batch/{version}/namespaces/{namespace}/cronjobs/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: cron-job }
+    card: "Change the status of CronJob {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/batch-cronjobs-status-patch.http
+        expect: write
+        resource: "cronjob"
+
+  - id: kubernetes.batch.cronjobs.status.replace
+    match: { rest: { method: PUT, path: "/apis/batch/{version}/namespaces/{namespace}/cronjobs/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: cron-job }
+    card: "Change the status of CronJob {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/batch-cronjobs-status-replace.http
+        expect: write
+        resource: "cronjob"
+
+  - id: kubernetes.batch.jobs.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/batch/{version}/namespaces/{namespace}/jobs" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the jobs matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/batch-jobs-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/batch-jobs-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.batch.jobs.create
+    match: { rest: { method: POST, path: "/apis/batch/{version}/namespaces/{namespace}/jobs" } }
+    class: write
+    when:
+      - if: { arg: body.spec.template.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create Job {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/batch-jobs-create.http
+        expect: write
+        resource: "shop"
+      - fixture: fixtures/batch-jobs-create-privileged.http
+        expect: access
+        resource: "shop"
+      - fixture: fixtures/batch-jobs-create-host.http
+        expect: access
+        resource: "shop"
+
+  - id: kubernetes.batch.jobs.delete
+    match: { rest: { method: DELETE, path: "/apis/batch/{version}/namespaces/{namespace}/jobs/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: job }
+    card: "Delete Job {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/batch-jobs-delete.http
+        expect: delete
+        resource: "job"
+
+  - id: kubernetes.batch.jobs.patch
+    match: { rest: { method: PATCH, path: "/apis/batch/{version}/namespaces/{namespace}/jobs/{name}" } }
+    class: write
+    when:
+      - if: { arg: body.spec.template.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: job }
+    card: "Change Job {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/batch-jobs-patch.http
+        expect: write
+        resource: "job"
+      - fixture: fixtures/batch-jobs-patch-privileged.http
+        expect: access
+        resource: "job"
+      - fixture: fixtures/batch-jobs-patch-json-patch.http
+        expect: access
+        resource: "job"
+
+  - id: kubernetes.batch.jobs.replace
+    match: { rest: { method: PUT, path: "/apis/batch/{version}/namespaces/{namespace}/jobs/{name}" } }
+    class: write
+    when:
+      - if: { arg: body.spec.template.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: job }
+    card: "Replace Job {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/batch-jobs-replace.http
+        expect: write
+        resource: "job"
+      - fixture: fixtures/batch-jobs-replace-privileged.http
+        expect: access
+        resource: "job"
+      - fixture: fixtures/batch-jobs-replace-host.http
+        expect: access
+        resource: "job"
+
+  - id: kubernetes.batch.jobs.status.patch
+    match: { rest: { method: PATCH, path: "/apis/batch/{version}/namespaces/{namespace}/jobs/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: job }
+    card: "Change the status of Job {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/batch-jobs-status-patch.http
+        expect: write
+        resource: "job"
+
+  - id: kubernetes.batch.jobs.status.replace
+    match: { rest: { method: PUT, path: "/apis/batch/{version}/namespaces/{namespace}/jobs/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: job }
+    card: "Change the status of Job {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/batch-jobs-status-replace.http
+        expect: write
+        resource: "job"

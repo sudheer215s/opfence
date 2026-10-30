@@ -1,0 +1,672 @@
+# Kubernetes API: admissionregistration (/apis/admissionregistration.k8s.io).
+# Generated from Kubernetes' OpenAPI description by tools/catalog-gen/k8sgen.py; classes reviewed by hand.
+operations:
+  - id: kubernetes.admissionregistration.mutatingadmissionpolicies.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/admissionregistration.k8s.io/{version}/mutatingadmissionpolicies" } }
+    class: access
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the mutatingadmissionpolicies matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access. Without
+      a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/admissionregistration-mutatingadmissionpolicies-delete-collection.http
+        expect: access
+        resource: "a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com"
+      - fixture: fixtures/admissionregistration-mutatingadmissionpolicies-delete-collection-every.http
+        expect: irreversible
+        resource: "a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com"
+
+  - id: kubernetes.admissionregistration.mutatingadmissionpolicies.create
+    match: { rest: { method: POST, path: "/apis/admissionregistration.k8s.io/{version}/mutatingadmissionpolicies" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: mutating-admission-policy }
+    card: "Create MutatingAdmissionPolicy {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access.
+    tests:
+      - fixture: fixtures/admissionregistration-mutatingadmissionpolicies-create.http
+        expect: access
+        resource: "mutatingadmissionpolicie"
+
+  - id: kubernetes.admissionregistration.mutatingadmissionpolicies.delete
+    match: { rest: { method: DELETE, path: "/apis/admissionregistration.k8s.io/{version}/mutatingadmissionpolicies/{name}" } }
+    class: access
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: mutating-admission-policy }
+    card: "Delete MutatingAdmissionPolicy {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access.
+    tests:
+      - fixture: fixtures/admissionregistration-mutatingadmissionpolicies-delete.http
+        expect: access
+        resource: "mutatingadmissionpolicie"
+
+  - id: kubernetes.admissionregistration.mutatingadmissionpolicies.patch
+    match: { rest: { method: PATCH, path: "/apis/admissionregistration.k8s.io/{version}/mutatingadmissionpolicies/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: mutating-admission-policy }
+    card: "Change MutatingAdmissionPolicy {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access.
+    tests:
+      - fixture: fixtures/admissionregistration-mutatingadmissionpolicies-patch.http
+        expect: access
+        resource: "mutatingadmissionpolicie"
+
+  - id: kubernetes.admissionregistration.mutatingadmissionpolicies.replace
+    match: { rest: { method: PUT, path: "/apis/admissionregistration.k8s.io/{version}/mutatingadmissionpolicies/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: mutating-admission-policy }
+    card: "Replace MutatingAdmissionPolicy {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access.
+    tests:
+      - fixture: fixtures/admissionregistration-mutatingadmissionpolicies-replace.http
+        expect: access
+        resource: "mutatingadmissionpolicie"
+
+  - id: kubernetes.admissionregistration.mutatingadmissionpolicybindings.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/admissionregistration.k8s.io/{version}/mutatingadmissionpolicybindings" } }
+    class: access
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the mutatingadmissionpolicybindings matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access. Without
+      a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/admissionregistration-mutatingadmissionpolicybindings-delete-collection.http
+        expect: access
+        resource: "a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com"
+      - fixture: fixtures/admissionregistration-mutatingadmissionpolicybindings-delete-collection-every.http
+        expect: irreversible
+        resource: "a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com"
+
+  - id: kubernetes.admissionregistration.mutatingadmissionpolicybindings.create
+    match: { rest: { method: POST, path: "/apis/admissionregistration.k8s.io/{version}/mutatingadmissionpolicybindings" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: mutating-admission-policy-binding }
+    card: "Create MutatingAdmissionPolicyBinding {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access.
+    tests:
+      - fixture: fixtures/admissionregistration-mutatingadmissionpolicybindings-create.http
+        expect: access
+        resource: "mutatingadmissionpolicybinding"
+
+  - id: kubernetes.admissionregistration.mutatingadmissionpolicybindings.delete
+    match: { rest: { method: DELETE, path: "/apis/admissionregistration.k8s.io/{version}/mutatingadmissionpolicybindings/{name}" } }
+    class: access
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: mutating-admission-policy-binding }
+    card: "Delete MutatingAdmissionPolicyBinding {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access.
+    tests:
+      - fixture: fixtures/admissionregistration-mutatingadmissionpolicybindings-delete.http
+        expect: access
+        resource: "mutatingadmissionpolicybinding"
+
+  - id: kubernetes.admissionregistration.mutatingadmissionpolicybindings.patch
+    match: { rest: { method: PATCH, path: "/apis/admissionregistration.k8s.io/{version}/mutatingadmissionpolicybindings/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: mutating-admission-policy-binding }
+    card: "Change MutatingAdmissionPolicyBinding {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access.
+    tests:
+      - fixture: fixtures/admissionregistration-mutatingadmissionpolicybindings-patch.http
+        expect: access
+        resource: "mutatingadmissionpolicybinding"
+
+  - id: kubernetes.admissionregistration.mutatingadmissionpolicybindings.replace
+    match: { rest: { method: PUT, path: "/apis/admissionregistration.k8s.io/{version}/mutatingadmissionpolicybindings/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: mutating-admission-policy-binding }
+    card: "Replace MutatingAdmissionPolicyBinding {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access.
+    tests:
+      - fixture: fixtures/admissionregistration-mutatingadmissionpolicybindings-replace.http
+        expect: access
+        resource: "mutatingadmissionpolicybinding"
+
+  - id: kubernetes.admissionregistration.mutatingwebhookconfigurations.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/admissionregistration.k8s.io/{version}/mutatingwebhookconfigurations" } }
+    class: access
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the mutatingwebhookconfigurations matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access. Without
+      a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/admissionregistration-mutatingwebhookconfigurations-delete-collection.http
+        expect: access
+        resource: "a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com"
+      - fixture: fixtures/admissionregistration-mutatingwebhookconfigurations-delete-collection-every.http
+        expect: irreversible
+        resource: "a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com"
+
+  - id: kubernetes.admissionregistration.mutatingwebhookconfigurations.create
+    match: { rest: { method: POST, path: "/apis/admissionregistration.k8s.io/{version}/mutatingwebhookconfigurations" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: mutating-webhook-configuration }
+    card: "Create MutatingWebhookConfiguration {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access.
+    tests:
+      - fixture: fixtures/admissionregistration-mutatingwebhookconfigurations-create.http
+        expect: access
+        resource: "mutatingwebhookconfiguration"
+
+  - id: kubernetes.admissionregistration.mutatingwebhookconfigurations.delete
+    match: { rest: { method: DELETE, path: "/apis/admissionregistration.k8s.io/{version}/mutatingwebhookconfigurations/{name}" } }
+    class: access
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: mutating-webhook-configuration }
+    card: "Delete MutatingWebhookConfiguration {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access.
+    tests:
+      - fixture: fixtures/admissionregistration-mutatingwebhookconfigurations-delete.http
+        expect: access
+        resource: "mutatingwebhookconfiguration"
+
+  - id: kubernetes.admissionregistration.mutatingwebhookconfigurations.patch
+    match: { rest: { method: PATCH, path: "/apis/admissionregistration.k8s.io/{version}/mutatingwebhookconfigurations/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: mutating-webhook-configuration }
+    card: "Change MutatingWebhookConfiguration {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access.
+    tests:
+      - fixture: fixtures/admissionregistration-mutatingwebhookconfigurations-patch.http
+        expect: access
+        resource: "mutatingwebhookconfiguration"
+
+  - id: kubernetes.admissionregistration.mutatingwebhookconfigurations.replace
+    match: { rest: { method: PUT, path: "/apis/admissionregistration.k8s.io/{version}/mutatingwebhookconfigurations/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: mutating-webhook-configuration }
+    card: "Replace MutatingWebhookConfiguration {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access.
+    tests:
+      - fixture: fixtures/admissionregistration-mutatingwebhookconfigurations-replace.http
+        expect: access
+        resource: "mutatingwebhookconfiguration"
+
+  - id: kubernetes.admissionregistration.validatingadmissionpolicies.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/admissionregistration.k8s.io/{version}/validatingadmissionpolicies" } }
+    class: access
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the validatingadmissionpolicies matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access. Without
+      a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/admissionregistration-validatingadmissionpolicies-delete-collection.http
+        expect: access
+        resource: "a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com"
+      - fixture: fixtures/admissionregistration-validatingadmissionpolicies-delete-collection-every.http
+        expect: irreversible
+        resource: "a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com"
+
+  - id: kubernetes.admissionregistration.validatingadmissionpolicies.create
+    match: { rest: { method: POST, path: "/apis/admissionregistration.k8s.io/{version}/validatingadmissionpolicies" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: validating-admission-policy }
+    card: "Create ValidatingAdmissionPolicy {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access.
+    tests:
+      - fixture: fixtures/admissionregistration-validatingadmissionpolicies-create.http
+        expect: access
+        resource: "validatingadmissionpolicie"
+
+  - id: kubernetes.admissionregistration.validatingadmissionpolicies.delete
+    match: { rest: { method: DELETE, path: "/apis/admissionregistration.k8s.io/{version}/validatingadmissionpolicies/{name}" } }
+    class: access
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: validating-admission-policy }
+    card: "Delete ValidatingAdmissionPolicy {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access.
+    tests:
+      - fixture: fixtures/admissionregistration-validatingadmissionpolicies-delete.http
+        expect: access
+        resource: "validatingadmissionpolicie"
+
+  - id: kubernetes.admissionregistration.validatingadmissionpolicies.patch
+    match: { rest: { method: PATCH, path: "/apis/admissionregistration.k8s.io/{version}/validatingadmissionpolicies/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: validating-admission-policy }
+    card: "Change ValidatingAdmissionPolicy {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access.
+    tests:
+      - fixture: fixtures/admissionregistration-validatingadmissionpolicies-patch.http
+        expect: access
+        resource: "validatingadmissionpolicie"
+
+  - id: kubernetes.admissionregistration.validatingadmissionpolicies.replace
+    match: { rest: { method: PUT, path: "/apis/admissionregistration.k8s.io/{version}/validatingadmissionpolicies/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: validating-admission-policy }
+    card: "Replace ValidatingAdmissionPolicy {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access.
+    tests:
+      - fixture: fixtures/admissionregistration-validatingadmissionpolicies-replace.http
+        expect: access
+        resource: "validatingadmissionpolicie"
+
+  - id: kubernetes.admissionregistration.validatingadmissionpolicies.status.patch
+    match: { rest: { method: PATCH, path: "/apis/admissionregistration.k8s.io/{version}/validatingadmissionpolicies/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: validating-admission-policy }
+    card: "Change the status of ValidatingAdmissionPolicy {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/admissionregistration-validatingadmissionpolicies-status-patch.http
+        expect: write
+        resource: "validatingadmissionpolicie"
+
+  - id: kubernetes.admissionregistration.validatingadmissionpolicies.status.replace
+    match: { rest: { method: PUT, path: "/apis/admissionregistration.k8s.io/{version}/validatingadmissionpolicies/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: validating-admission-policy }
+    card: "Change the status of ValidatingAdmissionPolicy {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/admissionregistration-validatingadmissionpolicies-status-replace.http
+        expect: write
+        resource: "validatingadmissionpolicie"
+
+  - id: kubernetes.admissionregistration.validatingadmissionpolicybindings.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/admissionregistration.k8s.io/{version}/validatingadmissionpolicybindings" } }
+    class: access
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the validatingadmissionpolicybindings matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access. Without
+      a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/admissionregistration-validatingadmissionpolicybindings-delete-collection.http
+        expect: access
+        resource: "gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog"
+      - fixture: fixtures/admissionregistration-validatingadmissionpolicybindings-delete-collection-every.http
+        expect: irreversible
+        resource: "gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog"
+
+  - id: kubernetes.admissionregistration.validatingadmissionpolicybindings.create
+    match: { rest: { method: POST, path: "/apis/admissionregistration.k8s.io/{version}/validatingadmissionpolicybindings" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: validating-admission-policy-binding }
+    card: "Create ValidatingAdmissionPolicyBinding {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access.
+    tests:
+      - fixture: fixtures/admissionregistration-validatingadmissionpolicybindings-create.http
+        expect: access
+        resource: "validatingadmissionpolicybinding"
+
+  - id: kubernetes.admissionregistration.validatingadmissionpolicybindings.delete
+    match: { rest: { method: DELETE, path: "/apis/admissionregistration.k8s.io/{version}/validatingadmissionpolicybindings/{name}" } }
+    class: access
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: validating-admission-policy-binding }
+    card: "Delete ValidatingAdmissionPolicyBinding {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access.
+    tests:
+      - fixture: fixtures/admissionregistration-validatingadmissionpolicybindings-delete.http
+        expect: access
+        resource: "validatingadmissionpolicybinding"
+
+  - id: kubernetes.admissionregistration.validatingadmissionpolicybindings.patch
+    match: { rest: { method: PATCH, path: "/apis/admissionregistration.k8s.io/{version}/validatingadmissionpolicybindings/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: validating-admission-policy-binding }
+    card: "Change ValidatingAdmissionPolicyBinding {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access.
+    tests:
+      - fixture: fixtures/admissionregistration-validatingadmissionpolicybindings-patch.http
+        expect: access
+        resource: "validatingadmissionpolicybinding"
+
+  - id: kubernetes.admissionregistration.validatingadmissionpolicybindings.replace
+    match: { rest: { method: PUT, path: "/apis/admissionregistration.k8s.io/{version}/validatingadmissionpolicybindings/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: validating-admission-policy-binding }
+    card: "Replace ValidatingAdmissionPolicyBinding {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access.
+    tests:
+      - fixture: fixtures/admissionregistration-validatingadmissionpolicybindings-replace.http
+        expect: access
+        resource: "validatingadmissionpolicybinding"
+
+  - id: kubernetes.admissionregistration.validatingwebhookconfigurations.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/admissionregistration.k8s.io/{version}/validatingwebhookconfigurations" } }
+    class: access
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the validatingwebhookconfigurations matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access. Without
+      a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/admissionregistration-validatingwebhookconfigurations-delete-collection.http
+        expect: access
+        resource: "gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog"
+      - fixture: fixtures/admissionregistration-validatingwebhookconfigurations-delete-collection-every.http
+        expect: irreversible
+        resource: "gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog"
+
+  - id: kubernetes.admissionregistration.validatingwebhookconfigurations.create
+    match: { rest: { method: POST, path: "/apis/admissionregistration.k8s.io/{version}/validatingwebhookconfigurations" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: validating-webhook-configuration }
+    card: "Create ValidatingWebhookConfiguration {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access.
+    tests:
+      - fixture: fixtures/admissionregistration-validatingwebhookconfigurations-create.http
+        expect: access
+        resource: "validatingwebhookconfiguration"
+
+  - id: kubernetes.admissionregistration.validatingwebhookconfigurations.delete
+    match: { rest: { method: DELETE, path: "/apis/admissionregistration.k8s.io/{version}/validatingwebhookconfigurations/{name}" } }
+    class: access
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: validating-webhook-configuration }
+    card: "Delete ValidatingWebhookConfiguration {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access.
+    tests:
+      - fixture: fixtures/admissionregistration-validatingwebhookconfigurations-delete.http
+        expect: access
+        resource: "validatingwebhookconfiguration"
+
+  - id: kubernetes.admissionregistration.validatingwebhookconfigurations.patch
+    match: { rest: { method: PATCH, path: "/apis/admissionregistration.k8s.io/{version}/validatingwebhookconfigurations/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: validating-webhook-configuration }
+    card: "Change ValidatingWebhookConfiguration {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access.
+    tests:
+      - fixture: fixtures/admissionregistration-validatingwebhookconfigurations-patch.http
+        expect: access
+        resource: "validatingwebhookconfiguration"
+
+  - id: kubernetes.admissionregistration.validatingwebhookconfigurations.replace
+    match: { rest: { method: PUT, path: "/apis/admissionregistration.k8s.io/{version}/validatingwebhookconfigurations/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: validating-webhook-configuration }
+    card: "Replace ValidatingWebhookConfiguration {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Admission webhooks and policies see or change every object the API server admits; adding,
+      changing or removing one changes what the cluster enforces, so every change is access.
+    tests:
+      - fixture: fixtures/admissionregistration-validatingwebhookconfigurations-replace.http
+        expect: access
+        resource: "validatingwebhookconfiguration"

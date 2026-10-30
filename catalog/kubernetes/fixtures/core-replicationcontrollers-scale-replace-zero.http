@@ -1,0 +1,8 @@
+# description: Scale ReplicationController replicationcontroller to 3 replicas in namespace shop on cluster gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog, to zero replicas
+PUT /api/v1/namespaces/shop/replicationcontrollers/replicationcontroller/scale HTTP/1.1
+Host: gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/json
+
+{"spec":{"replicas":0}}

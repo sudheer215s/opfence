@@ -1,0 +1,6 @@
+# description: Delete DeviceClass deviceclasse on cluster shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+DELETE /apis/resource.k8s.io/v1/deviceclasses/deviceclasse HTTP/1.1
+Host: shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+

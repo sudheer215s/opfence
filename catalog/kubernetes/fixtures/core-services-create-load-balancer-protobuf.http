@@ -1,0 +1,11 @@
+# description: Create Service web in namespace shop on cluster a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com, as a LoadBalancer, in protobuf as kubectl create sends it
+# body: base64
+POST /api/v1/namespaces/shop/services?fieldManager=kubectl-create&fieldValidation=Strict HTTP/1.1
+Host: a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/vnd.kubernetes.protobuf,application/json
+Content-Type: application/vnd.kubernetes.protobuf
+
+azhzAAoNCgJ2MRIHU2VydmljZRJyCiMKA3dlYhIAGgRzaG9wIgAqADIAOABCAFoKCgNhcHASA3dl
+YhJHCh0KCDQ0My04NDQzEgNUQ1AYuwMiBwgAEPtBGgAoABIKCgNhcHASA3dlYhoAIgxMb2FkQmFs
+YW5jZXI6AEIAUgBaAGAAaAAaAgoAGgAiAA==

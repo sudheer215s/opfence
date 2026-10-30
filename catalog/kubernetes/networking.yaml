@@ -1,0 +1,553 @@
+# Kubernetes API: networking (/apis/networking.k8s.io).
+# Generated from Kubernetes' OpenAPI description by tools/catalog-gen/k8sgen.py; classes reviewed by hand.
+operations:
+  - id: kubernetes.networking.ingressclasses.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/networking.k8s.io/{version}/ingressclasses" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the ingressclasses matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/networking-ingressclasses-delete-collection.http
+        expect: delete
+        resource: "3f2a7c1e-5b9d-4e8a-9c1f-2d7e6b5a4c3d.k8s.ondigitalocean.com"
+      - fixture: fixtures/networking-ingressclasses-delete-collection-every.http
+        expect: irreversible
+        resource: "3f2a7c1e-5b9d-4e8a-9c1f-2d7e6b5a4c3d.k8s.ondigitalocean.com"
+
+  - id: kubernetes.networking.ingressclasses.create
+    match: { rest: { method: POST, path: "/apis/networking.k8s.io/{version}/ingressclasses" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: ingress-class }
+    card: "Create IngressClass {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/networking-ingressclasses-create.http
+        expect: write
+        resource: "ingressclasse"
+
+  - id: kubernetes.networking.ingressclasses.delete
+    match: { rest: { method: DELETE, path: "/apis/networking.k8s.io/{version}/ingressclasses/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: ingress-class }
+    card: "Delete IngressClass {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/networking-ingressclasses-delete.http
+        expect: delete
+        resource: "ingressclasse"
+
+  - id: kubernetes.networking.ingressclasses.patch
+    match: { rest: { method: PATCH, path: "/apis/networking.k8s.io/{version}/ingressclasses/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: ingress-class }
+    card: "Change IngressClass {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/networking-ingressclasses-patch.http
+        expect: write
+        resource: "ingressclasse"
+
+  - id: kubernetes.networking.ingressclasses.replace
+    match: { rest: { method: PUT, path: "/apis/networking.k8s.io/{version}/ingressclasses/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: ingress-class }
+    card: "Replace IngressClass {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/networking-ingressclasses-replace.http
+        expect: write
+        resource: "ingressclasse"
+
+  - id: kubernetes.networking.ingresses.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/networking.k8s.io/{version}/namespaces/{namespace}/ingresses" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the ingresses matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/networking-ingresses-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/networking-ingresses-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.networking.ingresses.create
+    match: { rest: { method: POST, path: "/apis/networking.k8s.io/{version}/namespaces/{namespace}/ingresses" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create Ingress {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      An Ingress exposes services outside the cluster.
+    tests:
+      - fixture: fixtures/networking-ingresses-create.http
+        expect: access
+        resource: "shop"
+
+  - id: kubernetes.networking.ingresses.delete
+    match: { rest: { method: DELETE, path: "/apis/networking.k8s.io/{version}/namespaces/{namespace}/ingresses/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: ingress }
+    card: "Delete Ingress {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/networking-ingresses-delete.http
+        expect: delete
+        resource: "ingresse"
+
+  - id: kubernetes.networking.ingresses.patch
+    match: { rest: { method: PATCH, path: "/apis/networking.k8s.io/{version}/namespaces/{namespace}/ingresses/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: ingress }
+    card: "Change Ingress {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      An Ingress exposes services outside the cluster.
+    tests:
+      - fixture: fixtures/networking-ingresses-patch.http
+        expect: access
+        resource: "ingresse"
+
+  - id: kubernetes.networking.ingresses.replace
+    match: { rest: { method: PUT, path: "/apis/networking.k8s.io/{version}/namespaces/{namespace}/ingresses/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: ingress }
+    card: "Replace Ingress {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      An Ingress exposes services outside the cluster.
+    tests:
+      - fixture: fixtures/networking-ingresses-replace.http
+        expect: access
+        resource: "ingresse"
+
+  - id: kubernetes.networking.ingresses.status.patch
+    match: { rest: { method: PATCH, path: "/apis/networking.k8s.io/{version}/namespaces/{namespace}/ingresses/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: ingress }
+    card: "Change the status of Ingress {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/networking-ingresses-status-patch.http
+        expect: write
+        resource: "ingresse"
+
+  - id: kubernetes.networking.ingresses.status.replace
+    match: { rest: { method: PUT, path: "/apis/networking.k8s.io/{version}/namespaces/{namespace}/ingresses/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: ingress }
+    card: "Change the status of Ingress {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/networking-ingresses-status-replace.http
+        expect: write
+        resource: "ingresse"
+
+  - id: kubernetes.networking.ipaddresses.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/networking.k8s.io/{version}/ipaddresses" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the ipaddresses matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/networking-ipaddresses-delete-collection.http
+        expect: delete
+        resource: "a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com"
+      - fixture: fixtures/networking-ipaddresses-delete-collection-every.http
+        expect: irreversible
+        resource: "a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com"
+
+  - id: kubernetes.networking.ipaddresses.create
+    match: { rest: { method: POST, path: "/apis/networking.k8s.io/{version}/ipaddresses" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: i-p-address }
+    card: "Create IPAddress {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/networking-ipaddresses-create.http
+        expect: write
+        resource: "ipaddresse"
+
+  - id: kubernetes.networking.ipaddresses.delete
+    match: { rest: { method: DELETE, path: "/apis/networking.k8s.io/{version}/ipaddresses/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: i-p-address }
+    card: "Delete IPAddress {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/networking-ipaddresses-delete.http
+        expect: delete
+        resource: "ipaddresse"
+
+  - id: kubernetes.networking.ipaddresses.patch
+    match: { rest: { method: PATCH, path: "/apis/networking.k8s.io/{version}/ipaddresses/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: i-p-address }
+    card: "Change IPAddress {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/networking-ipaddresses-patch.http
+        expect: write
+        resource: "ipaddresse"
+
+  - id: kubernetes.networking.ipaddresses.replace
+    match: { rest: { method: PUT, path: "/apis/networking.k8s.io/{version}/ipaddresses/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: i-p-address }
+    card: "Replace IPAddress {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/networking-ipaddresses-replace.http
+        expect: write
+        resource: "ipaddresse"
+
+  - id: kubernetes.networking.networkpolicies.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/networking.k8s.io/{version}/namespaces/{namespace}/networkpolicies" } }
+    class: access
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the networkpolicies matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Network policies decide which pods may talk to which; every change is access. Without a label
+      selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/networking-networkpolicies-delete-collection.http
+        expect: access
+        resource: "shop"
+      - fixture: fixtures/networking-networkpolicies-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.networking.networkpolicies.create
+    match: { rest: { method: POST, path: "/apis/networking.k8s.io/{version}/namespaces/{namespace}/networkpolicies" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create NetworkPolicy {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Network policies decide which pods may talk to which; every change is access.
+    tests:
+      - fixture: fixtures/networking-networkpolicies-create.http
+        expect: access
+        resource: "shop"
+
+  - id: kubernetes.networking.networkpolicies.delete
+    match: { rest: { method: DELETE, path: "/apis/networking.k8s.io/{version}/namespaces/{namespace}/networkpolicies/{name}" } }
+    class: access
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: network-policy }
+    card: "Delete NetworkPolicy {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Network policies decide which pods may talk to which; every change is access.
+    tests:
+      - fixture: fixtures/networking-networkpolicies-delete.http
+        expect: access
+        resource: "networkpolicie"
+
+  - id: kubernetes.networking.networkpolicies.patch
+    match: { rest: { method: PATCH, path: "/apis/networking.k8s.io/{version}/namespaces/{namespace}/networkpolicies/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: network-policy }
+    card: "Change NetworkPolicy {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Network policies decide which pods may talk to which; every change is access.
+    tests:
+      - fixture: fixtures/networking-networkpolicies-patch.http
+        expect: access
+        resource: "networkpolicie"
+
+  - id: kubernetes.networking.networkpolicies.replace
+    match: { rest: { method: PUT, path: "/apis/networking.k8s.io/{version}/namespaces/{namespace}/networkpolicies/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: network-policy }
+    card: "Replace NetworkPolicy {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Network policies decide which pods may talk to which; every change is access.
+    tests:
+      - fixture: fixtures/networking-networkpolicies-replace.http
+        expect: access
+        resource: "networkpolicie"
+
+  - id: kubernetes.networking.servicecidrs.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/networking.k8s.io/{version}/servicecidrs" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the servicecidrs matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/networking-servicecidrs-delete-collection.http
+        expect: delete
+        resource: "a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com"
+      - fixture: fixtures/networking-servicecidrs-delete-collection-every.http
+        expect: irreversible
+        resource: "a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com"
+
+  - id: kubernetes.networking.servicecidrs.create
+    match: { rest: { method: POST, path: "/apis/networking.k8s.io/{version}/servicecidrs" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: service-c-i-d-r }
+    card: "Create ServiceCIDR {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/networking-servicecidrs-create.http
+        expect: write
+        resource: "servicecidr"
+
+  - id: kubernetes.networking.servicecidrs.delete
+    match: { rest: { method: DELETE, path: "/apis/networking.k8s.io/{version}/servicecidrs/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: service-c-i-d-r }
+    card: "Delete ServiceCIDR {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/networking-servicecidrs-delete.http
+        expect: delete
+        resource: "servicecidr"
+
+  - id: kubernetes.networking.servicecidrs.patch
+    match: { rest: { method: PATCH, path: "/apis/networking.k8s.io/{version}/servicecidrs/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: service-c-i-d-r }
+    card: "Change ServiceCIDR {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/networking-servicecidrs-patch.http
+        expect: write
+        resource: "servicecidr"
+
+  - id: kubernetes.networking.servicecidrs.replace
+    match: { rest: { method: PUT, path: "/apis/networking.k8s.io/{version}/servicecidrs/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: service-c-i-d-r }
+    card: "Replace ServiceCIDR {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/networking-servicecidrs-replace.http
+        expect: write
+        resource: "servicecidr"
+
+  - id: kubernetes.networking.servicecidrs.status.patch
+    match: { rest: { method: PATCH, path: "/apis/networking.k8s.io/{version}/servicecidrs/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: service-c-i-d-r }
+    card: "Change the status of ServiceCIDR {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/networking-servicecidrs-status-patch.http
+        expect: write
+        resource: "servicecidr"
+
+  - id: kubernetes.networking.servicecidrs.status.replace
+    match: { rest: { method: PUT, path: "/apis/networking.k8s.io/{version}/servicecidrs/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: service-c-i-d-r }
+    card: "Change the status of ServiceCIDR {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/networking-servicecidrs-status-replace.http
+        expect: write
+        resource: "servicecidr"

@@ -257,6 +257,27 @@ func TestLoadInvalid(t *testing.T) {
 		{"classify postgrest on a mutation", classifyRule(`{ postgrest: query }`), "is for PATCH and DELETE rules"},
 		{"classify postgrest with a dialect", classifyRule(`{ postgrest: query, dialect: mysql }`), "takes no dialect"},
 		{"classify postgrest bad path", classifyRule(`{ postgrest: "a..b" }`), "not an argument path"},
+		{"within without the other provider", func(m fstest.MapFS) {
+			m["beta/provider.yaml"] = &fstest.MapFile{Data: []byte("provider: beta\ntitle: Beta\nhosts: [\"*.k8s.acme.dev\"]\nwithin: [gamma]\n")}
+		}, "within: no provider gamma"},
+		{"within itself", func(m fstest.MapFS) {
+			m["beta/provider.yaml"] = &fstest.MapFile{Data: []byte("provider: beta\ntitle: Beta\nhosts: [\"*.k8s.acme.dev\"]\nwithin: [beta]\n")}
+		}, "within names the provider itself"},
+		{"inside a wildcard without within", func(m fstest.MapFS) {
+			replace("acme/provider.yaml", "hosts: [api.acme.dev]", `hosts: ["*.acme.dev"]`)(m)
+			m["beta/provider.yaml"] = &fstest.MapFile{Data: []byte("provider: beta\ntitle: Beta\nhosts: [\"*.k8s.acme.dev\"]\n")}
+		}, "overlaps"},
+		{"within the wrong provider", func(m fstest.MapFS) {
+			replace("acme/provider.yaml", "hosts: [api.acme.dev]", `hosts: ["*.acme.dev"]`)(m)
+			m["beta/provider.yaml"] = &fstest.MapFile{Data: []byte("provider: beta\ntitle: Beta\nhosts: [\"*.k8s.acme.dev\"]\nwithin: [gamma]\n")}
+			m["gamma/provider.yaml"] = &fstest.MapFile{Data: []byte("provider: gamma\ntitle: Gamma\nhosts: [api.gamma.dev]\n")}
+		}, "overlaps"},
+		{"within but wider", func(m fstest.MapFS) {
+			replace("acme/provider.yaml", "hosts: [api.acme.dev]", `hosts: ["*.k8s.acme.dev"]`)(m)
+			m["beta/provider.yaml"] = &fstest.MapFile{Data: []byte("provider: beta\ntitle: Beta\nhosts: [\"*.acme.dev\"]\nwithin: [acme]\n")}
+		}, "overlaps"},
+		{"host_arg_whole without host_arg", replace("acme/provider.yaml", "hosts: [api.acme.dev]", "hosts: [api.acme.dev]\nhost_arg_whole: true"), "host_arg_whole needs host_arg"},
+		{"own_ca with git", replace("acme/provider.yaml", "hosts: [api.acme.dev]", "hosts: [api.acme.dev]\ngit: [api.acme.dev]\nown_ca: true"), "own_ca provider takes REST"},
 		{"host arg named query", replace("acme/provider.yaml", "hosts: [api.acme.dev]", "hosts: [\"*.acme.dev\"]\nhost_arg: query"), "other than query and body"},
 		{"host arg without a wildcard host", replace("acme/provider.yaml", "hosts: [api.acme.dev]", "hosts: [api.acme.dev]\nhost_arg: ref"), "starts with *."},
 		{"host arg is a header arg", replace("acme/provider.yaml", "hosts: [api.acme.dev]", "hosts: [\"*.acme.dev\"]\nhost_arg: conn\nheader_args: [{header: X-Conn, arg: conn, parse: url}]"), "also a header_args arg"},
@@ -348,5 +369,27 @@ func TestEmbedded(t *testing.T) {
 	}
 	if c.Rule("railway.volume.delete") == nil {
 		t.Fatal("embedded catalog lacks railway.volume.delete")
+	}
+}
+
+// A provider may claim hosts inside another's *. pattern when it names it,
+// and the longer pattern wins.
+func TestWithin(t *testing.T) {
+	m := goodFS()
+	replace("acme/provider.yaml", "hosts: [api.acme.dev]", `hosts: ["*.acme.dev"]`)(m)
+	m["beta/provider.yaml"] = &fstest.MapFile{Data: []byte("provider: beta\ntitle: Beta\nhosts: [\"*.k8s.acme.dev\", api.k8s2.acme.dev]\nwithin: [acme]\nown_ca: true\nhost_arg: cluster\nhost_arg_whole: true\n")}
+	m["beta/r.yaml"] = &fstest.MapFile{Data: []byte("operations:\n  - id: beta.x.read\n    match: { rest: { method: GET, path: /x } }\n    class: read\n    status: community\n")}
+	c, err := Load(m)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for host, want := range map[string]string{"c1.eu.k8s.acme.dev": "beta", "api.k8s2.acme.dev": "beta", "api.acme.dev": "acme", "k8s.acme.dev": "acme"} {
+		if p := c.ProviderForHost(host); p == nil || p.ID != want {
+			t.Errorf("%s: got %v, want %s", host, p, want)
+		}
+	}
+	beta := c.Provider("beta")
+	if !beta.OwnCA || beta.Hints("c1.eu.k8s.acme.dev").HostArgValue != "c1.eu.k8s.acme.dev" {
+		t.Fatalf("host arg %q", beta.Hints("c1.eu.k8s.acme.dev").HostArgValue)
 	}
 }

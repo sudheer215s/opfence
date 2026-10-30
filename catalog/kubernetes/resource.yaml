@@ -1,0 +1,668 @@
+# Kubernetes API: resource (/apis/resource.k8s.io).
+# Generated from Kubernetes' OpenAPI description by tools/catalog-gen/k8sgen.py; classes reviewed by hand.
+operations:
+  - id: kubernetes.resource.deviceclasses.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/resource.k8s.io/{version}/deviceclasses" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the deviceclasses matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/resource-deviceclasses-delete-collection.http
+        expect: delete
+        resource: "8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net"
+      - fixture: fixtures/resource-deviceclasses-delete-collection-every.http
+        expect: irreversible
+        resource: "8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net"
+
+  - id: kubernetes.resource.deviceclasses.create
+    match: { rest: { method: POST, path: "/apis/resource.k8s.io/{version}/deviceclasses" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: device-class }
+    card: "Create DeviceClass {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/resource-deviceclasses-create.http
+        expect: write
+        resource: "deviceclasse"
+
+  - id: kubernetes.resource.deviceclasses.delete
+    match: { rest: { method: DELETE, path: "/apis/resource.k8s.io/{version}/deviceclasses/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: device-class }
+    card: "Delete DeviceClass {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/resource-deviceclasses-delete.http
+        expect: delete
+        resource: "deviceclasse"
+
+  - id: kubernetes.resource.deviceclasses.patch
+    match: { rest: { method: PATCH, path: "/apis/resource.k8s.io/{version}/deviceclasses/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: device-class }
+    card: "Change DeviceClass {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/resource-deviceclasses-patch.http
+        expect: write
+        resource: "deviceclasse"
+
+  - id: kubernetes.resource.deviceclasses.replace
+    match: { rest: { method: PUT, path: "/apis/resource.k8s.io/{version}/deviceclasses/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: device-class }
+    card: "Replace DeviceClass {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/resource-deviceclasses-replace.http
+        expect: write
+        resource: "deviceclasse"
+
+  - id: kubernetes.resource.devicetaintrules.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/resource.k8s.io/{version}/devicetaintrules" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the devicetaintrules matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/resource-devicetaintrules-delete-collection.http
+        expect: delete
+        resource: "8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net"
+      - fixture: fixtures/resource-devicetaintrules-delete-collection-every.http
+        expect: irreversible
+        resource: "8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net"
+
+  - id: kubernetes.resource.devicetaintrules.create
+    match: { rest: { method: POST, path: "/apis/resource.k8s.io/{version}/devicetaintrules" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: device-taint-rule }
+    card: "Create DeviceTaintRule {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/resource-devicetaintrules-create.http
+        expect: write
+        resource: "devicetaintrule"
+
+  - id: kubernetes.resource.devicetaintrules.delete
+    match: { rest: { method: DELETE, path: "/apis/resource.k8s.io/{version}/devicetaintrules/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: device-taint-rule }
+    card: "Delete DeviceTaintRule {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/resource-devicetaintrules-delete.http
+        expect: delete
+        resource: "devicetaintrule"
+
+  - id: kubernetes.resource.devicetaintrules.patch
+    match: { rest: { method: PATCH, path: "/apis/resource.k8s.io/{version}/devicetaintrules/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: device-taint-rule }
+    card: "Change DeviceTaintRule {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/resource-devicetaintrules-patch.http
+        expect: write
+        resource: "devicetaintrule"
+
+  - id: kubernetes.resource.devicetaintrules.replace
+    match: { rest: { method: PUT, path: "/apis/resource.k8s.io/{version}/devicetaintrules/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: device-taint-rule }
+    card: "Replace DeviceTaintRule {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/resource-devicetaintrules-replace.http
+        expect: write
+        resource: "devicetaintrule"
+
+  - id: kubernetes.resource.devicetaintrules.status.patch
+    match: { rest: { method: PATCH, path: "/apis/resource.k8s.io/{version}/devicetaintrules/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: device-taint-rule }
+    card: "Change the status of DeviceTaintRule {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/resource-devicetaintrules-status-patch.http
+        expect: write
+        resource: "devicetaintrule"
+
+  - id: kubernetes.resource.devicetaintrules.status.replace
+    match: { rest: { method: PUT, path: "/apis/resource.k8s.io/{version}/devicetaintrules/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: device-taint-rule }
+    card: "Change the status of DeviceTaintRule {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/resource-devicetaintrules-status-replace.http
+        expect: write
+        resource: "devicetaintrule"
+
+  - id: kubernetes.resource.resourceclaims.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/resource.k8s.io/{version}/namespaces/{namespace}/resourceclaims" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the resourceclaims matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/resource-resourceclaims-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/resource-resourceclaims-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.resource.resourceclaims.create
+    match: { rest: { method: POST, path: "/apis/resource.k8s.io/{version}/namespaces/{namespace}/resourceclaims" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create ResourceClaim {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/resource-resourceclaims-create.http
+        expect: write
+        resource: "shop"
+
+  - id: kubernetes.resource.resourceclaims.delete
+    match: { rest: { method: DELETE, path: "/apis/resource.k8s.io/{version}/namespaces/{namespace}/resourceclaims/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: resource-claim }
+    card: "Delete ResourceClaim {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/resource-resourceclaims-delete.http
+        expect: delete
+        resource: "resourceclaim"
+
+  - id: kubernetes.resource.resourceclaims.patch
+    match: { rest: { method: PATCH, path: "/apis/resource.k8s.io/{version}/namespaces/{namespace}/resourceclaims/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: resource-claim }
+    card: "Change ResourceClaim {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/resource-resourceclaims-patch.http
+        expect: write
+        resource: "resourceclaim"
+
+  - id: kubernetes.resource.resourceclaims.replace
+    match: { rest: { method: PUT, path: "/apis/resource.k8s.io/{version}/namespaces/{namespace}/resourceclaims/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: resource-claim }
+    card: "Replace ResourceClaim {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/resource-resourceclaims-replace.http
+        expect: write
+        resource: "resourceclaim"
+
+  - id: kubernetes.resource.resourceclaims.status.patch
+    match: { rest: { method: PATCH, path: "/apis/resource.k8s.io/{version}/namespaces/{namespace}/resourceclaims/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: resource-claim }
+    card: "Change the status of ResourceClaim {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/resource-resourceclaims-status-patch.http
+        expect: write
+        resource: "resourceclaim"
+
+  - id: kubernetes.resource.resourceclaims.status.replace
+    match: { rest: { method: PUT, path: "/apis/resource.k8s.io/{version}/namespaces/{namespace}/resourceclaims/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: resource-claim }
+    card: "Change the status of ResourceClaim {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/resource-resourceclaims-status-replace.http
+        expect: write
+        resource: "resourceclaim"
+
+  - id: kubernetes.resource.resourceclaimtemplates.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/resource.k8s.io/{version}/namespaces/{namespace}/resourceclaimtemplates" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the resourceclaimtemplates matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/resource-resourceclaimtemplates-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/resource-resourceclaimtemplates-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.resource.resourceclaimtemplates.create
+    match: { rest: { method: POST, path: "/apis/resource.k8s.io/{version}/namespaces/{namespace}/resourceclaimtemplates" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create ResourceClaimTemplate {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/resource-resourceclaimtemplates-create.http
+        expect: write
+        resource: "shop"
+
+  - id: kubernetes.resource.resourceclaimtemplates.delete
+    match: { rest: { method: DELETE, path: "/apis/resource.k8s.io/{version}/namespaces/{namespace}/resourceclaimtemplates/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: resource-claim-template }
+    card: "Delete ResourceClaimTemplate {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/resource-resourceclaimtemplates-delete.http
+        expect: delete
+        resource: "resourceclaimtemplate"
+
+  - id: kubernetes.resource.resourceclaimtemplates.patch
+    match: { rest: { method: PATCH, path: "/apis/resource.k8s.io/{version}/namespaces/{namespace}/resourceclaimtemplates/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: resource-claim-template }
+    card: "Change ResourceClaimTemplate {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/resource-resourceclaimtemplates-patch.http
+        expect: write
+        resource: "resourceclaimtemplate"
+
+  - id: kubernetes.resource.resourceclaimtemplates.replace
+    match: { rest: { method: PUT, path: "/apis/resource.k8s.io/{version}/namespaces/{namespace}/resourceclaimtemplates/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: resource-claim-template }
+    card: "Replace ResourceClaimTemplate {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/resource-resourceclaimtemplates-replace.http
+        expect: write
+        resource: "resourceclaimtemplate"
+
+  - id: kubernetes.resource.resourcepoolstatusrequests.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/resource.k8s.io/{version}/resourcepoolstatusrequests" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the resourcepoolstatusrequests matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/resource-resourcepoolstatusrequests-delete-collection.http
+        expect: delete
+        resource: "3f2a7c1e-5b9d-4e8a-9c1f-2d7e6b5a4c3d.k8s.ondigitalocean.com"
+      - fixture: fixtures/resource-resourcepoolstatusrequests-delete-collection-every.http
+        expect: irreversible
+        resource: "3f2a7c1e-5b9d-4e8a-9c1f-2d7e6b5a4c3d.k8s.ondigitalocean.com"
+
+  - id: kubernetes.resource.resourcepoolstatusrequests.create
+    match: { rest: { method: POST, path: "/apis/resource.k8s.io/{version}/resourcepoolstatusrequests" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: resource-pool-status-request }
+    card: "Create ResourcePoolStatusRequest {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/resource-resourcepoolstatusrequests-create.http
+        expect: write
+        resource: "resourcepoolstatusrequest"
+
+  - id: kubernetes.resource.resourcepoolstatusrequests.delete
+    match: { rest: { method: DELETE, path: "/apis/resource.k8s.io/{version}/resourcepoolstatusrequests/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: resource-pool-status-request }
+    card: "Delete ResourcePoolStatusRequest {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/resource-resourcepoolstatusrequests-delete.http
+        expect: delete
+        resource: "resourcepoolstatusrequest"
+
+  - id: kubernetes.resource.resourcepoolstatusrequests.patch
+    match: { rest: { method: PATCH, path: "/apis/resource.k8s.io/{version}/resourcepoolstatusrequests/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: resource-pool-status-request }
+    card: "Change ResourcePoolStatusRequest {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/resource-resourcepoolstatusrequests-patch.http
+        expect: write
+        resource: "resourcepoolstatusrequest"
+
+  - id: kubernetes.resource.resourcepoolstatusrequests.replace
+    match: { rest: { method: PUT, path: "/apis/resource.k8s.io/{version}/resourcepoolstatusrequests/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: resource-pool-status-request }
+    card: "Replace ResourcePoolStatusRequest {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/resource-resourcepoolstatusrequests-replace.http
+        expect: write
+        resource: "resourcepoolstatusrequest"
+
+  - id: kubernetes.resource.resourcepoolstatusrequests.status.patch
+    match: { rest: { method: PATCH, path: "/apis/resource.k8s.io/{version}/resourcepoolstatusrequests/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: resource-pool-status-request }
+    card: "Change the status of ResourcePoolStatusRequest {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/resource-resourcepoolstatusrequests-status-patch.http
+        expect: write
+        resource: "resourcepoolstatusrequest"
+
+  - id: kubernetes.resource.resourcepoolstatusrequests.status.replace
+    match: { rest: { method: PUT, path: "/apis/resource.k8s.io/{version}/resourcepoolstatusrequests/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: resource-pool-status-request }
+    card: "Change the status of ResourcePoolStatusRequest {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/resource-resourcepoolstatusrequests-status-replace.http
+        expect: write
+        resource: "resourcepoolstatusrequest"
+
+  - id: kubernetes.resource.resourceslices.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/resource.k8s.io/{version}/resourceslices" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the resourceslices matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/resource-resourceslices-delete-collection.http
+        expect: delete
+        resource: "a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com"
+      - fixture: fixtures/resource-resourceslices-delete-collection-every.http
+        expect: irreversible
+        resource: "a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com"
+
+  - id: kubernetes.resource.resourceslices.create
+    match: { rest: { method: POST, path: "/apis/resource.k8s.io/{version}/resourceslices" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: resource-slice }
+    card: "Create ResourceSlice {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/resource-resourceslices-create.http
+        expect: write
+        resource: "resourceslice"
+
+  - id: kubernetes.resource.resourceslices.delete
+    match: { rest: { method: DELETE, path: "/apis/resource.k8s.io/{version}/resourceslices/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: resource-slice }
+    card: "Delete ResourceSlice {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/resource-resourceslices-delete.http
+        expect: delete
+        resource: "resourceslice"
+
+  - id: kubernetes.resource.resourceslices.patch
+    match: { rest: { method: PATCH, path: "/apis/resource.k8s.io/{version}/resourceslices/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: resource-slice }
+    card: "Change ResourceSlice {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/resource-resourceslices-patch.http
+        expect: write
+        resource: "resourceslice"
+
+  - id: kubernetes.resource.resourceslices.replace
+    match: { rest: { method: PUT, path: "/apis/resource.k8s.io/{version}/resourceslices/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: resource-slice }
+    card: "Replace ResourceSlice {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/resource-resourceslices-replace.http
+        expect: write
+        resource: "resourceslice"

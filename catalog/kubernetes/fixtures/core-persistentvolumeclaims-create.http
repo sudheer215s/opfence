@@ -1,0 +1,8 @@
+# description: Create PersistentVolumeClaim data-postgres-0 in namespace shop on cluster a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com
+POST /api/v1/namespaces/shop/persistentvolumeclaims HTTP/1.1
+Host: a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/json
+
+{"apiVersion":"v1","kind":"PersistentVolumeClaim","metadata":{"name":"data-postgres-0","namespace":"shop"}}

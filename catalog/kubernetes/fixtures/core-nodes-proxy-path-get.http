@@ -1,0 +1,6 @@
+# description: Send GET to Node ip-10-0-1-23.ec2.internal at /metrics through the API server on cluster shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+GET /api/v1/nodes/ip-10-0-1-23.ec2.internal/proxy/metrics HTTP/1.1
+Host: shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+

@@ -1,0 +1,8 @@
+# description: Change the status of VolumeAttachment volumeattachment on cluster shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+PATCH /apis/storage.k8s.io/v1/volumeattachments/volumeattachment/status HTTP/1.1
+Host: shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/merge-patch+json
+
+{"status":{"conditions":[]}}

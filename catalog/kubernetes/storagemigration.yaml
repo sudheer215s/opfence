@@ -1,0 +1,130 @@
+# Kubernetes API: storagemigration (/apis/storagemigration.k8s.io).
+# Generated from Kubernetes' OpenAPI description by tools/catalog-gen/k8sgen.py; classes reviewed by hand.
+operations:
+  - id: kubernetes.storagemigration.storageversionmigrations.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/storagemigration.k8s.io/{version}/storageversionmigrations" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the storageversionmigrations matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/storagemigration-storageversionmigrations-delete-collection.http
+        expect: delete
+        resource: "3f2a7c1e-5b9d-4e8a-9c1f-2d7e6b5a4c3d.k8s.ondigitalocean.com"
+      - fixture: fixtures/storagemigration-storageversionmigrations-delete-collection-every.http
+        expect: irreversible
+        resource: "3f2a7c1e-5b9d-4e8a-9c1f-2d7e6b5a4c3d.k8s.ondigitalocean.com"
+
+  - id: kubernetes.storagemigration.storageversionmigrations.create
+    match: { rest: { method: POST, path: "/apis/storagemigration.k8s.io/{version}/storageversionmigrations" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: storage-version-migration }
+    card: "Create StorageVersionMigration {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storagemigration-storageversionmigrations-create.http
+        expect: write
+        resource: "storageversionmigration"
+
+  - id: kubernetes.storagemigration.storageversionmigrations.delete
+    match: { rest: { method: DELETE, path: "/apis/storagemigration.k8s.io/{version}/storageversionmigrations/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: storage-version-migration }
+    card: "Delete StorageVersionMigration {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/storagemigration-storageversionmigrations-delete.http
+        expect: delete
+        resource: "storageversionmigration"
+
+  - id: kubernetes.storagemigration.storageversionmigrations.patch
+    match: { rest: { method: PATCH, path: "/apis/storagemigration.k8s.io/{version}/storageversionmigrations/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: storage-version-migration }
+    card: "Change StorageVersionMigration {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storagemigration-storageversionmigrations-patch.http
+        expect: write
+        resource: "storageversionmigration"
+
+  - id: kubernetes.storagemigration.storageversionmigrations.replace
+    match: { rest: { method: PUT, path: "/apis/storagemigration.k8s.io/{version}/storageversionmigrations/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: storage-version-migration }
+    card: "Replace StorageVersionMigration {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storagemigration-storageversionmigrations-replace.http
+        expect: write
+        resource: "storageversionmigration"
+
+  - id: kubernetes.storagemigration.storageversionmigrations.status.patch
+    match: { rest: { method: PATCH, path: "/apis/storagemigration.k8s.io/{version}/storageversionmigrations/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: storage-version-migration }
+    card: "Change the status of StorageVersionMigration {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storagemigration-storageversionmigrations-status-patch.http
+        expect: write
+        resource: "storageversionmigration"
+
+  - id: kubernetes.storagemigration.storageversionmigrations.status.replace
+    match: { rest: { method: PUT, path: "/apis/storagemigration.k8s.io/{version}/storageversionmigrations/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: storage-version-migration }
+    card: "Change the status of StorageVersionMigration {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storagemigration-storageversionmigrations-status-replace.http
+        expect: write
+        resource: "storageversionmigration"

@@ -1,0 +1,446 @@
+# Kubernetes API: scheduling (/apis/scheduling.k8s.io).
+# Generated from Kubernetes' OpenAPI description by tools/catalog-gen/k8sgen.py; classes reviewed by hand.
+operations:
+  - id: kubernetes.scheduling.compositepodgroups.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/scheduling.k8s.io/{version}/namespaces/{namespace}/compositepodgroups" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the compositepodgroups matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/scheduling-compositepodgroups-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/scheduling-compositepodgroups-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.scheduling.compositepodgroups.create
+    match: { rest: { method: POST, path: "/apis/scheduling.k8s.io/{version}/namespaces/{namespace}/compositepodgroups" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create CompositePodGroup {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/scheduling-compositepodgroups-create.http
+        expect: write
+        resource: "shop"
+
+  - id: kubernetes.scheduling.compositepodgroups.delete
+    match: { rest: { method: DELETE, path: "/apis/scheduling.k8s.io/{version}/namespaces/{namespace}/compositepodgroups/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: composite-pod-group }
+    card: "Delete CompositePodGroup {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/scheduling-compositepodgroups-delete.http
+        expect: delete
+        resource: "compositepodgroup"
+
+  - id: kubernetes.scheduling.compositepodgroups.patch
+    match: { rest: { method: PATCH, path: "/apis/scheduling.k8s.io/{version}/namespaces/{namespace}/compositepodgroups/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: composite-pod-group }
+    card: "Change CompositePodGroup {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/scheduling-compositepodgroups-patch.http
+        expect: write
+        resource: "compositepodgroup"
+
+  - id: kubernetes.scheduling.compositepodgroups.replace
+    match: { rest: { method: PUT, path: "/apis/scheduling.k8s.io/{version}/namespaces/{namespace}/compositepodgroups/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: composite-pod-group }
+    card: "Replace CompositePodGroup {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/scheduling-compositepodgroups-replace.http
+        expect: write
+        resource: "compositepodgroup"
+
+  - id: kubernetes.scheduling.compositepodgroups.status.patch
+    match: { rest: { method: PATCH, path: "/apis/scheduling.k8s.io/{version}/namespaces/{namespace}/compositepodgroups/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: composite-pod-group }
+    card: "Change the status of CompositePodGroup {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/scheduling-compositepodgroups-status-patch.http
+        expect: write
+        resource: "compositepodgroup"
+
+  - id: kubernetes.scheduling.compositepodgroups.status.replace
+    match: { rest: { method: PUT, path: "/apis/scheduling.k8s.io/{version}/namespaces/{namespace}/compositepodgroups/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: composite-pod-group }
+    card: "Change the status of CompositePodGroup {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/scheduling-compositepodgroups-status-replace.http
+        expect: write
+        resource: "compositepodgroup"
+
+  - id: kubernetes.scheduling.podgroups.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/scheduling.k8s.io/{version}/namespaces/{namespace}/podgroups" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the podgroups matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/scheduling-podgroups-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/scheduling-podgroups-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.scheduling.podgroups.create
+    match: { rest: { method: POST, path: "/apis/scheduling.k8s.io/{version}/namespaces/{namespace}/podgroups" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create PodGroup {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/scheduling-podgroups-create.http
+        expect: write
+        resource: "shop"
+
+  - id: kubernetes.scheduling.podgroups.delete
+    match: { rest: { method: DELETE, path: "/apis/scheduling.k8s.io/{version}/namespaces/{namespace}/podgroups/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod-group }
+    card: "Delete PodGroup {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/scheduling-podgroups-delete.http
+        expect: delete
+        resource: "podgroup"
+
+  - id: kubernetes.scheduling.podgroups.patch
+    match: { rest: { method: PATCH, path: "/apis/scheduling.k8s.io/{version}/namespaces/{namespace}/podgroups/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod-group }
+    card: "Change PodGroup {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/scheduling-podgroups-patch.http
+        expect: write
+        resource: "podgroup"
+
+  - id: kubernetes.scheduling.podgroups.replace
+    match: { rest: { method: PUT, path: "/apis/scheduling.k8s.io/{version}/namespaces/{namespace}/podgroups/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod-group }
+    card: "Replace PodGroup {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/scheduling-podgroups-replace.http
+        expect: write
+        resource: "podgroup"
+
+  - id: kubernetes.scheduling.podgroups.status.patch
+    match: { rest: { method: PATCH, path: "/apis/scheduling.k8s.io/{version}/namespaces/{namespace}/podgroups/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod-group }
+    card: "Change the status of PodGroup {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/scheduling-podgroups-status-patch.http
+        expect: write
+        resource: "podgroup"
+
+  - id: kubernetes.scheduling.podgroups.status.replace
+    match: { rest: { method: PUT, path: "/apis/scheduling.k8s.io/{version}/namespaces/{namespace}/podgroups/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod-group }
+    card: "Change the status of PodGroup {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/scheduling-podgroups-status-replace.http
+        expect: write
+        resource: "podgroup"
+
+  - id: kubernetes.scheduling.priorityclasses.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/scheduling.k8s.io/{version}/priorityclasses" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the priorityclasses matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/scheduling-priorityclasses-delete-collection.http
+        expect: delete
+        resource: "8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net"
+      - fixture: fixtures/scheduling-priorityclasses-delete-collection-every.http
+        expect: irreversible
+        resource: "8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net"
+
+  - id: kubernetes.scheduling.priorityclasses.create
+    match: { rest: { method: POST, path: "/apis/scheduling.k8s.io/{version}/priorityclasses" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: priority-class }
+    card: "Create PriorityClass {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/scheduling-priorityclasses-create.http
+        expect: write
+        resource: "priorityclasse"
+
+  - id: kubernetes.scheduling.priorityclasses.delete
+    match: { rest: { method: DELETE, path: "/apis/scheduling.k8s.io/{version}/priorityclasses/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: priority-class }
+    card: "Delete PriorityClass {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/scheduling-priorityclasses-delete.http
+        expect: delete
+        resource: "priorityclasse"
+
+  - id: kubernetes.scheduling.priorityclasses.patch
+    match: { rest: { method: PATCH, path: "/apis/scheduling.k8s.io/{version}/priorityclasses/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: priority-class }
+    card: "Change PriorityClass {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/scheduling-priorityclasses-patch.http
+        expect: write
+        resource: "priorityclasse"
+
+  - id: kubernetes.scheduling.priorityclasses.replace
+    match: { rest: { method: PUT, path: "/apis/scheduling.k8s.io/{version}/priorityclasses/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: priority-class }
+    card: "Replace PriorityClass {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/scheduling-priorityclasses-replace.http
+        expect: write
+        resource: "priorityclasse"
+
+  - id: kubernetes.scheduling.workloads.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/scheduling.k8s.io/{version}/namespaces/{namespace}/workloads" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the workloads matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/scheduling-workloads-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/scheduling-workloads-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.scheduling.workloads.create
+    match: { rest: { method: POST, path: "/apis/scheduling.k8s.io/{version}/namespaces/{namespace}/workloads" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create Workload {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/scheduling-workloads-create.http
+        expect: write
+        resource: "shop"
+
+  - id: kubernetes.scheduling.workloads.delete
+    match: { rest: { method: DELETE, path: "/apis/scheduling.k8s.io/{version}/namespaces/{namespace}/workloads/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: workload }
+    card: "Delete Workload {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/scheduling-workloads-delete.http
+        expect: delete
+        resource: "workload"
+
+  - id: kubernetes.scheduling.workloads.patch
+    match: { rest: { method: PATCH, path: "/apis/scheduling.k8s.io/{version}/namespaces/{namespace}/workloads/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: workload }
+    card: "Change Workload {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/scheduling-workloads-patch.http
+        expect: write
+        resource: "workload"
+
+  - id: kubernetes.scheduling.workloads.replace
+    match: { rest: { method: PUT, path: "/apis/scheduling.k8s.io/{version}/namespaces/{namespace}/workloads/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: workload }
+    card: "Replace Workload {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/scheduling-workloads-replace.http
+        expect: write
+        resource: "workload"

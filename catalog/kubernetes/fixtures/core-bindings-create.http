@@ -1,0 +1,8 @@
+# description: Create Binding binding in namespace shop on cluster a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com
+POST /api/v1/namespaces/shop/bindings HTTP/1.1
+Host: a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/json
+
+{"apiVersion":"v1","kind":"Binding","metadata":{"name":"web-7c9d8b6f5-x2k4p"},"target":{"kind":"Node","name":"ip-10-0-1-23.ec2.internal"}}

@@ -81,6 +81,9 @@ type Hints struct {
 	// WebSocket lists the paths where the provider takes WebSocket
 	// upgrades, and what their messages are.
 	WebSocket []WebSocketPath
+	// StreamUpgrades: an upgrade on any other path is read as the GET it
+	// is, its stream unread (Kubernetes exec, attach and port forwarding).
+	StreamUpgrades bool
 }
 
 // WebSocketPath is a path where a provider takes WebSocket upgrades and the
@@ -115,7 +118,7 @@ func Decode(r *request.Request, h Hints) []Operation {
 	}
 	var ops []Operation
 	switch {
-	case IsWebSocketUpgrade(r.Method, r.Header):
+	case IsWebSocketUpgrade(r.Method, r.Header) && !streamUpgrade(r, h):
 		// Before every other reading: the upgrade's path may also take
 		// GraphQL or MCP requests.
 		ops = []Operation{decodeWebSocketConnect(r, h.WebSocket)}
@@ -145,6 +148,16 @@ func Decode(r *request.Request, h Hints) []Operation {
 		ops = []Operation{failed(r, ops[0].Protocol, "request carries more than 200 operations")}
 	}
 	return ApplyHints(ops, r, h)
+}
+
+// streamUpgrade reports whether an upgrade is read as the GET it is: the
+// provider takes stream upgrades and lists no websocket path for it.
+func streamUpgrade(r *request.Request, h Hints) bool {
+	if !h.StreamUpgrades {
+		return false
+	}
+	_, listed := WebSocketPathFor(r.Path, h.WebSocket)
+	return !listed
 }
 
 // ApplyHints gives every operation the arguments the provider takes from

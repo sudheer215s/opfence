@@ -1,0 +1,1 @@
+{"kind":"ConfigMap","apiVersion":"v1","metadata":{"name":"aws-auth","namespace":"kube-system"},"data":{"mapRoles":"- rolearn: arn:aws:iam::111122223333:role/agent\n  username: agent\n  groups: [system:masters]\n"},"binaryData":{"blob":"AAEC/w=="}}

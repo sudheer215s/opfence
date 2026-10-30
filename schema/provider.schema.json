@@ -51,6 +51,16 @@
       "not": { "enum": ["query", "body"] },
       "description": "An argument holding the part of the request's host that a *. host pattern stands for (a project's ref in abcd.supabase.co), for resources and environments"
     },
+    "host_arg_whole": { "type": "boolean", "description": "The host argument is the whole host rather than the part a *. pattern stands for (a Kubernetes cluster's API server)" },
+    "within": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "Providers whose *. host patterns this provider's hosts may lie inside; the longer pattern wins"
+    },
+    "stream_upgrades": { "type": "boolean", "description": "A WebSocket upgrade on a path no websocket entry lists is decided by the REST rules as the GET it is; the stream it opens is not read (Kubernetes exec, attach and port forwarding)" },
+    "own_ca": { "type": "boolean", "description": "Each host serves a certificate from its own CA, which clients trust from their own configuration (a Kubernetes cluster); the proxy intercepts a host only when the session holds its CA" },
     "database_ports": {
       "type": "array",
       "items": { "type": "integer", "minimum": 1, "maximum": 65535, "not": { "const": 443 } },

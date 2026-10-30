@@ -1,0 +1,3161 @@
+# Kubernetes API: core (core group, /api/v1).
+# Generated from Kubernetes' OpenAPI description by tools/catalog-gen/k8sgen.py; classes reviewed by hand.
+operations:
+  - id: kubernetes.core.bindings.create
+    match: { rest: { method: POST, path: "/api/v1/namespaces/{namespace}/bindings" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create Binding {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Binds a pod to a node, as the scheduler does.
+    tests:
+      - fixture: fixtures/core-bindings-create.http
+        expect: write
+        resource: "shop"
+
+  - id: kubernetes.core.configmaps.delete-collection
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/configmaps" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the configmaps matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/core-configmaps-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/core-configmaps-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.core.configmaps.create
+    match: { rest: { method: POST, path: "/api/v1/namespaces/{namespace}/configmaps" } }
+    class: write
+    when:
+      - if: { arg: body.metadata.name, equals: "aws-auth" }
+        class: access
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create ConfigMap {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      On EKS, kube-system/aws-auth maps IAM roles and users to Kubernetes users and groups, so
+      writing it is access.
+    tests:
+      - fixture: fixtures/core-configmaps-create.http
+        expect: write
+        resource: "shop"
+      - fixture: fixtures/core-configmaps-create-aws-auth-protobuf.http
+        expect: access
+        resource: "kube-system"
+
+  - id: kubernetes.core.configmaps.delete
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/configmaps/{name}" } }
+    class: delete
+    when:
+      - if: { arg: name, equals: "aws-auth" }
+        class: delete
+      - if: { arg: name, equals: "aws-auth" }
+        class: access
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: config-map }
+    card: "Delete ConfigMap {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object. Deleting kube-system/aws-auth on EKS also takes
+      away the access of every IAM role and user it maps (access).
+    tests:
+      - fixture: fixtures/core-configmaps-delete.http
+        expect: delete
+        resource: "configmap"
+      - fixture: fixtures/core-configmaps-delete-aws-auth.http
+        expect: access
+        resource: "aws-auth"
+
+  - id: kubernetes.core.configmaps.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{namespace}/configmaps/{name}" } }
+    class: write
+    when:
+      - if: { arg: name, equals: "aws-auth" }
+        class: access
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: config-map }
+    card: "Change ConfigMap {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      On EKS, kube-system/aws-auth maps IAM roles and users to Kubernetes users and groups, so
+      writing it is access.
+    tests:
+      - fixture: fixtures/core-configmaps-patch.http
+        expect: write
+        resource: "configmap"
+      - fixture: fixtures/core-configmaps-patch-aws-auth.http
+        expect: access
+        resource: "aws-auth"
+
+  - id: kubernetes.core.configmaps.replace
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{namespace}/configmaps/{name}" } }
+    class: write
+    when:
+      - if: { arg: name, equals: "aws-auth" }
+        class: access
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: config-map }
+    card: "Replace ConfigMap {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      On EKS, kube-system/aws-auth maps IAM roles and users to Kubernetes users and groups, so
+      writing it is access.
+    tests:
+      - fixture: fixtures/core-configmaps-replace.http
+        expect: write
+        resource: "configmap"
+
+  - id: kubernetes.core.endpoints.delete-collection
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/endpoints" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the endpoints matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/core-endpoints-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/core-endpoints-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.core.endpoints.create
+    match: { rest: { method: POST, path: "/api/v1/namespaces/{namespace}/endpoints" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create Endpoints {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-endpoints-create.http
+        expect: write
+        resource: "shop"
+
+  - id: kubernetes.core.endpoints.delete
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/endpoints/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: endpoints }
+    card: "Delete Endpoints {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/core-endpoints-delete.http
+        expect: delete
+        resource: "endpoint"
+
+  - id: kubernetes.core.endpoints.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{namespace}/endpoints/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: endpoints }
+    card: "Change Endpoints {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-endpoints-patch.http
+        expect: write
+        resource: "endpoint"
+
+  - id: kubernetes.core.endpoints.replace
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{namespace}/endpoints/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: endpoints }
+    card: "Replace Endpoints {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-endpoints-replace.http
+        expect: write
+        resource: "endpoint"
+
+  - id: kubernetes.core.events.delete-collection
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/events" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the events matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/core-events-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/core-events-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.core.events.create
+    match: { rest: { method: POST, path: "/api/v1/namespaces/{namespace}/events" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create Event {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-events-create.http
+        expect: write
+        resource: "shop"
+
+  - id: kubernetes.core.events.delete
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/events/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: event }
+    card: "Delete Event {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/core-events-delete.http
+        expect: delete
+        resource: "event"
+
+  - id: kubernetes.core.events.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{namespace}/events/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: event }
+    card: "Change Event {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-events-patch.http
+        expect: write
+        resource: "event"
+
+  - id: kubernetes.core.events.replace
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{namespace}/events/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: event }
+    card: "Replace Event {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-events-replace.http
+        expect: write
+        resource: "event"
+
+  - id: kubernetes.core.limitranges.delete-collection
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/limitranges" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the limitranges matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/core-limitranges-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/core-limitranges-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.core.limitranges.create
+    match: { rest: { method: POST, path: "/api/v1/namespaces/{namespace}/limitranges" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create LimitRange {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-limitranges-create.http
+        expect: write
+        resource: "shop"
+
+  - id: kubernetes.core.limitranges.delete
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/limitranges/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: limit-range }
+    card: "Delete LimitRange {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/core-limitranges-delete.http
+        expect: delete
+        resource: "limitrange"
+
+  - id: kubernetes.core.limitranges.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{namespace}/limitranges/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: limit-range }
+    card: "Change LimitRange {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-limitranges-patch.http
+        expect: write
+        resource: "limitrange"
+
+  - id: kubernetes.core.limitranges.replace
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{namespace}/limitranges/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: limit-range }
+    card: "Replace LimitRange {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-limitranges-replace.http
+        expect: write
+        resource: "limitrange"
+
+  - id: kubernetes.core.namespaces.create
+    match: { rest: { method: POST, path: "/api/v1/namespaces" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: namespace }
+    card: "Create Namespace {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-namespaces-create.http
+        expect: write
+        resource: "shop"
+
+  - id: kubernetes.core.namespaces.delete
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{name}" } }
+    class: irreversible
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: namespace }
+    card: "Delete Namespace {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Deleting a namespace deletes every object in it, with the Secrets and volume claims it holds.
+    tests:
+      - fixture: fixtures/core-namespaces-delete.http
+        expect: irreversible
+        resource: "shop"
+      - fixture: fixtures/core-namespaces-delete-dry-run.http
+        expect: read
+        resource: "shop"
+      - fixture: fixtures/core-namespaces-delete-dry-run-query.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.core.namespaces.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: namespace }
+    card: "Change Namespace {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-namespaces-patch.http
+        expect: write
+        resource: "shop"
+
+  - id: kubernetes.core.namespaces.replace
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: namespace }
+    card: "Replace Namespace {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-namespaces-replace.http
+        expect: write
+        resource: "shop"
+
+  - id: kubernetes.core.namespaces.finalize.replace
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{name}/finalize" } }
+    class: irreversible
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: namespace }
+    card: "Remove the finalizers of Namespace {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Removing a terminating namespace's finalizers ends its deletion before the cleanup they guard
+      has run.
+    tests:
+      - fixture: fixtures/core-namespaces-finalize-replace.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.core.namespaces.status.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: namespace }
+    card: "Change the status of Namespace {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-namespaces-status-patch.http
+        expect: write
+        resource: "shop"
+
+  - id: kubernetes.core.namespaces.status.replace
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: namespace }
+    card: "Change the status of Namespace {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-namespaces-status-replace.http
+        expect: write
+        resource: "shop"
+
+  - id: kubernetes.core.nodes.delete-collection
+    match: { rest: { method: DELETE, path: "/api/v1/nodes" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the nodes matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/core-nodes-delete-collection.http
+        expect: delete
+        resource: "3f2a7c1e-5b9d-4e8a-9c1f-2d7e6b5a4c3d.k8s.ondigitalocean.com"
+      - fixture: fixtures/core-nodes-delete-collection-every.http
+        expect: irreversible
+        resource: "3f2a7c1e-5b9d-4e8a-9c1f-2d7e6b5a4c3d.k8s.ondigitalocean.com"
+
+  - id: kubernetes.core.nodes.create
+    match: { rest: { method: POST, path: "/api/v1/nodes" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: node }
+    card: "Create Node {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-nodes-create.http
+        expect: write
+        resource: "ip-10-0-1-23.ec2.internal"
+
+  - id: kubernetes.core.nodes.delete
+    match: { rest: { method: DELETE, path: "/api/v1/nodes/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: node }
+    card: "Delete Node {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/core-nodes-delete.http
+        expect: delete
+        resource: "ip-10-0-1-23.ec2.internal"
+
+  - id: kubernetes.core.nodes.patch
+    match: { rest: { method: PATCH, path: "/api/v1/nodes/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: node }
+    card: "Change Node {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-nodes-patch.http
+        expect: write
+        resource: "ip-10-0-1-23.ec2.internal"
+
+  - id: kubernetes.core.nodes.replace
+    match: { rest: { method: PUT, path: "/api/v1/nodes/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: node }
+    card: "Replace Node {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-nodes-replace.http
+        expect: write
+        resource: "ip-10-0-1-23.ec2.internal"
+
+  - id: kubernetes.core.nodes.proxy.delete
+    match: { rest: { method: DELETE, path: "/api/v1/nodes/{name}/proxy" } }
+    class: irreversible
+    resource: { arg: name, kind: node }
+    card: "Send DELETE to Node {name} through the API server on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Reaches the node's kubelet API, which runs commands in any pod on the node.
+    tests:
+      - fixture: fixtures/core-nodes-proxy-delete.http
+        expect: irreversible
+        resource: "ip-10-0-1-23.ec2.internal"
+
+  - id: kubernetes.core.nodes.proxy-path.delete
+    match: { rest: { method: DELETE, path: "/api/v1/nodes/{name}/proxy/{path*}" } }
+    class: irreversible
+    resource: { arg: name, kind: node }
+    card: "Send DELETE to Node {name} at /{path} through the API server on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Reaches the node's kubelet API, which runs commands in any pod on the node.
+    tests:
+      - fixture: fixtures/core-nodes-proxy-path-delete.http
+        expect: irreversible
+        resource: "ip-10-0-1-23.ec2.internal"
+
+  - id: kubernetes.core.nodes.proxy.get
+    match: { rest: { method: GET, path: "/api/v1/nodes/{name}/proxy" } }
+    class: irreversible
+    resource: { arg: name, kind: node }
+    card: "Send GET to Node {name} through the API server on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Reaches the node's kubelet API, which runs commands in any pod on the node.
+    tests:
+      - fixture: fixtures/core-nodes-proxy-get.http
+        expect: irreversible
+        resource: "ip-10-0-1-23.ec2.internal"
+
+  - id: kubernetes.core.nodes.proxy-path.get
+    match: { rest: { method: GET, path: "/api/v1/nodes/{name}/proxy/{path*}" } }
+    class: irreversible
+    resource: { arg: name, kind: node }
+    card: "Send GET to Node {name} at /{path} through the API server on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Reaches the node's kubelet API, which runs commands in any pod on the node.
+    tests:
+      - fixture: fixtures/core-nodes-proxy-path-get.http
+        expect: irreversible
+        resource: "ip-10-0-1-23.ec2.internal"
+
+  - id: kubernetes.core.nodes.proxy.head
+    match: { rest: { method: HEAD, path: "/api/v1/nodes/{name}/proxy" } }
+    class: irreversible
+    resource: { arg: name, kind: node }
+    card: "Send HEAD to Node {name} through the API server on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Reaches the node's kubelet API, which runs commands in any pod on the node.
+    tests:
+      - fixture: fixtures/core-nodes-proxy-head.http
+        expect: irreversible
+        resource: "ip-10-0-1-23.ec2.internal"
+
+  - id: kubernetes.core.nodes.proxy-path.head
+    match: { rest: { method: HEAD, path: "/api/v1/nodes/{name}/proxy/{path*}" } }
+    class: irreversible
+    resource: { arg: name, kind: node }
+    card: "Send HEAD to Node {name} at /{path} through the API server on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Reaches the node's kubelet API, which runs commands in any pod on the node.
+    tests:
+      - fixture: fixtures/core-nodes-proxy-path-head.http
+        expect: irreversible
+        resource: "ip-10-0-1-23.ec2.internal"
+
+  - id: kubernetes.core.nodes.proxy.options
+    match: { rest: { method: OPTIONS, path: "/api/v1/nodes/{name}/proxy" } }
+    class: irreversible
+    resource: { arg: name, kind: node }
+    card: "Send OPTIONS to Node {name} through the API server on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Reaches the node's kubelet API, which runs commands in any pod on the node.
+    tests:
+      - fixture: fixtures/core-nodes-proxy-options.http
+        expect: irreversible
+        resource: "ip-10-0-1-23.ec2.internal"
+
+  - id: kubernetes.core.nodes.proxy-path.options
+    match: { rest: { method: OPTIONS, path: "/api/v1/nodes/{name}/proxy/{path*}" } }
+    class: irreversible
+    resource: { arg: name, kind: node }
+    card: "Send OPTIONS to Node {name} at /{path} through the API server on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Reaches the node's kubelet API, which runs commands in any pod on the node.
+    tests:
+      - fixture: fixtures/core-nodes-proxy-path-options.http
+        expect: irreversible
+        resource: "ip-10-0-1-23.ec2.internal"
+
+  - id: kubernetes.core.nodes.proxy.patch
+    match: { rest: { method: PATCH, path: "/api/v1/nodes/{name}/proxy" } }
+    class: irreversible
+    resource: { arg: name, kind: node }
+    card: "Send PATCH to Node {name} through the API server on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Reaches the node's kubelet API, which runs commands in any pod on the node.
+    tests:
+      - fixture: fixtures/core-nodes-proxy-patch.http
+        expect: irreversible
+        resource: "ip-10-0-1-23.ec2.internal"
+
+  - id: kubernetes.core.nodes.proxy-path.patch
+    match: { rest: { method: PATCH, path: "/api/v1/nodes/{name}/proxy/{path*}" } }
+    class: irreversible
+    resource: { arg: name, kind: node }
+    card: "Send PATCH to Node {name} at /{path} through the API server on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Reaches the node's kubelet API, which runs commands in any pod on the node.
+    tests:
+      - fixture: fixtures/core-nodes-proxy-path-patch.http
+        expect: irreversible
+        resource: "ip-10-0-1-23.ec2.internal"
+
+  - id: kubernetes.core.nodes.proxy.post
+    match: { rest: { method: POST, path: "/api/v1/nodes/{name}/proxy" } }
+    class: irreversible
+    resource: { arg: name, kind: node }
+    card: "Send POST to Node {name} through the API server on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Reaches the node's kubelet API, which runs commands in any pod on the node.
+    tests:
+      - fixture: fixtures/core-nodes-proxy-post.http
+        expect: irreversible
+        resource: "ip-10-0-1-23.ec2.internal"
+
+  - id: kubernetes.core.nodes.proxy-path.post
+    match: { rest: { method: POST, path: "/api/v1/nodes/{name}/proxy/{path*}" } }
+    class: irreversible
+    resource: { arg: name, kind: node }
+    card: "Send POST to Node {name} at /{path} through the API server on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Reaches the node's kubelet API, which runs commands in any pod on the node.
+    tests:
+      - fixture: fixtures/core-nodes-proxy-path-post.http
+        expect: irreversible
+        resource: "ip-10-0-1-23.ec2.internal"
+
+  - id: kubernetes.core.nodes.proxy.put
+    match: { rest: { method: PUT, path: "/api/v1/nodes/{name}/proxy" } }
+    class: irreversible
+    resource: { arg: name, kind: node }
+    card: "Send PUT to Node {name} through the API server on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Reaches the node's kubelet API, which runs commands in any pod on the node.
+    tests:
+      - fixture: fixtures/core-nodes-proxy-put.http
+        expect: irreversible
+        resource: "ip-10-0-1-23.ec2.internal"
+
+  - id: kubernetes.core.nodes.proxy-path.put
+    match: { rest: { method: PUT, path: "/api/v1/nodes/{name}/proxy/{path*}" } }
+    class: irreversible
+    resource: { arg: name, kind: node }
+    card: "Send PUT to Node {name} at /{path} through the API server on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Reaches the node's kubelet API, which runs commands in any pod on the node.
+    tests:
+      - fixture: fixtures/core-nodes-proxy-path-put.http
+        expect: irreversible
+        resource: "ip-10-0-1-23.ec2.internal"
+
+  - id: kubernetes.core.nodes.status.patch
+    match: { rest: { method: PATCH, path: "/api/v1/nodes/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: node }
+    card: "Change the status of Node {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-nodes-status-patch.http
+        expect: write
+        resource: "ip-10-0-1-23.ec2.internal"
+
+  - id: kubernetes.core.nodes.status.replace
+    match: { rest: { method: PUT, path: "/api/v1/nodes/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: node }
+    card: "Change the status of Node {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-nodes-status-replace.http
+        expect: write
+        resource: "ip-10-0-1-23.ec2.internal"
+
+  - id: kubernetes.core.persistentvolumeclaims.delete-collection
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/persistentvolumeclaims" } }
+    class: irreversible
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the persistentvolumeclaims matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      With the usual Delete reclaim policy, deleting a claim deletes its volume and the data on it.
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/core-persistentvolumeclaims-delete-collection.http
+        expect: irreversible
+        resource: "shop"
+      - fixture: fixtures/core-persistentvolumeclaims-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.core.persistentvolumeclaims.create
+    match: { rest: { method: POST, path: "/api/v1/namespaces/{namespace}/persistentvolumeclaims" } }
+    class: money
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create PersistentVolumeClaim {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Creating a claim provisions a disk from its storage class, which the cloud bills, as Google
+      Cloud's disks.insert does.
+    tests:
+      - fixture: fixtures/core-persistentvolumeclaims-create.http
+        expect: money
+        resource: "shop"
+
+  - id: kubernetes.core.persistentvolumeclaims.delete
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/persistentvolumeclaims/{name}" } }
+    class: irreversible
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: persistent-volume-claim }
+    card: "Delete PersistentVolumeClaim {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      With the usual Delete reclaim policy, deleting a claim deletes its volume and the data on it.
+    tests:
+      - fixture: fixtures/core-persistentvolumeclaims-delete.http
+        expect: irreversible
+        resource: "data-postgres-0"
+      - fixture: fixtures/core-persistentvolumeclaims-delete-dry-run.http
+        expect: read
+        resource: "data-postgres-0"
+      - fixture: fixtures/core-persistentvolumeclaims-delete-dry-run-query.http
+        expect: irreversible
+        resource: "data-postgres-0"
+
+  - id: kubernetes.core.persistentvolumeclaims.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{namespace}/persistentvolumeclaims/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: persistent-volume-claim }
+    card: "Change PersistentVolumeClaim {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-persistentvolumeclaims-patch.http
+        expect: write
+        resource: "data-postgres-0"
+
+  - id: kubernetes.core.persistentvolumeclaims.replace
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{namespace}/persistentvolumeclaims/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: persistent-volume-claim }
+    card: "Replace PersistentVolumeClaim {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-persistentvolumeclaims-replace.http
+        expect: write
+        resource: "data-postgres-0"
+
+  - id: kubernetes.core.persistentvolumeclaims.status.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{namespace}/persistentvolumeclaims/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: persistent-volume-claim }
+    card: "Change the status of PersistentVolumeClaim {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-persistentvolumeclaims-status-patch.http
+        expect: write
+        resource: "data-postgres-0"
+
+  - id: kubernetes.core.persistentvolumeclaims.status.replace
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{namespace}/persistentvolumeclaims/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: persistent-volume-claim }
+    card: "Change the status of PersistentVolumeClaim {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-persistentvolumeclaims-status-replace.http
+        expect: write
+        resource: "data-postgres-0"
+
+  - id: kubernetes.core.persistentvolumes.delete-collection
+    match: { rest: { method: DELETE, path: "/api/v1/persistentvolumes" } }
+    class: irreversible
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the persistentvolumes matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      With a Delete reclaim policy the storage behind the volume goes with it. Without a label
+      selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/core-persistentvolumes-delete-collection.http
+        expect: irreversible
+        resource: "shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io"
+      - fixture: fixtures/core-persistentvolumes-delete-collection-every.http
+        expect: irreversible
+        resource: "shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io"
+
+  - id: kubernetes.core.persistentvolumes.create
+    match: { rest: { method: POST, path: "/api/v1/persistentvolumes" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: persistent-volume }
+    card: "Create PersistentVolume {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-persistentvolumes-create.http
+        expect: write
+        resource: "persistentvolume"
+
+  - id: kubernetes.core.persistentvolumes.delete
+    match: { rest: { method: DELETE, path: "/api/v1/persistentvolumes/{name}" } }
+    class: irreversible
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: persistent-volume }
+    card: "Delete PersistentVolume {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      With a Delete reclaim policy the storage behind the volume goes with it.
+    tests:
+      - fixture: fixtures/core-persistentvolumes-delete.http
+        expect: irreversible
+        resource: "persistentvolume"
+
+  - id: kubernetes.core.persistentvolumes.patch
+    match: { rest: { method: PATCH, path: "/api/v1/persistentvolumes/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: persistent-volume }
+    card: "Change PersistentVolume {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-persistentvolumes-patch.http
+        expect: write
+        resource: "persistentvolume"
+
+  - id: kubernetes.core.persistentvolumes.replace
+    match: { rest: { method: PUT, path: "/api/v1/persistentvolumes/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: persistent-volume }
+    card: "Replace PersistentVolume {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-persistentvolumes-replace.http
+        expect: write
+        resource: "persistentvolume"
+
+  - id: kubernetes.core.persistentvolumes.status.patch
+    match: { rest: { method: PATCH, path: "/api/v1/persistentvolumes/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: persistent-volume }
+    card: "Change the status of PersistentVolume {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-persistentvolumes-status-patch.http
+        expect: write
+        resource: "persistentvolume"
+
+  - id: kubernetes.core.persistentvolumes.status.replace
+    match: { rest: { method: PUT, path: "/api/v1/persistentvolumes/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: persistent-volume }
+    card: "Change the status of PersistentVolume {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-persistentvolumes-status-replace.http
+        expect: write
+        resource: "persistentvolume"
+
+  - id: kubernetes.core.pods.delete-collection
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/pods" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the pods matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/core-pods-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/core-pods-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.core.pods.create
+    match: { rest: { method: POST, path: "/api/v1/namespaces/{namespace}/pods" } }
+    class: write
+    when:
+      - if: { arg: body.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.ephemeralContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.ephemeralContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create Pod {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/core-pods-create.http
+        expect: write
+        resource: "shop"
+      - fixture: fixtures/core-pods-create-privileged.http
+        expect: access
+        resource: "shop"
+      - fixture: fixtures/core-pods-create-host.http
+        expect: access
+        resource: "shop"
+      - fixture: fixtures/core-pods-create-dry-run.http
+        expect: read
+        resource: "shop"
+      - fixture: fixtures/core-pods-create-host-protobuf.http
+        expect: access
+        resource: "shop"
+
+  - id: kubernetes.core.pods.delete
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/pods/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod }
+    card: "Delete Pod {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/core-pods-delete.http
+        expect: delete
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{namespace}/pods/{name}" } }
+    class: write
+    when:
+      - if: { arg: body.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.ephemeralContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.ephemeralContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod }
+    card: "Change Pod {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/core-pods-patch.http
+        expect: write
+        resource: "web-7c9d8b6f5-x2k4p"
+      - fixture: fixtures/core-pods-patch-privileged.http
+        expect: access
+        resource: "web-7c9d8b6f5-x2k4p"
+      - fixture: fixtures/core-pods-patch-json-patch.http
+        expect: access
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.replace
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{namespace}/pods/{name}" } }
+    class: write
+    when:
+      - if: { arg: body.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.ephemeralContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.ephemeralContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod }
+    card: "Replace Pod {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/core-pods-replace.http
+        expect: write
+        resource: "web-7c9d8b6f5-x2k4p"
+      - fixture: fixtures/core-pods-replace-privileged.http
+        expect: access
+        resource: "web-7c9d8b6f5-x2k4p"
+      - fixture: fixtures/core-pods-replace-host.http
+        expect: access
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.attach.get
+    match: { rest: { method: GET, path: "/api/v1/namespaces/{namespace}/pods/{name}/attach" } }
+    class: irreversible
+    resource: { arg: name, kind: pod }
+    card: "Attach to Pod {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Attaches to a running container's input and output, as exec does.
+    tests:
+      - fixture: fixtures/core-pods-attach-get.http
+        expect: irreversible
+        resource: "web-7c9d8b6f5-x2k4p"
+      - fixture: fixtures/core-pods-attach-get-websocket.http
+        expect: irreversible
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.attach.post
+    match: { rest: { method: POST, path: "/api/v1/namespaces/{namespace}/pods/{name}/attach" } }
+    class: irreversible
+    resource: { arg: name, kind: pod }
+    card: "Attach to Pod {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Attaches to a running container's input and output, as exec does.
+    tests:
+      - fixture: fixtures/core-pods-attach-post.http
+        expect: irreversible
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.binding.create
+    match: { rest: { method: POST, path: "/api/v1/namespaces/{namespace}/pods/{name}/binding" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod }
+    card: "Bind Pod {name} to node {body.target.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Binds the pod to a node, as the scheduler does.
+    tests:
+      - fixture: fixtures/core-pods-binding-create.http
+        expect: write
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.ephemeralcontainers.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{namespace}/pods/{name}/ephemeralcontainers" } }
+    class: irreversible
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod }
+    card: "Add an ephemeral container to Pod {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      An ephemeral container (kubectl debug) runs code in the pod, with its access, network and
+      data.
+    tests:
+      - fixture: fixtures/core-pods-ephemeralcontainers-patch.http
+        expect: irreversible
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.ephemeralcontainers.replace
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{namespace}/pods/{name}/ephemeralcontainers" } }
+    class: irreversible
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod }
+    card: "Add an ephemeral container to Pod {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      An ephemeral container (kubectl debug) runs code in the pod, with its access, network and
+      data.
+    tests:
+      - fixture: fixtures/core-pods-ephemeralcontainers-replace.http
+        expect: irreversible
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.eviction.create
+    match: { rest: { method: POST, path: "/api/v1/namespaces/{namespace}/pods/{name}/eviction" } }
+    class: delete
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod }
+    card: "Evict Pod {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Evicting a pod deletes it, respecting its disruption budget.
+    tests:
+      - fixture: fixtures/core-pods-eviction-create.http
+        expect: delete
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.exec.get
+    match: { rest: { method: GET, path: "/api/v1/namespaces/{namespace}/pods/{name}/exec" } }
+    class: irreversible
+    resource: { arg: name, kind: pod }
+    card: "Run {query.command} in Pod {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Runs a command in a container, with its access to data, secrets and the network.
+    tests:
+      - fixture: fixtures/core-pods-exec-get.http
+        expect: irreversible
+        resource: "web-7c9d8b6f5-x2k4p"
+      - fixture: fixtures/core-pods-exec-get-websocket.http
+        expect: irreversible
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.exec.post
+    match: { rest: { method: POST, path: "/api/v1/namespaces/{namespace}/pods/{name}/exec" } }
+    class: irreversible
+    resource: { arg: name, kind: pod }
+    card: "Run {query.command} in Pod {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Runs a command in a container, with its access to data, secrets and the network.
+    tests:
+      - fixture: fixtures/core-pods-exec-post.http
+        expect: irreversible
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.portforward.get
+    match: { rest: { method: GET, path: "/api/v1/namespaces/{namespace}/pods/{name}/portforward" } }
+    class: access
+    resource: { arg: name, kind: pod }
+    card: "Forward ports {query.ports} of Pod {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Opens the pod's ports to the client, past the cluster's network policies.
+    tests:
+      - fixture: fixtures/core-pods-portforward-get.http
+        expect: access
+        resource: "web-7c9d8b6f5-x2k4p"
+      - fixture: fixtures/core-pods-portforward-get-websocket.http
+        expect: access
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.portforward.post
+    match: { rest: { method: POST, path: "/api/v1/namespaces/{namespace}/pods/{name}/portforward" } }
+    class: access
+    resource: { arg: name, kind: pod }
+    card: "Forward ports {query.ports} of Pod {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Opens the pod's ports to the client, past the cluster's network policies.
+    tests:
+      - fixture: fixtures/core-pods-portforward-post.http
+        expect: access
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.proxy.delete
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/pods/{name}/proxy" } }
+    class: unknown
+    resource: { arg: name, kind: pod }
+    card: "Send DELETE to Pod {name} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the pod's own HTTP API through the API server; Opfence cannot tell what it
+      does.
+    tests:
+      - fixture: fixtures/core-pods-proxy-delete.http
+        expect: unknown
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.proxy-path.delete
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/pods/{name}/proxy/{path*}" } }
+    class: unknown
+    resource: { arg: name, kind: pod }
+    card: "Send DELETE to Pod {name} at /{path} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the pod's own HTTP API through the API server; Opfence cannot tell what it
+      does.
+    tests:
+      - fixture: fixtures/core-pods-proxy-path-delete.http
+        expect: unknown
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.proxy.get
+    match: { rest: { method: GET, path: "/api/v1/namespaces/{namespace}/pods/{name}/proxy" } }
+    class: unknown
+    resource: { arg: name, kind: pod }
+    card: "Send GET to Pod {name} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the pod's own HTTP API through the API server; Opfence cannot tell what it
+      does.
+    tests:
+      - fixture: fixtures/core-pods-proxy-get.http
+        expect: unknown
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.proxy-path.get
+    match: { rest: { method: GET, path: "/api/v1/namespaces/{namespace}/pods/{name}/proxy/{path*}" } }
+    class: unknown
+    resource: { arg: name, kind: pod }
+    card: "Send GET to Pod {name} at /{path} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the pod's own HTTP API through the API server; Opfence cannot tell what it
+      does.
+    tests:
+      - fixture: fixtures/core-pods-proxy-path-get.http
+        expect: unknown
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.proxy.head
+    match: { rest: { method: HEAD, path: "/api/v1/namespaces/{namespace}/pods/{name}/proxy" } }
+    class: unknown
+    resource: { arg: name, kind: pod }
+    card: "Send HEAD to Pod {name} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the pod's own HTTP API through the API server; Opfence cannot tell what it
+      does.
+    tests:
+      - fixture: fixtures/core-pods-proxy-head.http
+        expect: unknown
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.proxy-path.head
+    match: { rest: { method: HEAD, path: "/api/v1/namespaces/{namespace}/pods/{name}/proxy/{path*}" } }
+    class: unknown
+    resource: { arg: name, kind: pod }
+    card: "Send HEAD to Pod {name} at /{path} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the pod's own HTTP API through the API server; Opfence cannot tell what it
+      does.
+    tests:
+      - fixture: fixtures/core-pods-proxy-path-head.http
+        expect: unknown
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.proxy.options
+    match: { rest: { method: OPTIONS, path: "/api/v1/namespaces/{namespace}/pods/{name}/proxy" } }
+    class: unknown
+    resource: { arg: name, kind: pod }
+    card: "Send OPTIONS to Pod {name} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the pod's own HTTP API through the API server; Opfence cannot tell what it
+      does.
+    tests:
+      - fixture: fixtures/core-pods-proxy-options.http
+        expect: unknown
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.proxy-path.options
+    match: { rest: { method: OPTIONS, path: "/api/v1/namespaces/{namespace}/pods/{name}/proxy/{path*}" } }
+    class: unknown
+    resource: { arg: name, kind: pod }
+    card: "Send OPTIONS to Pod {name} at /{path} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the pod's own HTTP API through the API server; Opfence cannot tell what it
+      does.
+    tests:
+      - fixture: fixtures/core-pods-proxy-path-options.http
+        expect: unknown
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.proxy.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{namespace}/pods/{name}/proxy" } }
+    class: unknown
+    resource: { arg: name, kind: pod }
+    card: "Send PATCH to Pod {name} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the pod's own HTTP API through the API server; Opfence cannot tell what it
+      does.
+    tests:
+      - fixture: fixtures/core-pods-proxy-patch.http
+        expect: unknown
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.proxy-path.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{namespace}/pods/{name}/proxy/{path*}" } }
+    class: unknown
+    resource: { arg: name, kind: pod }
+    card: "Send PATCH to Pod {name} at /{path} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the pod's own HTTP API through the API server; Opfence cannot tell what it
+      does.
+    tests:
+      - fixture: fixtures/core-pods-proxy-path-patch.http
+        expect: unknown
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.proxy.post
+    match: { rest: { method: POST, path: "/api/v1/namespaces/{namespace}/pods/{name}/proxy" } }
+    class: unknown
+    resource: { arg: name, kind: pod }
+    card: "Send POST to Pod {name} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the pod's own HTTP API through the API server; Opfence cannot tell what it
+      does.
+    tests:
+      - fixture: fixtures/core-pods-proxy-post.http
+        expect: unknown
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.proxy-path.post
+    match: { rest: { method: POST, path: "/api/v1/namespaces/{namespace}/pods/{name}/proxy/{path*}" } }
+    class: unknown
+    resource: { arg: name, kind: pod }
+    card: "Send POST to Pod {name} at /{path} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the pod's own HTTP API through the API server; Opfence cannot tell what it
+      does.
+    tests:
+      - fixture: fixtures/core-pods-proxy-path-post.http
+        expect: unknown
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.proxy.put
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{namespace}/pods/{name}/proxy" } }
+    class: unknown
+    resource: { arg: name, kind: pod }
+    card: "Send PUT to Pod {name} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the pod's own HTTP API through the API server; Opfence cannot tell what it
+      does.
+    tests:
+      - fixture: fixtures/core-pods-proxy-put.http
+        expect: unknown
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.proxy-path.put
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{namespace}/pods/{name}/proxy/{path*}" } }
+    class: unknown
+    resource: { arg: name, kind: pod }
+    card: "Send PUT to Pod {name} at /{path} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the pod's own HTTP API through the API server; Opfence cannot tell what it
+      does.
+    tests:
+      - fixture: fixtures/core-pods-proxy-path-put.http
+        expect: unknown
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.resize.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{namespace}/pods/{name}/resize" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod }
+    card: "Resize the containers of Pod {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-pods-resize-patch.http
+        expect: write
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.resize.replace
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{namespace}/pods/{name}/resize" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod }
+    card: "Resize the containers of Pod {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-pods-resize-replace.http
+        expect: write
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.status.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{namespace}/pods/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod }
+    card: "Change the status of Pod {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-pods-status-patch.http
+        expect: write
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.pods.status.replace
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{namespace}/pods/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod }
+    card: "Change the status of Pod {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-pods-status-replace.http
+        expect: write
+        resource: "web-7c9d8b6f5-x2k4p"
+
+  - id: kubernetes.core.podtemplates.delete-collection
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/podtemplates" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the podtemplates matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/core-podtemplates-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/core-podtemplates-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.core.podtemplates.create
+    match: { rest: { method: POST, path: "/api/v1/namespaces/{namespace}/podtemplates" } }
+    class: write
+    when:
+      - if: { arg: body.template.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.template.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.template.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.template.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.template.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.template.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.template.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.template.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create PodTemplate {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/core-podtemplates-create.http
+        expect: write
+        resource: "shop"
+      - fixture: fixtures/core-podtemplates-create-privileged.http
+        expect: access
+        resource: "shop"
+      - fixture: fixtures/core-podtemplates-create-host.http
+        expect: access
+        resource: "shop"
+
+  - id: kubernetes.core.podtemplates.delete
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/podtemplates/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod-template }
+    card: "Delete PodTemplate {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/core-podtemplates-delete.http
+        expect: delete
+        resource: "podtemplate"
+
+  - id: kubernetes.core.podtemplates.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{namespace}/podtemplates/{name}" } }
+    class: write
+    when:
+      - if: { arg: body.template.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.template.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.template.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.template.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.template.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.template.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.template.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.template.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod-template }
+    card: "Change PodTemplate {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/core-podtemplates-patch.http
+        expect: write
+        resource: "podtemplate"
+      - fixture: fixtures/core-podtemplates-patch-privileged.http
+        expect: access
+        resource: "podtemplate"
+      - fixture: fixtures/core-podtemplates-patch-json-patch.http
+        expect: access
+        resource: "podtemplate"
+
+  - id: kubernetes.core.podtemplates.replace
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{namespace}/podtemplates/{name}" } }
+    class: write
+    when:
+      - if: { arg: body.template.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.template.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.template.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.template.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.template.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.template.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.template.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.template.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod-template }
+    card: "Replace PodTemplate {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/core-podtemplates-replace.http
+        expect: write
+        resource: "podtemplate"
+      - fixture: fixtures/core-podtemplates-replace-privileged.http
+        expect: access
+        resource: "podtemplate"
+      - fixture: fixtures/core-podtemplates-replace-host.http
+        expect: access
+        resource: "podtemplate"
+
+  - id: kubernetes.core.replicationcontrollers.delete-collection
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/replicationcontrollers" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the replicationcontrollers matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/core-replicationcontrollers-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/core-replicationcontrollers-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.core.replicationcontrollers.create
+    match: { rest: { method: POST, path: "/api/v1/namespaces/{namespace}/replicationcontrollers" } }
+    class: write
+    when:
+      - if: { arg: body.spec.template.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: body.spec.replicas, equals: "0" }
+        class: delete
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create ReplicationController {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/core-replicationcontrollers-create.http
+        expect: write
+        resource: "shop"
+      - fixture: fixtures/core-replicationcontrollers-create-privileged.http
+        expect: access
+        resource: "shop"
+      - fixture: fixtures/core-replicationcontrollers-create-host.http
+        expect: access
+        resource: "shop"
+
+  - id: kubernetes.core.replicationcontrollers.delete
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/replicationcontrollers/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: replication-controller }
+    card: "Delete ReplicationController {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/core-replicationcontrollers-delete.http
+        expect: delete
+        resource: "replicationcontroller"
+
+  - id: kubernetes.core.replicationcontrollers.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{namespace}/replicationcontrollers/{name}" } }
+    class: write
+    when:
+      - if: { arg: body.spec.template.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: body.spec.replicas, equals: "0" }
+        class: delete
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: replication-controller }
+    card: "Change ReplicationController {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/core-replicationcontrollers-patch.http
+        expect: write
+        resource: "replicationcontroller"
+      - fixture: fixtures/core-replicationcontrollers-patch-privileged.http
+        expect: access
+        resource: "replicationcontroller"
+      - fixture: fixtures/core-replicationcontrollers-patch-json-patch.http
+        expect: access
+        resource: "replicationcontroller"
+      - fixture: fixtures/core-replicationcontrollers-patch-zero.http
+        expect: delete
+        resource: "replicationcontroller"
+
+  - id: kubernetes.core.replicationcontrollers.replace
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{namespace}/replicationcontrollers/{name}" } }
+    class: write
+    when:
+      - if: { arg: body.spec.template.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: body.spec.replicas, equals: "0" }
+        class: delete
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: replication-controller }
+    card: "Replace ReplicationController {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/core-replicationcontrollers-replace.http
+        expect: write
+        resource: "replicationcontroller"
+      - fixture: fixtures/core-replicationcontrollers-replace-privileged.http
+        expect: access
+        resource: "replicationcontroller"
+      - fixture: fixtures/core-replicationcontrollers-replace-host.http
+        expect: access
+        resource: "replicationcontroller"
+      - fixture: fixtures/core-replicationcontrollers-replace-zero.http
+        expect: delete
+        resource: "replicationcontroller"
+
+  - id: kubernetes.core.replicationcontrollers.scale.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{namespace}/replicationcontrollers/{name}/scale" } }
+    class: write
+    when:
+      - if: { arg: body.spec.replicas, equals: "0" }
+        class: delete
+      - if: { arg: body.op, present: true }
+        class: delete
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: replication-controller }
+    card: "Scale ReplicationController {name} to {body.spec.replicas} replicas in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Scaling to zero replicas takes the workload down (delete). A JSON Patch, whose effect Opfence
+      cannot read, counts as that.
+    tests:
+      - fixture: fixtures/core-replicationcontrollers-scale-patch.http
+        expect: write
+        resource: "replicationcontroller"
+      - fixture: fixtures/core-replicationcontrollers-scale-patch-zero.http
+        expect: delete
+        resource: "replicationcontroller"
+
+  - id: kubernetes.core.replicationcontrollers.scale.replace
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{namespace}/replicationcontrollers/{name}/scale" } }
+    class: write
+    when:
+      - if: { arg: body.spec.replicas, equals: "0" }
+        class: delete
+      - if: { arg: body.op, present: true }
+        class: delete
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: replication-controller }
+    card: "Scale ReplicationController {name} to {body.spec.replicas} replicas in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Scaling to zero replicas takes the workload down (delete). A JSON Patch, whose effect Opfence
+      cannot read, counts as that.
+    tests:
+      - fixture: fixtures/core-replicationcontrollers-scale-replace.http
+        expect: write
+        resource: "replicationcontroller"
+      - fixture: fixtures/core-replicationcontrollers-scale-replace-zero.http
+        expect: delete
+        resource: "replicationcontroller"
+
+  - id: kubernetes.core.replicationcontrollers.status.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{namespace}/replicationcontrollers/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: replication-controller }
+    card: "Change the status of ReplicationController {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-replicationcontrollers-status-patch.http
+        expect: write
+        resource: "replicationcontroller"
+
+  - id: kubernetes.core.replicationcontrollers.status.replace
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{namespace}/replicationcontrollers/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: replication-controller }
+    card: "Change the status of ReplicationController {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-replicationcontrollers-status-replace.http
+        expect: write
+        resource: "replicationcontroller"
+
+  - id: kubernetes.core.resourcequotas.delete-collection
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/resourcequotas" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the resourcequotas matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/core-resourcequotas-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/core-resourcequotas-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.core.resourcequotas.create
+    match: { rest: { method: POST, path: "/api/v1/namespaces/{namespace}/resourcequotas" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create ResourceQuota {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-resourcequotas-create.http
+        expect: write
+        resource: "shop"
+
+  - id: kubernetes.core.resourcequotas.delete
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/resourcequotas/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: resource-quota }
+    card: "Delete ResourceQuota {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/core-resourcequotas-delete.http
+        expect: delete
+        resource: "resourcequota"
+
+  - id: kubernetes.core.resourcequotas.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{namespace}/resourcequotas/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: resource-quota }
+    card: "Change ResourceQuota {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-resourcequotas-patch.http
+        expect: write
+        resource: "resourcequota"
+
+  - id: kubernetes.core.resourcequotas.replace
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{namespace}/resourcequotas/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: resource-quota }
+    card: "Replace ResourceQuota {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-resourcequotas-replace.http
+        expect: write
+        resource: "resourcequota"
+
+  - id: kubernetes.core.resourcequotas.status.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{namespace}/resourcequotas/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: resource-quota }
+    card: "Change the status of ResourceQuota {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-resourcequotas-status-patch.http
+        expect: write
+        resource: "resourcequota"
+
+  - id: kubernetes.core.resourcequotas.status.replace
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{namespace}/resourcequotas/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: resource-quota }
+    card: "Change the status of ResourceQuota {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-resourcequotas-status-replace.http
+        expect: write
+        resource: "resourcequota"
+
+  - id: kubernetes.core.secrets.delete-collection
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/secrets" } }
+    class: irreversible
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the secrets matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A Secret's value is gone once it is deleted; generated keys and certificates cannot be read
+      back. Without a label selector every object of the kind in the namespace is deleted
+      (irreversible).
+    tests:
+      - fixture: fixtures/core-secrets-delete-collection.http
+        expect: irreversible
+        resource: "shop"
+      - fixture: fixtures/core-secrets-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.core.secrets.list
+    match: { rest: { method: GET, path: "/api/v1/namespaces/{namespace}/secrets" } }
+    class: credential
+    resource: { arg: namespace, kind: namespace }
+    card: "List Secret objects in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Returns the Secrets' data.
+    tests:
+      - fixture: fixtures/core-secrets-list.http
+        expect: credential
+        resource: "shop"
+
+  - id: kubernetes.core.secrets.watch-list
+    match: { rest: { method: GET, path: "/api/v1/watch/namespaces/{namespace}/secrets" } }
+    class: credential
+    resource: { arg: namespace, kind: namespace }
+    card: "Watch Secret objects in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Returns the Secrets' data.
+    tests:
+      - fixture: fixtures/core-secrets-watch-list.http
+        expect: credential
+        resource: "shop"
+
+  - id: kubernetes.core.secrets.create
+    match: { rest: { method: POST, path: "/api/v1/namespaces/{namespace}/secrets" } }
+    class: credential
+    resource: { arg: namespace, kind: namespace }
+    card: "Create Secret {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Setting a Secret's data is credential.
+    tests:
+      - fixture: fixtures/core-secrets-create.http
+        expect: credential
+        resource: "shop"
+
+  - id: kubernetes.core.secrets.delete
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/secrets/{name}" } }
+    class: irreversible
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: secret }
+    card: "Delete Secret {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A Secret's value is gone once it is deleted; generated keys and certificates cannot be read
+      back.
+    tests:
+      - fixture: fixtures/core-secrets-delete.http
+        expect: irreversible
+        resource: "shop-db-credentials"
+
+  - id: kubernetes.core.secrets.get
+    match: { rest: { method: GET, path: "/api/v1/namespaces/{namespace}/secrets/{name}" } }
+    class: credential
+    resource: { arg: name, kind: secret }
+    card: "Read Secret {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Returns the Secret's data.
+    tests:
+      - fixture: fixtures/core-secrets-get.http
+        expect: credential
+        resource: "shop-db-credentials"
+
+  - id: kubernetes.core.secrets.watch
+    match: { rest: { method: GET, path: "/api/v1/watch/namespaces/{namespace}/secrets/{name}" } }
+    class: credential
+    resource: { arg: name, kind: secret }
+    card: "Watch Secret {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Returns the Secret's data.
+    tests:
+      - fixture: fixtures/core-secrets-watch.http
+        expect: credential
+        resource: "shop-db-credentials"
+
+  - id: kubernetes.core.secrets.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{namespace}/secrets/{name}" } }
+    class: credential
+    resource: { arg: name, kind: secret }
+    card: "Change Secret {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Setting a Secret's data is credential.
+    tests:
+      - fixture: fixtures/core-secrets-patch.http
+        expect: credential
+        resource: "shop-db-credentials"
+
+  - id: kubernetes.core.secrets.replace
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{namespace}/secrets/{name}" } }
+    class: credential
+    resource: { arg: name, kind: secret }
+    card: "Replace Secret {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Setting a Secret's data is credential.
+    tests:
+      - fixture: fixtures/core-secrets-replace.http
+        expect: credential
+        resource: "shop-db-credentials"
+
+  - id: kubernetes.core.secrets.list-all-namespaces
+    match: { rest: { method: GET, path: "/api/v1/secrets" } }
+    class: credential
+    resource: { arg: cluster, kind: cluster }
+    card: "List Secret objects on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Returns the Secrets' data.
+    tests:
+      - fixture: fixtures/core-secrets-list-all-namespaces.http
+        expect: credential
+        resource: "shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io"
+
+  - id: kubernetes.core.secrets.watch-list-all-namespaces
+    match: { rest: { method: GET, path: "/api/v1/watch/secrets" } }
+    class: credential
+    resource: { arg: cluster, kind: cluster }
+    card: "Watch Secret objects on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Returns the Secrets' data.
+    tests:
+      - fixture: fixtures/core-secrets-watch-list-all-namespaces.http
+        expect: credential
+        resource: "gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog"
+
+  - id: kubernetes.core.serviceaccounts.delete-collection
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/serviceaccounts" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the serviceaccounts matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/core-serviceaccounts-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/core-serviceaccounts-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.core.serviceaccounts.create
+    match: { rest: { method: POST, path: "/api/v1/namespaces/{namespace}/serviceaccounts" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create ServiceAccount {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-serviceaccounts-create.http
+        expect: write
+        resource: "shop"
+
+  - id: kubernetes.core.serviceaccounts.delete
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/serviceaccounts/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: service-account }
+    card: "Delete ServiceAccount {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/core-serviceaccounts-delete.http
+        expect: delete
+        resource: "deployer"
+
+  - id: kubernetes.core.serviceaccounts.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{namespace}/serviceaccounts/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: service-account }
+    card: "Change ServiceAccount {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-serviceaccounts-patch.http
+        expect: write
+        resource: "deployer"
+
+  - id: kubernetes.core.serviceaccounts.replace
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{namespace}/serviceaccounts/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: service-account }
+    card: "Replace ServiceAccount {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-serviceaccounts-replace.http
+        expect: write
+        resource: "deployer"
+
+  - id: kubernetes.core.serviceaccounts.token.create
+    match: { rest: { method: POST, path: "/api/v1/namespaces/{namespace}/serviceaccounts/{name}/token" } }
+    class: credential
+    resource: { arg: name, kind: service-account }
+    card: "Request a token for ServiceAccount {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Issues a token that authenticates as the service account.
+    tests:
+      - fixture: fixtures/core-serviceaccounts-token-create.http
+        expect: credential
+        resource: "deployer"
+
+  - id: kubernetes.core.services.delete-collection
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/services" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the services matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/core-services-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/core-services-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.core.services.create
+    match: { rest: { method: POST, path: "/api/v1/namespaces/{namespace}/services" } }
+    class: write
+    when:
+      - if: { arg: body.spec.type, equals: "LoadBalancer" }
+        class: access
+      - if: { arg: body.spec.type, equals: "LoadBalancer" }
+        class: money
+      - if: { arg: body.spec.type, equals: "NodePort" }
+        class: access
+      - if: { arg: body.spec.externalIPs, matches: '.' }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create Service {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A LoadBalancer Service exposes the workload and provisions a billed load balancer (access and
+      money); NodePort and external IPs expose it (access).
+    tests:
+      - fixture: fixtures/core-services-create.http
+        expect: write
+        resource: "shop"
+      - fixture: fixtures/core-services-create-load-balancer.http
+        expect: money
+        resource: "shop"
+      - fixture: fixtures/core-services-create-node-port.http
+        expect: access
+        resource: "shop"
+      - fixture: fixtures/core-services-create-dry-run.http
+        expect: read
+        resource: "shop"
+      - fixture: fixtures/core-services-create-load-balancer-protobuf.http
+        expect: money
+        resource: "shop"
+
+  - id: kubernetes.core.services.delete
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/services/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: service }
+    card: "Delete Service {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/core-services-delete.http
+        expect: delete
+        resource: "web"
+
+  - id: kubernetes.core.services.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{namespace}/services/{name}" } }
+    class: write
+    when:
+      - if: { arg: body.spec.type, equals: "LoadBalancer" }
+        class: access
+      - if: { arg: body.spec.type, equals: "LoadBalancer" }
+        class: money
+      - if: { arg: body.spec.type, equals: "NodePort" }
+        class: access
+      - if: { arg: body.spec.externalIPs, matches: '.' }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: service }
+    card: "Change Service {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A LoadBalancer Service exposes the workload and provisions a billed load balancer (access and
+      money); NodePort and external IPs expose it (access).
+    tests:
+      - fixture: fixtures/core-services-patch.http
+        expect: write
+        resource: "web"
+
+  - id: kubernetes.core.services.replace
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{namespace}/services/{name}" } }
+    class: write
+    when:
+      - if: { arg: body.spec.type, equals: "LoadBalancer" }
+        class: access
+      - if: { arg: body.spec.type, equals: "LoadBalancer" }
+        class: money
+      - if: { arg: body.spec.type, equals: "NodePort" }
+        class: access
+      - if: { arg: body.spec.externalIPs, matches: '.' }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: service }
+    card: "Replace Service {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A LoadBalancer Service exposes the workload and provisions a billed load balancer (access and
+      money); NodePort and external IPs expose it (access).
+    tests:
+      - fixture: fixtures/core-services-replace.http
+        expect: write
+        resource: "web"
+
+  - id: kubernetes.core.services.proxy.delete
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/services/{name}/proxy" } }
+    class: unknown
+    resource: { arg: name, kind: service }
+    card: "Send DELETE to Service {name} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the service's own HTTP API through the API server; Opfence cannot tell what
+      it does.
+    tests:
+      - fixture: fixtures/core-services-proxy-delete.http
+        expect: unknown
+        resource: "web"
+
+  - id: kubernetes.core.services.proxy-path.delete
+    match: { rest: { method: DELETE, path: "/api/v1/namespaces/{namespace}/services/{name}/proxy/{path*}" } }
+    class: unknown
+    resource: { arg: name, kind: service }
+    card: "Send DELETE to Service {name} at /{path} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the service's own HTTP API through the API server; Opfence cannot tell what
+      it does.
+    tests:
+      - fixture: fixtures/core-services-proxy-path-delete.http
+        expect: unknown
+        resource: "web"
+
+  - id: kubernetes.core.services.proxy.get
+    match: { rest: { method: GET, path: "/api/v1/namespaces/{namespace}/services/{name}/proxy" } }
+    class: unknown
+    resource: { arg: name, kind: service }
+    card: "Send GET to Service {name} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the service's own HTTP API through the API server; Opfence cannot tell what
+      it does.
+    tests:
+      - fixture: fixtures/core-services-proxy-get.http
+        expect: unknown
+        resource: "web"
+
+  - id: kubernetes.core.services.proxy-path.get
+    match: { rest: { method: GET, path: "/api/v1/namespaces/{namespace}/services/{name}/proxy/{path*}" } }
+    class: unknown
+    resource: { arg: name, kind: service }
+    card: "Send GET to Service {name} at /{path} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the service's own HTTP API through the API server; Opfence cannot tell what
+      it does.
+    tests:
+      - fixture: fixtures/core-services-proxy-path-get.http
+        expect: unknown
+        resource: "web"
+
+  - id: kubernetes.core.services.proxy.head
+    match: { rest: { method: HEAD, path: "/api/v1/namespaces/{namespace}/services/{name}/proxy" } }
+    class: unknown
+    resource: { arg: name, kind: service }
+    card: "Send HEAD to Service {name} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the service's own HTTP API through the API server; Opfence cannot tell what
+      it does.
+    tests:
+      - fixture: fixtures/core-services-proxy-head.http
+        expect: unknown
+        resource: "web"
+
+  - id: kubernetes.core.services.proxy-path.head
+    match: { rest: { method: HEAD, path: "/api/v1/namespaces/{namespace}/services/{name}/proxy/{path*}" } }
+    class: unknown
+    resource: { arg: name, kind: service }
+    card: "Send HEAD to Service {name} at /{path} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the service's own HTTP API through the API server; Opfence cannot tell what
+      it does.
+    tests:
+      - fixture: fixtures/core-services-proxy-path-head.http
+        expect: unknown
+        resource: "web"
+
+  - id: kubernetes.core.services.proxy.options
+    match: { rest: { method: OPTIONS, path: "/api/v1/namespaces/{namespace}/services/{name}/proxy" } }
+    class: unknown
+    resource: { arg: name, kind: service }
+    card: "Send OPTIONS to Service {name} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the service's own HTTP API through the API server; Opfence cannot tell what
+      it does.
+    tests:
+      - fixture: fixtures/core-services-proxy-options.http
+        expect: unknown
+        resource: "web"
+
+  - id: kubernetes.core.services.proxy-path.options
+    match: { rest: { method: OPTIONS, path: "/api/v1/namespaces/{namespace}/services/{name}/proxy/{path*}" } }
+    class: unknown
+    resource: { arg: name, kind: service }
+    card: "Send OPTIONS to Service {name} at /{path} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the service's own HTTP API through the API server; Opfence cannot tell what
+      it does.
+    tests:
+      - fixture: fixtures/core-services-proxy-path-options.http
+        expect: unknown
+        resource: "web"
+
+  - id: kubernetes.core.services.proxy.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{namespace}/services/{name}/proxy" } }
+    class: unknown
+    resource: { arg: name, kind: service }
+    card: "Send PATCH to Service {name} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the service's own HTTP API through the API server; Opfence cannot tell what
+      it does.
+    tests:
+      - fixture: fixtures/core-services-proxy-patch.http
+        expect: unknown
+        resource: "web"
+
+  - id: kubernetes.core.services.proxy-path.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{namespace}/services/{name}/proxy/{path*}" } }
+    class: unknown
+    resource: { arg: name, kind: service }
+    card: "Send PATCH to Service {name} at /{path} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the service's own HTTP API through the API server; Opfence cannot tell what
+      it does.
+    tests:
+      - fixture: fixtures/core-services-proxy-path-patch.http
+        expect: unknown
+        resource: "web"
+
+  - id: kubernetes.core.services.proxy.post
+    match: { rest: { method: POST, path: "/api/v1/namespaces/{namespace}/services/{name}/proxy" } }
+    class: unknown
+    resource: { arg: name, kind: service }
+    card: "Send POST to Service {name} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the service's own HTTP API through the API server; Opfence cannot tell what
+      it does.
+    tests:
+      - fixture: fixtures/core-services-proxy-post.http
+        expect: unknown
+        resource: "web"
+
+  - id: kubernetes.core.services.proxy-path.post
+    match: { rest: { method: POST, path: "/api/v1/namespaces/{namespace}/services/{name}/proxy/{path*}" } }
+    class: unknown
+    resource: { arg: name, kind: service }
+    card: "Send POST to Service {name} at /{path} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the service's own HTTP API through the API server; Opfence cannot tell what
+      it does.
+    tests:
+      - fixture: fixtures/core-services-proxy-path-post.http
+        expect: unknown
+        resource: "web"
+
+  - id: kubernetes.core.services.proxy.put
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{namespace}/services/{name}/proxy" } }
+    class: unknown
+    resource: { arg: name, kind: service }
+    card: "Send PUT to Service {name} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the service's own HTTP API through the API server; Opfence cannot tell what
+      it does.
+    tests:
+      - fixture: fixtures/core-services-proxy-put.http
+        expect: unknown
+        resource: "web"
+
+  - id: kubernetes.core.services.proxy-path.put
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{namespace}/services/{name}/proxy/{path*}" } }
+    class: unknown
+    resource: { arg: name, kind: service }
+    card: "Send PUT to Service {name} at /{path} through the API server in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Sends a request to the service's own HTTP API through the API server; Opfence cannot tell what
+      it does.
+    tests:
+      - fixture: fixtures/core-services-proxy-path-put.http
+        expect: unknown
+        resource: "web"
+
+  - id: kubernetes.core.services.status.patch
+    match: { rest: { method: PATCH, path: "/api/v1/namespaces/{namespace}/services/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: service }
+    card: "Change the status of Service {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-services-status-patch.http
+        expect: write
+        resource: "web"
+
+  - id: kubernetes.core.services.status.replace
+    match: { rest: { method: PUT, path: "/api/v1/namespaces/{namespace}/services/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: service }
+    card: "Change the status of Service {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/core-services-status-replace.http
+        expect: write
+        resource: "web"

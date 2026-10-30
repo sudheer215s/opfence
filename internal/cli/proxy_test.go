@@ -3,11 +3,14 @@ package cli
 import (
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"testing"
 	"time"
 
 	"github.com/rakeshnitb23/opfence/internal/audit"
+	"github.com/rakeshnitb23/opfence/internal/ca"
+	"github.com/rakeshnitb23/opfence/internal/catalog"
 )
 
 func TestLogShowAndVerify(t *testing.T) {
@@ -58,5 +61,29 @@ func TestPrintLogSanitizes(t *testing.T) {
 	}
 	if lines := strings.Split(strings.TrimSpace(out.String()), "\n"); strings.ContainsAny(out.String(), "\x1b\r") || len(lines) != 2 {
 		t.Fatalf("%q", out.String())
+	}
+}
+
+// Opfence's CA covers every catalog host but those of providers whose
+// hosts serve their own CA (Kubernetes clusters), so adding them does not
+// make users trust a new CA.
+func TestCAHostsLeaveOutOwnCA(t *testing.T) {
+	c, err := catalog.Embedded()
+	if err != nil {
+		t.Fatal(err)
+	}
+	hosts := caHosts(c)
+	for _, h := range hosts {
+		if strings.HasSuffix(h, "azmk8s.io") || strings.HasSuffix(h, "gke.goog") || strings.HasSuffix(h, "eks.amazonaws.com") {
+			t.Fatalf("CA hosts include %s", h)
+		}
+	}
+	if !slices.Contains(hosts, "*.amazonaws.com") || !slices.Contains(hosts, "backboard.railway.com") {
+		t.Fatal("CA hosts miss ordinary providers")
+	}
+	for _, d := range ca.PermittedDomains(hosts) {
+		if d == "azmk8s.io" || d == "gke.goog" {
+			t.Fatalf("permitted domains include %s", d)
+		}
 	}
 }

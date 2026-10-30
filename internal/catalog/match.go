@@ -90,7 +90,7 @@ func (c *Catalog) ProviderForMCPName(name string) *Provider {
 
 // Hints tells the decoder what the provider speaks on host.
 func (p *Provider) Hints(host string) decode.Hints {
-	h := decode.Hints{GraphQLPaths: p.GraphQL, BatchPaths: p.Batch, SigV4: p.SigV4, MCP: p.MCP != nil, Git: slices.Contains(p.Git, host), FormatSuffix: p.FormatSuffix}
+	h := decode.Hints{GraphQLPaths: p.GraphQL, BatchPaths: p.Batch, SigV4: p.SigV4, MCP: p.MCP != nil, Git: slices.Contains(p.Git, host), FormatSuffix: p.FormatSuffix, StreamUpgrades: p.StreamUpgrades}
 	if p.MCP != nil {
 		h.MCPPaths = p.MCP.Paths
 	}
@@ -119,8 +119,12 @@ func (p *Provider) HoldsValues() bool {
 }
 
 // hostLabels returns the part of host that one of the provider's "*." host
-// patterns stands for, or "" when none matches.
+// patterns stands for, or "" when none matches; with HostArgWhole, the whole
+// host.
 func (p *Provider) hostLabels(host string) string {
+	if p.HostArgWhole {
+		return host
+	}
 	for _, pat := range p.Hosts {
 		if suffix, ok := strings.CutPrefix(pat, "*."); ok && strings.HasSuffix(host, "."+suffix) {
 			if v := strings.TrimSuffix(host, "."+suffix); v != "" {

@@ -1,0 +1,6 @@
+# description: Delete the storageclasses matching label selector app=web on cluster shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+DELETE /apis/storage.k8s.io/v1/storageclasses?labelSelector=app%3Dweb HTTP/1.1
+Host: shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+

@@ -1,0 +1,6 @@
+# description: Send HEAD to Node ip-10-0-1-23.ec2.internal through the API server on cluster gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog
+HEAD /api/v1/nodes/ip-10-0-1-23.ec2.internal/proxy HTTP/1.1
+Host: gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+

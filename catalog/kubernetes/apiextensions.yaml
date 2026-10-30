@@ -1,0 +1,131 @@
+# Kubernetes API: apiextensions (/apis/apiextensions.k8s.io).
+# Generated from Kubernetes' OpenAPI description by tools/catalog-gen/k8sgen.py; classes reviewed by hand.
+operations:
+  - id: kubernetes.apiextensions.customresourcedefinitions.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/apiextensions.k8s.io/{version}/customresourcedefinitions" } }
+    class: irreversible
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the customresourcedefinitions matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Deleting a CRD deletes every custom resource of its kind. Without a label selector every
+      object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/apiextensions-customresourcedefinitions-delete-collection.http
+        expect: irreversible
+        resource: "gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog"
+      - fixture: fixtures/apiextensions-customresourcedefinitions-delete-collection-every.http
+        expect: irreversible
+        resource: "gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog"
+
+  - id: kubernetes.apiextensions.customresourcedefinitions.create
+    match: { rest: { method: POST, path: "/apis/apiextensions.k8s.io/{version}/customresourcedefinitions" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: custom-resource-definition }
+    card: "Create CustomResourceDefinition {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/apiextensions-customresourcedefinitions-create.http
+        expect: write
+        resource: "certificates.cert-manager.io"
+
+  - id: kubernetes.apiextensions.customresourcedefinitions.delete
+    match: { rest: { method: DELETE, path: "/apis/apiextensions.k8s.io/{version}/customresourcedefinitions/{name}" } }
+    class: irreversible
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: custom-resource-definition }
+    card: "Delete CustomResourceDefinition {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Deleting a CRD deletes every custom resource of its kind.
+    tests:
+      - fixture: fixtures/apiextensions-customresourcedefinitions-delete.http
+        expect: irreversible
+        resource: "certificates.cert-manager.io"
+
+  - id: kubernetes.apiextensions.customresourcedefinitions.patch
+    match: { rest: { method: PATCH, path: "/apis/apiextensions.k8s.io/{version}/customresourcedefinitions/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: custom-resource-definition }
+    card: "Change CustomResourceDefinition {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/apiextensions-customresourcedefinitions-patch.http
+        expect: write
+        resource: "certificates.cert-manager.io"
+
+  - id: kubernetes.apiextensions.customresourcedefinitions.replace
+    match: { rest: { method: PUT, path: "/apis/apiextensions.k8s.io/{version}/customresourcedefinitions/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: custom-resource-definition }
+    card: "Replace CustomResourceDefinition {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/apiextensions-customresourcedefinitions-replace.http
+        expect: write
+        resource: "certificates.cert-manager.io"
+
+  - id: kubernetes.apiextensions.customresourcedefinitions.status.patch
+    match: { rest: { method: PATCH, path: "/apis/apiextensions.k8s.io/{version}/customresourcedefinitions/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: custom-resource-definition }
+    card: "Change the status of CustomResourceDefinition {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/apiextensions-customresourcedefinitions-status-patch.http
+        expect: write
+        resource: "certificates.cert-manager.io"
+
+  - id: kubernetes.apiextensions.customresourcedefinitions.status.replace
+    match: { rest: { method: PUT, path: "/apis/apiextensions.k8s.io/{version}/customresourcedefinitions/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: custom-resource-definition }
+    card: "Change the status of CustomResourceDefinition {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/apiextensions-customresourcedefinitions-status-replace.http
+        expect: write
+        resource: "certificates.cert-manager.io"

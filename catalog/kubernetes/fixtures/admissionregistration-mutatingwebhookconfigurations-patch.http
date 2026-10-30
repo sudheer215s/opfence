@@ -1,0 +1,8 @@
+# description: Change MutatingWebhookConfiguration mutatingwebhookconfiguration on cluster 3f2a7c1e-5b9d-4e8a-9c1f-2d7e6b5a4c3d.k8s.ondigitalocean.com
+PATCH /apis/admissionregistration.k8s.io/v1/mutatingwebhookconfigurations/mutatingwebhookconfiguration HTTP/1.1
+Host: 3f2a7c1e-5b9d-4e8a-9c1f-2d7e6b5a4c3d.k8s.ondigitalocean.com
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/merge-patch+json
+
+{"metadata":{"labels":{"team":"shop"}}}

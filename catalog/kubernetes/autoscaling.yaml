@@ -1,0 +1,130 @@
+# Kubernetes API: autoscaling (/apis/autoscaling).
+# Generated from Kubernetes' OpenAPI description by tools/catalog-gen/k8sgen.py; classes reviewed by hand.
+operations:
+  - id: kubernetes.autoscaling.horizontalpodautoscalers.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/autoscaling/{version}/namespaces/{namespace}/horizontalpodautoscalers" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the horizontalpodautoscalers matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/autoscaling-horizontalpodautoscalers-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/autoscaling-horizontalpodautoscalers-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.autoscaling.horizontalpodautoscalers.create
+    match: { rest: { method: POST, path: "/apis/autoscaling/{version}/namespaces/{namespace}/horizontalpodautoscalers" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create HorizontalPodAutoscaler {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/autoscaling-horizontalpodautoscalers-create.http
+        expect: write
+        resource: "shop"
+
+  - id: kubernetes.autoscaling.horizontalpodautoscalers.delete
+    match: { rest: { method: DELETE, path: "/apis/autoscaling/{version}/namespaces/{namespace}/horizontalpodautoscalers/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: horizontal-pod-autoscaler }
+    card: "Delete HorizontalPodAutoscaler {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/autoscaling-horizontalpodautoscalers-delete.http
+        expect: delete
+        resource: "horizontalpodautoscaler"
+
+  - id: kubernetes.autoscaling.horizontalpodautoscalers.patch
+    match: { rest: { method: PATCH, path: "/apis/autoscaling/{version}/namespaces/{namespace}/horizontalpodautoscalers/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: horizontal-pod-autoscaler }
+    card: "Change HorizontalPodAutoscaler {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/autoscaling-horizontalpodautoscalers-patch.http
+        expect: write
+        resource: "horizontalpodautoscaler"
+
+  - id: kubernetes.autoscaling.horizontalpodautoscalers.replace
+    match: { rest: { method: PUT, path: "/apis/autoscaling/{version}/namespaces/{namespace}/horizontalpodautoscalers/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: horizontal-pod-autoscaler }
+    card: "Replace HorizontalPodAutoscaler {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/autoscaling-horizontalpodautoscalers-replace.http
+        expect: write
+        resource: "horizontalpodautoscaler"
+
+  - id: kubernetes.autoscaling.horizontalpodautoscalers.status.patch
+    match: { rest: { method: PATCH, path: "/apis/autoscaling/{version}/namespaces/{namespace}/horizontalpodautoscalers/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: horizontal-pod-autoscaler }
+    card: "Change the status of HorizontalPodAutoscaler {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/autoscaling-horizontalpodautoscalers-status-patch.http
+        expect: write
+        resource: "horizontalpodautoscaler"
+
+  - id: kubernetes.autoscaling.horizontalpodautoscalers.status.replace
+    match: { rest: { method: PUT, path: "/apis/autoscaling/{version}/namespaces/{namespace}/horizontalpodautoscalers/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: horizontal-pod-autoscaler }
+    card: "Change the status of HorizontalPodAutoscaler {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/autoscaling-horizontalpodautoscalers-status-replace.http
+        expect: write
+        resource: "horizontalpodautoscaler"

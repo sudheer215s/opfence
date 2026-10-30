@@ -1,0 +1,8 @@
+# description: Change the status of ServiceCIDR servicecidr on cluster a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com
+PATCH /apis/networking.k8s.io/v1/servicecidrs/servicecidr/status HTTP/1.1
+Host: a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/merge-patch+json
+
+{"status":{"conditions":[]}}

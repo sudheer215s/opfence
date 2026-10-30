@@ -1,0 +1,8 @@
+# description: Resize the containers of Pod web-7c9d8b6f5-x2k4p in namespace shop on cluster gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog
+PATCH /api/v1/namespaces/shop/pods/web-7c9d8b6f5-x2k4p/resize HTTP/1.1
+Host: gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/merge-patch+json
+
+{"spec":{"containers":[{"name":"web","resources":{"limits":{"memory":"512Mi"}}}]}}

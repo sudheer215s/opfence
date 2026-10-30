@@ -1,0 +1,142 @@
+# Kubernetes API: apiregistration (/apis/apiregistration.k8s.io).
+# Generated from Kubernetes' OpenAPI description by tools/catalog-gen/k8sgen.py; classes reviewed by hand.
+operations:
+  - id: kubernetes.apiregistration.apiservices.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/apiregistration.k8s.io/{version}/apiservices" } }
+    class: access
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the apiservices matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      An APIService sends every request for its group and version to a service of its own choosing;
+      every change is access. Without a label selector every object of the kind is deleted
+      (irreversible).
+    tests:
+      - fixture: fixtures/apiregistration-apiservices-delete-collection.http
+        expect: access
+        resource: "8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net"
+      - fixture: fixtures/apiregistration-apiservices-delete-collection-every.http
+        expect: irreversible
+        resource: "8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net"
+
+  - id: kubernetes.apiregistration.apiservices.create
+    match: { rest: { method: POST, path: "/apis/apiregistration.k8s.io/{version}/apiservices" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: a-p-i-service }
+    card: "Create APIService {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      An APIService sends every request for its group and version to a service of its own choosing;
+      every change is access.
+    tests:
+      - fixture: fixtures/apiregistration-apiservices-create.http
+        expect: access
+        resource: "v1beta1.metrics.k8s.io"
+
+  - id: kubernetes.apiregistration.apiservices.delete
+    match: { rest: { method: DELETE, path: "/apis/apiregistration.k8s.io/{version}/apiservices/{name}" } }
+    class: access
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: a-p-i-service }
+    card: "Delete APIService {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      An APIService sends every request for its group and version to a service of its own choosing;
+      every change is access.
+    tests:
+      - fixture: fixtures/apiregistration-apiservices-delete.http
+        expect: access
+        resource: "v1beta1.metrics.k8s.io"
+
+  - id: kubernetes.apiregistration.apiservices.patch
+    match: { rest: { method: PATCH, path: "/apis/apiregistration.k8s.io/{version}/apiservices/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: a-p-i-service }
+    card: "Change APIService {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      An APIService sends every request for its group and version to a service of its own choosing;
+      every change is access.
+    tests:
+      - fixture: fixtures/apiregistration-apiservices-patch.http
+        expect: access
+        resource: "v1beta1.metrics.k8s.io"
+
+  - id: kubernetes.apiregistration.apiservices.replace
+    match: { rest: { method: PUT, path: "/apis/apiregistration.k8s.io/{version}/apiservices/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: a-p-i-service }
+    card: "Replace APIService {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      An APIService sends every request for its group and version to a service of its own choosing;
+      every change is access.
+    tests:
+      - fixture: fixtures/apiregistration-apiservices-replace.http
+        expect: access
+        resource: "v1beta1.metrics.k8s.io"
+
+  - id: kubernetes.apiregistration.apiservices.status.patch
+    match: { rest: { method: PATCH, path: "/apis/apiregistration.k8s.io/{version}/apiservices/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: a-p-i-service }
+    card: "Change the status of APIService {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/apiregistration-apiservices-status-patch.http
+        expect: write
+        resource: "v1beta1.metrics.k8s.io"
+
+  - id: kubernetes.apiregistration.apiservices.status.replace
+    match: { rest: { method: PUT, path: "/apis/apiregistration.k8s.io/{version}/apiservices/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: a-p-i-service }
+    card: "Change the status of APIService {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/apiregistration-apiservices-status-replace.http
+        expect: write
+        resource: "v1beta1.metrics.k8s.io"

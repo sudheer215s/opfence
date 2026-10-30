@@ -103,8 +103,22 @@ func (l *loader) validateProviders(c *Catalog) {
 		}
 	}
 	fallback := map[string]bool{}
+	within := map[string][]string{}
 	for _, p := range c.Providers {
 		fallback[p.ID] = p.Fallback
+		within[p.ID] = p.Within
+		for _, w := range p.Within {
+			if c.Provider(w) == nil {
+				l.addf(path.Join(p.ID, ProviderFile), 0, "within: no provider %s", w)
+			}
+		}
+	}
+	// inside reports whether pattern h of provider owner lies strictly inside
+	// pattern other of otherOwner, which owner names in within: the longer
+	// pattern wins at run time.
+	inside := func(h, owner, other, otherOwner string) bool {
+		return slices.Contains(within[owner], otherOwner) && strings.HasPrefix(other, "*.") &&
+			HostMatches(other, hostSample(h)) && !HostMatches(h, hostSample(other)) && len(h) > len(other)
 	}
 	for h, owner := range hostOwner {
 		if !strings.Contains(h, "*") {
@@ -117,7 +131,10 @@ func (l *loader) validateProviders(c *Catalog) {
 			if fallback[owner] != fallback[otherOwner] {
 				continue
 			}
-			if otherOwner != owner && (HostMatches(h, hostSample(other)) || HostMatches(other, hostSample(h))) {
+			if otherOwner == owner || inside(h, owner, other, otherOwner) || inside(other, otherOwner, h, owner) {
+				continue
+			}
+			if HostMatches(h, hostSample(other)) || HostMatches(other, hostSample(h)) {
 				l.addf(path.Join(owner, ProviderFile), 0, "host %q overlaps %q claimed by provider %s", h, other, otherOwner)
 			}
 		}
@@ -238,13 +255,29 @@ func (l *loader) validateProvider(p *Provider, hostOwner, mcpNameOwner map[strin
 		switch {
 		case !headerArgNameRe.MatchString(p.HostArg) || p.HostArg == "query" || p.HostArg == "body":
 			l.addf(file, 0, "host_arg %q must be a plain name other than query and body", p.HostArg)
-		case !wild:
+		case !wild && !p.HostArgWhole:
 			l.addf(file, 0, "host_arg needs a host pattern that starts with *.")
 		}
 		for _, a := range p.HeaderArgs {
 			if a.Arg == p.HostArg {
 				l.addf(file, 0, "host_arg %q is also a header_args arg", p.HostArg)
 			}
+		}
+	}
+	if p.HostArgWhole && p.HostArg == "" {
+		l.addf(file, 0, "host_arg_whole needs host_arg")
+	}
+	if p.OwnCA {
+		switch {
+		case len(p.Hosts) == 0:
+			l.addf(file, 0, "own_ca needs hosts")
+		case p.MCP != nil || p.SigV4 || len(p.Git) > 0 || p.Fallback || len(p.DatabasePorts) > 0:
+			l.addf(file, 0, "an own_ca provider takes REST, GraphQL and WebSocket rules only")
+		}
+	}
+	for _, w := range p.Within {
+		if w == p.ID {
+			l.addf(file, 0, "within names the provider itself")
 		}
 	}
 	seenPorts := map[int]bool{}

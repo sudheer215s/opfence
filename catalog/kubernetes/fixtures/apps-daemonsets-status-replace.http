@@ -1,0 +1,8 @@
+# description: Change the status of DaemonSet daemonset in namespace shop on cluster gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog
+PUT /apis/apps/v1/namespaces/shop/daemonsets/daemonset/status HTTP/1.1
+Host: gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/json
+
+{"status":{"conditions":[]}}

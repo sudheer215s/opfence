@@ -122,6 +122,8 @@ func (s *Server) tunnelAllowed(host string) (bool, string) {
 		return true, ""
 	case s.cfg.Mode == "open":
 		return true, ""
+	case s.ownCAProvider(host) != nil:
+		return false, fmt.Sprintf("%s is a %s server, which serves a certificate from its own CA; Opfence cannot inspect it in this session, so strict mode refuses it", host, s.ownCAProvider(host).Title)
 	default:
 		return false, host + " is not an API in the Opfence catalog or on your passthrough list (strict mode)"
 	}

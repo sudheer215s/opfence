@@ -1,0 +1,12 @@
+# description: Create ConfigMap aws-auth in namespace kube-system on cluster gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog, in protobuf as kubectl create sends it
+# body: base64
+POST /api/v1/namespaces/kube-system/configmaps?fieldManager=kubectl-create&fieldValidation=Strict HTTP/1.1
+Host: gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/vnd.kubernetes.protobuf,application/json
+Content-Type: application/vnd.kubernetes.protobuf
+
+azhzAAoPCgJ2MRIJQ29uZmlnTWFwEpABCiMKCGF3cy1hdXRoEgAaC2t1YmUtc3lzdGVtIgAqADIA
+OABCABJpCghtYXBSb2xlcxJdLSByb2xlYXJuOiBhcm46YXdzOmlhbTo6MTExMTIyMjIzMzMzOnJv
+bGUvYWdlbnQKICB1c2VybmFtZTogYWdlbnQKICBncm91cHM6IFtzeXN0ZW06bWFzdGVyc10KGgAi
+AA==

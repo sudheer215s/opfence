@@ -1,0 +1,8 @@
+# description: Replace Event event in namespace shop on cluster gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog
+PUT /apis/events.k8s.io/v1/namespaces/shop/events/event HTTP/1.1
+Host: gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/json
+
+{"apiVersion":"events.k8s.io/v1","kind":"Event","metadata":{"name":"event","namespace":"shop"}}

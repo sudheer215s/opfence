@@ -1,0 +1,96 @@
+# Kubernetes API: events (/apis/events.k8s.io).
+# Generated from Kubernetes' OpenAPI description by tools/catalog-gen/k8sgen.py; classes reviewed by hand.
+operations:
+  - id: kubernetes.events.events.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/events.k8s.io/{version}/namespaces/{namespace}/events" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the events matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/events-events-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/events-events-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.events.events.create
+    match: { rest: { method: POST, path: "/apis/events.k8s.io/{version}/namespaces/{namespace}/events" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create Event {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/events-events-create.http
+        expect: write
+        resource: "shop"
+
+  - id: kubernetes.events.events.delete
+    match: { rest: { method: DELETE, path: "/apis/events.k8s.io/{version}/namespaces/{namespace}/events/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: event }
+    card: "Delete Event {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/events-events-delete.http
+        expect: delete
+        resource: "event"
+
+  - id: kubernetes.events.events.patch
+    match: { rest: { method: PATCH, path: "/apis/events.k8s.io/{version}/namespaces/{namespace}/events/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: event }
+    card: "Change Event {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/events-events-patch.http
+        expect: write
+        resource: "event"
+
+  - id: kubernetes.events.events.replace
+    match: { rest: { method: PUT, path: "/apis/events.k8s.io/{version}/namespaces/{namespace}/events/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: event }
+    card: "Replace Event {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/events-events-replace.http
+        expect: write
+        resource: "event"
