@@ -1,0 +1,8 @@
+# description: Create ServiceCIDR servicecidr on cluster shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+POST /apis/networking.k8s.io/v1/servicecidrs HTTP/1.1
+Host: shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/json
+
+{"apiVersion":"networking.k8s.io/v1","kind":"ServiceCIDR","metadata":{"name":"servicecidr"}}

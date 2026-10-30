@@ -1,0 +1,8 @@
+# description: Replace ValidatingAdmissionPolicyBinding validatingadmissionpolicybinding on cluster shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+PUT /apis/admissionregistration.k8s.io/v1/validatingadmissionpolicybindings/validatingadmissionpolicybinding HTTP/1.1
+Host: shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/json
+
+{"apiVersion":"admissionregistration.k8s.io/v1","kind":"ValidatingAdmissionPolicyBinding","metadata":{"name":"validatingadmissionpolicybinding"}}

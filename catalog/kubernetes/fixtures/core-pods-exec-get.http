@@ -1,0 +1,6 @@
+# description: Run ["sh","-c","env"] in Pod web-7c9d8b6f5-x2k4p in namespace shop on cluster 8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net
+GET /api/v1/namespaces/shop/pods/web-7c9d8b6f5-x2k4p/exec?command=sh&command=-c&command=env&container=web&stdin=true&stdout=true&stderr=true&tty=true HTTP/1.1
+Host: 8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+

@@ -1,0 +1,11 @@
+# description: Forward ports 5432 of Pod web-7c9d8b6f5-x2k4p in namespace shop on cluster shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io, opened as a WebSocket as kubectl opens it
+GET /api/v1/namespaces/shop/pods/web-7c9d8b6f5-x2k4p/portforward?ports=5432 HTTP/1.1
+Host: shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Connection: Upgrade
+Upgrade: websocket
+Sec-WebSocket-Version: 13
+Sec-WebSocket-Key: SuGEWJPf09uZBVHb9CtL1Q==
+Sec-WebSocket-Protocol: SPDY/3.1+portforward.k8s.io, portforward.k8s.io
+

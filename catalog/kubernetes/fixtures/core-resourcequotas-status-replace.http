@@ -1,0 +1,8 @@
+# description: Change the status of ResourceQuota resourcequota in namespace shop on cluster shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+PUT /api/v1/namespaces/shop/resourcequotas/resourcequota/status HTTP/1.1
+Host: shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/json
+
+{"status":{"conditions":[]}}

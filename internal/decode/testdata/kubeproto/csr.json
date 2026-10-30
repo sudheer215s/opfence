@@ -1,0 +1,1 @@
+{"kind":"CertificateSigningRequest","apiVersion":"certificates.k8s.io/v1","metadata":{"name":"agent"},"spec":{"request":"LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0K","signerName":"kubernetes.io/kube-apiserver-client","expirationSeconds":3600,"usages":["client auth"],"extra":{"scopes":["a","b"]}},"status":{}}

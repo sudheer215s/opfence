@@ -1,0 +1,96 @@
+# Kubernetes API: discovery (/apis/discovery.k8s.io).
+# Generated from Kubernetes' OpenAPI description by tools/catalog-gen/k8sgen.py; classes reviewed by hand.
+operations:
+  - id: kubernetes.discovery.endpointslices.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/discovery.k8s.io/{version}/namespaces/{namespace}/endpointslices" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the endpointslices matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/discovery-endpointslices-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/discovery-endpointslices-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.discovery.endpointslices.create
+    match: { rest: { method: POST, path: "/apis/discovery.k8s.io/{version}/namespaces/{namespace}/endpointslices" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create EndpointSlice {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/discovery-endpointslices-create.http
+        expect: write
+        resource: "shop"
+
+  - id: kubernetes.discovery.endpointslices.delete
+    match: { rest: { method: DELETE, path: "/apis/discovery.k8s.io/{version}/namespaces/{namespace}/endpointslices/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: endpoint-slice }
+    card: "Delete EndpointSlice {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/discovery-endpointslices-delete.http
+        expect: delete
+        resource: "endpointslice"
+
+  - id: kubernetes.discovery.endpointslices.patch
+    match: { rest: { method: PATCH, path: "/apis/discovery.k8s.io/{version}/namespaces/{namespace}/endpointslices/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: endpoint-slice }
+    card: "Change EndpointSlice {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/discovery-endpointslices-patch.http
+        expect: write
+        resource: "endpointslice"
+
+  - id: kubernetes.discovery.endpointslices.replace
+    match: { rest: { method: PUT, path: "/apis/discovery.k8s.io/{version}/namespaces/{namespace}/endpointslices/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: endpoint-slice }
+    card: "Replace EndpointSlice {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/discovery-endpointslices-replace.http
+        expect: write
+        resource: "endpointslice"

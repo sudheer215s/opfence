@@ -1,0 +1,6 @@
+# description: Delete ClusterRoleBinding agent-admin on cluster shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+DELETE /apis/rbac.authorization.k8s.io/v1/clusterrolebindings/agent-admin HTTP/1.1
+Host: shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+

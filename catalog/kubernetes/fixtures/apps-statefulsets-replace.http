@@ -1,0 +1,8 @@
+# description: Replace StatefulSet postgres in namespace shop on cluster a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com
+PUT /apis/apps/v1/namespaces/shop/statefulsets/postgres HTTP/1.1
+Host: a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/json
+
+{"apiVersion":"apps/v1","kind":"StatefulSet","metadata":{"name":"postgres","namespace":"shop"}}

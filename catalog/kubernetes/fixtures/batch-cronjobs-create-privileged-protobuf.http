@@ -1,0 +1,15 @@
+# description: Create CronJob cronjob in namespace shop on cluster 8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net, privileged, in protobuf as client-go sends it
+# body: base64
+POST /apis/batch/v1/namespaces/shop/cronjobs HTTP/1.1
+Host: 8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/vnd.kubernetes.protobuf,application/json
+Content-Type: application/vnd.kubernetes.protobuf
+
+azhzAAoTCghiYXRjaC92MRIHQ3JvbkpvYhLLAgobCgduaWdodGx5EgAaBHNob3AiACoAMgA4AEIA
+EqkCCgkwIDMgKiAqICoaACqZAgoQCgASABoAIgAqADIAOABCABKEAjKBAgocCgASABoAIgAqADIA
+OABCAFoKCgNhcHASA3dlYhLgAQoNCgRyb290EgUKAwoBLxJ+CgVzaGVsbBIHYnVzeWJveBoFc2xl
+ZXAaBDM2MDAqAEIiCg0KA2NwdRIGCgQ1MDBtChEKBm1lbW9yeRIHCgUxMjhNaVIlChkSFwoIL2hl
+YWx0aHoSBwgAEJA/GgAaACIAEAAYACAAKAAwAGoAcgB6AhABgAEAiAEAkAEAogEAGgAyAEIASgBS
+AFgBYABoAIIBAIoBAJoBAKIBMgoEaW5pdBIHYnVzeWJveCoAQgBqAHIAeg0KCwoJU1lTX0FETUlO
+gAEAiAEAkAEAogEAwgEAGgAaACIA

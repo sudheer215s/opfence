@@ -1,0 +1,130 @@
+# Kubernetes API: policy (/apis/policy).
+# Generated from Kubernetes' OpenAPI description by tools/catalog-gen/k8sgen.py; classes reviewed by hand.
+operations:
+  - id: kubernetes.policy.poddisruptionbudgets.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/policy/{version}/namespaces/{namespace}/poddisruptionbudgets" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the poddisruptionbudgets matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/policy-poddisruptionbudgets-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/policy-poddisruptionbudgets-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.policy.poddisruptionbudgets.create
+    match: { rest: { method: POST, path: "/apis/policy/{version}/namespaces/{namespace}/poddisruptionbudgets" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create PodDisruptionBudget {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/policy-poddisruptionbudgets-create.http
+        expect: write
+        resource: "shop"
+
+  - id: kubernetes.policy.poddisruptionbudgets.delete
+    match: { rest: { method: DELETE, path: "/apis/policy/{version}/namespaces/{namespace}/poddisruptionbudgets/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod-disruption-budget }
+    card: "Delete PodDisruptionBudget {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/policy-poddisruptionbudgets-delete.http
+        expect: delete
+        resource: "poddisruptionbudget"
+
+  - id: kubernetes.policy.poddisruptionbudgets.patch
+    match: { rest: { method: PATCH, path: "/apis/policy/{version}/namespaces/{namespace}/poddisruptionbudgets/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod-disruption-budget }
+    card: "Change PodDisruptionBudget {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/policy-poddisruptionbudgets-patch.http
+        expect: write
+        resource: "poddisruptionbudget"
+
+  - id: kubernetes.policy.poddisruptionbudgets.replace
+    match: { rest: { method: PUT, path: "/apis/policy/{version}/namespaces/{namespace}/poddisruptionbudgets/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod-disruption-budget }
+    card: "Replace PodDisruptionBudget {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/policy-poddisruptionbudgets-replace.http
+        expect: write
+        resource: "poddisruptionbudget"
+
+  - id: kubernetes.policy.poddisruptionbudgets.status.patch
+    match: { rest: { method: PATCH, path: "/apis/policy/{version}/namespaces/{namespace}/poddisruptionbudgets/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod-disruption-budget }
+    card: "Change the status of PodDisruptionBudget {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/policy-poddisruptionbudgets-status-patch.http
+        expect: write
+        resource: "poddisruptionbudget"
+
+  - id: kubernetes.policy.poddisruptionbudgets.status.replace
+    match: { rest: { method: PUT, path: "/apis/policy/{version}/namespaces/{namespace}/poddisruptionbudgets/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: pod-disruption-budget }
+    card: "Change the status of PodDisruptionBudget {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/policy-poddisruptionbudgets-status-replace.http
+        expect: write
+        resource: "poddisruptionbudget"

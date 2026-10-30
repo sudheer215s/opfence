@@ -1,0 +1,8 @@
+# description: Replace CronJob cronjob in namespace shop on cluster gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog, on the host's network with the host's root mounted
+PUT /apis/batch/v1/namespaces/shop/cronjobs/cronjob HTTP/1.1
+Host: gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/json
+
+{"apiVersion":"batch/v1","kind":"CronJob","metadata":{"name":"cronjob","namespace":"shop"},"spec":{"jobTemplate":{"spec":{"template":{"spec":{"hostNetwork":true,"containers":[{"name":"debug","image":"busybox:1.36"}],"volumes":[{"name":"root","hostPath":{"path":"/"}}]}}}}}}

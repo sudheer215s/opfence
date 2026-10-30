@@ -517,6 +517,26 @@ func TestOpenShellLeavesOutMidWildcardHosts(t *testing.T) {
 	}
 }
 
+// A provider whose hosts each serve their own CA (Kubernetes) is left out,
+// with a note: a policy inspecting it would break every client.
+func TestOpenShellLeavesOutOwnCAProviders(t *testing.T) {
+	c, err := catalog.Embedded()
+	if err != nil {
+		t.Fatal(err)
+	}
+	out, err := OpenShell(c, nil, policy.Production)
+	if err != nil {
+		t.Fatal(err)
+	}
+	s := string(out)
+	if strings.Contains(s, "opfence_kubernetes:") || strings.Contains(s, "eks.amazonaws.com") {
+		t.Fatal("the Kubernetes provider was exported")
+	}
+	if !strings.Contains(s, "Not exported: kubernetes, whose servers each present a certificate from their own CA") {
+		t.Fatal("no note about the Kubernetes provider")
+	}
+}
+
 // A REST API sharing its host with an MCP server (mcp.paths) gets its own
 // endpoint beside the MCP one, with wildcard writes left out: POST
 // /search/* would also match /search/%2e%2e%2fmcp.

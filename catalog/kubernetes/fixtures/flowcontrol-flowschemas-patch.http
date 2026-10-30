@@ -1,0 +1,8 @@
+# description: Change FlowSchema flowschema on cluster shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+PATCH /apis/flowcontrol.apiserver.k8s.io/v1/flowschemas/flowschema HTTP/1.1
+Host: shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/merge-patch+json
+
+{"metadata":{"labels":{"team":"shop"}}}

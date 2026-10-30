@@ -47,6 +47,7 @@ func TestParseFixtureVariants(t *testing.T) {
 		{"absolute form", "GET https://API.github.com:8443/repos/a%2Fb?q=1 HTTP/1.1\nHost: ignored.example\n\n", "api.github.com", "8443", "/repos/a%2Fb", ""},
 		{"escaped path kept raw", "GET /v1/a%2Fb/c HTTP/1.1\nHost: h.example.com\n\n", "h.example.com", "", "/v1/a%2Fb/c", ""},
 		{"multi-line body", "POST /x HTTP/1.1\nHost: h.example.com\n\nline1\nline2\n", "h.example.com", "", "/x", "line1\nline2"},
+		{"base64 body", "# body: base64\nPOST /x HTTP/1.1\nHost: h.example.com\n\nazhzAAoA\n/wo=\n", "h.example.com", "", "/x", "k8s\x00\n\x00\xff\n"},
 	}
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
@@ -62,7 +63,8 @@ func TestParseFixtureVariants(t *testing.T) {
 }
 
 func TestParseFixtureErrors(t *testing.T) {
-	for _, data := range []string{"", "# only a comment\n", "NOT A REQUEST\n\n", "GET / HTTP/1.1\n\n", "GET /?a=%zz HTTP/1.1\nHost: h.example.com\n\n"} {
+	for _, data := range []string{"", "# only a comment\n", "NOT A REQUEST\n\n", "GET / HTTP/1.1\n\n", "GET /?a=%zz HTTP/1.1\nHost: h.example.com\n\n",
+		"# body: base64\nPOST / HTTP/1.1\nHost: h.example.com\n\nnot base64!\n", "# body: hex\nPOST / HTTP/1.1\nHost: h.example.com\n\n00\n"} {
 		if _, _, err := ParseFixture([]byte(data)); err == nil {
 			t.Errorf("ParseFixture(%q) succeeded", data)
 		}

@@ -1,0 +1,8 @@
+# description: Replace PodDisruptionBudget poddisruptionbudget in namespace shop on cluster shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+PUT /apis/policy/v1/namespaces/shop/poddisruptionbudgets/poddisruptionbudget HTTP/1.1
+Host: shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/json
+
+{"apiVersion":"policy/v1","kind":"PodDisruptionBudget","metadata":{"name":"poddisruptionbudget","namespace":"shop"}}

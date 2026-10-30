@@ -1,0 +1,1 @@
+{"kind":"Pod","apiVersion":"v1","metadata":{"name":"debug","namespace":"shop"},"spec":{"containers":[{"name":"web","image":"nginx:1.29","ports":[{"containerPort":80}],"resources":{}}],"hostPID":true},"status":{}}

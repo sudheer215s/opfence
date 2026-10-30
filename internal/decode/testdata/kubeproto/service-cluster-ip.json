@@ -1,0 +1,1 @@
+{"kind":"Service","apiVersion":"v1","metadata":{"name":"web","namespace":"shop"},"spec":{"ports":[{"port":80,"targetPort":"http"}],"selector":{"app":"web"}},"status":{"loadBalancer":{}}}

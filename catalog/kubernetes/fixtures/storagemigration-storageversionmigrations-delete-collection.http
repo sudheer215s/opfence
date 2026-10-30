@@ -1,0 +1,6 @@
+# description: Delete the storageversionmigrations matching label selector app=web on cluster 3f2a7c1e-5b9d-4e8a-9c1f-2d7e6b5a4c3d.k8s.ondigitalocean.com
+DELETE /apis/storagemigration.k8s.io/v1/storageversionmigrations?labelSelector=app%3Dweb HTTP/1.1
+Host: 3f2a7c1e-5b9d-4e8a-9c1f-2d7e6b5a4c3d.k8s.ondigitalocean.com
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+

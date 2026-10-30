@@ -1,0 +1,11 @@
+# description: Create Pod web-7c9d8b6f5-x2k4p in namespace shop on cluster 8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net, in the host's PID namespace, in protobuf as client-go sends it
+# body: base64
+POST /api/v1/namespaces/shop/pods HTTP/1.1
+Host: 8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/vnd.kubernetes.protobuf,application/json
+Content-Type: application/vnd.kubernetes.protobuf
+
+azhzAAoJCgJ2MRIDUG9kEoEBChkKBWRlYnVnEgAaBHNob3AiACoAMgA4AEIAEk8SMQoDd2ViEgpu
+Z2lueDoxLjI5KgAyCgoAEAAYUCIAKgBCAGoAcgCAAQCIAQCQAQCiAQAaADIAQgBKAFIAWABgAWgA
+ggEAigEAmgEAwgEAGhMKABoAIgAqADIASgBaAHIAiAEAGgAiAA==

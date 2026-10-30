@@ -1,0 +1,190 @@
+# Kubernetes API: coordination (/apis/coordination.k8s.io).
+# Generated from Kubernetes' OpenAPI description by tools/catalog-gen/k8sgen.py; classes reviewed by hand.
+operations:
+  - id: kubernetes.coordination.leasecandidates.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/coordination.k8s.io/{version}/namespaces/{namespace}/leasecandidates" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the leasecandidates matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/coordination-leasecandidates-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/coordination-leasecandidates-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.coordination.leasecandidates.create
+    match: { rest: { method: POST, path: "/apis/coordination.k8s.io/{version}/namespaces/{namespace}/leasecandidates" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create LeaseCandidate {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/coordination-leasecandidates-create.http
+        expect: write
+        resource: "shop"
+
+  - id: kubernetes.coordination.leasecandidates.delete
+    match: { rest: { method: DELETE, path: "/apis/coordination.k8s.io/{version}/namespaces/{namespace}/leasecandidates/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: lease-candidate }
+    card: "Delete LeaseCandidate {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/coordination-leasecandidates-delete.http
+        expect: delete
+        resource: "leasecandidate"
+
+  - id: kubernetes.coordination.leasecandidates.patch
+    match: { rest: { method: PATCH, path: "/apis/coordination.k8s.io/{version}/namespaces/{namespace}/leasecandidates/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: lease-candidate }
+    card: "Change LeaseCandidate {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/coordination-leasecandidates-patch.http
+        expect: write
+        resource: "leasecandidate"
+
+  - id: kubernetes.coordination.leasecandidates.replace
+    match: { rest: { method: PUT, path: "/apis/coordination.k8s.io/{version}/namespaces/{namespace}/leasecandidates/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: lease-candidate }
+    card: "Replace LeaseCandidate {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/coordination-leasecandidates-replace.http
+        expect: write
+        resource: "leasecandidate"
+
+  - id: kubernetes.coordination.leases.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/coordination.k8s.io/{version}/namespaces/{namespace}/leases" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the leases matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/coordination-leases-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/coordination-leases-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.coordination.leases.create
+    match: { rest: { method: POST, path: "/apis/coordination.k8s.io/{version}/namespaces/{namespace}/leases" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create Lease {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/coordination-leases-create.http
+        expect: write
+        resource: "shop"
+
+  - id: kubernetes.coordination.leases.delete
+    match: { rest: { method: DELETE, path: "/apis/coordination.k8s.io/{version}/namespaces/{namespace}/leases/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: lease }
+    card: "Delete Lease {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/coordination-leases-delete.http
+        expect: delete
+        resource: "lease"
+
+  - id: kubernetes.coordination.leases.patch
+    match: { rest: { method: PATCH, path: "/apis/coordination.k8s.io/{version}/namespaces/{namespace}/leases/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: lease }
+    card: "Change Lease {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/coordination-leases-patch.http
+        expect: write
+        resource: "lease"
+
+  - id: kubernetes.coordination.leases.replace
+    match: { rest: { method: PUT, path: "/apis/coordination.k8s.io/{version}/namespaces/{namespace}/leases/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: lease }
+    card: "Replace Lease {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/coordination-leases-replace.http
+        expect: write
+        resource: "lease"

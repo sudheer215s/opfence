@@ -33,10 +33,16 @@ func OpenShell(c *catalog.Catalog, p *policy.Effective, env string) ([]byte, err
 		p = policy.Resolve(nil, nil)
 	}
 	policies := mapping()
-	var skipped, unmatched, fallbacks []string
+	var skipped, unmatched, fallbacks, ownCA []string
 	for _, prov := range c.Providers {
 		if prov.SigV4 {
 			skipped = append(skipped, prov.ID)
+			continue
+		}
+		if prov.OwnCA {
+			// Each host trusts its own CA; a policy that inspected it would
+			// break every client.
+			ownCA = append(ownCA, prov.ID)
 			continue
 		}
 		if prov.Fallback {
@@ -90,6 +96,10 @@ func OpenShell(c *catalog.Catalog, p *policy.Effective, env string) ([]byte, err
 	if len(fallbacks) > 0 {
 		foot = append(foot, "Not exported: "+strings.Join(fallbacks, ", ")+", which cover every API on a domain that no other\n"+
 			"provider claims; those APIs stay outside the policy (and blocked by it); use `opfence run` for them.")
+	}
+	if len(ownCA) > 0 {
+		foot = append(foot, "Not exported: "+strings.Join(ownCA, ", ")+", whose servers each present a certificate from their own CA,\n"+
+			"which clients trust from their own configuration; use `opfence run` for them.")
 	}
 	root.FootComment = strings.Join(foot, "\n")
 	doc := &yaml.Node{Kind: yaml.DocumentNode, Content: []*yaml.Node{root}}

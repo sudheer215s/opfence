@@ -1,0 +1,1163 @@
+# Kubernetes API: apps (/apis/apps).
+# Generated from Kubernetes' OpenAPI description by tools/catalog-gen/k8sgen.py; classes reviewed by hand.
+operations:
+  - id: kubernetes.apps.controllerrevisions.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/apps/{version}/namespaces/{namespace}/controllerrevisions" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the controllerrevisions matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/apps-controllerrevisions-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/apps-controllerrevisions-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.apps.controllerrevisions.create
+    match: { rest: { method: POST, path: "/apis/apps/{version}/namespaces/{namespace}/controllerrevisions" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create ControllerRevision {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/apps-controllerrevisions-create.http
+        expect: write
+        resource: "shop"
+
+  - id: kubernetes.apps.controllerrevisions.delete
+    match: { rest: { method: DELETE, path: "/apis/apps/{version}/namespaces/{namespace}/controllerrevisions/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: controller-revision }
+    card: "Delete ControllerRevision {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/apps-controllerrevisions-delete.http
+        expect: delete
+        resource: "controllerrevision"
+
+  - id: kubernetes.apps.controllerrevisions.patch
+    match: { rest: { method: PATCH, path: "/apis/apps/{version}/namespaces/{namespace}/controllerrevisions/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: controller-revision }
+    card: "Change ControllerRevision {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/apps-controllerrevisions-patch.http
+        expect: write
+        resource: "controllerrevision"
+
+  - id: kubernetes.apps.controllerrevisions.replace
+    match: { rest: { method: PUT, path: "/apis/apps/{version}/namespaces/{namespace}/controllerrevisions/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: controller-revision }
+    card: "Replace ControllerRevision {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/apps-controllerrevisions-replace.http
+        expect: write
+        resource: "controllerrevision"
+
+  - id: kubernetes.apps.daemonsets.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/apps/{version}/namespaces/{namespace}/daemonsets" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the daemonsets matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/apps-daemonsets-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/apps-daemonsets-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.apps.daemonsets.create
+    match: { rest: { method: POST, path: "/apis/apps/{version}/namespaces/{namespace}/daemonsets" } }
+    class: write
+    when:
+      - if: { arg: body.spec.template.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create DaemonSet {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/apps-daemonsets-create.http
+        expect: write
+        resource: "shop"
+      - fixture: fixtures/apps-daemonsets-create-privileged.http
+        expect: access
+        resource: "shop"
+      - fixture: fixtures/apps-daemonsets-create-host.http
+        expect: access
+        resource: "shop"
+
+  - id: kubernetes.apps.daemonsets.delete
+    match: { rest: { method: DELETE, path: "/apis/apps/{version}/namespaces/{namespace}/daemonsets/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: daemon-set }
+    card: "Delete DaemonSet {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/apps-daemonsets-delete.http
+        expect: delete
+        resource: "daemonset"
+
+  - id: kubernetes.apps.daemonsets.patch
+    match: { rest: { method: PATCH, path: "/apis/apps/{version}/namespaces/{namespace}/daemonsets/{name}" } }
+    class: write
+    when:
+      - if: { arg: body.spec.template.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: daemon-set }
+    card: "Change DaemonSet {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/apps-daemonsets-patch.http
+        expect: write
+        resource: "daemonset"
+      - fixture: fixtures/apps-daemonsets-patch-privileged.http
+        expect: access
+        resource: "daemonset"
+      - fixture: fixtures/apps-daemonsets-patch-json-patch.http
+        expect: access
+        resource: "daemonset"
+
+  - id: kubernetes.apps.daemonsets.replace
+    match: { rest: { method: PUT, path: "/apis/apps/{version}/namespaces/{namespace}/daemonsets/{name}" } }
+    class: write
+    when:
+      - if: { arg: body.spec.template.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: daemon-set }
+    card: "Replace DaemonSet {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/apps-daemonsets-replace.http
+        expect: write
+        resource: "daemonset"
+      - fixture: fixtures/apps-daemonsets-replace-privileged.http
+        expect: access
+        resource: "daemonset"
+      - fixture: fixtures/apps-daemonsets-replace-host.http
+        expect: access
+        resource: "daemonset"
+
+  - id: kubernetes.apps.daemonsets.status.patch
+    match: { rest: { method: PATCH, path: "/apis/apps/{version}/namespaces/{namespace}/daemonsets/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: daemon-set }
+    card: "Change the status of DaemonSet {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/apps-daemonsets-status-patch.http
+        expect: write
+        resource: "daemonset"
+
+  - id: kubernetes.apps.daemonsets.status.replace
+    match: { rest: { method: PUT, path: "/apis/apps/{version}/namespaces/{namespace}/daemonsets/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: daemon-set }
+    card: "Change the status of DaemonSet {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/apps-daemonsets-status-replace.http
+        expect: write
+        resource: "daemonset"
+
+  - id: kubernetes.apps.deployments.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/apps/{version}/namespaces/{namespace}/deployments" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the deployments matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/apps-deployments-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/apps-deployments-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.apps.deployments.create
+    match: { rest: { method: POST, path: "/apis/apps/{version}/namespaces/{namespace}/deployments" } }
+    class: write
+    when:
+      - if: { arg: body.spec.template.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: body.spec.replicas, equals: "0" }
+        class: delete
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create Deployment {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/apps-deployments-create.http
+        expect: write
+        resource: "shop"
+      - fixture: fixtures/apps-deployments-create-privileged.http
+        expect: access
+        resource: "shop"
+      - fixture: fixtures/apps-deployments-create-host.http
+        expect: access
+        resource: "shop"
+      - fixture: fixtures/apps-deployments-create-dry-run.http
+        expect: read
+        resource: "shop"
+      - fixture: fixtures/apps-deployments-create-protobuf.http
+        expect: write
+        resource: "shop"
+      - fixture: fixtures/apps-deployments-create-privileged-protobuf.http
+        expect: access
+        resource: "shop"
+
+  - id: kubernetes.apps.deployments.delete
+    match: { rest: { method: DELETE, path: "/apis/apps/{version}/namespaces/{namespace}/deployments/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: deployment }
+    card: "Delete Deployment {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/apps-deployments-delete.http
+        expect: delete
+        resource: "web"
+      - fixture: fixtures/apps-deployments-delete-dry-run.http
+        expect: read
+        resource: "web"
+      - fixture: fixtures/apps-deployments-delete-dry-run-query.http
+        expect: delete
+        resource: "web"
+
+  - id: kubernetes.apps.deployments.patch
+    match: { rest: { method: PATCH, path: "/apis/apps/{version}/namespaces/{namespace}/deployments/{name}" } }
+    class: write
+    when:
+      - if: { arg: body.spec.template.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: body.spec.replicas, equals: "0" }
+        class: delete
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: deployment }
+    card: "Change Deployment {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/apps-deployments-patch.http
+        expect: write
+        resource: "web"
+      - fixture: fixtures/apps-deployments-patch-privileged.http
+        expect: access
+        resource: "web"
+      - fixture: fixtures/apps-deployments-patch-json-patch.http
+        expect: access
+        resource: "web"
+      - fixture: fixtures/apps-deployments-patch-zero.http
+        expect: delete
+        resource: "web"
+
+  - id: kubernetes.apps.deployments.replace
+    match: { rest: { method: PUT, path: "/apis/apps/{version}/namespaces/{namespace}/deployments/{name}" } }
+    class: write
+    when:
+      - if: { arg: body.spec.template.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: body.spec.replicas, equals: "0" }
+        class: delete
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: deployment }
+    card: "Replace Deployment {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/apps-deployments-replace.http
+        expect: write
+        resource: "web"
+      - fixture: fixtures/apps-deployments-replace-privileged.http
+        expect: access
+        resource: "web"
+      - fixture: fixtures/apps-deployments-replace-host.http
+        expect: access
+        resource: "web"
+      - fixture: fixtures/apps-deployments-replace-zero.http
+        expect: delete
+        resource: "web"
+
+  - id: kubernetes.apps.deployments.scale.patch
+    match: { rest: { method: PATCH, path: "/apis/apps/{version}/namespaces/{namespace}/deployments/{name}/scale" } }
+    class: write
+    when:
+      - if: { arg: body.spec.replicas, equals: "0" }
+        class: delete
+      - if: { arg: body.op, present: true }
+        class: delete
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: deployment }
+    card: "Scale Deployment {name} to {body.spec.replicas} replicas in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Scaling to zero replicas takes the workload down (delete). A JSON Patch, whose effect Opfence
+      cannot read, counts as that.
+    tests:
+      - fixture: fixtures/apps-deployments-scale-patch.http
+        expect: write
+        resource: "web"
+      - fixture: fixtures/apps-deployments-scale-patch-zero.http
+        expect: delete
+        resource: "web"
+
+  - id: kubernetes.apps.deployments.scale.replace
+    match: { rest: { method: PUT, path: "/apis/apps/{version}/namespaces/{namespace}/deployments/{name}/scale" } }
+    class: write
+    when:
+      - if: { arg: body.spec.replicas, equals: "0" }
+        class: delete
+      - if: { arg: body.op, present: true }
+        class: delete
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: deployment }
+    card: "Scale Deployment {name} to {body.spec.replicas} replicas in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Scaling to zero replicas takes the workload down (delete). A JSON Patch, whose effect Opfence
+      cannot read, counts as that.
+    tests:
+      - fixture: fixtures/apps-deployments-scale-replace.http
+        expect: write
+        resource: "web"
+      - fixture: fixtures/apps-deployments-scale-replace-zero.http
+        expect: delete
+        resource: "web"
+      - fixture: fixtures/apps-deployments-scale-replace-zero-protobuf.http
+        expect: delete
+        resource: "web"
+
+  - id: kubernetes.apps.deployments.status.patch
+    match: { rest: { method: PATCH, path: "/apis/apps/{version}/namespaces/{namespace}/deployments/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: deployment }
+    card: "Change the status of Deployment {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/apps-deployments-status-patch.http
+        expect: write
+        resource: "web"
+
+  - id: kubernetes.apps.deployments.status.replace
+    match: { rest: { method: PUT, path: "/apis/apps/{version}/namespaces/{namespace}/deployments/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: deployment }
+    card: "Change the status of Deployment {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/apps-deployments-status-replace.http
+        expect: write
+        resource: "web"
+
+  - id: kubernetes.apps.replicasets.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/apps/{version}/namespaces/{namespace}/replicasets" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the replicasets matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/apps-replicasets-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/apps-replicasets-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.apps.replicasets.create
+    match: { rest: { method: POST, path: "/apis/apps/{version}/namespaces/{namespace}/replicasets" } }
+    class: write
+    when:
+      - if: { arg: body.spec.template.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: body.spec.replicas, equals: "0" }
+        class: delete
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create ReplicaSet {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/apps-replicasets-create.http
+        expect: write
+        resource: "shop"
+      - fixture: fixtures/apps-replicasets-create-privileged.http
+        expect: access
+        resource: "shop"
+      - fixture: fixtures/apps-replicasets-create-host.http
+        expect: access
+        resource: "shop"
+
+  - id: kubernetes.apps.replicasets.delete
+    match: { rest: { method: DELETE, path: "/apis/apps/{version}/namespaces/{namespace}/replicasets/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: replica-set }
+    card: "Delete ReplicaSet {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/apps-replicasets-delete.http
+        expect: delete
+        resource: "replicaset"
+
+  - id: kubernetes.apps.replicasets.patch
+    match: { rest: { method: PATCH, path: "/apis/apps/{version}/namespaces/{namespace}/replicasets/{name}" } }
+    class: write
+    when:
+      - if: { arg: body.spec.template.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: body.spec.replicas, equals: "0" }
+        class: delete
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: replica-set }
+    card: "Change ReplicaSet {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/apps-replicasets-patch.http
+        expect: write
+        resource: "replicaset"
+      - fixture: fixtures/apps-replicasets-patch-privileged.http
+        expect: access
+        resource: "replicaset"
+      - fixture: fixtures/apps-replicasets-patch-json-patch.http
+        expect: access
+        resource: "replicaset"
+      - fixture: fixtures/apps-replicasets-patch-zero.http
+        expect: delete
+        resource: "replicaset"
+
+  - id: kubernetes.apps.replicasets.replace
+    match: { rest: { method: PUT, path: "/apis/apps/{version}/namespaces/{namespace}/replicasets/{name}" } }
+    class: write
+    when:
+      - if: { arg: body.spec.template.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: body.spec.replicas, equals: "0" }
+        class: delete
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: replica-set }
+    card: "Replace ReplicaSet {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/apps-replicasets-replace.http
+        expect: write
+        resource: "replicaset"
+      - fixture: fixtures/apps-replicasets-replace-privileged.http
+        expect: access
+        resource: "replicaset"
+      - fixture: fixtures/apps-replicasets-replace-host.http
+        expect: access
+        resource: "replicaset"
+      - fixture: fixtures/apps-replicasets-replace-zero.http
+        expect: delete
+        resource: "replicaset"
+
+  - id: kubernetes.apps.replicasets.scale.patch
+    match: { rest: { method: PATCH, path: "/apis/apps/{version}/namespaces/{namespace}/replicasets/{name}/scale" } }
+    class: write
+    when:
+      - if: { arg: body.spec.replicas, equals: "0" }
+        class: delete
+      - if: { arg: body.op, present: true }
+        class: delete
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: replica-set }
+    card: "Scale ReplicaSet {name} to {body.spec.replicas} replicas in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Scaling to zero replicas takes the workload down (delete). A JSON Patch, whose effect Opfence
+      cannot read, counts as that.
+    tests:
+      - fixture: fixtures/apps-replicasets-scale-patch.http
+        expect: write
+        resource: "replicaset"
+      - fixture: fixtures/apps-replicasets-scale-patch-zero.http
+        expect: delete
+        resource: "replicaset"
+
+  - id: kubernetes.apps.replicasets.scale.replace
+    match: { rest: { method: PUT, path: "/apis/apps/{version}/namespaces/{namespace}/replicasets/{name}/scale" } }
+    class: write
+    when:
+      - if: { arg: body.spec.replicas, equals: "0" }
+        class: delete
+      - if: { arg: body.op, present: true }
+        class: delete
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: replica-set }
+    card: "Scale ReplicaSet {name} to {body.spec.replicas} replicas in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Scaling to zero replicas takes the workload down (delete). A JSON Patch, whose effect Opfence
+      cannot read, counts as that.
+    tests:
+      - fixture: fixtures/apps-replicasets-scale-replace.http
+        expect: write
+        resource: "replicaset"
+      - fixture: fixtures/apps-replicasets-scale-replace-zero.http
+        expect: delete
+        resource: "replicaset"
+
+  - id: kubernetes.apps.replicasets.status.patch
+    match: { rest: { method: PATCH, path: "/apis/apps/{version}/namespaces/{namespace}/replicasets/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: replica-set }
+    card: "Change the status of ReplicaSet {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/apps-replicasets-status-patch.http
+        expect: write
+        resource: "replicaset"
+
+  - id: kubernetes.apps.replicasets.status.replace
+    match: { rest: { method: PUT, path: "/apis/apps/{version}/namespaces/{namespace}/replicasets/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: replica-set }
+    card: "Change the status of ReplicaSet {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/apps-replicasets-status-replace.http
+        expect: write
+        resource: "replicaset"
+
+  - id: kubernetes.apps.statefulsets.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/apps/{version}/namespaces/{namespace}/statefulsets" } }
+    class: irreversible
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the statefulsets matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A StatefulSet's persistentVolumeClaimRetentionPolicy can delete its volume claims, and their
+      data, with it. Without a label selector every object of the kind in the namespace is deleted
+      (irreversible).
+    tests:
+      - fixture: fixtures/apps-statefulsets-delete-collection.http
+        expect: irreversible
+        resource: "shop"
+      - fixture: fixtures/apps-statefulsets-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.apps.statefulsets.create
+    match: { rest: { method: POST, path: "/apis/apps/{version}/namespaces/{namespace}/statefulsets" } }
+    class: write
+    when:
+      - if: { arg: body.spec.template.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: body.spec.replicas, equals: "0" }
+        class: delete
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create StatefulSet {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/apps-statefulsets-create.http
+        expect: write
+        resource: "shop"
+      - fixture: fixtures/apps-statefulsets-create-privileged.http
+        expect: access
+        resource: "shop"
+      - fixture: fixtures/apps-statefulsets-create-host.http
+        expect: access
+        resource: "shop"
+
+  - id: kubernetes.apps.statefulsets.delete
+    match: { rest: { method: DELETE, path: "/apis/apps/{version}/namespaces/{namespace}/statefulsets/{name}" } }
+    class: irreversible
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: stateful-set }
+    card: "Delete StatefulSet {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A StatefulSet's persistentVolumeClaimRetentionPolicy can delete its volume claims, and their
+      data, with it.
+    tests:
+      - fixture: fixtures/apps-statefulsets-delete.http
+        expect: irreversible
+        resource: "postgres"
+
+  - id: kubernetes.apps.statefulsets.patch
+    match: { rest: { method: PATCH, path: "/apis/apps/{version}/namespaces/{namespace}/statefulsets/{name}" } }
+    class: write
+    when:
+      - if: { arg: body.spec.template.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: body.spec.replicas, equals: "0" }
+        class: delete
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: stateful-set }
+    card: "Change StatefulSet {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/apps-statefulsets-patch.http
+        expect: write
+        resource: "postgres"
+      - fixture: fixtures/apps-statefulsets-patch-privileged.http
+        expect: access
+        resource: "postgres"
+      - fixture: fixtures/apps-statefulsets-patch-json-patch.http
+        expect: access
+        resource: "postgres"
+      - fixture: fixtures/apps-statefulsets-patch-zero.http
+        expect: delete
+        resource: "postgres"
+
+  - id: kubernetes.apps.statefulsets.replace
+    match: { rest: { method: PUT, path: "/apis/apps/{version}/namespaces/{namespace}/statefulsets/{name}" } }
+    class: write
+    when:
+      - if: { arg: body.spec.template.spec.containers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.containers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.privileged, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.initContainers.securityContext.capabilities.add, matches: '(?i)^(CAP_)?(ALL|SYS_ADMIN|SYS_PTRACE|SYS_MODULE|SYS_RAWIO|SYS_BOOT|NET_ADMIN|DAC_READ_SEARCH|BPF|PERFMON)$' }
+        class: access
+      - if: { arg: body.spec.template.spec.hostNetwork, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostPID, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.hostIPC, in: ["true", "yes", "y", "on"] }
+        class: access
+      - if: { arg: body.spec.template.spec.volumes.hostPath, present: true }
+        class: access
+      - if: { arg: body.op, present: true }
+        class: access
+      - if: { arg: body.spec.replicas, equals: "0" }
+        class: delete
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: stateful-set }
+    card: "Replace StatefulSet {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A pod spec that asks for privileged containers, the host's network, PID or IPC namespaces,
+      hostPath volumes or dangerous capabilities is access: such a pod owns its node. A JSON Patch,
+      whose effect Opfence cannot read, is access too.
+    tests:
+      - fixture: fixtures/apps-statefulsets-replace.http
+        expect: write
+        resource: "postgres"
+      - fixture: fixtures/apps-statefulsets-replace-privileged.http
+        expect: access
+        resource: "postgres"
+      - fixture: fixtures/apps-statefulsets-replace-host.http
+        expect: access
+        resource: "postgres"
+      - fixture: fixtures/apps-statefulsets-replace-zero.http
+        expect: delete
+        resource: "postgres"
+
+  - id: kubernetes.apps.statefulsets.scale.patch
+    match: { rest: { method: PATCH, path: "/apis/apps/{version}/namespaces/{namespace}/statefulsets/{name}/scale" } }
+    class: write
+    when:
+      - if: { arg: body.spec.replicas, equals: "0" }
+        class: delete
+      - if: { arg: body.op, present: true }
+        class: delete
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: stateful-set }
+    card: "Scale StatefulSet {name} to {body.spec.replicas} replicas in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Scaling to zero replicas takes the workload down (delete). A JSON Patch, whose effect Opfence
+      cannot read, counts as that.
+    tests:
+      - fixture: fixtures/apps-statefulsets-scale-patch.http
+        expect: write
+        resource: "postgres"
+      - fixture: fixtures/apps-statefulsets-scale-patch-zero.http
+        expect: delete
+        resource: "postgres"
+
+  - id: kubernetes.apps.statefulsets.scale.replace
+    match: { rest: { method: PUT, path: "/apis/apps/{version}/namespaces/{namespace}/statefulsets/{name}/scale" } }
+    class: write
+    when:
+      - if: { arg: body.spec.replicas, equals: "0" }
+        class: delete
+      - if: { arg: body.op, present: true }
+        class: delete
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: stateful-set }
+    card: "Scale StatefulSet {name} to {body.spec.replicas} replicas in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Scaling to zero replicas takes the workload down (delete). A JSON Patch, whose effect Opfence
+      cannot read, counts as that.
+    tests:
+      - fixture: fixtures/apps-statefulsets-scale-replace.http
+        expect: write
+        resource: "postgres"
+      - fixture: fixtures/apps-statefulsets-scale-replace-zero.http
+        expect: delete
+        resource: "postgres"
+
+  - id: kubernetes.apps.statefulsets.status.patch
+    match: { rest: { method: PATCH, path: "/apis/apps/{version}/namespaces/{namespace}/statefulsets/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: stateful-set }
+    card: "Change the status of StatefulSet {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/apps-statefulsets-status-patch.http
+        expect: write
+        resource: "postgres"
+
+  - id: kubernetes.apps.statefulsets.status.replace
+    match: { rest: { method: PUT, path: "/apis/apps/{version}/namespaces/{namespace}/statefulsets/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: stateful-set }
+    card: "Change the status of StatefulSet {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/apps-statefulsets-status-replace.http
+        expect: write
+        resource: "postgres"

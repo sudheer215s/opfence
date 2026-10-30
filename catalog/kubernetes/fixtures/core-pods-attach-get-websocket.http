@@ -1,0 +1,11 @@
+# description: Attach to Pod web-7c9d8b6f5-x2k4p in namespace shop on cluster 3f2a7c1e-5b9d-4e8a-9c1f-2d7e6b5a4c3d.k8s.ondigitalocean.com, opened as a WebSocket as kubectl opens it
+GET /api/v1/namespaces/shop/pods/web-7c9d8b6f5-x2k4p/attach?container=web&stdin=true&stdout=true&tty=true HTTP/1.1
+Host: 3f2a7c1e-5b9d-4e8a-9c1f-2d7e6b5a4c3d.k8s.ondigitalocean.com
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Connection: Upgrade
+Upgrade: websocket
+Sec-WebSocket-Version: 13
+Sec-WebSocket-Key: SuGEWJPf09uZBVHb9CtL1Q==
+Sec-WebSocket-Protocol: v5.channel.k8s.io, v4.channel.k8s.io, v3.channel.k8s.io, v2.channel.k8s.io, channel.k8s.io
+

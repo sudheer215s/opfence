@@ -153,6 +153,9 @@ func TestHelpers(t *testing.T) {
 	if got := shownBody([]byte(`{"query":"mutation { a }","variables":{"x":1}}`)); got != "mutation { a }\nvariables {\"x\":1}" {
 		t.Errorf("shownBody = %q", got)
 	}
+	if got := shownBody([]byte("k8s\x00\n\x0b\n\x02v1")); got != "(10 bytes, binary)" {
+		t.Errorf("shownBody = %q", got)
+	}
 	if got := base("catalog/railway.html"); got != "../" {
 		t.Errorf("base = %q", got)
 	}

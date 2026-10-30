@@ -1,0 +1,8 @@
+# description: Replace LeaseCandidate leasecandidate in namespace shop on cluster gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog
+PUT /apis/coordination.k8s.io/v1beta1/namespaces/shop/leasecandidates/leasecandidate HTTP/1.1
+Host: gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/json
+
+{"apiVersion":"coordination.k8s.io/v1beta1","kind":"LeaseCandidate","metadata":{"name":"leasecandidate","namespace":"shop"}}

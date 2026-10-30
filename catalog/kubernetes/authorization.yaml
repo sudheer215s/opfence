@@ -1,0 +1,66 @@
+# Kubernetes API: authorization (/apis/authorization.k8s.io).
+# Generated from Kubernetes' OpenAPI description by tools/catalog-gen/k8sgen.py; classes reviewed by hand.
+operations:
+  - id: kubernetes.authorization.localsubjectaccessreviews.create
+    match: { rest: { method: POST, path: "/apis/authorization.k8s.io/{version}/namespaces/{namespace}/localsubjectaccessreviews" } }
+    class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Create LocalSubjectAccessReview {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A review answers a question and changes nothing.
+    tests:
+      - fixture: fixtures/authorization-localsubjectaccessreviews-create.http
+        expect: read
+        resource: "gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog"
+
+  - id: kubernetes.authorization.selfsubjectaccessreviews.create
+    match: { rest: { method: POST, path: "/apis/authorization.k8s.io/{version}/selfsubjectaccessreviews" } }
+    class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Create SelfSubjectAccessReview {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A review answers a question and changes nothing.
+    tests:
+      - fixture: fixtures/authorization-selfsubjectaccessreviews-create.http
+        expect: read
+        resource: "3f2a7c1e-5b9d-4e8a-9c1f-2d7e6b5a4c3d.k8s.ondigitalocean.com"
+
+  - id: kubernetes.authorization.selfsubjectrulesreviews.create
+    match: { rest: { method: POST, path: "/apis/authorization.k8s.io/{version}/selfsubjectrulesreviews" } }
+    class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Create SelfSubjectRulesReview {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A review answers a question and changes nothing.
+    tests:
+      - fixture: fixtures/authorization-selfsubjectrulesreviews-create.http
+        expect: read
+        resource: "8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net"
+
+  - id: kubernetes.authorization.subjectaccessreviews.create
+    match: { rest: { method: POST, path: "/apis/authorization.k8s.io/{version}/subjectaccessreviews" } }
+    class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Create SubjectAccessReview {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A review answers a question and changes nothing.
+    tests:
+      - fixture: fixtures/authorization-subjectaccessreviews-create.http
+        expect: read
+        resource: "a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com"

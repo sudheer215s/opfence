@@ -1,0 +1,406 @@
+# Kubernetes API: rbac (/apis/rbac.authorization.k8s.io).
+# Generated from Kubernetes' OpenAPI description by tools/catalog-gen/k8sgen.py; classes reviewed by hand.
+operations:
+  - id: kubernetes.rbac.clusterrolebindings.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/rbac.authorization.k8s.io/{version}/clusterrolebindings" } }
+    class: access
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the clusterrolebindings matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Roles and their bindings decide who can do what in the cluster; every change is access.
+      Without a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/rbac-clusterrolebindings-delete-collection.http
+        expect: access
+        resource: "8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net"
+      - fixture: fixtures/rbac-clusterrolebindings-delete-collection-every.http
+        expect: irreversible
+        resource: "8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net"
+
+  - id: kubernetes.rbac.clusterrolebindings.create
+    match: { rest: { method: POST, path: "/apis/rbac.authorization.k8s.io/{version}/clusterrolebindings" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: cluster-role-binding }
+    card: "Create ClusterRoleBinding {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Roles and their bindings decide who can do what in the cluster; every change is access.
+    tests:
+      - fixture: fixtures/rbac-clusterrolebindings-create.http
+        expect: access
+        resource: "agent-admin"
+
+  - id: kubernetes.rbac.clusterrolebindings.delete
+    match: { rest: { method: DELETE, path: "/apis/rbac.authorization.k8s.io/{version}/clusterrolebindings/{name}" } }
+    class: access
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: cluster-role-binding }
+    card: "Delete ClusterRoleBinding {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Roles and their bindings decide who can do what in the cluster; every change is access.
+    tests:
+      - fixture: fixtures/rbac-clusterrolebindings-delete.http
+        expect: access
+        resource: "agent-admin"
+
+  - id: kubernetes.rbac.clusterrolebindings.patch
+    match: { rest: { method: PATCH, path: "/apis/rbac.authorization.k8s.io/{version}/clusterrolebindings/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: cluster-role-binding }
+    card: "Change ClusterRoleBinding {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Roles and their bindings decide who can do what in the cluster; every change is access.
+    tests:
+      - fixture: fixtures/rbac-clusterrolebindings-patch.http
+        expect: access
+        resource: "agent-admin"
+
+  - id: kubernetes.rbac.clusterrolebindings.replace
+    match: { rest: { method: PUT, path: "/apis/rbac.authorization.k8s.io/{version}/clusterrolebindings/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: cluster-role-binding }
+    card: "Replace ClusterRoleBinding {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Roles and their bindings decide who can do what in the cluster; every change is access.
+    tests:
+      - fixture: fixtures/rbac-clusterrolebindings-replace.http
+        expect: access
+        resource: "agent-admin"
+
+  - id: kubernetes.rbac.clusterroles.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/rbac.authorization.k8s.io/{version}/clusterroles" } }
+    class: access
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the clusterroles matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Roles and their bindings decide who can do what in the cluster; every change is access.
+      Without a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/rbac-clusterroles-delete-collection.http
+        expect: access
+        resource: "8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net"
+      - fixture: fixtures/rbac-clusterroles-delete-collection-every.http
+        expect: irreversible
+        resource: "8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net"
+
+  - id: kubernetes.rbac.clusterroles.create
+    match: { rest: { method: POST, path: "/apis/rbac.authorization.k8s.io/{version}/clusterroles" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: cluster-role }
+    card: "Create ClusterRole {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Roles and their bindings decide who can do what in the cluster; every change is access.
+    tests:
+      - fixture: fixtures/rbac-clusterroles-create.http
+        expect: access
+        resource: "agent-admin"
+
+  - id: kubernetes.rbac.clusterroles.delete
+    match: { rest: { method: DELETE, path: "/apis/rbac.authorization.k8s.io/{version}/clusterroles/{name}" } }
+    class: access
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: cluster-role }
+    card: "Delete ClusterRole {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Roles and their bindings decide who can do what in the cluster; every change is access.
+    tests:
+      - fixture: fixtures/rbac-clusterroles-delete.http
+        expect: access
+        resource: "agent-admin"
+
+  - id: kubernetes.rbac.clusterroles.patch
+    match: { rest: { method: PATCH, path: "/apis/rbac.authorization.k8s.io/{version}/clusterroles/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: cluster-role }
+    card: "Change ClusterRole {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Roles and their bindings decide who can do what in the cluster; every change is access.
+    tests:
+      - fixture: fixtures/rbac-clusterroles-patch.http
+        expect: access
+        resource: "agent-admin"
+
+  - id: kubernetes.rbac.clusterroles.replace
+    match: { rest: { method: PUT, path: "/apis/rbac.authorization.k8s.io/{version}/clusterroles/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: cluster-role }
+    card: "Replace ClusterRole {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Roles and their bindings decide who can do what in the cluster; every change is access.
+    tests:
+      - fixture: fixtures/rbac-clusterroles-replace.http
+        expect: access
+        resource: "agent-admin"
+
+  - id: kubernetes.rbac.rolebindings.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/rbac.authorization.k8s.io/{version}/namespaces/{namespace}/rolebindings" } }
+    class: access
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the rolebindings matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Roles and their bindings decide who can do what in the cluster; every change is access.
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/rbac-rolebindings-delete-collection.http
+        expect: access
+        resource: "shop"
+      - fixture: fixtures/rbac-rolebindings-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.rbac.rolebindings.create
+    match: { rest: { method: POST, path: "/apis/rbac.authorization.k8s.io/{version}/namespaces/{namespace}/rolebindings" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create RoleBinding {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Roles and their bindings decide who can do what in the cluster; every change is access.
+    tests:
+      - fixture: fixtures/rbac-rolebindings-create.http
+        expect: access
+        resource: "shop"
+
+  - id: kubernetes.rbac.rolebindings.delete
+    match: { rest: { method: DELETE, path: "/apis/rbac.authorization.k8s.io/{version}/namespaces/{namespace}/rolebindings/{name}" } }
+    class: access
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: role-binding }
+    card: "Delete RoleBinding {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Roles and their bindings decide who can do what in the cluster; every change is access.
+    tests:
+      - fixture: fixtures/rbac-rolebindings-delete.http
+        expect: access
+        resource: "deployer"
+
+  - id: kubernetes.rbac.rolebindings.patch
+    match: { rest: { method: PATCH, path: "/apis/rbac.authorization.k8s.io/{version}/namespaces/{namespace}/rolebindings/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: role-binding }
+    card: "Change RoleBinding {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Roles and their bindings decide who can do what in the cluster; every change is access.
+    tests:
+      - fixture: fixtures/rbac-rolebindings-patch.http
+        expect: access
+        resource: "deployer"
+
+  - id: kubernetes.rbac.rolebindings.replace
+    match: { rest: { method: PUT, path: "/apis/rbac.authorization.k8s.io/{version}/namespaces/{namespace}/rolebindings/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: role-binding }
+    card: "Replace RoleBinding {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Roles and their bindings decide who can do what in the cluster; every change is access.
+    tests:
+      - fixture: fixtures/rbac-rolebindings-replace.http
+        expect: access
+        resource: "deployer"
+
+  - id: kubernetes.rbac.roles.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/rbac.authorization.k8s.io/{version}/namespaces/{namespace}/roles" } }
+    class: access
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the roles matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Roles and their bindings decide who can do what in the cluster; every change is access.
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/rbac-roles-delete-collection.http
+        expect: access
+        resource: "shop"
+      - fixture: fixtures/rbac-roles-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.rbac.roles.create
+    match: { rest: { method: POST, path: "/apis/rbac.authorization.k8s.io/{version}/namespaces/{namespace}/roles" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create Role {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Roles and their bindings decide who can do what in the cluster; every change is access.
+    tests:
+      - fixture: fixtures/rbac-roles-create.http
+        expect: access
+        resource: "shop"
+
+  - id: kubernetes.rbac.roles.delete
+    match: { rest: { method: DELETE, path: "/apis/rbac.authorization.k8s.io/{version}/namespaces/{namespace}/roles/{name}" } }
+    class: access
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: role }
+    card: "Delete Role {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Roles and their bindings decide who can do what in the cluster; every change is access.
+    tests:
+      - fixture: fixtures/rbac-roles-delete.http
+        expect: access
+        resource: "deployer"
+
+  - id: kubernetes.rbac.roles.patch
+    match: { rest: { method: PATCH, path: "/apis/rbac.authorization.k8s.io/{version}/namespaces/{namespace}/roles/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: role }
+    card: "Change Role {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Roles and their bindings decide who can do what in the cluster; every change is access.
+    tests:
+      - fixture: fixtures/rbac-roles-patch.http
+        expect: access
+        resource: "deployer"
+
+  - id: kubernetes.rbac.roles.replace
+    match: { rest: { method: PUT, path: "/apis/rbac.authorization.k8s.io/{version}/namespaces/{namespace}/roles/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: role }
+    card: "Replace Role {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Roles and their bindings decide who can do what in the cluster; every change is access.
+    tests:
+      - fixture: fixtures/rbac-roles-replace.http
+        expect: access
+        resource: "deployer"

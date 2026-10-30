@@ -1,0 +1,8 @@
+# description: Change Node ip-10-0-1-23.ec2.internal on cluster shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+PATCH /api/v1/nodes/ip-10-0-1-23.ec2.internal HTTP/1.1
+Host: shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/merge-patch+json
+
+{"metadata":{"labels":{"team":"shop"}}}

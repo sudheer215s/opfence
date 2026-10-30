@@ -1,0 +1,8 @@
+# description: Change CustomResourceDefinition certificates.cert-manager.io on cluster a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com
+PATCH /apis/apiextensions.k8s.io/v1/customresourcedefinitions/certificates.cert-manager.io HTTP/1.1
+Host: a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/merge-patch+json
+
+{"metadata":{"labels":{"team":"shop"}}}

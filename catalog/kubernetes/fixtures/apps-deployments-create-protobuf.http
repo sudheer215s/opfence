@@ -1,0 +1,12 @@
+# description: Create Deployment web in namespace shop on cluster 8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net, in protobuf as kubectl create sends it
+# body: base64
+POST /apis/apps/v1/namespaces/shop/deployments?fieldManager=kubectl-create&fieldValidation=Strict HTTP/1.1
+Host: 8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/vnd.kubernetes.protobuf,application/json
+Content-Type: application/vnd.kubernetes.protobuf
+
+azhzAAoVCgdhcHBzL3YxEgpEZXBsb3ltZW50Er8BCiMKA3dlYhIAGgRzaG9wIgAqADIAOABCAFoK
+CgNhcHASA3dlYhKJAQgBEgwKCgoDYXBwEgN3ZWIabwocCgASABoAIgAqADIAOABCAFoKCgNhcHAS
+A3dlYhJPEjEKA3dlYhIWZ2hjci5pby9hY21lL3dlYjoxLjQuMioAQgBqAHIAgAEAiAEAkAEAogEA
+GgAyAEIASgBSAFgAYABoAIIBAIoBAJoBAMIBACICCgAoADgAGgwIABAAGAAgACgAOAAaACIA

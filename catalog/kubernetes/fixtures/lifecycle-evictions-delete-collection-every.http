@@ -1,0 +1,6 @@
+# description: Delete the evictions matching label selector app=web in namespace shop on cluster shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io, with no label selector
+DELETE /apis/lifecycle.k8s.io/v1alpha1/namespaces/shop/evictions HTTP/1.1
+Host: shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+

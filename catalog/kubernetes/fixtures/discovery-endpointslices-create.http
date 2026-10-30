@@ -1,0 +1,8 @@
+# description: Create EndpointSlice endpointslice in namespace shop on cluster 8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net
+POST /apis/discovery.k8s.io/v1/namespaces/shop/endpointslices HTTP/1.1
+Host: 8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/json
+
+{"apiVersion":"discovery.k8s.io/v1","kind":"EndpointSlice","metadata":{"name":"endpointslice","namespace":"shop"}}

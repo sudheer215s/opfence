@@ -1,0 +1,634 @@
+# Kubernetes API: storage (/apis/storage.k8s.io).
+# Generated from Kubernetes' OpenAPI description by tools/catalog-gen/k8sgen.py; classes reviewed by hand.
+operations:
+  - id: kubernetes.storage.csidrivers.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/storage.k8s.io/{version}/csidrivers" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the csidrivers matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/storage-csidrivers-delete-collection.http
+        expect: delete
+        resource: "8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net"
+      - fixture: fixtures/storage-csidrivers-delete-collection-every.http
+        expect: irreversible
+        resource: "8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net"
+
+  - id: kubernetes.storage.csidrivers.create
+    match: { rest: { method: POST, path: "/apis/storage.k8s.io/{version}/csidrivers" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: c-s-i-driver }
+    card: "Create CSIDriver {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storage-csidrivers-create.http
+        expect: write
+        resource: "csidriver"
+
+  - id: kubernetes.storage.csidrivers.delete
+    match: { rest: { method: DELETE, path: "/apis/storage.k8s.io/{version}/csidrivers/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: c-s-i-driver }
+    card: "Delete CSIDriver {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/storage-csidrivers-delete.http
+        expect: delete
+        resource: "csidriver"
+
+  - id: kubernetes.storage.csidrivers.patch
+    match: { rest: { method: PATCH, path: "/apis/storage.k8s.io/{version}/csidrivers/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: c-s-i-driver }
+    card: "Change CSIDriver {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storage-csidrivers-patch.http
+        expect: write
+        resource: "csidriver"
+
+  - id: kubernetes.storage.csidrivers.replace
+    match: { rest: { method: PUT, path: "/apis/storage.k8s.io/{version}/csidrivers/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: c-s-i-driver }
+    card: "Replace CSIDriver {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storage-csidrivers-replace.http
+        expect: write
+        resource: "csidriver"
+
+  - id: kubernetes.storage.csinodes.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/storage.k8s.io/{version}/csinodes" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the csinodes matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/storage-csinodes-delete-collection.http
+        expect: delete
+        resource: "8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net"
+      - fixture: fixtures/storage-csinodes-delete-collection-every.http
+        expect: irreversible
+        resource: "8c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f.us-east-2-gw.linodelke.net"
+
+  - id: kubernetes.storage.csinodes.create
+    match: { rest: { method: POST, path: "/apis/storage.k8s.io/{version}/csinodes" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: c-s-i-node }
+    card: "Create CSINode {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storage-csinodes-create.http
+        expect: write
+        resource: "csinode"
+
+  - id: kubernetes.storage.csinodes.delete
+    match: { rest: { method: DELETE, path: "/apis/storage.k8s.io/{version}/csinodes/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: c-s-i-node }
+    card: "Delete CSINode {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/storage-csinodes-delete.http
+        expect: delete
+        resource: "csinode"
+
+  - id: kubernetes.storage.csinodes.patch
+    match: { rest: { method: PATCH, path: "/apis/storage.k8s.io/{version}/csinodes/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: c-s-i-node }
+    card: "Change CSINode {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storage-csinodes-patch.http
+        expect: write
+        resource: "csinode"
+
+  - id: kubernetes.storage.csinodes.replace
+    match: { rest: { method: PUT, path: "/apis/storage.k8s.io/{version}/csinodes/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: c-s-i-node }
+    card: "Replace CSINode {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storage-csinodes-replace.http
+        expect: write
+        resource: "csinode"
+
+  - id: kubernetes.storage.csinodes.status.patch
+    match: { rest: { method: PATCH, path: "/apis/storage.k8s.io/{version}/csinodes/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: c-s-i-node }
+    card: "Change the status of CSINode {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storage-csinodes-status-patch.http
+        expect: write
+        resource: "csinode"
+
+  - id: kubernetes.storage.csinodes.status.replace
+    match: { rest: { method: PUT, path: "/apis/storage.k8s.io/{version}/csinodes/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: c-s-i-node }
+    card: "Change the status of CSINode {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storage-csinodes-status-replace.http
+        expect: write
+        resource: "csinode"
+
+  - id: kubernetes.storage.csistoragecapacities.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/storage.k8s.io/{version}/namespaces/{namespace}/csistoragecapacities" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Delete the csistoragecapacities matching label selector {query.labelSelector} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind in the namespace is deleted (irreversible).
+    tests:
+      - fixture: fixtures/storage-csistoragecapacities-delete-collection.http
+        expect: delete
+        resource: "shop"
+      - fixture: fixtures/storage-csistoragecapacities-delete-collection-every.http
+        expect: irreversible
+        resource: "shop"
+
+  - id: kubernetes.storage.csistoragecapacities.create
+    match: { rest: { method: POST, path: "/apis/storage.k8s.io/{version}/namespaces/{namespace}/csistoragecapacities" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: namespace, kind: namespace }
+    card: "Create CSIStorageCapacity {body.metadata.name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storage-csistoragecapacities-create.http
+        expect: write
+        resource: "shop"
+
+  - id: kubernetes.storage.csistoragecapacities.delete
+    match: { rest: { method: DELETE, path: "/apis/storage.k8s.io/{version}/namespaces/{namespace}/csistoragecapacities/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: c-s-i-storage-capacity }
+    card: "Delete CSIStorageCapacity {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/storage-csistoragecapacities-delete.http
+        expect: delete
+        resource: "csistoragecapacitie"
+
+  - id: kubernetes.storage.csistoragecapacities.patch
+    match: { rest: { method: PATCH, path: "/apis/storage.k8s.io/{version}/namespaces/{namespace}/csistoragecapacities/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: c-s-i-storage-capacity }
+    card: "Change CSIStorageCapacity {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storage-csistoragecapacities-patch.http
+        expect: write
+        resource: "csistoragecapacitie"
+
+  - id: kubernetes.storage.csistoragecapacities.replace
+    match: { rest: { method: PUT, path: "/apis/storage.k8s.io/{version}/namespaces/{namespace}/csistoragecapacities/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: c-s-i-storage-capacity }
+    card: "Replace CSIStorageCapacity {name} in namespace {namespace} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storage-csistoragecapacities-replace.http
+        expect: write
+        resource: "csistoragecapacitie"
+
+  - id: kubernetes.storage.storageclasses.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/storage.k8s.io/{version}/storageclasses" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the storageclasses matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/storage-storageclasses-delete-collection.http
+        expect: delete
+        resource: "shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io"
+      - fixture: fixtures/storage-storageclasses-delete-collection-every.http
+        expect: irreversible
+        resource: "shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io"
+
+  - id: kubernetes.storage.storageclasses.create
+    match: { rest: { method: POST, path: "/apis/storage.k8s.io/{version}/storageclasses" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: storage-class }
+    card: "Create StorageClass {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storage-storageclasses-create.http
+        expect: write
+        resource: "storageclasse"
+
+  - id: kubernetes.storage.storageclasses.delete
+    match: { rest: { method: DELETE, path: "/apis/storage.k8s.io/{version}/storageclasses/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: storage-class }
+    card: "Delete StorageClass {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/storage-storageclasses-delete.http
+        expect: delete
+        resource: "storageclasse"
+
+  - id: kubernetes.storage.storageclasses.patch
+    match: { rest: { method: PATCH, path: "/apis/storage.k8s.io/{version}/storageclasses/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: storage-class }
+    card: "Change StorageClass {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storage-storageclasses-patch.http
+        expect: write
+        resource: "storageclasse"
+
+  - id: kubernetes.storage.storageclasses.replace
+    match: { rest: { method: PUT, path: "/apis/storage.k8s.io/{version}/storageclasses/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: storage-class }
+    card: "Replace StorageClass {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storage-storageclasses-replace.http
+        expect: write
+        resource: "storageclasse"
+
+  - id: kubernetes.storage.volumeattachments.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/storage.k8s.io/{version}/volumeattachments" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the volumeattachments matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/storage-volumeattachments-delete-collection.http
+        expect: delete
+        resource: "shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io"
+      - fixture: fixtures/storage-volumeattachments-delete-collection-every.http
+        expect: irreversible
+        resource: "shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io"
+
+  - id: kubernetes.storage.volumeattachments.create
+    match: { rest: { method: POST, path: "/apis/storage.k8s.io/{version}/volumeattachments" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: volume-attachment }
+    card: "Create VolumeAttachment {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storage-volumeattachments-create.http
+        expect: write
+        resource: "volumeattachment"
+
+  - id: kubernetes.storage.volumeattachments.delete
+    match: { rest: { method: DELETE, path: "/apis/storage.k8s.io/{version}/volumeattachments/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: volume-attachment }
+    card: "Delete VolumeAttachment {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/storage-volumeattachments-delete.http
+        expect: delete
+        resource: "volumeattachment"
+
+  - id: kubernetes.storage.volumeattachments.patch
+    match: { rest: { method: PATCH, path: "/apis/storage.k8s.io/{version}/volumeattachments/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: volume-attachment }
+    card: "Change VolumeAttachment {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storage-volumeattachments-patch.http
+        expect: write
+        resource: "volumeattachment"
+
+  - id: kubernetes.storage.volumeattachments.replace
+    match: { rest: { method: PUT, path: "/apis/storage.k8s.io/{version}/volumeattachments/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: volume-attachment }
+    card: "Replace VolumeAttachment {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storage-volumeattachments-replace.http
+        expect: write
+        resource: "volumeattachment"
+
+  - id: kubernetes.storage.volumeattachments.status.patch
+    match: { rest: { method: PATCH, path: "/apis/storage.k8s.io/{version}/volumeattachments/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: volume-attachment }
+    card: "Change the status of VolumeAttachment {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storage-volumeattachments-status-patch.http
+        expect: write
+        resource: "volumeattachment"
+
+  - id: kubernetes.storage.volumeattachments.status.replace
+    match: { rest: { method: PUT, path: "/apis/storage.k8s.io/{version}/volumeattachments/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: volume-attachment }
+    card: "Change the status of VolumeAttachment {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storage-volumeattachments-status-replace.http
+        expect: write
+        resource: "volumeattachment"
+
+  - id: kubernetes.storage.volumeattributesclasses.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/storage.k8s.io/{version}/volumeattributesclasses" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the volumeattributesclasses matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/storage-volumeattributesclasses-delete-collection.http
+        expect: delete
+        resource: "3f2a7c1e-5b9d-4e8a-9c1f-2d7e6b5a4c3d.k8s.ondigitalocean.com"
+      - fixture: fixtures/storage-volumeattributesclasses-delete-collection-every.http
+        expect: irreversible
+        resource: "3f2a7c1e-5b9d-4e8a-9c1f-2d7e6b5a4c3d.k8s.ondigitalocean.com"
+
+  - id: kubernetes.storage.volumeattributesclasses.create
+    match: { rest: { method: POST, path: "/apis/storage.k8s.io/{version}/volumeattributesclasses" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: volume-attributes-class }
+    card: "Create VolumeAttributesClass {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storage-volumeattributesclasses-create.http
+        expect: write
+        resource: "volumeattributesclasse"
+
+  - id: kubernetes.storage.volumeattributesclasses.delete
+    match: { rest: { method: DELETE, path: "/apis/storage.k8s.io/{version}/volumeattributesclasses/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: volume-attributes-class }
+    card: "Delete VolumeAttributesClass {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/storage-volumeattributesclasses-delete.http
+        expect: delete
+        resource: "volumeattributesclasse"
+
+  - id: kubernetes.storage.volumeattributesclasses.patch
+    match: { rest: { method: PATCH, path: "/apis/storage.k8s.io/{version}/volumeattributesclasses/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: volume-attributes-class }
+    card: "Change VolumeAttributesClass {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storage-volumeattributesclasses-patch.http
+        expect: write
+        resource: "volumeattributesclasse"
+
+  - id: kubernetes.storage.volumeattributesclasses.replace
+    match: { rest: { method: PUT, path: "/apis/storage.k8s.io/{version}/volumeattributesclasses/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: volume-attributes-class }
+    card: "Replace VolumeAttributesClass {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/storage-volumeattributesclasses-replace.http
+        expect: write
+        resource: "volumeattributesclasse"

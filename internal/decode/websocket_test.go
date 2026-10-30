@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/url"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -37,6 +38,20 @@ func TestWebSocketUpgradeDecodes(t *testing.T) {
 	// Not read as a GraphQL GET on the same path, and an unlisted path
 	// cannot be read.
 	if ops := Decode(upgrade("/other"), wsHints); ops[0].Error == "" || ops[0].Protocol != WebSocket {
+		t.Fatalf("%+v", ops)
+	}
+	// With stream upgrades, an unlisted path is the GET it is (kubectl
+	// exec over WebSocket); a listed one is still a socket.
+	stream := wsHints
+	stream.StreamUpgrades = true
+	ops = Decode(upgrade("/api/v1/namespaces/shop/pods/web/exec?command=sh&command=-c&command=env"), stream)
+	if len(ops) != 1 || ops[0].Protocol != REST || ops[0].Method != "GET" || ops[0].Path != "/api/v1/namespaces/shop/pods/web/exec" || ops[0].Error != "" {
+		t.Fatalf("%+v", ops)
+	}
+	if q, _ := ops[0].Args["query"].(map[string]any); !reflect.DeepEqual(q["command"], []any{"sh", "-c", "env"}) {
+		t.Fatalf("query %v", ops[0].Args)
+	}
+	if ops := Decode(upgrade("/graphql"), stream); ops[0].Protocol != WebSocket || ops[0].Method != WSConnect {
 		t.Fatalf("%+v", ops)
 	}
 }

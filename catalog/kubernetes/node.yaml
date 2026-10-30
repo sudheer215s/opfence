@@ -1,0 +1,96 @@
+# Kubernetes API: node (/apis/node.k8s.io).
+# Generated from Kubernetes' OpenAPI description by tools/catalog-gen/k8sgen.py; classes reviewed by hand.
+operations:
+  - id: kubernetes.node.runtimeclasses.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/node.k8s.io/{version}/runtimeclasses" } }
+    class: delete
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the runtimeclasses matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      Without a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/node-runtimeclasses-delete-collection.http
+        expect: delete
+        resource: "gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog"
+      - fixture: fixtures/node-runtimeclasses-delete-collection-every.http
+        expect: irreversible
+        resource: "gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog"
+
+  - id: kubernetes.node.runtimeclasses.create
+    match: { rest: { method: POST, path: "/apis/node.k8s.io/{version}/runtimeclasses" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: runtime-class }
+    card: "Create RuntimeClass {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/node-runtimeclasses-create.http
+        expect: write
+        resource: "runtimeclasse"
+
+  - id: kubernetes.node.runtimeclasses.delete
+    match: { rest: { method: DELETE, path: "/apis/node.k8s.io/{version}/runtimeclasses/{name}" } }
+    class: delete
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: runtime-class }
+    card: "Delete RuntimeClass {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      The API keeps no copy of a deleted object.
+    tests:
+      - fixture: fixtures/node-runtimeclasses-delete.http
+        expect: delete
+        resource: "runtimeclasse"
+
+  - id: kubernetes.node.runtimeclasses.patch
+    match: { rest: { method: PATCH, path: "/apis/node.k8s.io/{version}/runtimeclasses/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: runtime-class }
+    card: "Change RuntimeClass {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/node-runtimeclasses-patch.http
+        expect: write
+        resource: "runtimeclasse"
+
+  - id: kubernetes.node.runtimeclasses.replace
+    match: { rest: { method: PUT, path: "/apis/node.k8s.io/{version}/runtimeclasses/{name}" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: runtime-class }
+    card: "Replace RuntimeClass {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/node-runtimeclasses-replace.http
+        expect: write
+        resource: "runtimeclasse"

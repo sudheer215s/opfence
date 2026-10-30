@@ -58,6 +58,27 @@ type Provider struct {
 	// to abcd.supabase.co has HostArg "abcd". Rules can name it as their
 	// resource, and environments can map it, like any argument.
 	HostArg string `yaml:"host_arg"`
+	// HostArgWhole makes the host argument the whole host rather than the
+	// part a "*." pattern stands for: a Kubernetes cluster is named by its
+	// API server's host, as the kubeconfig writes it (stage 31).
+	HostArgWhole bool `yaml:"host_arg_whole"`
+	// Within names providers whose "*." host patterns this provider's hosts
+	// may lie inside (EKS's *.eks.amazonaws.com under AWS's
+	// *.amazonaws.com); the longer pattern wins (stage 31).
+	Within []string `yaml:"within"`
+	// OwnCA says each of the provider's hosts serves a certificate from its
+	// own CA, which clients trust from their own configuration rather than
+	// the system (a Kubernetes API server and its kubeconfig). The proxy
+	// intercepts such a host only for a cluster whose CA the session holds,
+	// and otherwise handles it as a host outside the catalog; Opfence's own
+	// CA does not cover these hosts (stage 31).
+	OwnCA bool `yaml:"own_ca"`
+	// StreamUpgrades says a WebSocket upgrade on a path no websocket entry
+	// lists is decided by the provider's REST rules as the GET it is: the
+	// socket carries a stream Opfence does not read (a Kubernetes exec,
+	// attach or port forward), which the decision on opening it covers
+	// (stage 31).
+	StreamUpgrades bool `yaml:"stream_upgrades"`
 	// DatabasePorts are ports where the provider's hosts speak a database's
 	// own protocol (MySQL on 3306), which Opfence cannot read. The proxy
 	// handles them as it handles hosts outside the catalog, instead of

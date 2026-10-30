@@ -1,0 +1,8 @@
+# description: Create ReplicaSet replicaset in namespace shop on cluster 3f2a7c1e-5b9d-4e8a-9c1f-2d7e6b5a4c3d.k8s.ondigitalocean.com, privileged
+POST /apis/apps/v1/namespaces/shop/replicasets HTTP/1.1
+Host: 3f2a7c1e-5b9d-4e8a-9c1f-2d7e6b5a4c3d.k8s.ondigitalocean.com
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/json
+
+{"apiVersion":"apps/v1","kind":"ReplicaSet","metadata":{"name":"replicaset","namespace":"shop"},"spec":{"template":{"spec":{"containers":[{"name":"debug","image":"busybox:1.36","securityContext":{"privileged":true}}]}}}}

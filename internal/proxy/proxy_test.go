@@ -70,6 +70,8 @@ type opts struct {
 	respond func(w http.ResponseWriter, r *http.Request)
 	// catalog, when set, replaces the embedded catalog.
 	catalog *catalog.Catalog
+	// ownCA reports the own_ca hosts the session can intercept.
+	ownCA func(host string) bool
 }
 
 func newEnv(t *testing.T, o opts) *env {
@@ -163,6 +165,7 @@ func newEnv(t *testing.T, o opts) *env {
 		AgentHosts:      o.agentHosts,
 		Secrets:         o.secrets,
 		UpstreamRootCAs: upCA.Pool(),
+		OwnCA:           o.ownCA,
 		Logf:            t.Logf,
 	}
 	if o.passthrough != nil {
@@ -941,5 +944,68 @@ func TestInjectAndScrub(t *testing.T) {
 	// A response Opfence cannot decode is refused rather than passed on.
 	if resp, body := get("https://api.vercel.com/br", vercelSecret.Placeholder); resp.StatusCode != http.StatusBadGateway {
 		t.Fatalf("br response: %d %s", resp.StatusCode, body)
+	}
+}
+
+// A Kubernetes API server presents a certificate from its cluster's own
+// CA, so its host (an EKS endpoint, inside AWS's *.amazonaws.com) is
+// intercepted only when the session holds that CA; otherwise it is handled
+// as a host outside the catalog.
+func TestOwnCAHosts(t *testing.T) {
+	const host = "a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com"
+	strict := newEnv(t, opts{})
+	if c, code := connect(t, strict.httpAddr, host+":443"); code != http.StatusForbidden {
+		t.Fatalf("strict: %s got %d", host, code)
+	} else {
+		c.Close()
+	}
+	open := newEnv(t, opts{mode: "open"})
+	c, code := connect(t, open.httpAddr, host+":443")
+	if code != 200 {
+		t.Fatalf("open: %s got %d", host, code)
+	}
+	// Tunnelled, not intercepted: the server's own certificate reaches the
+	// client, which a leaf from Opfence's CA would not verify as.
+	tc := tls.Client(c, &tls.Config{ServerName: host, RootCAs: open.ca.Pool()})
+	if err := tc.Handshake(); err == nil {
+		t.Fatal("the connection was intercepted with Opfence's CA")
+	}
+	c.Close()
+	got := ""
+	for _, e := range append(strict.entries(), open.entries()...) {
+		got += e.Outcome + ": " + e.Host + ": " + e.Reason + "\n"
+	}
+	for _, want := range []string{"refused: " + host + ": " + host + " is a Kubernetes API server, which serves a certificate from its own CA",
+		"tunneled: " + host + ": open mode"} {
+		if !strings.Contains(got, want) {
+			t.Errorf("audit missing %q in:\n%s", want, got)
+		}
+	}
+	// Another *.amazonaws.com host is still AWS's, and intercepted.
+	if c, code := connect(t, strict.httpAddr, "sts.amazonaws.com:443"); code != 200 {
+		t.Fatalf("strict: sts.amazonaws.com got %d", code)
+	} else {
+		c.Close()
+	}
+
+	// With the cluster's CA held, the host is intercepted and decided.
+	held := newEnv(t, opts{mode: "open", ownCA: func(h string) bool { return h == host }})
+	req, _ := http.NewRequest(http.MethodDelete, "https://"+host+"/api/v1/namespaces/shop", nil)
+	resp, err := held.client(false).Do(req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	body, _ := io.ReadAll(resp.Body)
+	resp.Body.Close()
+	if resp.StatusCode != http.StatusForbidden || held.hits.Load() != 0 || !strings.Contains(string(body), "kubernetes.core.namespaces.delete") {
+		t.Fatalf("namespace deletion: status %d, upstream hits %d, body %s", resp.StatusCode, held.hits.Load(), body)
+	}
+	resp, err = held.client(false).Get("https://" + host + "/api/v1/namespaces/shop/pods")
+	if err != nil {
+		t.Fatal(err)
+	}
+	resp.Body.Close()
+	if resp.StatusCode != 200 || held.hits.Load() != 1 {
+		t.Fatalf("listing pods: status %d", resp.StatusCode)
 	}
 }

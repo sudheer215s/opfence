@@ -1,0 +1,8 @@
+# description: Replace ClusterTrustBundle clustertrustbundle on cluster a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com
+PUT /apis/certificates.k8s.io/v1/clustertrustbundles/clustertrustbundle HTTP/1.1
+Host: a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/json
+
+{"apiVersion":"certificates.k8s.io/v1","kind":"ClusterTrustBundle","metadata":{"name":"clustertrustbundle"}}

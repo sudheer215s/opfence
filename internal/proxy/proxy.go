@@ -24,6 +24,7 @@ import (
 
 	"github.com/rakeshnitb23/opfence/internal/audit"
 	"github.com/rakeshnitb23/opfence/internal/ca"
+	"github.com/rakeshnitb23/opfence/internal/catalog"
 	"github.com/rakeshnitb23/opfence/internal/engine"
 	"github.com/rakeshnitb23/opfence/internal/inject"
 	"github.com/rakeshnitb23/opfence/internal/policy"
@@ -105,6 +106,11 @@ type Config struct {
 	Upstream *Upstream
 	// UpstreamRootCAs verifies upstream servers; nil uses the system roots.
 	UpstreamRootCAs *x509.CertPool
+	// OwnCA reports whether the session can intercept a host of a provider
+	// whose hosts serve their own CA (own_ca, a Kubernetes API server):
+	// whether it holds that cluster's CA. Nil means none; such hosts are
+	// then handled as hosts outside the catalog.
+	OwnCA func(host string) bool
 	// Logf reports errors that have no client to go to; nil uses log.Printf.
 	Logf func(format string, args ...any)
 }
@@ -301,9 +307,25 @@ func (s *Server) record(e audit.Entry) {
 	}
 }
 
-// isCatalogHost reports whether the proxy intercepts host.
+// isCatalogHost reports whether the proxy intercepts host: a catalog host,
+// except one whose provider's hosts serve their own CA when the session
+// does not hold it.
 func (s *Server) isCatalogHost(host string) bool {
-	return s.cfg.Engine.Catalog.ProviderForHost(host) != nil
+	p := s.cfg.Engine.Catalog.ProviderForHost(host)
+	if p == nil {
+		return false
+	}
+	return !p.OwnCA || (s.cfg.OwnCA != nil && s.cfg.OwnCA(host))
+}
+
+// ownCAProvider returns the provider of host when its hosts serve their own
+// CA, which the session does not hold.
+func (s *Server) ownCAProvider(host string) *catalog.Provider {
+	p := s.cfg.Engine.Catalog.ProviderForHost(host)
+	if p == nil || !p.OwnCA || s.isCatalogHost(host) {
+		return nil
+	}
+	return p
 }
 
 // databasePort reports whether port is one where host's provider speaks a

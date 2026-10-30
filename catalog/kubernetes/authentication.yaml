@@ -1,0 +1,34 @@
+# Kubernetes API: authentication (/apis/authentication.k8s.io).
+# Generated from Kubernetes' OpenAPI description by tools/catalog-gen/k8sgen.py; classes reviewed by hand.
+operations:
+  - id: kubernetes.authentication.selfsubjectreviews.create
+    match: { rest: { method: POST, path: "/apis/authentication.k8s.io/{version}/selfsubjectreviews" } }
+    class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Create SelfSubjectReview {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A review answers a question and changes nothing.
+    tests:
+      - fixture: fixtures/authentication-selfsubjectreviews-create.http
+        expect: read
+        resource: "a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com"
+
+  - id: kubernetes.authentication.tokenreviews.create
+    match: { rest: { method: POST, path: "/apis/authentication.k8s.io/{version}/tokenreviews" } }
+    class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Create TokenReview {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      A review answers a question and changes nothing.
+    tests:
+      - fixture: fixtures/authentication-tokenreviews-create.http
+        expect: read
+        resource: "shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io"

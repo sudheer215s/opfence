@@ -26,6 +26,7 @@ import (
 	"sort"
 	"strings"
 	"time"
+	"unicode/utf8"
 
 	"github.com/rakeshnitb23/opfence/internal/catalog"
 	"github.com/rakeshnitb23/opfence/internal/classes"
@@ -296,6 +297,9 @@ func shownBody(b []byte) string {
 	var gql struct {
 		Query     string          `json:"query"`
 		Variables json.RawMessage `json:"variables"`
+	}
+	if !utf8.Valid(b) || bytes.IndexByte(b, 0) >= 0 {
+		return fmt.Sprintf("(%d bytes, binary)", len(b))
 	}
 	text := string(b)
 	if json.Unmarshal(b, &gql) == nil && gql.Query != "" {

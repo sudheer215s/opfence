@@ -1,0 +1,6 @@
+# description: Delete the podgroups matching label selector app=web in namespace shop on cluster gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog, with no label selector
+DELETE /apis/scheduling.k8s.io/v1beta1/namespaces/shop/podgroups HTTP/1.1
+Host: gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+

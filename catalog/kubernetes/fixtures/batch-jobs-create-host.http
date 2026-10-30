@@ -1,0 +1,8 @@
+# description: Create Job job in namespace shop on cluster shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io, on the host's network with the host's root mounted
+POST /apis/batch/v1/namespaces/shop/jobs HTTP/1.1
+Host: shop-prod-dns-4f7a1c2e.hcp.eastus.azmk8s.io
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/json
+
+{"apiVersion":"batch/v1","kind":"Job","metadata":{"name":"job","namespace":"shop"},"spec":{"template":{"spec":{"hostNetwork":true,"containers":[{"name":"debug","image":"busybox:1.36"}],"volumes":[{"name":"root","hostPath":{"path":"/"}}]}}}}

@@ -1,0 +1,39 @@
+name: kubeproto
+
+# Checks the Kubernetes protobuf decoder against Kubernetes' own encoder
+# (tools/kubeprotogen/check, its own module) when the decoder, its table or
+# the check changes.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "internal/decode/kubeproto*"
+      - "tools/kubeprotogen/**"
+      - ".github/workflows/kubeproto.yml"
+  pull_request:
+    paths:
+      - "internal/decode/kubeproto*"
+      - "tools/kubeprotogen/**"
+      - ".github/workflows/kubeproto.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+          cache-dependency-path: tools/kubeprotogen/check/go.sum
+      - name: round trip every built-in kind
+        working-directory: tools/kubeprotogen/check
+        run: go test -count=1 ./...
+      - name: test data is what the check writes
+        working-directory: tools/kubeprotogen/check
+        run: |
+          go run . ../../../internal/decode/testdata/kubeproto
+          git diff --exit-code -- ../../../internal/decode/testdata/kubeproto

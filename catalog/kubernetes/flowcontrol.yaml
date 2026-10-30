@@ -1,0 +1,280 @@
+# Kubernetes API: flowcontrol (/apis/flowcontrol.apiserver.k8s.io).
+# Generated from Kubernetes' OpenAPI description by tools/catalog-gen/k8sgen.py; classes reviewed by hand.
+operations:
+  - id: kubernetes.flowcontrol.flowschemas.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/flowcontrol.apiserver.k8s.io/{version}/flowschemas" } }
+    class: access
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the flowschemas matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      API priority and fairness decides whose requests the API server serves; a change can lock
+      users out. Without a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/flowcontrol-flowschemas-delete-collection.http
+        expect: access
+        resource: "3f2a7c1e-5b9d-4e8a-9c1f-2d7e6b5a4c3d.k8s.ondigitalocean.com"
+      - fixture: fixtures/flowcontrol-flowschemas-delete-collection-every.http
+        expect: irreversible
+        resource: "3f2a7c1e-5b9d-4e8a-9c1f-2d7e6b5a4c3d.k8s.ondigitalocean.com"
+
+  - id: kubernetes.flowcontrol.flowschemas.create
+    match: { rest: { method: POST, path: "/apis/flowcontrol.apiserver.k8s.io/{version}/flowschemas" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: flow-schema }
+    card: "Create FlowSchema {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      API priority and fairness decides whose requests the API server serves; a change can lock
+      users out.
+    tests:
+      - fixture: fixtures/flowcontrol-flowschemas-create.http
+        expect: access
+        resource: "flowschema"
+
+  - id: kubernetes.flowcontrol.flowschemas.delete
+    match: { rest: { method: DELETE, path: "/apis/flowcontrol.apiserver.k8s.io/{version}/flowschemas/{name}" } }
+    class: access
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: flow-schema }
+    card: "Delete FlowSchema {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      API priority and fairness decides whose requests the API server serves; a change can lock
+      users out.
+    tests:
+      - fixture: fixtures/flowcontrol-flowschemas-delete.http
+        expect: access
+        resource: "flowschema"
+
+  - id: kubernetes.flowcontrol.flowschemas.patch
+    match: { rest: { method: PATCH, path: "/apis/flowcontrol.apiserver.k8s.io/{version}/flowschemas/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: flow-schema }
+    card: "Change FlowSchema {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      API priority and fairness decides whose requests the API server serves; a change can lock
+      users out.
+    tests:
+      - fixture: fixtures/flowcontrol-flowschemas-patch.http
+        expect: access
+        resource: "flowschema"
+
+  - id: kubernetes.flowcontrol.flowschemas.replace
+    match: { rest: { method: PUT, path: "/apis/flowcontrol.apiserver.k8s.io/{version}/flowschemas/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: flow-schema }
+    card: "Replace FlowSchema {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      API priority and fairness decides whose requests the API server serves; a change can lock
+      users out.
+    tests:
+      - fixture: fixtures/flowcontrol-flowschemas-replace.http
+        expect: access
+        resource: "flowschema"
+
+  - id: kubernetes.flowcontrol.flowschemas.status.patch
+    match: { rest: { method: PATCH, path: "/apis/flowcontrol.apiserver.k8s.io/{version}/flowschemas/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: flow-schema }
+    card: "Change the status of FlowSchema {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/flowcontrol-flowschemas-status-patch.http
+        expect: write
+        resource: "flowschema"
+
+  - id: kubernetes.flowcontrol.flowschemas.status.replace
+    match: { rest: { method: PUT, path: "/apis/flowcontrol.apiserver.k8s.io/{version}/flowschemas/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: flow-schema }
+    card: "Change the status of FlowSchema {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/flowcontrol-flowschemas-status-replace.http
+        expect: write
+        resource: "flowschema"
+
+  - id: kubernetes.flowcontrol.prioritylevelconfigurations.delete-collection
+    match: { rest: { method: DELETE, path: "/apis/flowcontrol.apiserver.k8s.io/{version}/prioritylevelconfigurations" } }
+    class: access
+    when:
+      - if: { arg: query.labelSelector, empty: true }
+        class: irreversible
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: cluster, kind: cluster }
+    card: "Delete the prioritylevelconfigurations matching label selector {query.labelSelector} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      API priority and fairness decides whose requests the API server serves; a change can lock
+      users out. Without a label selector every object of the kind is deleted (irreversible).
+    tests:
+      - fixture: fixtures/flowcontrol-prioritylevelconfigurations-delete-collection.http
+        expect: access
+        resource: "a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com"
+      - fixture: fixtures/flowcontrol-prioritylevelconfigurations-delete-collection-every.http
+        expect: irreversible
+        resource: "a1b2c3d4e5f60718293a4b5c6d7e8f90.gr7.us-east-1.eks.amazonaws.com"
+
+  - id: kubernetes.flowcontrol.prioritylevelconfigurations.create
+    match: { rest: { method: POST, path: "/apis/flowcontrol.apiserver.k8s.io/{version}/prioritylevelconfigurations" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: body.metadata.name, kind: priority-level-configuration }
+    card: "Create PriorityLevelConfiguration {body.metadata.name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      API priority and fairness decides whose requests the API server serves; a change can lock
+      users out.
+    tests:
+      - fixture: fixtures/flowcontrol-prioritylevelconfigurations-create.http
+        expect: access
+        resource: "prioritylevelconfiguration"
+
+  - id: kubernetes.flowcontrol.prioritylevelconfigurations.delete
+    match: { rest: { method: DELETE, path: "/apis/flowcontrol.apiserver.k8s.io/{version}/prioritylevelconfigurations/{name}" } }
+    class: access
+    when:
+      - if: { arg: body.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: priority-level-configuration }
+    card: "Delete PriorityLevelConfiguration {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      API priority and fairness decides whose requests the API server serves; a change can lock
+      users out.
+    tests:
+      - fixture: fixtures/flowcontrol-prioritylevelconfigurations-delete.http
+        expect: access
+        resource: "prioritylevelconfiguration"
+
+  - id: kubernetes.flowcontrol.prioritylevelconfigurations.patch
+    match: { rest: { method: PATCH, path: "/apis/flowcontrol.apiserver.k8s.io/{version}/prioritylevelconfigurations/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: priority-level-configuration }
+    card: "Change PriorityLevelConfiguration {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      API priority and fairness decides whose requests the API server serves; a change can lock
+      users out.
+    tests:
+      - fixture: fixtures/flowcontrol-prioritylevelconfigurations-patch.http
+        expect: access
+        resource: "prioritylevelconfiguration"
+
+  - id: kubernetes.flowcontrol.prioritylevelconfigurations.replace
+    match: { rest: { method: PUT, path: "/apis/flowcontrol.apiserver.k8s.io/{version}/prioritylevelconfigurations/{name}" } }
+    class: access
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: priority-level-configuration }
+    card: "Replace PriorityLevelConfiguration {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    notes: >-
+      API priority and fairness decides whose requests the API server serves; a change can lock
+      users out.
+    tests:
+      - fixture: fixtures/flowcontrol-prioritylevelconfigurations-replace.http
+        expect: access
+        resource: "prioritylevelconfiguration"
+
+  - id: kubernetes.flowcontrol.prioritylevelconfigurations.status.patch
+    match: { rest: { method: PATCH, path: "/apis/flowcontrol.apiserver.k8s.io/{version}/prioritylevelconfigurations/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: priority-level-configuration }
+    card: "Change the status of PriorityLevelConfiguration {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/flowcontrol-prioritylevelconfigurations-status-patch.http
+        expect: write
+        resource: "prioritylevelconfiguration"
+
+  - id: kubernetes.flowcontrol.prioritylevelconfigurations.status.replace
+    match: { rest: { method: PUT, path: "/apis/flowcontrol.apiserver.k8s.io/{version}/prioritylevelconfigurations/{name}/status" } }
+    class: write
+    when:
+      - if: { arg: query.dryRun, equals: "All" }
+        class: read
+    resource: { arg: name, kind: priority-level-configuration }
+    card: "Change the status of PriorityLevelConfiguration {name} on cluster {cluster}"
+    status: verified
+    verified: 2026-10-30
+    sources:
+      - https://github.com/kubernetes/kubernetes/blob/v1.37.2/api/openapi-spec/swagger.json
+    tests:
+      - fixture: fixtures/flowcontrol-prioritylevelconfigurations-status-replace.http
+        expect: write
+        resource: "prioritylevelconfiguration"

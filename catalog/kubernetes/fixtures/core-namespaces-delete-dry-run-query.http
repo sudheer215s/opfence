@@ -1,0 +1,8 @@
+# description: Delete Namespace shop on cluster gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog, with dryRun in the query, which the server ignores beside a body
+DELETE /api/v1/namespaces/shop?dryRun=All HTTP/1.1
+Host: gke-1e6371ceeb5a4e02aed7c588bd2b82491006-993897508389.europe-west2.gke.goog
+Authorization: Bearer opf_kubernetes_EXAMPLE
+Accept: application/json
+Content-Type: application/json
+
+{"propagationPolicy":"Background"}

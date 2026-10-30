@@ -1,0 +1,45 @@
+provider: kubernetes
+title: Kubernetes API
+docs: https://kubernetes.io/docs/reference/kubernetes-api/
+# The API every Kubernetes cluster serves, which kubectl, Helm, client
+# libraries and Kubernetes MCP servers call. Generated from Kubernetes'
+# OpenAPI description by tools/catalog-gen/k8sgen.py, one rule per resource,
+# action and scope, with the API version as a path parameter so a cluster
+# still serving an older version of a group meets the same rules. Custom
+# resources are not in the description: their writes are unknown.
+#
+# Hosts: the managed control planes whose API servers have stable names:
+# EKS (<id>.<cell>.<region>.eks.amazonaws.com, inside the aws provider's
+# *.amazonaws.com), AKS (<name>-dns-<id>.hcp.<region>.azmk8s.io), GKE's
+# DNS-based endpoints (gke-<id>-<project number>.<location>.gke.goog),
+# DigitalOcean (<id>.k8s.ondigitalocean.com) and Linode (<id>.<region>.linodelke.net).
+hosts:
+  - "*.eks.amazonaws.com"
+  - "*.azmk8s.io"
+  - "*.gke.goog"
+  - "*.k8s.ondigitalocean.com"
+  - "*.linodelke.net"
+within: [aws]
+# Every cluster serves its API with a certificate from its own CA, which
+# kubectl trusts from the kubeconfig, not from the system. The proxy
+# intercepts a cluster only when the session holds its CA; until then these
+# hosts are handled as hosts outside the catalog (refused in strict mode,
+# tunnelled in open mode), and Opfence's own CA does not cover them.
+own_ca: true
+# kubectl opens exec, attach and port forwarding as a WebSocket upgrade of
+# the GET (falling back to SPDY on the POST): the upgrade is decided by
+# those rules, and the stream it opens is not read.
+stream_upgrades: true
+# The cluster is named by its API server's host, as the kubeconfig writes
+# it: environments map kubernetes: { cluster: [<host>] } or namespaces
+# (kubernetes: { namespace: [dev] }).
+host_arg: cluster
+host_arg_whole: true
+auth:
+  - header: Authorization          # a bearer token: a service account's, or an exec plugin's (aws eks get-token, gke-gcloud-auth-plugin)
+    scheme: Bearer
+defaults:
+  rest_safe_methods: read          # GET, HEAD and OPTIONS; reading Secrets, exec, attach, port forwarding and the proxies have rules
+schemas:
+  - kind: openapi
+    url: https://raw.githubusercontent.com/kubernetes/kubernetes/master/api/openapi-spec/swagger.json
