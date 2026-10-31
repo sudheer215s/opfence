@@ -11,6 +11,7 @@ import (
 	"github.com/rakeshnitb23/opfence/internal/approve"
 	"github.com/rakeshnitb23/opfence/internal/audit"
 	"github.com/rakeshnitb23/opfence/internal/ca"
+	"github.com/rakeshnitb23/opfence/internal/catalog"
 	"github.com/rakeshnitb23/opfence/internal/engine"
 	"github.com/rakeshnitb23/opfence/internal/launch"
 	"github.com/rakeshnitb23/opfence/internal/proxy"
@@ -38,6 +39,28 @@ type session struct {
 
 	servers []*proxy.Server
 	errc    chan error
+
+	// The user's Kubernetes API servers and the session CA for them.
+	kube   []*proxy.KubeEndpoint
+	kubeCA *ca.CA
+}
+
+// useKube makes the session intercept the clusters of a session
+// kubeconfig: every listener started afterwards reaches them, and their
+// hosts join the Kubernetes provider.
+func (s *session) useKube(k *launch.KubeSession) {
+	s.kubeCA = k.CA
+	prov := s.eng.Catalog.Provider("kubernetes")
+	if s.eng.Hosts == nil {
+		s.eng.Hosts = map[string]*catalog.Provider{}
+	}
+	for _, c := range k.Clusters {
+		s.kube = append(s.kube, &proxy.KubeEndpoint{Host: c.Host, Port: c.Port, ServerName: c.ServerName, Alias: c.Alias,
+			RootCAs: c.RootCAs, Insecure: c.Insecure, ClientCerts: c.ClientCerts})
+		if prov != nil {
+			s.eng.Hosts[c.Host] = prov
+		}
+	}
 }
 
 // sessionOptions configures openSession.
@@ -129,7 +152,7 @@ func (s *session) listen(spec listenSpec) (httpAddr, socksAddr string, err error
 	srv, err := proxy.New(proxy.Config{
 		Engine: s.eng, CA: s.ca, Audit: s.audit, Session: s.id, Via: spec.via, Mode: spec.mode,
 		PrivateTunnels: spec.privateTunnels, AgentHosts: spec.agentHosts, Secrets: secrets.NewSet(append(append([]*secrets.Secret{}, s.stored...), s.extra...)),
-		Approver: s.broker, Logf: s.logf, Upstream: s.upstream,
+		Approver: s.broker, Logf: s.logf, Upstream: s.upstream, Kube: s.kube, KubeCA: s.kubeCA,
 	})
 	if err != nil {
 		return "", "", err

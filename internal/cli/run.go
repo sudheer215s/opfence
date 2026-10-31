@@ -127,6 +127,24 @@ asked in a desktop dialog or with "opfence approve" in another terminal.`,
 					denyRead = append(denyRead, google.DenyRead...)
 				}
 			}
+			// The user's Kubernetes clusters, reached through the proxy with a
+			// session CA (stage 31c).
+			kubeTmp, err := os.MkdirTemp("", "opfence-"+s.id+"-kube-")
+			if err != nil {
+				return err
+			}
+			defer os.RemoveAll(kubeTmp)
+			home, _ := os.UserHomeDir()
+			kube, err := launch.KubeConfig(kubeTmp, home, os.Getenv)
+			if err != nil {
+				return fmt.Errorf("preparing the kubeconfig: %w", err)
+			}
+			if kube != nil {
+				for k, v := range kube.Env {
+					vars[k] = v
+				}
+				s.useKube(kube)
+			}
 			var agent *launch.Agent
 			var watch []string
 			if kind == "srt" {
@@ -255,6 +273,11 @@ asked in a desktop dialog or with "opfence approve" in another terminal.`,
 			if google != nil {
 				for _, n := range google.Notes {
 					fmt.Fprintf(stderr, "  Google: %s\n", n)
+				}
+			}
+			if kube != nil {
+				for _, n := range kube.Notes {
+					fmt.Fprintf(stderr, "  Kubernetes: %s\n", n)
 				}
 			}
 			if kind == "claude" {

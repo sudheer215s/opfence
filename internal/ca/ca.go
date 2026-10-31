@@ -24,7 +24,10 @@ import (
 
 const (
 	rootValidity = 10 * 365 * 24 * time.Hour
-	leafValidity = 24 * time.Hour
+	// sessionValidity bounds a session CA, which lives in memory for one
+	// session; a session that outlives it needs restarting.
+	sessionValidity = 30 * 24 * time.Hour
+	leafValidity    = 24 * time.Hour
 	// leafRenew is how close to expiry a cached leaf is replaced.
 	leafRenew = time.Hour
 	// maxLeaves bounds the leaf cache; wildcard hosts such as
@@ -46,12 +49,36 @@ type CA struct {
 }
 
 // New generates a root whose name constraints permit only the given DNS
-// domains (see PermittedDomains). An empty list is an error: an
-// unconstrained root would let a leaked key impersonate any site.
+// domains (see PermittedDomains) and no IP address. An empty list is an
+// error: an unconstrained root would let a leaked key impersonate any site.
 func New(machine string, permitted []string) (*CA, error) {
 	if len(permitted) == 0 {
 		return nil, errors.New("ca: no permitted domains")
 	}
+	cn := "Opfence local CA"
+	if machine != "" {
+		cn += " (" + machine + ")"
+	}
+	return newRoot(cn, permitted, nil, rootValidity)
+}
+
+// NewSession generates a root for one session's Kubernetes clusters (stage
+// 31c), which kubectl trusts from the session's kubeconfig: its constraints
+// permit exactly the clusters' names and addresses. Its key stays in
+// memory. With addresses only, it permits names under .invalid, which
+// nothing resolves, since a root without a DNS constraint could sign any
+// name.
+func NewSession(names []string, ips []net.IP) (*CA, error) {
+	if len(names) == 0 && len(ips) == 0 {
+		return nil, errors.New("ca: no permitted names or addresses")
+	}
+	if len(names) == 0 {
+		names = []string{"invalid"}
+	}
+	return newRoot("Opfence session CA", names, ips, sessionValidity)
+}
+
+func newRoot(cn string, permitted []string, ips []net.IP, validity time.Duration) (*CA, error) {
 	key, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	if err != nil {
 		return nil, err
@@ -61,21 +88,28 @@ func New(machine string, permitted []string) (*CA, error) {
 		return nil, err
 	}
 	now := time.Now()
-	cn := "Opfence local CA"
-	if machine != "" {
-		cn += " (" + machine + ")"
-	}
 	tmpl := &x509.Certificate{
 		SerialNumber:                serial,
 		Subject:                     pkix.Name{CommonName: cn, Organization: []string{"Opfence"}},
 		NotBefore:                   now.Add(-time.Hour),
-		NotAfter:                    now.Add(rootValidity),
+		NotAfter:                    now.Add(validity),
 		KeyUsage:                    x509.KeyUsageCertSign | x509.KeyUsageCRLSign,
 		BasicConstraintsValid:       true,
 		IsCA:                        true,
 		MaxPathLenZero:              true,
 		PermittedDNSDomainsCritical: true,
 		PermittedDNSDomains:         permitted,
+	}
+	if len(ips) == 0 {
+		// Without an IP constraint, a root may sign any address.
+		tmpl.ExcludedIPRanges = []*net.IPNet{{IP: net.IPv4zero, Mask: net.CIDRMask(0, 32)}, {IP: net.IPv6zero, Mask: net.CIDRMask(0, 128)}}
+	}
+	for _, ip := range ips {
+		if v4 := ip.To4(); v4 != nil {
+			tmpl.PermittedIPRanges = append(tmpl.PermittedIPRanges, &net.IPNet{IP: v4, Mask: net.CIDRMask(32, 32)})
+		} else {
+			tmpl.PermittedIPRanges = append(tmpl.PermittedIPRanges, &net.IPNet{IP: ip.To16(), Mask: net.CIDRMask(128, 128)})
+		}
 	}
 	der, err := x509.CreateCertificate(rand.Reader, tmpl, tmpl, key.Public(), key)
 	if err != nil {
@@ -150,9 +184,18 @@ func (c *CA) Pool() *x509.CertPool {
 	return p
 }
 
-// Permits reports whether the root's name constraints allow host.
+// Permits reports whether the root's name constraints allow host, a name
+// or an IP address.
 func (c *CA) Permits(host string) bool {
 	host = strings.ToLower(host)
+	if ip := net.ParseIP(host); ip != nil {
+		for _, r := range c.cert.PermittedIPRanges {
+			if r.Contains(ip) {
+				return true
+			}
+		}
+		return false
+	}
 	for _, d := range c.cert.PermittedDNSDomains {
 		if host == d || strings.HasSuffix(host, "."+d) {
 			return true
@@ -165,8 +208,8 @@ func (c *CA) Permits(host string) bool {
 // the cached one is close to expiry.
 func (c *CA) Leaf(host string) (*tls.Certificate, error) {
 	host = strings.TrimSuffix(strings.ToLower(host), ".")
-	if host == "" || net.ParseIP(host) != nil {
-		return nil, fmt.Errorf("ca: no certificate for %q: a DNS name is required", host)
+	if host == "" {
+		return nil, errors.New("ca: no certificate for an empty name")
 	}
 	if !c.Permits(host) {
 		return nil, fmt.Errorf("ca: %s is outside the CA's permitted names", host)
@@ -184,11 +227,15 @@ func (c *CA) Leaf(host string) (*tls.Certificate, error) {
 	tmpl := &x509.Certificate{
 		SerialNumber: serial,
 		Subject:      pkix.Name{CommonName: host},
-		DNSNames:     []string{host},
 		NotBefore:    now.Add(-time.Hour),
 		NotAfter:     now.Add(leafValidity),
 		KeyUsage:     x509.KeyUsageDigitalSignature,
 		ExtKeyUsage:  []x509.ExtKeyUsage{x509.ExtKeyUsageServerAuth},
+	}
+	if ip := net.ParseIP(host); ip != nil {
+		tmpl.IPAddresses = []net.IP{ip}
+	} else {
+		tmpl.DNSNames = []string{host}
 	}
 	der, err := x509.CreateCertificate(rand.Reader, tmpl, c.cert, c.leafKey.Public(), c.key)
 	if err != nil {

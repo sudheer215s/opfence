@@ -111,6 +111,12 @@ type Config struct {
 	// whether it holds that cluster's CA. Nil means none; such hosts are
 	// then handled as hosts outside the catalog.
 	OwnCA func(host string) bool
+	// Kube are the session's Kubernetes API servers, from the user's
+	// kubeconfig (stage 31c): the proxy intercepts each on its own port,
+	// private address or not, with KubeCA's certificates. Their hosts join
+	// the Kubernetes provider through the engine's Hosts.
+	Kube   []*KubeEndpoint
+	KubeCA *ca.CA
 	// Logf reports errors that have no client to go to; nil uses log.Printf.
 	Logf func(format string, args ...any)
 }
@@ -127,6 +133,7 @@ type Server struct {
 	plainRP   *httputil.ReverseProxy
 	inner     *http.Server // serves intercepted TLS connections
 	conns     *chanListener
+	kubeConns sync.Map // *tls.Conn -> *KubeEndpoint, while it is served
 
 	mu        sync.Mutex
 	listeners []net.Listener
@@ -154,6 +161,22 @@ func New(cfg Config) (*Server, error) {
 	if cfg.Logf == nil {
 		cfg.Logf = log.Printf
 	}
+	if len(cfg.Kube) > 0 {
+		if cfg.KubeCA == nil {
+			return nil, errors.New("proxy: Kubernetes endpoints need KubeCA")
+		}
+		if cfg.OwnCA == nil {
+			kube := cfg.Kube
+			cfg.OwnCA = func(host string) bool {
+				for _, ep := range kube {
+					if ep.Host == host {
+						return true
+					}
+				}
+				return false
+			}
+		}
+	}
 	if cfg.Secrets == nil {
 		cfg.Secrets = secrets.NewSet(nil) // responses can still mint some
 	}
@@ -179,7 +202,7 @@ func New(cfg Config) (*Server, error) {
 	}
 	s.rp = &httputil.ReverseProxy{
 		Rewrite:        rewriteIntercepted,
-		Transport:      s.transport,
+		Transport:      kubeRoundTripper{s},
 		FlushInterval:  -1, // stream server-sent events (MCP) as they arrive
 		ModifyResponse: s.modifyResponse,
 		ErrorHandler:   s.upstreamError,
@@ -201,6 +224,7 @@ func New(cfg Config) (*Server, error) {
 	}
 	s.inner = &http.Server{
 		Handler:           http.HandlerFunc(s.serveIntercepted),
+		ConnContext:       s.kubeConnContext,
 		ReadHeaderTimeout: 30 * time.Second,
 		IdleTimeout:       2 * time.Minute,
 		ErrorLog:          log.New(io.Discard, "", 0),
@@ -311,7 +335,7 @@ func (s *Server) record(e audit.Entry) {
 // except one whose provider's hosts serve their own CA when the session
 // does not hold it.
 func (s *Server) isCatalogHost(host string) bool {
-	p := s.cfg.Engine.Catalog.ProviderForHost(host)
+	p := s.cfg.Engine.ProviderForHost(host)
 	if p == nil {
 		return false
 	}
@@ -321,7 +345,7 @@ func (s *Server) isCatalogHost(host string) bool {
 // ownCAProvider returns the provider of host when its hosts serve their own
 // CA, which the session does not hold.
 func (s *Server) ownCAProvider(host string) *catalog.Provider {
-	p := s.cfg.Engine.Catalog.ProviderForHost(host)
+	p := s.cfg.Engine.ProviderForHost(host)
 	if p == nil || !p.OwnCA || s.isCatalogHost(host) {
 		return nil
 	}
@@ -331,7 +355,7 @@ func (s *Server) ownCAProvider(host string) *catalog.Provider {
 // databasePort reports whether port is one where host's provider speaks a
 // database's own protocol, which Opfence cannot read.
 func (s *Server) databasePort(host, port string) bool {
-	p := s.cfg.Engine.Catalog.ProviderForHost(host)
+	p := s.cfg.Engine.ProviderForHost(host)
 	if p == nil {
 		return false
 	}

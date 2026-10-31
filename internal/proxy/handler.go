@@ -39,6 +39,10 @@ type fwd struct {
 	// transforms are the response transforms of the request's rules, which
 	// must be applied before the response reaches the agent.
 	transforms []transform
+	// kube is the Kubernetes endpoint the request goes to, with the client
+	// certificate its connection presented (-1 for none).
+	kube     *KubeEndpoint
+	kubeCert int
 }
 
 type transform struct {
@@ -52,6 +56,16 @@ type transform struct {
 // forwards, holds for approval, or blocks it.
 func (s *Server) serveIntercepted(w http.ResponseWriter, r *http.Request) {
 	host := strings.TrimSuffix(strings.ToLower(r.TLS.ServerName), ".")
+	kube, kubeCert := kubeFrom(r)
+	wantPort := ""
+	if kube != nil {
+		// The kubeconfig's server: its host, whatever name TLS used, and
+		// its port.
+		host = kube.Host
+		if kube.Port != "443" {
+			wantPort = kube.Port
+		}
+	}
 	entry := audit.Entry{Event: "request", Host: host, Method: r.Method}
 	req, raw, err := request.FromHTTP(r)
 	if err != nil {
@@ -60,7 +74,10 @@ func (s *Server) serveIntercepted(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	entry.Path = auditPath(req.Path)
-	if req.Host != host || req.Port != "" {
+	if kube != nil && kube.Alias != "" && req.Host == kube.Alias {
+		req.Host = kube.Host // the server the session's name stands for
+	}
+	if req.Host != host || req.Port != wantPort {
 		// HTTP/2 clients may reuse a connection for another host; 421 makes
 		// them open a new one, which gets its own decision.
 		entry.Outcome, entry.Status, entry.Reason = "refused", http.StatusMisdirectedRequest, "Host "+r.Host+" does not match the TLS server name"
@@ -75,7 +92,8 @@ func (s *Server) serveIntercepted(w http.ResponseWriter, r *http.Request) {
 		s.block(w, req, nil, entry, http.StatusForbidden, "Opfence does not open tunnels inside an API connection.")
 		return
 	}
-	if r.Header.Get("Upgrade") != "" {
+	stream := kube != nil && isStreamUpgrade(r)
+	if r.Header.Get("Upgrade") != "" && !stream {
 		if why := s.upgradeRefused(r, req); why != "" {
 			s.block(w, req, nil, entry, http.StatusForbidden, why)
 			return
@@ -92,6 +110,10 @@ func (s *Server) serveIntercepted(w http.ResponseWriter, r *http.Request) {
 	res := s.cfg.Engine.Evaluate(req)
 	if ok, why := s.decide(r.Context(), &res, Pending{Method: req.Method, Host: host, Path: req.Path}, &entry); !ok {
 		s.block(w, req, &res, entry, http.StatusForbidden, why)
+		return
+	}
+	if stream {
+		s.serveStream(w, r, req, &res, entry, kube, kubeCert)
 		return
 	}
 	if ws, ok := s.webSocketPath(res.Provider, r, req); ok {
@@ -185,7 +207,10 @@ func (s *Server) serveIntercepted(w http.ResponseWriter, r *http.Request) {
 		}
 		whole = body
 	}
-	f := &fwd{host: host, path: path, rawPath: req.Path, rawQuery: rawQuery, entry: entry, transforms: transforms}
+	f := &fwd{host: host, path: path, rawPath: req.Path, rawQuery: rawQuery, entry: entry, transforms: transforms, kube: kube, kubeCert: kubeCert}
+	if kube != nil {
+		f.host = kube.addr()
+	}
 	if r.Body != nil && r.Body != http.NoBody {
 		var rd io.Reader = io.MultiReader(bytes.NewReader(raw), r.Body)
 		if whole != nil {

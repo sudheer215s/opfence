@@ -113,7 +113,7 @@ flowchart LR
 | 27 | Google Cloud | Rules generated from Google's discovery documents, starting with the services where one call destroys data or hands out keys, then Compute, GKE, Cloud Run, BigQuery and the rest; gcloud working under `opfence run`; keys kept from the agent | Every method that is not a GET, and every GET that returns a secret, has a rule with a fixture; the source check passes for each API; real gcloud commands are decided through `opfence run` | done |
 | 28 | WebSocket inspection | Upgrades on catalog hosts decided by rules and relayed by Opfence message by message: GraphQL subscriptions (Railway's CLI), Postgres over WebSocket (Neon's `Pool` and `Client`), Supabase Realtime, libSQL's Hrana over WebSocket | `railway logs` works behind Opfence and a mutation sent over its socket is decided as one sent over HTTP; a `DROP TABLE` through Neon's `Pool` is blocked before it leaves the machine while a `SELECT` returns its rows; every message of each protocol is decided or passed by name, anything else is unknown | done (28a to 28c) |
 | 29 | GitLab | gitlab.com's REST API from GitLab's published OpenAPI description, git over HTTPS with nested groups, the OAuth token endpoint, and GitLab's own MCP server on the same host | Every REST operation that is not a GET has a rule with a fixture, and the GETs that return secrets are credential; the source check passes; a `.json` suffix cannot dodge a rule; real `glab` commands are decided through `opfence run` | done (29a, 29b) |
-| 31 | Kubernetes | The Kubernetes API (every built-in resource, from Kubernetes' published OpenAPI description) for the managed control planes and clusters in the user's kubeconfig; the Kubernetes MCP servers' tools decided by the same rules; kubectl working through `opfence run` | Every operation that is not a GET has a rule with a fixture, and reads of Secrets are credential; the source check passes; a privileged pod, a LoadBalancer Service, scaling to zero and deleting a namespace get their classes from the request body; real kubectl commands are decided through `opfence run` | in progress (31a, 31b done) |
+| 31 | Kubernetes | The Kubernetes API (every built-in resource, from Kubernetes' published OpenAPI description) for the managed control planes and clusters in the user's kubeconfig; the Kubernetes MCP servers' tools decided by the same rules; kubectl working through `opfence run` | Every operation that is not a GET has a rule with a fixture, and reads of Secrets are credential; the source check passes; a privileged pod, a LoadBalancer Service, scaling to zero and deleting a namespace get their classes from the request body; real kubectl commands are decided through `opfence run` | done (31a to 31c) |
 | 32 | Agent setup and packaging | MCP tool calls of Cursor's and Gemini CLI's local servers decided by their hooks; `opfence setup` adds Opfence's hook to Claude Code's, Cursor's or Gemini CLI's settings in one command; a Homebrew formula; the catalog generators in the repository | Each hook's decisions tested over the embedded catalog; real Gemini CLI asks, denies and allows through the hook in and out of `opfence run`; setup keeps every other setting and undoes cleanly; `brew install` builds a working binary; each generator reproduces its provider's files | done (32a, 32b) |
 
 v1.0 also needs an external security review of the proxy and approver (PLAN.md phase 5), which the owner arranges, and the catalog split into its own repository, which needs the owner's GitHub account. What only a Mac, signed-in agents and a phone can check (the macOS sandbox and keychain, desktop dialogs, Cursor and Gemini CLI, phone approvals through ntfy.sh, publishing the site) is listed in [MAC_CHECKS.md](MAC_CHECKS.md).
@@ -588,3 +588,41 @@ Two independent security reviews (proxy and injection; launcher and approvals) f
 - **Not run for real:** the servers were read, not started; starting third-party servers from source was not allowed in this session. Their requests are built from their source, and `catalog/kubernetes` was checked against kubectl's real requests in 31a.
 - **Tests:** 42 cases of the request builder (resource names, every action, manifests, objects, patches, dry runs, contexts, unreadable input), the manifest reader (YAML 1.2 scalars, aliases, repeated keys, depth, size), the engine's decisions and policy (a mapped namespace and context, the default namespace, the kubeconfig's, rule overrides), 10 validation errors, and the schema's actions against the decoder's.
 - **Follow-ups:** labels that weaken a namespace's Pod Security Admission level (`pod-security.kubernetes.io/enforce=privileged`) are a write, since conditions cannot name a label key with dots and slashes.
+
+**Stage 31c · kubectl through `opfence run` (done 31 Oct 2026).** As planned, with three additions. Loopback and IP servers are renamed in the session kubeconfig, client certificates are carried through, and stream relays were checked against a real server. The catalog is unchanged.
+- **Session kubeconfig** (`launch.KubeConfig`, every mode of `opfence run`):
+  - KUBECONFIG's files are merged as kubectl merges them.
+  - Each HTTPS cluster trusts a session CA (`ca.NewSession`, in memory, constrained to exactly the clusters' names and addresses).
+  - Relative paths are made absolute, and CBOR is kept off.
+  - A server named by an IP address or `localhost` gets a name under `.invalid`. Found on the way: the sandbox runtime's NO_PROXY lists the private ranges as well as loopback, so a client would skip the proxy for a cluster at `10.x` or `127.0.0.1` and fail inside the sandbox.
+- **Proxy:**
+  - The kubeconfig's servers join the `kubernetes` provider and are intercepted on their own ports, private addresses included.
+  - Their certificates are checked with each cluster's own CA.
+  - The client's certificate picks which of the kubeconfig's client certificates is presented to the cluster, so mutual-TLS clusters such as kind, minikube and k3s keep working.
+  - WebSocket and SPDY upgrades are decided by their path's rules, then relayed unread.
+  - Opfence's own CA now excludes every IP range.
+- **Checked for real** (kubectl v1.37.2 against kube-apiserver v1.37.2 at `https://127.0.0.1:16443`):
+  - Under `opfence run --weak` and `--srt` (the sandbox runtime), `get` and `get -w` were allowed and `get secrets -A` was denied.
+  - `create namespace`, `create sa`, `run` and `create deployment` (protobuf) asked and went through once approved with `opfence approve`.
+  - `exec`, `attach` and `delete namespace` asked for confirmation. Exec and attach went out over WebSocket, then SPDY, and the server's refusal (the pod had no node) came back intact.
+  - A WebSocket watch of namespaces got the server's 101 and its events through the relay.
+- **Found on the way:** an API server that refuses an upgrade without a length (kube-apiserver's 403 to a WebSocket without an Origin) kept the relay waiting for a body that never ended. Both relays now send the status at once, and give the body a bounded time that ends when the client leaves.
+- **Tests:**
+  - `KubeConfig`: merging, paths, aliases, client certificates, IPv6, five errors, and a kubeconfig with nothing to intercept.
+  - The session CA's constraints, and the main CA's key failing to sign an address.
+  - The proxy, against a fake mutual-TLS API server with its own CA:
+    - identities passed on, or not;
+    - the alias and the address both working;
+    - decisions;
+    - another server name, port or Host refused;
+    - WebSocket and SPDY exec and port forwarding relayed and echoed;
+    - a refusal without a length returned at once;
+    - a denied stream never reaching the server;
+    - a watch needing no approval.
+  - `engine.Hosts`.
+  - `opfence run --weak` end to end, with a child acting as kubectl through the session kubeconfig.
+- **Follow-ups:**
+  - Credentials in kubeconfigs: placeholders for tokens and client keys; re-signing EKS tokens made with placeholder AWS keys; swapping GKE's minted Google tokens.
+  - The second ask when kubectl falls back from WebSocket to SPDY.
+  - A cluster's own `proxy-url` upstream.
+  - Pod Security Admission labels on namespaces.

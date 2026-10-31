@@ -29,6 +29,19 @@ type Engine struct {
 	// TransformsResponses says the caller applies rules' response
 	// transforms (only the proxy can), so their response.class counts.
 	TransformsResponses bool
+	// Hosts are exact hosts a session adds to providers: the API servers
+	// of the user's kubeconfig, which no catalog pattern can name (stage
+	// 31c). They are looked up before the catalog's patterns.
+	Hosts map[string]*catalog.Provider
+}
+
+// ProviderForHost returns the provider of host: a session's own host, or
+// the catalog's.
+func (e *Engine) ProviderForHost(host string) *catalog.Provider {
+	if p, ok := e.Hosts[host]; ok {
+		return p
+	}
+	return e.Catalog.ProviderForHost(host)
 }
 
 // New returns an engine. A nil policy means defaults only.
@@ -81,7 +94,7 @@ func (r Result) UnknownHost() bool { return r.Provider == nil }
 
 // Evaluate decides a request.
 func (e *Engine) Evaluate(r *request.Request) Result {
-	p := e.Catalog.ProviderForHost(r.Host)
+	p := e.ProviderForHost(r.Host)
 	res := Result{Host: r.Host, Provider: p}
 	var ops []decode.Operation
 	if p == nil {
@@ -108,7 +121,7 @@ func (e *Engine) Evaluate(r *request.Request) Result {
 // the provider takes from the upgrade (its host and header arguments), and
 // the hash binds to body, the message as sent.
 func (e *Engine) EvaluateMessage(handshake *request.Request, ops []decode.Operation, body []byte) Result {
-	p := e.Catalog.ProviderForHost(handshake.Host)
+	p := e.ProviderForHost(handshake.Host)
 	res := Result{Host: handshake.Host, Provider: p}
 	if p != nil {
 		ops = decode.ApplyHints(ops, handshake, p.Hints(handshake.Host))

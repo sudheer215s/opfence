@@ -7,6 +7,7 @@ import (
 	"github.com/rakeshnitb23/opfence/internal/catalog"
 	"github.com/rakeshnitb23/opfence/internal/classes"
 	"github.com/rakeshnitb23/opfence/internal/policy"
+	"github.com/rakeshnitb23/opfence/internal/request"
 )
 
 func callKube(t *testing.T, user *policy.File, tool string, args map[string]any) Evaluation {
@@ -87,5 +88,31 @@ func TestKubernetesToolPolicy(t *testing.T) {
 	override := &policy.File{Rules: []policy.RuleOverride{{Rule: "kubernetes.core.secrets.*", Decision: classes.Ask}}}
 	if ev := callKube(t, override, "kubectl_get", map[string]any{"resourceType": "secret", "name": "x", "namespace": "shop"}); ev.Decision != classes.Ask {
 		t.Errorf("override on kubernetes.core.secrets.*: %s (%s)", ev.Decision, ev.DecisionSource)
+	}
+}
+
+// A session's own hosts (a kubeconfig's API servers) join their provider
+// before the catalog's patterns are tried.
+func TestEngineHosts(t *testing.T) {
+	c, err := catalog.Embedded()
+	if err != nil {
+		t.Fatal(err)
+	}
+	e := New(c, nil)
+	if p := e.ProviderForHost("10.0.0.5"); p != nil {
+		t.Fatalf("10.0.0.5 is %s before the session adds it", p.ID)
+	}
+	e.Hosts = map[string]*catalog.Provider{"10.0.0.5": c.Provider("kubernetes")}
+	r, _, err := request.ParseFixture([]byte("DELETE /api/v1/namespaces/shop HTTP/1.1\nHost: 10.0.0.5:6443\n\n"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	res := e.Evaluate(r)
+	if res.Provider == nil || res.Provider.ID != "kubernetes" || res.Evaluations[0].Rule == nil ||
+		res.Evaluations[0].Rule.ID != "kubernetes.core.namespaces.delete" || res.Evaluations[0].Args["cluster"] != "10.0.0.5" {
+		t.Fatalf("%+v", res.Evaluations[0])
+	}
+	if p := e.ProviderForHost("api.github.com"); p == nil || p.ID != "github" {
+		t.Errorf("api.github.com: %v", p)
 	}
 }

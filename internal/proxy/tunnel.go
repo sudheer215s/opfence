@@ -159,6 +159,10 @@ func (s *Server) refused(host, port, reason string) {
 // outside the catalog.
 func (s *Server) routeTunnel(c net.Conn, host, port string, hs handshake) {
 	defer c.Close()
+	if ep := s.kubeEndpoint(host, port); ep != nil {
+		s.routeKube(c, ep, hs)
+		return
+	}
 	isIP := net.ParseIP(host) != nil
 	catalog := !isIP && s.isCatalogHost(host) && !s.databasePort(host, port)
 	refuse := func(reason string) {
@@ -242,6 +246,35 @@ func (s *Server) routeTunnel(c net.Conn, host, port string, hs handshake) {
 	defer up.Close()
 	s.record(audit.Entry{Event: "tunnel", Host: name, Port: port, Outcome: "tunneled", Reason: s.tunnelReason(name)})
 	splice(pc, up)
+}
+
+// routeKube intercepts a connection to one of the session's Kubernetes API
+// servers. The client's TLS server name must be the server's host or the
+// kubeconfig's tls-server-name, the names the session CA signs for it.
+func (s *Server) routeKube(c net.Conn, ep *KubeEndpoint, hs handshake) {
+	if hs.accept() != nil {
+		return
+	}
+	_ = c.SetReadDeadline(time.Now().Add(helloTimeout))
+	sni, peeked, err := peekServerName(c)
+	_ = c.SetReadDeadline(time.Time{})
+	name := sni
+	switch {
+	case err != nil:
+		s.refused(ep.Host, ep.Port, "not a TLS connection: "+err.Error())
+		return
+	case sni == "":
+		// Go clients send no server name for an IP address.
+		name = ep.Host
+	case sni != ep.Host && sni != ep.ServerName && (ep.Alias == "" || sni != ep.Alias):
+		s.refused(ep.Host, ep.Port, fmt.Sprintf("TLS server name %s does not match the API server %s", sni, ep.Host))
+		return
+	}
+	if !s.cfg.KubeCA.Permits(name) {
+		s.refused(ep.Host, ep.Port, "the session's Kubernetes CA does not cover "+name)
+		return
+	}
+	s.interceptKube(&prefixConn{Conn: c, r: io.MultiReader(bytes.NewReader(peeked), c)}, ep, name)
 }
 
 // intercept terminates TLS with a leaf for host and hands the connection to
