@@ -2,6 +2,7 @@ package ca
 
 import (
 	"crypto/x509"
+	"net"
 	"reflect"
 	"testing"
 	"time"
@@ -100,5 +101,62 @@ func TestLoadRoundTrip(t *testing.T) {
 	}
 	if _, err := New("x", nil); err == nil {
 		t.Fatal("unconstrained CA created")
+	}
+}
+
+// A root signs no IP address unless it names it: the main CA excludes every
+// address, and a session CA permits exactly its clusters'.
+func TestIPConstraints(t *testing.T) {
+	verify := func(c *CA, host string, ip net.IP) error {
+		c.cert.PermittedIPRanges = append(c.cert.PermittedIPRanges, &net.IPNet{IP: net.IPv4zero, Mask: net.CIDRMask(0, 32)}) // bypass Permits only
+		defer func() { c.cert.PermittedIPRanges = c.cert.PermittedIPRanges[:len(c.cert.PermittedIPRanges)-1] }()
+		l, err := c.Leaf(host)
+		if err != nil {
+			return err
+		}
+		root, _ := x509.ParseCertificate(c.cert.Raw)
+		pool := x509.NewCertPool()
+		pool.AddCert(root)
+		_, err = l.Leaf.Verify(x509.VerifyOptions{DNSName: ip.String(), Roots: pool})
+		return err
+	}
+	main, err := New("test", []string{"api.github.com"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := verify(main, "10.0.0.1", net.ParseIP("10.0.0.1")); err == nil {
+		t.Error("the main CA's key signed an address that verified")
+	}
+	s, err := NewSession([]string{"kube.example.com"}, []net.IP{net.ParseIP("127.0.0.1"), net.ParseIP("::1")})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, host := range []string{"127.0.0.1", "::1", "kube.example.com"} {
+		l, err := s.Leaf(host)
+		if err != nil {
+			t.Fatalf("%s: %v", host, err)
+		}
+		if _, err := l.Leaf.Verify(x509.VerifyOptions{DNSName: host, Roots: s.Pool()}); err != nil {
+			t.Errorf("%s: %v", host, err)
+		}
+	}
+	for _, host := range []string{"127.0.0.2", "api.github.com", "example.com"} {
+		if _, err := s.Leaf(host); err == nil {
+			t.Errorf("session CA minted a leaf for %s", host)
+		}
+	}
+	if err := verify(s, "127.0.0.2", net.ParseIP("127.0.0.2")); err == nil {
+		t.Error("the session CA's key signed another address that verified")
+	}
+	// Addresses only: names are confined to .invalid.
+	ipOnly, err := NewSession(nil, []net.IP{net.ParseIP("127.0.0.1")})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if ipOnly.Permits("example.com") || !ipOnly.Permits("127.0.0.1") {
+		t.Error("an address-only session CA's constraints")
+	}
+	if _, err := NewSession(nil, nil); err == nil {
+		t.Error("an empty session CA")
 	}
 }

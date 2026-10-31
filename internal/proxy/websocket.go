@@ -46,7 +46,7 @@ func (s *Server) upgradeRefused(r *http.Request, req *request.Request) string {
 	if !decode.IsWebSocketUpgrade(r.Method, r.Header) || r.ProtoMajor != 1 || !headerHasToken(r.Header, "Connection", "upgrade") {
 		return generic
 	}
-	p := s.cfg.Engine.Catalog.ProviderForHost(req.Host)
+	p := s.cfg.Engine.ProviderForHost(req.Host)
 	if p == nil {
 		return generic
 	}
@@ -160,10 +160,9 @@ func (s *Server) serveWebSocket(w http.ResponseWriter, r *http.Request, req *req
 		if s.scrubber.Active() {
 			body = s.scrubber.Reader(resp.Body, nil)
 		}
-		w.WriteHeader(resp.StatusCode)
-		_, _ = io.Copy(w, io.LimitReader(body, 1<<20))
 		entry.Status = resp.StatusCode
 		s.record(entry)
+		refusedUpgrade(r.Context(), w, up, resp.StatusCode, body)
 		return
 	}
 	sub := resp.Header.Get("Sec-WebSocket-Protocol")
@@ -213,6 +212,19 @@ func (s *Server) serveWebSocket(w http.ResponseWriter, r *http.Request, req *req
 	}
 	x.ctx, x.cancel = context.WithCancel(r.Context())
 	x.run(cc, up)
+}
+
+// refusedUpgrade passes on the API's answer to an upgrade it refused: the
+// status at once, then up to 1 MiB of body. A body without a length ends
+// when the server closes the connection, which it may never do, so it gets
+// a bounded time, and none once the client has gone.
+func refusedUpgrade(ctx context.Context, w http.ResponseWriter, up net.Conn, status int, body io.Reader) {
+	stop := context.AfterFunc(ctx, func() { _ = up.Close() })
+	defer stop()
+	w.WriteHeader(status)
+	_ = http.NewResponseController(w).Flush()
+	_ = up.SetReadDeadline(time.Now().Add(wsHandshakeTimeout))
+	_, _ = io.Copy(w, io.LimitReader(body, 1<<20))
 }
 
 // dialTLS opens a TLS connection to host's API for HTTP/1.1.
